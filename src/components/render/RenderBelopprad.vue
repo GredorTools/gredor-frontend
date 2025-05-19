@@ -2,16 +2,19 @@
 import type { Belopprad } from "@/model/arsredovisning/Arsredovisning.ts";
 import { FormatUtil } from "@/util/FormatUtil.ts";
 
-defineProps<{
+const props = defineProps<{
   belopprad: Belopprad;
+  contextRefPrefix: "period" | "balans";
   showSaldo?: boolean;
 }>();
+
+const isAbstract = props.belopprad.taxonomyItem.abstrakt === "true";
 </script>
 
 <template>
   <tr
     :class="{
-      abstract: belopprad.taxonomyItem.abstrakt === 'true',
+      abstract: isAbstract,
       [`level-${belopprad.taxonomyItem.__Level}`]: true,
       [`typ-${belopprad.typ}`]: true,
     }"
@@ -22,51 +25,55 @@ defineProps<{
     </td>
     <td>{{ belopprad.not }}</td>
     <td>
-      <span
-        v-if="
-          showSaldo &&
-          belopprad.taxonomyItem.saldo === 'debit' &&
-          belopprad.beloppNuvarandeAr.trim().length > 0
-        "
-        >-</span
-      >
-      <ix:nonFraction
-        :name="
-          belopprad.taxonomyItem.tillhor +
-          ':' +
-          belopprad.taxonomyItem.elementnamn
-        "
-        context-ref="period0"
-        decimals="INF"
-        format="ixt:numspacecomma"
-        scale="0"
-        unit-ref="SEK"
-      >
-        {{ FormatUtil.formatNumber(belopprad.beloppNuvarandeAr) }}
-      </ix:nonFraction>
+      <template v-if="!isAbstract">
+        <span
+          v-if="
+            showSaldo &&
+            belopprad.taxonomyItem.saldo === 'debit' &&
+            belopprad.beloppNuvarandeAr.trim().length > 0
+          "
+          >-</span
+        >
+        <ix:nonFraction
+          :context-ref="contextRefPrefix + '_nuvarande'"
+          :name="
+            belopprad.taxonomyItem.tillhor +
+            ':' +
+            belopprad.taxonomyItem.elementnamn
+          "
+          decimals="INF"
+          format="ixt:numspacecomma"
+          scale="0"
+          unit-ref="SEK"
+        >
+          {{ FormatUtil.formatNumber(belopprad.beloppNuvarandeAr) }}
+        </ix:nonFraction>
+      </template>
     </td>
-    <td v-if="belopprad.beloppForegaendeAr != null">
-      <span
-        v-if="
-          showSaldo &&
-          belopprad.taxonomyItem.saldo === 'debit' &&
-          belopprad.beloppForegaendeAr.trim().length > 0
-        "
-        >-</span
-      >
-      <ix:nonFraction
-        :name="
-          belopprad.taxonomyItem.tillhor +
-          ':' +
-          belopprad.taxonomyItem.elementnamn
-        "
-        context-ref="period1"
-        decimals="INF"
-        format="ixt:numspacecomma"
-        scale="0"
-        unit-ref="SEK"
-        >{{ FormatUtil.formatNumber(belopprad.beloppForegaendeAr) }}
-      </ix:nonFraction>
+    <td>
+      <template v-if="!isAbstract && belopprad.beloppForegaendeAr != null">
+        <span
+          v-if="
+            showSaldo &&
+            belopprad.taxonomyItem.saldo === 'debit' &&
+            belopprad.beloppForegaendeAr.trim().length > 0
+          "
+          >-</span
+        >
+        <ix:nonFraction
+          :context-ref="contextRefPrefix + '_foregaende'"
+          :name="
+            belopprad.taxonomyItem.tillhor +
+            ':' +
+            belopprad.taxonomyItem.elementnamn
+          "
+          decimals="INF"
+          format="ixt:numspacecomma"
+          scale="0"
+          unit-ref="SEK"
+          >{{ FormatUtil.formatNumber(belopprad.beloppForegaendeAr) }}
+        </ix:nonFraction>
+      </template>
     </td>
   </tr>
 </template>

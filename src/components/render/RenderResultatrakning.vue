@@ -28,6 +28,7 @@ defineProps<{
         v-for="belopprad in arsredovsining.resultatrakning"
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
+        context-ref-prefix="period"
         show-saldo
       />
     </tbody>

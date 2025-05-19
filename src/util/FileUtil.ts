@@ -1,4 +1,11 @@
 export class FileUtil {
+  /**
+   * Ber användaren att välja en JSON-fil för import, läser dess innehåll, och
+   * returnerar filens innehåll som en sträng.
+   *
+   * @return {Promise<string | undefined>} En Promise som returnerar innehållet
+   * i den valda filen som en sträng, eller undefined om ingen fil valts.
+   */
   static importFile(): Promise<string | undefined> {
     return new Promise<string | undefined>((resolve) => {
       const input = document.createElement("input");
@@ -16,6 +23,15 @@ export class FileUtil {
     });
   }
 
+  /**
+   * Exporterar data som en nedladdningsbar fil med det angivna filnamnet och
+   * MIME-typen.
+   *
+   * @param {string} data - Innehållet som ska skrivas till filen.
+   * @param {string} fileName - Namnet på den fil som ska laddas ner.
+   * @param {string} mimeType - MIME-typen för den fil som exporteras.
+   * @return {void} Denna metod returnerar inget värde.
+   */
   static exportFile(data: string, fileName: string, mimeType: string) {
     const file = new Blob([data], { type: mimeType });
     const a = document.createElement("a");

@@ -1,9 +1,13 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
 export const exampleArsredovisning: Arsredovisning = {
+  metadata: {
+    taxonomiTyp: "k2",
+    taxonomiVersion: "2021-10-31",
+  },
   foretagsinformation: {
     foretagsnamn: "Exempelbolaget AB",
-    organisationsnummer: "556123-4567",
+    organisationsnummer: "556999-9999",
     adress: "Storgatan 1, 123 45 Exempelstad",
     telefon: "0123-45 67 89",
   },

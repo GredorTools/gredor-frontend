@@ -9,7 +9,7 @@ const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
 });
 
 const temp: TaxonomyItem[] = await (
-  await fetch("data/taxonomy/Balansräkning.json")
+  await fetch("data/taxonomy/k2/2021-10-31/Balansräkning.json")
 ).json();
 
 const beloppItemToAdd = ref<TaxonomyItem | null>(null);

@@ -1,12 +1,18 @@
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface Arsredovisning {
+  metadata: Metadata;
   foretagsinformation: Foretagsinformation;
   verksamhetsarNuvarande: Verksamhetsar;
   verksamhetsarTidigare: Verksamhetsar[];
   resultatrakning: Belopprad[];
   balansrakning: Belopprad[];
   noter?: Not[];
+}
+
+export interface Metadata {
+  taxonomiTyp: "k2";
+  taxonomiVersion: "2021-10-31";
 }
 
 export interface Foretagsinformation {
