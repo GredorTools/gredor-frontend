@@ -5,7 +5,7 @@
 
 import * as fs from "fs";
 import minimist from "minimist";
-import * as XLSX from "xlsx/xlsx.mjs";
+import * as XLSX from "xlsx-republish/xlsx.mjs";
 
 XLSX.set_fs(fs);
 
@@ -17,120 +17,6 @@ if (!argv["input"]) {
 
 const workbook = XLSX.readFile(argv["input"]);
 const worksheetNames = workbook.SheetNames;
-
-const columnsToExclude = [
-  "namn",
-  "nummer",
-  "kapitel",
-  "namn_1",
-  "nummer_1",
-  "kapitel_1",
-  "paragraf_1",
-  "stycke_1",
-  "utgivare_2",
-  "namn_2",
-  "nummer_2",
-  "kapitel_2",
-  "paragraf_2",
-  "stycke_2",
-  "punkt_2",
-  "avsnitt_2",
-  "notis_2",
-  "utgivningsdatum_2",
-  "utgivare_3",
-  "namn_3",
-  "nummer_3",
-  "kapitel_3",
-  "paragraf_3",
-  "stycke_3",
-  "punkt_3",
-  "avsnitt_3",
-  "notis_3",
-  "utgivningsdatum_3",
-  "utgivare_4",
-  "namn_4",
-  "nummer_4",
-  "kapitel_4",
-  "paragraf_4",
-  "stycke_4",
-  "punkt_4",
-  "avsnitt_4",
-  "notis_4",
-  "utgivningsdatum_4",
-  "utgivare_5",
-  "namn_5",
-  "nummer_5",
-  "kapitel_5",
-  "paragraf_5",
-  "stycke_5",
-  "punkt_5",
-  "avsnitt_5",
-  "notis_5",
-  "utgivningsdatum_5",
-  "utgivare_6",
-  "namn_6",
-  "nummer_6",
-  "kapitel_6",
-  "paragraf_6",
-  "stycke_6",
-  "punkt_6",
-  "avsnitt_6",
-  "notis_6",
-  "utgivningsdatum_6",
-  "utgivare_7",
-  "namn_7",
-  "nummer_7",
-  "kapitel_7",
-  "punkt_7",
-  "utgivare_8",
-  "namn_8",
-  "nummer_8",
-  "kapitel_8",
-  "punkt_8",
-  "utgivare_1",
-  "punkt_1",
-  "avsnitt_1",
-  "notis_1",
-  "utgivningsdatum_1",
-  "utgivare_9",
-  "namn_9",
-  "nummer_9",
-  "kapitel_9",
-  "punkt_9",
-  "utgivare_10",
-  "namn_10",
-  "nummer_10",
-  "utgivare_11",
-  "namn_11",
-  "nummer_11",
-  "kapitel_10",
-  "kapitel_11",
-  "utgivare_12",
-  "namn_12",
-  "nummer_12",
-  "kapitel_12",
-  "notis_11",
-  "notis_8",
-  "punkt_10",
-  "utgivare_13",
-  "namn_13",
-  "nummer_13",
-  "utgivare_14",
-  "namn_14",
-  "nummer_14",
-  "punkt_11",
-  "utgivare_15",
-  "namn_15",
-  "nummer_15",
-  "paragraf",
-  "stycke",
-  "punkt_12",
-  "paragraf_7",
-  "paragraf_8",
-  "stycke_8",
-  "paragraf_11",
-  "paragraf_12",
-];
 
 for (const worksheetName of worksheetNames) {
   const worksheet = workbook.Sheets[worksheetName];
@@ -220,7 +106,11 @@ for (const worksheetName of worksheetNames) {
     */
     for (const row of taxonomySheet) {
       for (const key in row) {
-        if (columnsToExclude.includes(key)) {
+        if (
+          key.match(
+            /^(namn|nummer|kapitel|paragraf|stycke|utgivare|punkt|avsnitt|notis|utgivningsdatum)(_\d+)?$/,
+          )
+        ) {
           delete row[key];
         }
       }

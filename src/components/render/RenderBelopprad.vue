@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { Belopprad } from "@/model/arsredovisning/Arsredovisning.ts";
-import { FormatTools } from "@/util/FormatTools.ts";
+import { FormatUtil } from "@/util/FormatUtil.ts";
 
 defineProps<{
   belopprad: Belopprad;
@@ -42,7 +42,7 @@ defineProps<{
         scale="0"
         unit-ref="SEK"
       >
-        {{ FormatTools.formatNumber(belopprad.beloppNuvarandeAr) }}
+        {{ FormatUtil.formatNumber(belopprad.beloppNuvarandeAr) }}
       </ix:nonFraction>
     </td>
     <td v-if="belopprad.beloppForegaendeAr != null">
@@ -65,7 +65,7 @@ defineProps<{
         format="ixt:numspacecomma"
         scale="0"
         unit-ref="SEK"
-        >{{ FormatTools.formatNumber(belopprad.beloppForegaendeAr) }}
+        >{{ FormatUtil.formatNumber(belopprad.beloppForegaendeAr) }}
       </ix:nonFraction>
     </td>
   </tr>

@@ -1,4 +1,4 @@
-export class FileTools {
+export class FileUtil {
   static importFile(): Promise<string | undefined> {
     return new Promise<string | undefined>((resolve) => {
       const input = document.createElement("input");

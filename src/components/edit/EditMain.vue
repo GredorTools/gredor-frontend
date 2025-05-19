@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditResultatrakning from "@/components/edit/EditResultatrakning.vue";
-import { FileTools } from "@/util/FileTools.ts";
+import { FileUtil } from "@/util/FileUtil.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/EditBalansrakning.vue";
 import { type Ref, ref } from "vue";
@@ -11,7 +11,7 @@ const arsredovsining = defineModel<Arsredovisning>({
 });
 
 async function importFile() {
-  const file = await FileTools.importFile();
+  const file = await FileUtil.importFile();
   if (file) {
     const dataContainer: DataContainer<Arsredovisning> = JSON.parse(file);
     // TODO: Validera
@@ -26,7 +26,7 @@ function exportFile() {
     data: arsredovsining.value,
   };
 
-  FileTools.exportFile(
+  FileUtil.exportFile(
     JSON.stringify(dataContainer),
     `Gredor_${new Date().getTime()}.json`,
     "application/json",

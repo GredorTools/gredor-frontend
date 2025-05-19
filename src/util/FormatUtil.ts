@@ -1,4 +1,4 @@
-export class FormatTools {
+export class FormatUtil {
   static formatNumber(numberAsString: string): string {
     return numberAsString
       .trim()
