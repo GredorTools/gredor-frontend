@@ -10,7 +10,8 @@ export interface TaxonomyItem {
   elementnamn: string;
   tillhor: string;
   standardrubrik: string;
-  abstrakt: string;
+  abstrakt: "true" | "false";
+  belopp: number;
   datatyp: string;
   saldo?: "debit" | "credit";
   periodtyp: string;

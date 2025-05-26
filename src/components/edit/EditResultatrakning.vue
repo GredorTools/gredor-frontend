@@ -8,7 +8,7 @@ const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 
-const temp: TaxonomyItem[] = await (
+const taxonomyItemsFromData: TaxonomyItem[] = await (
   await fetch("data/taxonomy/k2/2021-10-31/Kostnadsslagsindelad resultatr.json")
 ).json();
 
@@ -32,7 +32,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem, sort: boolean = true) {
   });
 
   if (taxonomyItem.__ParentId != null) {
-    for (const possibleParentTaxonomyItem of temp) {
+    for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
       if (
         possibleParentTaxonomyItem.__Level > 0 &&
         possibleParentTaxonomyItem.id === taxonomyItem.__ParentId
@@ -82,12 +82,12 @@ function addBelopprad(taxonomyItem: TaxonomyItem, sort: boolean = true) {
 
   <select v-model="beloppItemToAdd">
     <option
-      v-for="taxonomy in temp"
-      :key="taxonomy.id"
-      :disabled="taxonomy.abstrakt === 'true'"
-      :value="taxonomy"
+      v-for="taxonomyItem in taxonomyItemsFromData"
+      :key="taxonomyItem.id"
+      :disabled="taxonomyItem.abstrakt === 'true'"
+      :value="taxonomyItem"
     >
-      {{ "\u00a0".repeat(taxonomy.__Level * 4) + taxonomy.radrubrik }}
+      {{ "\u00a0".repeat(taxonomyItem.__Level * 4) + taxonomyItem.radrubrik }}
     </option>
   </select>
   <button
