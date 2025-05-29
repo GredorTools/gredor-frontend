@@ -21,6 +21,7 @@ export const exampleArsredovisning: Arsredovisning = {
   verksamhetsarTidigare: [
     { startdatum: "2023-01-01", slutdatum: "2023-12-31" },
   ],
+  forvaltningsberattelse: [],
   resultatrakning: [
     {
       taxonomyItem: {

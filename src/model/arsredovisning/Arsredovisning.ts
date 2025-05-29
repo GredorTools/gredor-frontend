@@ -8,6 +8,7 @@ export interface Arsredovisning {
   foretagsinformation: Foretagsinformation;
   verksamhetsarNuvarande: Verksamhetsar;
   verksamhetsarTidigare: Verksamhetsar[];
+  forvaltningsberattelse: Belopprad<TaxonomyItemType>[];
   resultatrakning: Belopprad<TaxonomyItemType>[];
   balansrakning: Belopprad<TaxonomyItemType>[];
   noter: Belopprad<TaxonomyItemType>[];
@@ -74,6 +75,17 @@ export function createBelopprad<T extends TaxonomyItemType>(
         beloppNuvarandeAr: "",
         beloppForegaendeAr: "",
       } as Belopprad<T>;
+
+    // TODO
+    case "enum:enumerationItemType":
+    case "nonnum:domainItemType":
+    case "xbrli:decimalItemType":
+    case "xbrli:pureItemType":
+    case "xbrli:sharesItemType":
+      alert("Ännu ej implementerat");
+      throw new Error(
+        `Unsupported taxonomy item data type: ${taxonomyItem.datatyp}`,
+      );
 
     default:
       throw new Error(

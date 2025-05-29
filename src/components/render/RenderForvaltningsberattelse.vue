@@ -9,22 +9,10 @@ defineProps<{
 
 <template>
   <table>
-    <thead>
-      <tr>
-        <th scope="col">Noter</th>
-        <th scope="col">Not</th>
-        <th scope="col">
-          {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
-        </th>
-        <th scope="col">
-          {{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
-        </th>
-      </tr>
-    </thead>
     <tbody>
       <!-- TODO: Olika context-ref-prefix -->
       <RenderBelopprad
-        v-for="belopprad in arsredovsining.noter"
+        v-for="belopprad in arsredovsining.forvaltningsberattelse"
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
         context-ref-prefix="balans"

@@ -6,6 +6,8 @@ import { FileUtil } from "@/util/FileUtil.ts";
 import xmlFormat from "xml-formatter";
 import { DocumentUtil } from "@/util/DocumentUtil.ts";
 import RenderIXBRLHeader from "@/components/render/RenderIXBRLHeader.vue";
+import RenderForvaltningsberattelse from "@/components/render/RenderForvaltningsberattelse.vue";
+import RenderNoter from "@/components/render/RenderNoter.vue";
 
 const props = defineProps<{
   arsredovsining: Arsredovisning;
@@ -120,10 +122,10 @@ function exportArsredovisning() {
     <div id="arsredovisning-for-export">
       <RenderIXBRLHeader :arsredovsining="arsredovsining" />
       <div class="sections-container">
-        <!--<RenderForvaltningsberattelse :arsredovsining="arsredovsining" />-->
+        <RenderForvaltningsberattelse :arsredovsining="arsredovsining" />
         <RenderResultatrakning :arsredovsining="arsredovsining" />
         <RenderBalansrakning :arsredovsining="arsredovsining" />
-        <!--<RenderNoter :arsredovsining="arsredovsining" />-->
+        <RenderNoter :arsredovsining="arsredovsining" />
       </div>
     </div>
   </div>

@@ -30,9 +30,13 @@ function enumerateForGroup(
   group: TaxonomyItemGroup,
 ): [Belopprad<TaxonomyItemType>, number][] {
   const result: [Belopprad<TaxonomyItemType>, number][] = [];
-  for (let i = 0; i < arsredovsining.value.balansrakning.length; i++) {
-    if (group.ids.has(arsredovsining.value.balansrakning[i].taxonomyItem.id)) {
-      result.push([arsredovsining.value.balansrakning[i], i]);
+  for (let i = 0; i < arsredovsining.value.forvaltningsberattelse.length; i++) {
+    if (
+      group.ids.has(
+        arsredovsining.value.forvaltningsberattelse[i].taxonomyItem.id,
+      )
+    ) {
+      result.push([arsredovsining.value.forvaltningsberattelse[i], i]);
     }
   }
   return result;
@@ -43,7 +47,7 @@ function addBelopprad(
   sort: boolean = true,
 ) {
   if (
-    arsredovsining.value.balansrakning.some(
+    arsredovsining.value.forvaltningsberattelse.some(
       (belopprad) => belopprad.taxonomyItem.id === taxonomyItem.id,
     )
   ) {
@@ -51,7 +55,9 @@ function addBelopprad(
     return;
   }
 
-  arsredovsining.value.balansrakning.push(createBelopprad(taxonomyItem));
+  arsredovsining.value.forvaltningsberattelse.push(
+    createBelopprad(taxonomyItem),
+  );
 
   if (taxonomyItem.__ParentId != null) {
     for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
@@ -65,7 +71,7 @@ function addBelopprad(
   }
 
   if (sort) {
-    arsredovsining.value.balansrakning.sort(
+    arsredovsining.value.forvaltningsberattelse.sort(
       (a, b) =>
         parseInt(a.taxonomyItem.rowNumber, 10) -
         parseInt(b.taxonomyItem.rowNumber, 10),
@@ -78,24 +84,12 @@ function addBelopprad(
   <h3>Förvaltningsberättelse</h3>
   <template v-for="group in groupedTaxonomyItems" :key="group.items[0].id">
     <table>
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">Eget namn</th>
-          <th scope="col">Not</th>
-          <th scope="col">
-            {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
-          </th>
-          <th scope="col">
-            {{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
-          </th>
-        </tr>
-      </thead>
       <tbody>
         <EditBelopprad
           v-for="[belopprad, index] in enumerateForGroup(group)"
           :key="belopprad.taxonomyItem.id"
-          v-model:belopprad="arsredovsining.balansrakning[index]"
+          v-model:belopprad="arsredovsining.forvaltningsberattelse[index]"
+          string-multiline
         />
       </tbody>
     </table>
