@@ -1,7 +1,10 @@
-import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import type {
+  TaxonomyItem,
+  TaxonomyItemType,
+} from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface TaxonomyItemGroup {
-  items: TaxonomyItem[];
+  items: TaxonomyItem<TaxonomyItemType>[];
   ids: Set<string>;
 }
 
@@ -18,7 +21,7 @@ export interface TaxonomyItemGroup {
  * den gruppen.
  */
 export function groupTaxonomyItems(
-  taxonomyItems: TaxonomyItem[],
+  taxonomyItems: TaxonomyItem<TaxonomyItemType>[],
   groupLevel: number,
 ): TaxonomyItemGroup[] {
   const groupedTaxonomyItems: TaxonomyItemGroup[] = [];

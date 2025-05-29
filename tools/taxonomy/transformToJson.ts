@@ -31,6 +31,9 @@ for (const worksheetName of worksheetNames) {
     { key: "__EMPTY_1", level: 2 },
     { key: "__EMPTY_2", level: 3 },
     { key: "__EMPTY_3", level: 4 },
+    { key: "__EMPTY_4", level: 5 },
+    { key: "__EMPTY_5", level: 6 },
+    { key: "__EMPTY_6", level: 7 },
   ];
 
   function updateHierarchy(

@@ -22,7 +22,13 @@ export default typescriptEslint.config(
       },
     },
     rules: {
-      // your rules
+      "vue/attribute-hyphenation": [
+        "error",
+        "always",
+        {
+          ignoreTags: ["ix:nonFraction", "ix:nonNumeric"],
+        },
+      ],
     },
   },
   eslintConfigPrettier,

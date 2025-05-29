@@ -20,7 +20,7 @@ const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
 });
 
 const taxonomyItemsFromData: TaxonomyItem<TaxonomyItemType>[] = await (
-  await fetch("data/taxonomy/k2/2021-10-31/Balansräkning.json")
+  await fetch("data/taxonomy/k2/2021-10-31/Förvaltningsberättelse.json")
 ).json();
 const groupedTaxonomyItems = groupTaxonomyItems(taxonomyItemsFromData, 1);
 
@@ -75,7 +75,7 @@ function addBelopprad(
 </script>
 
 <template>
-  <h3>Balansräkning</h3>
+  <h3>Förvaltningsberättelse</h3>
   <template v-for="group in groupedTaxonomyItems" :key="group.items[0].id">
     <table>
       <thead>

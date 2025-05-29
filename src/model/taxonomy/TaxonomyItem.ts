@@ -1,4 +1,13 @@
-export interface TaxonomyItem {
+export type TaxonomyItemType =
+  | "enum:enumerationItemType"
+  | "nonnum:domainItemType"
+  | "xbrli:decimalItemType"
+  | "xbrli:monetaryItemType"
+  | "xbrli:pureItemType"
+  | "xbrli:sharesItemType"
+  | "xbrli:stringItemType";
+
+export interface TaxonomyItem<T extends TaxonomyItemType> {
   // Egna fält
   __ParentId?: string;
   __Level: number;
@@ -11,8 +20,7 @@ export interface TaxonomyItem {
   tillhor: string;
   standardrubrik: string;
   abstrakt: "true" | "false";
-  belopp: number;
-  datatyp: string;
+  datatyp: T;
   saldo?: "debit" | "credit";
   periodtyp: string;
   typ: string;

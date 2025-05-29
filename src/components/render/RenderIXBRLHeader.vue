@@ -16,29 +16,29 @@ defineProps<{
   >
     <ix:header>
       <ix:hidden>
-        <ix:nonNumeric context-ref="period_nuvarande" name="se-cd-base:Sprak"
+        <ix:nonNumeric contextRef="period_nuvarande" name="se-cd-base:Sprak"
           >sv
         </ix:nonNumeric>
-        <ix:nonNumeric context-ref="period_nuvarande" name="se-cd-base:Land"
+        <ix:nonNumeric contextRef="period_nuvarande" name="se-cd-base:Land"
           >SE
         </ix:nonNumeric>
         <ix:nonNumeric
-          context-ref="period_nuvarande"
+          contextRef="period_nuvarande"
           name="se-cd-base:Redovisningsvaluta"
           >SEK
         </ix:nonNumeric>
         <ix:nonNumeric
-          context-ref="period_nuvarande"
+          contextRef="period_nuvarande"
           name="se-cd-base:Beloppsformat"
           >NORMALFORM
         </ix:nonNumeric>
         <ix:nonNumeric
-          context-ref="period_nuvarande"
+          contextRef="period_nuvarande"
           name="se-cd-base:RakenskapsarForstaDag"
           >{{ arsredovsining.verksamhetsarNuvarande.startdatum }}
         </ix:nonNumeric>
         <ix:nonNumeric
-          context-ref="period_nuvarande"
+          contextRef="period_nuvarande"
           name="se-cd-base:RakenskapsarSistaDag"
           >{{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
         </ix:nonNumeric>

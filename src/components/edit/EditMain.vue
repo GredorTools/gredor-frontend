@@ -5,6 +5,8 @@ import { FileUtil } from "@/util/FileUtil.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/EditBalansrakning.vue";
 import { type Ref, ref } from "vue";
+import EditNoter from "@/components/edit/EditNoter.vue";
+import EditForvaltningsberattelse from "@/components/edit/EditForvaltningsberattelse.vue";
 
 const arsredovsining = defineModel<Arsredovisning>({
   required: true,
@@ -33,8 +35,12 @@ function exportFile() {
   );
 }
 
-type Mode = "resultatrakning" | "balansrakning";
-const currentMode: Ref<Mode> = ref("resultatrakning");
+type Mode =
+  | "forvaltningsberattelse"
+  | "resultatrakning"
+  | "balansrakning"
+  | "noter";
+const currentMode: Ref<Mode> = ref("forvaltningsberattelse");
 </script>
 
 <template>
@@ -43,17 +49,25 @@ const currentMode: Ref<Mode> = ref("resultatrakning");
 
   <div class="mode-selector">
     <select v-model="currentMode">
+      <option value="forvaltningsberattelse">Förvaltningsberättelse</option>
       <option value="resultatrakning">Resultaträkning</option>
       <option value="balansrakning">Balansräkning</option>
+      <option value="noter">Noter</option>
     </select>
   </div>
 
   <div class="editor">
+    <Suspense v-if="currentMode === 'forvaltningsberattelse'">
+      <EditForvaltningsberattelse v-model:arsredovisning="arsredovsining" />
+    </Suspense>
     <Suspense v-if="currentMode === 'resultatrakning'">
       <EditResultatrakning v-model:arsredovisning="arsredovsining" />
     </Suspense>
     <Suspense v-if="currentMode === 'balansrakning'">
       <EditBalansrakning v-model:arsredovisning="arsredovsining" />
+    </Suspense>
+    <Suspense v-if="currentMode === 'noter'">
+      <EditNoter v-model:arsredovisning="arsredovsining" />
     </Suspense>
   </div>
 </template>

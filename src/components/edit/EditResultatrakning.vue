@@ -1,20 +1,29 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import {
+  type Arsredovisning,
+  createBelopprad,
+} from "@/model/arsredovisning/Arsredovisning.ts";
+import type {
+  TaxonomyItem,
+  TaxonomyItemType,
+} from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
 
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 
-const taxonomyItemsFromData: TaxonomyItem[] = await (
+const taxonomyItemsFromData: TaxonomyItem<TaxonomyItemType>[] = await (
   await fetch("data/taxonomy/k2/2021-10-31/Kostnadsslagsindelad resultatr.json")
 ).json();
 
-const beloppItemToAdd = ref<TaxonomyItem | null>(null);
+const beloppItemToAdd = ref<TaxonomyItem<TaxonomyItemType> | null>(null);
 
-function addBelopprad(taxonomyItem: TaxonomyItem, sort: boolean = true) {
+function addBelopprad(
+  taxonomyItem: TaxonomyItem<TaxonomyItemType>,
+  sort: boolean = true,
+) {
   if (
     arsredovsining.value.resultatrakning.some(
       (belopprad) => belopprad.taxonomyItem.id === taxonomyItem.id,
@@ -24,12 +33,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem, sort: boolean = true) {
     return;
   }
 
-  arsredovsining.value.resultatrakning.push({
-    taxonomyItem: taxonomyItem,
-    typ: "enkelvarde",
-    beloppNuvarandeAr: "",
-    beloppForegaendeAr: "",
-  });
+  arsredovsining.value.resultatrakning.push(createBelopprad(taxonomyItem));
 
   if (taxonomyItem.__ParentId != null) {
     for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {

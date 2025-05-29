@@ -20,7 +20,7 @@ const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
 });
 
 const taxonomyItemsFromData: TaxonomyItem<TaxonomyItemType>[] = await (
-  await fetch("data/taxonomy/k2/2021-10-31/Balansräkning.json")
+  await fetch("data/taxonomy/k2/2021-10-31/Noter.json")
 ).json();
 const groupedTaxonomyItems = groupTaxonomyItems(taxonomyItemsFromData, 1);
 
@@ -30,9 +30,9 @@ function enumerateForGroup(
   group: TaxonomyItemGroup,
 ): [Belopprad<TaxonomyItemType>, number][] {
   const result: [Belopprad<TaxonomyItemType>, number][] = [];
-  for (let i = 0; i < arsredovsining.value.balansrakning.length; i++) {
-    if (group.ids.has(arsredovsining.value.balansrakning[i].taxonomyItem.id)) {
-      result.push([arsredovsining.value.balansrakning[i], i]);
+  for (let i = 0; i < arsredovsining.value.noter.length; i++) {
+    if (group.ids.has(arsredovsining.value.noter[i].taxonomyItem.id)) {
+      result.push([arsredovsining.value.noter[i], i]);
     }
   }
   return result;
@@ -43,7 +43,7 @@ function addBelopprad(
   sort: boolean = true,
 ) {
   if (
-    arsredovsining.value.balansrakning.some(
+    arsredovsining.value.noter.some(
       (belopprad) => belopprad.taxonomyItem.id === taxonomyItem.id,
     )
   ) {
@@ -51,7 +51,7 @@ function addBelopprad(
     return;
   }
 
-  arsredovsining.value.balansrakning.push(createBelopprad(taxonomyItem));
+  arsredovsining.value.noter.push(createBelopprad(taxonomyItem));
 
   if (taxonomyItem.__ParentId != null) {
     for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
@@ -65,7 +65,7 @@ function addBelopprad(
   }
 
   if (sort) {
-    arsredovsining.value.balansrakning.sort(
+    arsredovsining.value.noter.sort(
       (a, b) =>
         parseInt(a.taxonomyItem.rowNumber, 10) -
         parseInt(b.taxonomyItem.rowNumber, 10),
@@ -75,7 +75,7 @@ function addBelopprad(
 </script>
 
 <template>
-  <h3>Balansräkning</h3>
+  <h3>Noter</h3>
   <template v-for="group in groupedTaxonomyItems" :key="group.items[0].id">
     <table>
       <thead>
@@ -95,7 +95,7 @@ function addBelopprad(
         <EditBelopprad
           v-for="[belopprad, index] in enumerateForGroup(group)"
           :key="belopprad.taxonomyItem.id"
-          v-model:belopprad="arsredovsining.balansrakning[index]"
+          v-model:belopprad="arsredovsining.noter[index]"
         />
       </tbody>
     </table>

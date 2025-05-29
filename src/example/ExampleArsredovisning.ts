@@ -1,4 +1,7 @@
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import type {
+  Arsredovisning,
+  Belopprad,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 
 export const exampleArsredovisning: Arsredovisning = {
   metadata: {
@@ -34,10 +37,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "240",
         radrubrik: "Rörelseresultat",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -54,10 +54,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "241",
         radrubrik: "Rörelseintäkter, lagerförändringar m.m.",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -78,10 +75,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "242",
         radrubrik: "Nettoomsättning",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "5000",
       beloppForegaendeAr: "3000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -102,10 +98,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "241",
         radrubrik: "Summa rörelseintäkter, lagerförändringar m.m.",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "5000",
       beloppForegaendeAr: "3000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -121,10 +116,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "241",
         radrubrik: "Rörelsekostnader",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -145,10 +137,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "248",
         radrubrik: "Övriga externa kostnader",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "150",
       beloppForegaendeAr: "2900",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -167,11 +158,10 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "248",
         radrubrik: "Personalkostnader",
       },
-      typ: "enkelvarde",
       not: 2,
       beloppNuvarandeAr: "1100",
       beloppForegaendeAr: "1100",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -192,10 +182,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "241",
         radrubrik: "Summa rörelsekostnader",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "1250",
       beloppForegaendeAr: "4000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -214,10 +203,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "240",
         radrubrik: "Rörelseresultat",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "3750",
       beloppForegaendeAr: "-1000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -235,10 +223,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "240",
         radrubrik: "Resultat efter finansiella poster",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "3750",
       beloppForegaendeAr: "-1000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -257,10 +244,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "240",
         radrubrik: "Resultat före skatt",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "3750",
       beloppForegaendeAr: "-1000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -276,10 +262,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "240",
         radrubrik: "Skatter",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -297,10 +280,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "276",
         radrubrik: "Skatt på årets resultat",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "772",
       beloppForegaendeAr: "0",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -319,10 +301,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "240",
         radrubrik: "Årets resultat",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "2978",
       beloppForegaendeAr: "-1000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
   ],
   balansrakning: [
     {
@@ -340,10 +321,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "310",
         radrubrik: "Tillgångar",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -359,10 +337,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "311",
         radrubrik: "Omsättningstillgångar",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -378,10 +353,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "340",
         radrubrik: "Kassa och bank",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 4,
@@ -399,10 +371,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "362",
         radrubrik: "Kassa och bank",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "39728",
       beloppForegaendeAr: "36500",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -421,10 +392,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "340",
         radrubrik: "Summa kassa och bank",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "39728",
       beloppForegaendeAr: "36500",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -445,10 +415,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "311",
         radrubrik: "Summa omsättningstillgångar",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "39728",
       beloppForegaendeAr: "36500",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -469,10 +438,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "310",
         radrubrik: "Summa tillgångar",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "39728",
       beloppForegaendeAr: "36500",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -488,10 +456,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "310",
         radrubrik: "Eget kapital och skulder",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -507,10 +472,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "368",
         radrubrik: "Eget kapital",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -526,10 +488,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "369",
         radrubrik: "Bundet eget kapital",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 4,
@@ -548,10 +507,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "370",
         radrubrik: "Aktiekapital",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "25000",
       beloppForegaendeAr: "25000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -567,10 +525,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "369",
         radrubrik: "Fritt eget kapital",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 4,
@@ -591,10 +546,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "377",
         radrubrik: "Balanserat resultat",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "11000",
       beloppForegaendeAr: "12000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 4,
@@ -613,10 +567,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "377",
         radrubrik: "Årets resultat",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "2978",
       beloppForegaendeAr: "-1000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -637,10 +590,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "369",
         radrubrik: "Summa fritt eget kapital",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "13978",
       beloppForegaendeAr: "11000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -660,10 +612,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "368",
         radrubrik: "Summa eget kapital",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "38978",
       beloppForegaendeAr: "36000",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 2,
@@ -679,10 +630,7 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "368",
         radrubrik: "Kortfristiga skulder",
       },
-      typ: "enkelvarde",
-      beloppNuvarandeAr: "",
-      beloppForegaendeAr: "",
-    },
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItem: {
         __Level: 3,
@@ -701,10 +649,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "402",
         radrubrik: "Övriga skulder",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "750",
       beloppForegaendeAr: "500",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItem: {
         __Level: 1,
@@ -725,22 +672,9 @@ export const exampleArsredovisning: Arsredovisning = {
         __ParentId: "310",
         radrubrik: "Summa eget kapital och skulder",
       },
-      typ: "enkelvarde",
       beloppNuvarandeAr: "39728",
       beloppForegaendeAr: "36500",
-    },
+    } as Belopprad<"xbrli:monetaryItemType">,
   ],
-  noter: [
-    {
-      notnummer: 1,
-      beskrivning: "Redovisningsprinciper",
-      detaljer:
-        "Företaget tillämpar årsredovisningslagen och Bokföringsnämndens allmänna råd.",
-    },
-    {
-      notnummer: 2,
-      beskrivning: "Personal",
-      detaljer: "Företaget har i genomsnitt haft 5 anställda under året.",
-    },
-  ],
+  noter: [],
 };

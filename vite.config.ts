@@ -11,7 +11,11 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // XHTML för taxonomier
-          isCustomElement: (tag) => tag.startsWith("ix:"),
+          isCustomElement: (tag) =>
+            tag.startsWith("ix:") ||
+            tag.startsWith("link:") ||
+            tag.startsWith("xbrli:") ||
+            tag.startsWith("xlink:"),
         },
       },
     }),
