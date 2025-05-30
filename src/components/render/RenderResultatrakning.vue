@@ -29,7 +29,7 @@ defineProps<{
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
         context-ref-prefix="period"
-        show-saldo
+        monetary-show-saldo
       />
     </tbody>
   </table>

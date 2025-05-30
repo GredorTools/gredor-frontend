@@ -79,7 +79,7 @@ function addBelopprad(
         v-for="(belopprad, index) in arsredovsining.resultatrakning"
         :key="belopprad.taxonomyItem.id"
         v-model:belopprad="arsredovsining.resultatrakning[index]"
-        show-saldo
+        monetary-show-saldo
       />
     </tbody>
   </table>

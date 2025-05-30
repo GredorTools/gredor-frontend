@@ -7,14 +7,12 @@ const props = defineProps<{
   contextRefPrefix: "period" | "balans";
   showSaldo: boolean;
 }>();
-
-const isAbstract = props.belopprad.taxonomyItem.abstrakt === "true";
 </script>
 
 <template>
   <tr
     :class="{
-      abstract: isAbstract,
+      abstract: props.belopprad.taxonomyItem.abstrakt === 'true',
       [`level-${belopprad.taxonomyItem.__Level}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"

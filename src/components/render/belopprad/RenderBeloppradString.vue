@@ -5,14 +5,12 @@ const props = defineProps<{
   belopprad: BeloppradString;
   contextRefPrefix: "period" | "balans";
 }>();
-
-const isAbstract = props.belopprad.taxonomyItem.abstrakt === "true";
 </script>
 
 <template>
   <tr
     :class="{
-      abstract: isAbstract,
+      abstract: props.belopprad.taxonomyItem.abstrakt === 'true',
       [`level-${belopprad.taxonomyItem.__Level}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
@@ -30,7 +28,14 @@ const isAbstract = props.belopprad.taxonomyItem.abstrakt === "true";
           belopprad.taxonomyItem.elementnamn
         "
       >
-        {{ belopprad.text }}
+        <p
+          v-for="(line, index) in props.belopprad.text
+            .split(/\r?\n/)
+            .filter((line) => line.trim().length > 0)"
+          :key="index"
+        >
+          {{ line }}
+        </p>
       </ix:nonNumeric>
     </td>
   </tr>
@@ -39,5 +44,14 @@ const isAbstract = props.belopprad.taxonomyItem.abstrakt === "true";
 <style lang="scss" scoped>
 .header {
   font-weight: 600;
+}
+
+p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
 }
 </style>

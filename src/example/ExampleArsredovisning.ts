@@ -21,7 +21,63 @@ export const exampleArsredovisning: Arsredovisning = {
   verksamhetsarTidigare: [
     { startdatum: "2023-01-01", slutdatum: "2023-12-31" },
   ],
-  forvaltningsberattelse: [],
+  forvaltningsberattelse: [
+    {
+      taxonomyItem: {
+        __Level: 1,
+        id: "26",
+        rowNumber: "2",
+        elementnamn: "VerksamhetenAbstract",
+        tillhor: "se-gen-base",
+        standardrubrik: "Verksamheten (Presentation)",
+        abstrakt: "true",
+        datatyp: "xbrli:stringItemType",
+        periodtyp: "duration",
+        typ: "item",
+        dokumentation: "Upplysningar om verksamheten",
+        __ParentId: "25",
+        radrubrik: "Verksamheten",
+      },
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItem: {
+        __Level: 2,
+        id: "27",
+        rowNumber: "3",
+        elementnamn: "AllmantVerksamheten",
+        tillhor: "se-gen-base",
+        standardrubrik: "Allmänt om verksamheten",
+        abstrakt: "false",
+        datatyp: "xbrli:stringItemType",
+        periodtyp: "duration",
+        typ: "item",
+        dokumentation:
+          "Upplysning om företagets säte, vilken verksamhet företaget bedriver, om företaget bytt namn och andra förhållanden som särskilt berör företaget",
+        __ParentId: "26",
+        radrubrik: "Allmänt om verksamheten",
+      },
+      text: "Verksamheten har varit att grilla körv.\n\nBolaget har sitt säte i Halmstads kommun.",
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItem: {
+        __Level: 2,
+        id: "28",
+        rowNumber: "4",
+        elementnamn: "VasentligaHandelserRakenskapsaret",
+        tillhor: "se-gen-base",
+        standardrubrik: "Väsentliga händelser under räkenskapsåret",
+        abstrakt: "false",
+        datatyp: "xbrli:stringItemType",
+        periodtyp: "duration",
+        typ: "item",
+        dokumentation:
+          "Upplysning om händelser av väsentlig betydelse för företaget som har inträffat under räkenskapsåret; beslutade viktiga förändringar i verksamheten, för företaget viktiga externa faktorer som påverkat dess ställning och resultat samt den omständigheten att företaget inte längre förutsätts fortsätta sin verksamhet",
+        __ParentId: "26",
+        radrubrik: "Väsentliga händelser under räkenskapsåret",
+      },
+      text: "Mängden körv som grillas har ökat från 1st/månad till 2st/månad.",
+    } as Belopprad<"xbrli:stringItemType">,
+  ],
   resultatrakning: [
     {
       taxonomyItem: {
@@ -677,5 +733,41 @@ export const exampleArsredovisning: Arsredovisning = {
       beloppForegaendeAr: "36500",
     } as Belopprad<"xbrli:monetaryItemType">,
   ],
-  noter: [],
+  noter: [
+    {
+      taxonomyItem: {
+        __Level: 1,
+        id: "503",
+        rowNumber: "2",
+        elementnamn: "RedovisningsprinciperAbstract",
+        tillhor: "se-gen-base",
+        standardrubrik: "Redovisnings- och värderingsprinciper (Presentation)",
+        abstrakt: "true",
+        datatyp: "xbrli:stringItemType",
+        periodtyp: "duration",
+        typ: "item",
+        __ParentId: "502",
+        radrubrik: "Redovisningsprinciper",
+      },
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItem: {
+        __Level: 2,
+        id: "504",
+        rowNumber: "3",
+        elementnamn: "RedovisningsVarderingsprinciper",
+        tillhor: "se-gen-base",
+        standardrubrik: "Redovisnings- och värderingsprinciper",
+        abstrakt: "false",
+        datatyp: "xbrli:stringItemType",
+        periodtyp: "duration",
+        typ: "item",
+        dokumentation:
+          "Upplysning om att årsredovisningslagen tillämpas samt vilken normgivning som tillämpas",
+        __ParentId: "503",
+        radrubrik: "Redovisningsprinciper",
+      },
+      text: "Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag.",
+    } as Belopprad<"xbrli:stringItemType">,
+  ],
 };
