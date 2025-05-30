@@ -8,37 +8,43 @@ import {
   type BeloppradGroup,
   groupBelopprader,
 } from "@/model/arsredovisning/BeloppradGroup.ts";
-import { computed } from "vue";
+import { computed, h, type VNode } from "vue";
 
 const props = defineProps<{
   arsredovsining: Arsredovisning;
 }>();
 
 const groupedBelopprader = computed(() =>
-  groupBelopprader(props.arsredovsining.noter, 2),
+  groupBelopprader(
+    props.arsredovsining.noter,
+    1,
+    (belopprad) => belopprad.taxonomyItem.__Level > 1,
+  ),
 );
-//const groupedBelopprader = computed(() =>
-//    groupBelopprader(props.arsredovsining.noter, 2).map((group) =>
-//        groupBelopprader(group.items, 3),
-//    ),
-//);
 
-function getValueHeader(
+function getValueColumnHeaderCell(
   beloppradGroup: BeloppradGroup,
   verksamhetsar: Verksamhetsar,
-): string {
+): VNode {
+  const attrs = { scope: "col" };
+
   const firstNonStringItem = beloppradGroup.items.find(
     (belopprad) => belopprad.taxonomyItem.datatyp !== "xbrli:stringItemType",
   );
   if (!firstNonStringItem) {
     // Finns inga icke-sträng-värden, vi ska inte ha någon kolumnrubrik
-    return "";
+    return h("th", attrs);
   }
   switch (firstNonStringItem.taxonomyItem.periodtyp) {
     case "duration":
-      return `${verksamhetsar.startdatum}<br />–${verksamhetsar.slutdatum}`;
+      return h("th", attrs, [
+        verksamhetsar.startdatum,
+        h("br"),
+        "–",
+        verksamhetsar.slutdatum,
+      ]);
     case "instant":
-      return verksamhetsar.slutdatum;
+      return h("th", attrs, [verksamhetsar.slutdatum]);
     default:
       throw new Error("Unknown periodtyp");
   }
@@ -52,39 +58,38 @@ function getValueHeader(
   >
     <thead>
       <tr>
-        <th colspan="2" scope="col"></th>
         <th scope="col">
           {{
-            getValueHeader(
+            "Not " +
+            (index + 1) +
+            ": " +
+            beloppradGroup.items[0].taxonomyItem.radrubrik
+          }}
+        </th>
+        <th scope="col"></th>
+        <component
+          :is="
+            getValueColumnHeaderCell(
               beloppradGroup,
               arsredovsining.verksamhetsarNuvarande,
             )
-          }}
-        </th>
-        <th scope="col">
-          {{
-            getValueHeader(
+          "
+        />
+        <component
+          :is="
+            getValueColumnHeaderCell(
               beloppradGroup,
               arsredovsining.verksamhetsarTidigare[0],
             )
-          }}
-        </th>
+          "
+        />
       </tr>
     </thead>
     <tbody>
       <RenderBelopprad
-        v-for="belopprad in beloppradGroup.items.filter(
-          (b) =>
-            b.taxonomyItem.__Level > 2 || b.taxonomyItem.abstrakt !== 'true',
-        )"
+        v-for="belopprad in beloppradGroup.items"
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
-        :string-header-mapper="
-          belopprad.taxonomyItem.__Level === 2
-            ? (text) => 'Not ' + (index + 1) + ': ' + text
-            : undefined
-        "
-        string-show-header
       />
     </tbody>
   </table>

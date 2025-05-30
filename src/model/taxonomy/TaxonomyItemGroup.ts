@@ -12,20 +12,21 @@ export interface TaxonomyItemGroup {
 /**
  * Grupperar taxonomiposter i logiska grupper baserat på nivå.
  *
- * @param {TaxonomyItem[]} taxonomyItems - En array med taxonomiposter som ska
- * grupperas.
- * @param {number} groupLevel - På vilken nivå taxonomiposter ska grupperas.
- * Endast poster med en `__Level` som är större än eller lika med denna nivå
- * kommer att inkluderas i grupperingen.
- * @return {TaxonomyItemGroup[]} En array med grupperade taxonomiposter. Varje
- * grupp innehåller en uppsättning av ids och en array av poster som hör till
- * den gruppen.
+ * @param taxonomyItems - En array med taxonomiposter som ska grupperas.
+ * @param groupLevel - På vilken nivå taxonomiposter ska grupperas. Endast
+ * poster med en `__Level` som är större än eller lika med denna nivå kommer
+ * att inkluderas i grupperingen.
+ * @param filter - En funktion som används för att filtrera posterna. Endast
+ * poster som uppfyller villkoren i denna funktion inkluderas i utdatat.
+ * @return En array med grupperade taxonomiposter. Varje grupp innehåller en
+ * uppsättning av ids och en array av poster som hör till den gruppen.
  */
 export function groupTaxonomyItems(
   taxonomyItems: TaxonomyItem<TaxonomyItemType>[],
   groupLevel: number,
+  filter: (item: TaxonomyItem<TaxonomyItemType>) => boolean = () => true,
 ): TaxonomyItemGroup[] {
-  return groupItems(taxonomyItems, groupLevel, (item) => ({
+  return groupItems(taxonomyItems, groupLevel, filter, (item) => ({
     id: item.id,
     level: item.__Level,
     isAbstract: item.abstrakt === "true",

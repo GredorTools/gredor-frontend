@@ -10,20 +10,22 @@ export interface BeloppradGroup {
 /**
  * Grupperar belopprader i logiska grupper baserat på nivå.
  *
- * @param {Belopprad[]} belopprader - En array med belopprader som ska
- * grupperas.
- * @param {number} groupLevel - På vilken nivå belopprader ska grupperas.
- * Endast poster med en `__Level` som är större än eller lika med denna nivå
- * kommer att inkluderas i grupperingen.
- * @return {BeloppradGroup[]} En array med grupperade belopprader. Varje grupp
- * innehåller en uppsättning av ids och en array av poster som hör till den
- * gruppen.
+ * @param belopprader - En array med belopprader som ska grupperas.
+ * @param groupLevel - På vilken nivå belopprader ska grupperas. Endast poster
+ * med en `__Level` som är större än eller lika med denna nivå kommer att
+ * inkluderas i utdatat.
+ * @param filter - En funktion som används för att filtrera beloppraderna.
+ * Endast belopprader som uppfyller villkoren i denna funktion inkluderas i
+ * utdatat.
+ * @return En array med grupperade belopprader. Varje grupp innehåller en
+ * uppsättning av ids och en array av poster som hör till den gruppen.
  */
 export function groupBelopprader(
   belopprader: Belopprad<TaxonomyItemType>[],
   groupLevel: number,
+  filter: (item: Belopprad<TaxonomyItemType>) => boolean = () => true,
 ): BeloppradGroup[] {
-  return groupItems(belopprader, groupLevel, (item) => ({
+  return groupItems(belopprader, groupLevel, filter, (item) => ({
     id: item.taxonomyItem.id,
     level: item.taxonomyItem.__Level,
     isAbstract: item.taxonomyItem.abstrakt === "true",

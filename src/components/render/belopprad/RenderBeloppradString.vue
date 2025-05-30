@@ -21,6 +21,7 @@ const computedHeader = computed(() => {
 
 <template>
   <tr
+    v-if="showHeader || belopprad.text"
     :class="{
       abstract: belopprad.taxonomyItem.abstrakt === 'true',
       [`level-${belopprad.taxonomyItem.__Level}`]: true,
@@ -43,7 +44,7 @@ const computedHeader = computed(() => {
         <p
           v-for="(line, index) in belopprad.text
             .split(/\r?\n/)
-            .filter((line) => line.trim().length > 0)"
+            .filter((l) => l.trim().length > 0)"
           :key="index"
         >
           {{ line }}
