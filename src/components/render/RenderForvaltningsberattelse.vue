@@ -10,12 +10,11 @@ defineProps<{
 <template>
   <table>
     <tbody>
-      <!-- TODO: Olika context-ref-prefix -->
       <RenderBelopprad
         v-for="belopprad in arsredovsining.forvaltningsberattelse"
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
-        context-ref-prefix="balans"
+        string-show-header
       />
     </tbody>
   </table>

@@ -26,7 +26,7 @@ defineProps<{
         v-for="belopprad in arsredovsining.balansrakning"
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
-        context-ref-prefix="balans"
+        string-show-header
       />
     </tbody>
   </table>

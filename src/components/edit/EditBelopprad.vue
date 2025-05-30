@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import {
-  type Belopprad,
-  isBeloppradMonetary,
-  isBeloppradString,
-} from "@/model/arsredovisning/Arsredovisning.ts";
 import type { TaxonomyItemType } from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBeloppradMonetary from "@/components/edit/belopprad/EditBeloppradMonetary.vue";
 import EditBeloppradString from "@/components/edit/belopprad/EditBeloppradString.vue";
+
+import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import EditBeloppradDecimal from "@/components/edit/belopprad/EditBeloppradDecimal.vue";
+import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 
 defineProps<{
   monetaryShowSaldo?: boolean;
@@ -24,17 +25,22 @@ const classes = {
 </script>
 
 <template>
+  <EditBeloppradString
+    v-if="isBeloppradString(belopprad)"
+    :belopprad="belopprad"
+    :class="[$style.belopprad, classes]"
+    :multiline="stringMultiline || false"
+  />
   <EditBeloppradMonetary
     v-if="isBeloppradMonetary(belopprad)"
     :belopprad="belopprad"
     :class="[$style.belopprad, classes]"
     :show-saldo="monetaryShowSaldo || false"
   />
-  <EditBeloppradString
-    v-if="isBeloppradString(belopprad)"
+  <EditBeloppradDecimal
+    v-if="isBeloppradDecimal(belopprad)"
     :belopprad="belopprad"
     :class="[$style.belopprad, classes]"
-    :multiline="stringMultiline || false"
   />
 </template>
 

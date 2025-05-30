@@ -18,8 +18,10 @@ function exportArsredovisning() {
     "arsredovisning-for-export",
   );
   if (arsredovisningForExport) {
-    let html = arsredovisningForExport.innerHTML;
-    const doc = new DOMParser().parseFromString(html, "text/html");
+    const doc = new DOMParser().parseFromString(
+      arsredovisningForExport.innerHTML,
+      "text/html",
+    );
 
     // Lägg till CSS
     let rulesCss = DocumentUtil.getCssTextForUsedRules(
@@ -40,15 +42,7 @@ function exportArsredovisning() {
     }
     rulesCss = rulesCss.replace(/\[(data-.+?)]/g, ".$1");
 
-    const { foretagsinformation } = props.arsredovsining;
-    doc.head.innerHTML += `
-      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning</title>
-      <meta name="programvara" content="Gredor" />
-      <meta name="programversion" content="${import.meta.env.VITE_APP_VERSION}" />
-      <style type="text/css">${rulesCss}</style>
-    `;
-
+    // Fixa versalisering i taggar och attribut (som blir fel pga att vi kör HTML5 i gui:t)
     function fixTag(
       tagName: string,
       attributeNamesToFix: string[],
@@ -83,7 +77,7 @@ function exportArsredovisning() {
         }
 
         // Replace it
-        oldElement.parentNode.replaceChild(newElement, oldElement);
+        oldElement.parentNode?.replaceChild(newElement, oldElement);
       }
     }
 
@@ -102,16 +96,24 @@ function exportArsredovisning() {
     fixTag("xbrli:endDate", [], "http://www.xbrl.org/2003/instance");
 
     // Skapa slutlig HTML
-    html = new XMLSerializer().serializeToString(doc);
-    html = '<?xml version="1.0" encoding="UTF-8"?>\n' + html;
-    html = html.replace(
+    const { foretagsinformation } = props.arsredovsining;
+    doc.head.innerHTML += `
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <meta name="programvara" content="Gredor" />
+      <meta name="programversion" content="${import.meta.env.VITE_APP_VERSION}" />
+      <title>${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning</title>
+      <style type="text/css">${rulesCss}</style>
+    `;
+    let xhtml = new XMLSerializer().serializeToString(doc);
+    xhtml = '<?xml version="1.0" encoding="UTF-8"?>\n' + xhtml;
+    xhtml = xhtml.replace(
       '<html xmlns="http://www.w3.org/1999/xhtml">',
       '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2010-04-20" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" xmlns:se-gen-base="http://www.taxonomier.se/se/fr/gen-base/2017-09-30" xmlns:se-cd-base="http://www.taxonomier.se/se/fr/cd-base/2017-09-30" xmlns:se-k2-type="http://www.taxonomier.se/se/fr/k2/datatype">',
     );
-    html = xmlFormat(html, { collapseContent: true });
+    xhtml = xmlFormat(xhtml, { collapseContent: true });
 
     // Spara filen
-    FileUtil.exportFile(html, "arsredovisning.xhtml", "text/html");
+    FileUtil.exportFile(xhtml, "arsredovisning.xhtml", "text/html");
   }
 }
 </script>

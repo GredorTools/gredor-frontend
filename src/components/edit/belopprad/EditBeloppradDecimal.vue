@@ -1,11 +1,7 @@
 <script lang="ts" setup>
-import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import type { BeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 
-defineProps<{
-  showSaldo?: boolean;
-}>();
-
-const belopprad = defineModel<BeloppradMonetary>("belopprad", {
+const belopprad = defineModel<BeloppradDecimal>("belopprad", {
   required: true,
 });
 </script>
@@ -27,18 +23,8 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
     <td>
       <input v-model="belopprad.egetNamn" type="text" />
     </td>
+    <td></td>
     <td>
-      <input
-        v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        v-model="belopprad.not"
-        type="text"
-      />
-    </td>
-    <td>
-      <template v-if="showSaldo">
-        <span v-if="belopprad.taxonomyItem.saldo === 'debit'">-</span>
-        <span v-if="belopprad.taxonomyItem.saldo === 'credit'">+</span>
-      </template>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
         v-model="belopprad.beloppNuvarandeAr"
@@ -46,10 +32,6 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
       />
     </td>
     <td>
-      <template v-if="showSaldo">
-        <span v-if="belopprad.taxonomyItem.saldo === 'debit'">-</span>
-        <span v-if="belopprad.taxonomyItem.saldo === 'credit'">+</span>
-      </template>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
         v-model="belopprad.beloppForegaendeAr"

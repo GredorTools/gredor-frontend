@@ -22,7 +22,7 @@ export interface TaxonomyItem<T extends TaxonomyItemType> {
   abstrakt: "true" | "false";
   datatyp: T;
   saldo?: "debit" | "credit";
-  periodtyp: string;
+  periodtyp: "duration" | "instant";
   typ: string;
   dokumentation?: string;
   utokadDokumentation?: string;

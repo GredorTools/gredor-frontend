@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { FormatUtil } from "@/util/FormatUtil.ts";
-import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import type { BeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 
 defineProps<{
-  belopprad: BeloppradMonetary;
+  belopprad: BeloppradDecimal;
   contextRefPrefix: "period" | "balans";
-  showSaldo: boolean;
 }>();
 </script>
 
@@ -20,20 +19,9 @@ defineProps<{
     <td>
       {{ belopprad.egetNamn || belopprad.taxonomyItem.radrubrik }}
     </td>
+    <td></td>
     <td>
-      {{ belopprad.not }}
-    </td>
-    <td>
-      <span
-        v-if="
-          (showSaldo &&
-            belopprad.taxonomyItem.saldo === 'debit' &&
-            belopprad.beloppNuvarandeAr.trim().length > 0 &&
-            belopprad.beloppNuvarandeAr.trim() !== '0') ||
-          belopprad.beloppNuvarandeAr.startsWith('-')
-        "
-        >-</span
-      >
+      <!-- TODO: unitRef -->
       <ix:nonFraction
         :contextRef="contextRefPrefix + '_nuvarande'"
         :name="
@@ -56,16 +44,7 @@ defineProps<{
     </td>
     <td>
       <template v-if="belopprad.beloppForegaendeAr != null">
-        <span
-          v-if="
-            (showSaldo &&
-              belopprad.taxonomyItem.saldo === 'debit' &&
-              belopprad.beloppForegaendeAr.trim().length > 0 &&
-              belopprad.beloppForegaendeAr.trim() !== '0') ||
-            belopprad.beloppForegaendeAr.startsWith('-')
-          "
-          >-</span
-        >
+        <!-- TODO: unitRef -->
         <ix:nonFraction
           :contextRef="contextRefPrefix + '_foregaende'"
           :name="

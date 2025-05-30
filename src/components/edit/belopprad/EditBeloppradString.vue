@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { type BeloppradString } from "@/model/arsredovisning/Arsredovisning.ts";
-import { useAttrs } from "vue";
+import { computed, useAttrs } from "vue";
+import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 
 defineOptions({
   inheritAttrs: false,
@@ -16,14 +16,16 @@ const belopprad = defineModel<BeloppradString>("belopprad", {
   required: true,
 });
 
-const isAbstract = belopprad.value.taxonomyItem.abstrakt === "true";
+const isAbstract = computed(
+  () => belopprad.value.taxonomyItem.abstrakt === "true",
+);
 
-const trClasses = [
+const trClasses = computed(() => [
   attrs.class,
   {
     "full-width": props.multiline,
   },
-];
+]);
 </script>
 
 <template>

@@ -1,7 +1,5 @@
-import type {
-  Arsredovisning,
-  Belopprad,
-} from "@/model/arsredovisning/Arsredovisning.ts";
+import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export const exampleArsredovisning: Arsredovisning = {
   metadata: {
@@ -13,6 +11,7 @@ export const exampleArsredovisning: Arsredovisning = {
     organisationsnummer: "556999-9999",
     adress: "Storgatan 1, 123 45 Exempelstad",
     telefon: "0123-45 67 89",
+    redovisningsvaluta: "SEK",
   },
   verksamhetsarNuvarande: {
     startdatum: "2024-01-01",
@@ -769,5 +768,74 @@ export const exampleArsredovisning: Arsredovisning = {
       },
       text: "Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag.",
     } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItem: {
+        __Level: 1,
+        __ParentId: "502",
+        abstrakt: "true",
+        datatyp: "xbrli:stringItemType",
+        elementnamn: "UpplysningarResultatrakningenAbstract",
+        id: "546",
+        periodtyp: "duration",
+        radrubrik: "Upplysningar till resultaträkningen",
+        rowNumber: "45",
+        standardrubrik: "Upplysningar till resultaträkningen (Presentation)",
+        tillhor: "se-gen-base",
+        typ: "item",
+      },
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItem: {
+        __Level: 2,
+        __ParentId: "546",
+        abstrakt: "false",
+        datatyp: "xbrli:stringItemType",
+        elementnamn: "NotMedelantaletAnstallda",
+        id: "567",
+        periodtyp: "duration",
+        radrubrik: "Medelantalet anställda",
+        rowNumber: "66",
+        standardrubrik: "Upplysning om medelantalet anställda",
+        tillhor: "se-gen-base",
+        typ: "item",
+      },
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItem: {
+        __Level: 3,
+        __ParentId: "567",
+        abstrakt: "true",
+        datatyp: "xbrli:stringItemType",
+        dokumentation: "Specifikation av medelantalet anställda",
+        elementnamn: "MedelantaletAnstalldaAbstract",
+        id: "568",
+        periodtyp: "duration",
+        radrubrik: "Medelantalet anställda",
+        rowNumber: "67",
+        standardrubrik: "Medelantalet anställda (Presentation)",
+        tillhor: "se-gen-base",
+        typ: "item",
+      },
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      beloppForegaendeAr: "2,5",
+      beloppNuvarandeAr: "4",
+      taxonomyItem: {
+        __Level: 4,
+        __ParentId: "568",
+        abstrakt: "false",
+        datatyp: "xbrli:decimalItemType",
+        dokumentation:
+          "Upplysning om medelantalet av de personer som varit anställda under perioden. Upplysningen ska utvisa de anställdas arbetsvolym under perioden räknat i antalet heltidstjänster (helårspersoner). Medelantalet anställda kan beräknas på individnivå. Beräkningen för anställda som inte arbetar heltid eller hela året utgår från ersatta timmar, dagar eller annan tid för att mäta den arbetsvolym som ska omräknas till heltidstjänster. Beräkningen får också göras som summan av antalet arbetade timmar dividerad med normal årsarbetstid eller som ett genomsnitt av antalet anställda personer enligt mätningar vid minst två tidpunkter under perioden (justerat för icke heltidsanställda)",
+        elementnamn: "MedelantaletAnstallda",
+        id: "569",
+        periodtyp: "duration",
+        radrubrik: "Medelantalet anställda",
+        rowNumber: "68",
+        standardrubrik: "Medelantalet anställda",
+        tillhor: "se-gen-base",
+        typ: "item",
+      },
+    } as Belopprad<"xbrli:decimalItemType">,
   ],
 };

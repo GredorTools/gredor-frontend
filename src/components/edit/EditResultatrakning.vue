@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import {
-  type Arsredovisning,
-  createBelopprad,
-} from "@/model/arsredovisning/Arsredovisning.ts";
+import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type {
   TaxonomyItem,
   TaxonomyItemType,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
+import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,

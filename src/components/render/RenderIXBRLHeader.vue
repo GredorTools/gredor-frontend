@@ -110,6 +110,7 @@ defineProps<{
             </xbrli:instant>
           </xbrli:period>
         </xbrli:context>
+        <!-- TODO: redovisningsvaluta -->
         <xbrli:unit id="SEK">
           <xbrli:measure>iso4217:SEK</xbrli:measure>
         </xbrli:unit>

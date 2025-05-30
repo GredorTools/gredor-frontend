@@ -1,33 +1,90 @@
 <script lang="ts" setup>
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import type {
+  Arsredovisning,
+  Verksamhetsar,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import {
+  type BeloppradGroup,
+  groupBelopprader,
+} from "@/model/arsredovisning/BeloppradGroup.ts";
+import { computed } from "vue";
 
-defineProps<{
+const props = defineProps<{
   arsredovsining: Arsredovisning;
 }>();
+
+const groupedBelopprader = computed(() =>
+  groupBelopprader(props.arsredovsining.noter, 2),
+);
+//const groupedBelopprader = computed(() =>
+//    groupBelopprader(props.arsredovsining.noter, 2).map((group) =>
+//        groupBelopprader(group.items, 3),
+//    ),
+//);
+
+function getValueHeader(
+  beloppradGroup: BeloppradGroup,
+  verksamhetsar: Verksamhetsar,
+): string {
+  const firstNonStringItem = beloppradGroup.items.find(
+    (belopprad) => belopprad.taxonomyItem.datatyp !== "xbrli:stringItemType",
+  );
+  if (!firstNonStringItem) {
+    // Finns inga icke-sträng-värden, vi ska inte ha någon kolumnrubrik
+    return "";
+  }
+  switch (firstNonStringItem.taxonomyItem.periodtyp) {
+    case "duration":
+      return `${verksamhetsar.startdatum}<br />–${verksamhetsar.slutdatum}`;
+    case "instant":
+      return verksamhetsar.slutdatum;
+    default:
+      throw new Error("Unknown periodtyp");
+  }
+}
 </script>
 
 <template>
-  <table>
+  <table
+    v-for="(beloppradGroup, index) in groupedBelopprader"
+    :key="beloppradGroup.items[0].taxonomyItem.id"
+  >
     <thead>
       <tr>
-        <th scope="col">Noter</th>
-        <th scope="col">Not</th>
+        <th colspan="2" scope="col"></th>
         <th scope="col">
-          {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+          {{
+            getValueHeader(
+              beloppradGroup,
+              arsredovsining.verksamhetsarNuvarande,
+            )
+          }}
         </th>
         <th scope="col">
-          {{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
+          {{
+            getValueHeader(
+              beloppradGroup,
+              arsredovsining.verksamhetsarTidigare[0],
+            )
+          }}
         </th>
       </tr>
     </thead>
     <tbody>
-      <!-- TODO: Olika context-ref-prefix -->
       <RenderBelopprad
-        v-for="belopprad in arsredovsining.noter"
+        v-for="belopprad in beloppradGroup.items.filter(
+          (b) =>
+            b.taxonomyItem.__Level > 2 || b.taxonomyItem.abstrakt !== 'true',
+        )"
         :key="belopprad.taxonomyItem.id"
         :belopprad="belopprad"
-        context-ref-prefix="balans"
+        :string-header-mapper="
+          belopprad.taxonomyItem.__Level === 2
+            ? (text) => 'Not ' + (index + 1) + ': ' + text
+            : undefined
+        "
+        string-show-header
       />
     </tbody>
   </table>
