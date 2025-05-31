@@ -7,6 +7,7 @@ import EditBalansrakning from "@/components/edit/EditBalansrakning.vue";
 import { type Ref, ref } from "vue";
 import EditNoter from "@/components/edit/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/EditForvaltningsberattelse.vue";
+import EditGrunduppgifter from "@/components/edit/EditGrunduppgifter.vue";
 
 const arsredovsining = defineModel<Arsredovisning>({
   required: true,
@@ -36,11 +37,12 @@ function exportFile() {
 }
 
 type Mode =
+  | "grunduppgifter"
   | "forvaltningsberattelse"
   | "resultatrakning"
   | "balansrakning"
   | "noter";
-const currentMode: Ref<Mode> = ref("forvaltningsberattelse");
+const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
 
 <template>
@@ -49,6 +51,7 @@ const currentMode: Ref<Mode> = ref("forvaltningsberattelse");
 
   <div class="mode-selector">
     <select v-model="currentMode">
+      <option value="grunduppgifter">Grunduppgifter</option>
       <option value="forvaltningsberattelse">Förvaltningsberättelse</option>
       <option value="resultatrakning">Resultaträkning</option>
       <option value="balansrakning">Balansräkning</option>
@@ -57,6 +60,9 @@ const currentMode: Ref<Mode> = ref("forvaltningsberattelse");
   </div>
 
   <div class="editor">
+    <Suspense v-if="currentMode === 'grunduppgifter'">
+      <EditGrunduppgifter v-model:arsredovisning="arsredovsining" />
+    </Suspense>
     <Suspense v-if="currentMode === 'forvaltningsberattelse'">
       <EditForvaltningsberattelse v-model:arsredovisning="arsredovsining" />
     </Suspense>

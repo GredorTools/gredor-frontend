@@ -33,7 +33,7 @@ defineProps<{
         decimals="INF"
         format="ixt:numspacecomma"
         scale="0"
-        unitRef="SEK"
+        unitRef="redovisningsvaluta"
       >
         {{
           FormatUtil.formatNumber(belopprad.beloppNuvarandeAr, {
@@ -56,7 +56,7 @@ defineProps<{
           decimals="INF"
           format="ixt:numspacecomma"
           scale="0"
-          unitRef="SEK"
+          unitRef="redovisningsvaluta"
           >{{
             FormatUtil.formatNumber(belopprad.beloppForegaendeAr, {
               removeSign: true,
@@ -80,17 +80,5 @@ defineProps<{
 .abstract.level-3 {
   font-weight: 400;
   text-decoration: underline;
-}
-
-.typ-delsumma {
-  font-weight: 500;
-}
-
-.typ-summa {
-  font-weight: 600;
-}
-
-.typ-slutsumma {
-  font-weight: 700;
 }
 </style>

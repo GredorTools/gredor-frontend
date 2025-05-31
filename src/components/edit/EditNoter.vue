@@ -13,6 +13,7 @@ import {
 import {
   type Belopprad,
   createBelopprad,
+  deleteBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
@@ -89,6 +90,7 @@ function addBelopprad(
           <th scope="col">
             {{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
           </th>
+          <th scope="col"><!-- Ta bort-knapp --></th>
         </tr>
       </thead>
       <tbody>
@@ -96,6 +98,9 @@ function addBelopprad(
           v-for="[belopprad, index] in enumerateForGroup(group)"
           :key="belopprad.taxonomyItem.id"
           v-model:belopprad="arsredovsining.noter[index]"
+          :delete-callback="
+            () => deleteBelopprad(belopprad, arsredovsining.noter)
+          "
         />
       </tbody>
     </table>

@@ -52,47 +52,52 @@ function getValueColumnHeaderCell(
 </script>
 
 <template>
-  <table
-    v-for="(beloppradGroup, index) in groupedBelopprader"
-    :key="beloppradGroup.items[0].taxonomyItem.id"
-  >
-    <thead>
-      <tr>
-        <th scope="col">
-          {{
-            "Not " +
-            (index + 1) +
-            ": " +
-            beloppradGroup.items[0].taxonomyItem.radrubrik
-          }}
-        </th>
-        <th scope="col"></th>
-        <component
-          :is="
-            getValueColumnHeaderCell(
-              beloppradGroup,
-              arsredovsining.verksamhetsarNuvarande,
-            )
-          "
+  <div>
+    <h2>Noter</h2>
+    <table
+      v-for="(beloppradGroup, index) in groupedBelopprader"
+      :key="beloppradGroup.items[0].taxonomyItem.id"
+    >
+      <thead>
+        <tr>
+          <th scope="col">
+            <h3>
+              {{
+                "Not " +
+                (index + 1) +
+                ": " +
+                beloppradGroup.items[0].taxonomyItem.radrubrik
+              }}
+            </h3>
+          </th>
+          <th scope="col"></th>
+          <component
+            :is="
+              getValueColumnHeaderCell(
+                beloppradGroup,
+                arsredovsining.verksamhetsarNuvarande,
+              )
+            "
+          />
+          <component
+            :is="
+              getValueColumnHeaderCell(
+                beloppradGroup,
+                arsredovsining.verksamhetsarTidigare[0],
+              )
+            "
+          />
+        </tr>
+      </thead>
+      <tbody>
+        <RenderBelopprad
+          v-for="belopprad in beloppradGroup.items"
+          :key="belopprad.taxonomyItem.id"
+          :belopprad="belopprad"
         />
-        <component
-          :is="
-            getValueColumnHeaderCell(
-              beloppradGroup,
-              arsredovsining.verksamhetsarTidigare[0],
-            )
-          "
-        />
-      </tr>
-    </thead>
-    <tbody>
-      <RenderBelopprad
-        v-for="belopprad in beloppradGroup.items"
-        :key="belopprad.taxonomyItem.id"
-        :belopprad="belopprad"
-      />
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -102,13 +107,14 @@ table {
   th,
   &:deep(td) {
     text-align: left;
-    padding: 0.25rem;
+    padding: 0.25rem 0;
 
     &:first-child {
       width: 99%;
     }
 
     &:not(:first-child) {
+      padding-left: 1rem;
       white-space: nowrap;
     }
 

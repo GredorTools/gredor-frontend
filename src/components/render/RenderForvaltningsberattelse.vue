@@ -8,16 +8,19 @@ defineProps<{
 </script>
 
 <template>
-  <table>
-    <tbody>
-      <RenderBelopprad
-        v-for="belopprad in arsredovsining.forvaltningsberattelse"
-        :key="belopprad.taxonomyItem.id"
-        :belopprad="belopprad"
-        string-show-header
-      />
-    </tbody>
-  </table>
+  <div>
+    <h2>Förvaltningsberättelse</h2>
+    <table>
+      <tbody>
+        <RenderBelopprad
+          v-for="belopprad in arsredovsining.forvaltningsberattelse"
+          :key="belopprad.taxonomyItem.id"
+          :belopprad="belopprad"
+          string-show-header
+        />
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -27,13 +30,14 @@ table {
   th,
   &:deep(td) {
     text-align: left;
-    padding: 0.25rem;
+    padding: 0.25rem 0;
 
     &:first-child {
       width: 99%;
     }
 
     &:not(:first-child) {
+      padding-left: 1rem;
       white-space: nowrap;
     }
 

@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import type { BeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 
+defineProps<{
+  deleteCallback: () => void;
+}>();
+
 const belopprad = defineModel<BeloppradDecimal>("belopprad", {
   required: true,
 });
@@ -27,16 +31,19 @@ const belopprad = defineModel<BeloppradDecimal>("belopprad", {
     <td>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        v-model="belopprad.beloppNuvarandeAr"
+        v-model.trim="belopprad.beloppNuvarandeAr"
         type="text"
       />
     </td>
     <td>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        v-model="belopprad.beloppForegaendeAr"
+        v-model.trim="belopprad.beloppForegaendeAr"
         type="text"
       />
+    </td>
+    <td>
+      <button @click="deleteCallback">X</button>
     </td>
   </tr>
 </template>

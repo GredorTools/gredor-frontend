@@ -11,7 +11,7 @@ defineProps<{
   <table>
     <thead>
       <tr>
-        <th scope="col">Balansräkning</th>
+        <th scope="col"><h2>Balansräkning</h2></th>
         <th scope="col">Not</th>
         <th scope="col">
           {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
@@ -39,13 +39,14 @@ table {
   th,
   &:deep(td) {
     text-align: left;
-    padding: 0.25rem;
+    padding: 0.25rem 0;
 
     &:first-child {
       width: 99%;
     }
 
     &:not(:first-child) {
+      padding-left: 1rem;
       white-space: nowrap;
     }
 

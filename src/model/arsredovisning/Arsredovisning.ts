@@ -4,6 +4,7 @@ import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 export interface Arsredovisning {
   metadata: Metadata;
   foretagsinformation: Foretagsinformation;
+  redovisningsinformation: Redovisningsinformation;
   verksamhetsarNuvarande: Verksamhetsar;
   verksamhetsarTidigare: Verksamhetsar[];
   forvaltningsberattelse: Belopprad<TaxonomyItemType>[];
@@ -20,9 +21,16 @@ export interface Metadata {
 export interface Foretagsinformation {
   foretagsnamn: string;
   organisationsnummer: string;
-  adress?: string;
-  telefon?: string;
-  redovisningsvaluta: "SEK" | "EUR";
+}
+
+export interface Redovisningsinformation {
+  forfattare: string;
+  redovisningsvaluta: Redovisningsvaluta;
+}
+
+export interface Redovisningsvaluta {
+  kod: string;
+  namn: string;
 }
 
 export interface Verksamhetsar {

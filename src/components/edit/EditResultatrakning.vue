@@ -6,7 +6,10 @@ import type {
   TaxonomyItemType,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
-import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  createBelopprad,
+  deleteBelopprad,
+} from "@/model/arsredovisning/Belopprad.ts";
 
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
@@ -70,6 +73,7 @@ function addBelopprad(
           {{ arsredovsining.verksamhetsarTidigare[0].startdatum }}<br />
           –{{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
         </th>
+        <th scope="col"><!-- Ta bort-knapp --></th>
       </tr>
     </thead>
     <tbody>
@@ -77,6 +81,9 @@ function addBelopprad(
         v-for="(belopprad, index) in arsredovsining.resultatrakning"
         :key="belopprad.taxonomyItem.id"
         v-model:belopprad="arsredovsining.resultatrakning[index]"
+        :delete-callback="
+          () => deleteBelopprad(belopprad, arsredovsining.resultatrakning)
+        "
         monetary-show-saldo
       />
     </tbody>

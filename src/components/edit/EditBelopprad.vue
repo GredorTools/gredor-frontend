@@ -10,6 +10,7 @@ import EditBeloppradDecimal from "@/components/edit/belopprad/EditBeloppradDecim
 import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 
 defineProps<{
+  deleteCallback: () => void;
   monetaryShowSaldo?: boolean;
   stringMultiline?: boolean;
 }>();
@@ -29,18 +30,21 @@ const classes = {
     v-if="isBeloppradString(belopprad)"
     :belopprad="belopprad"
     :class="[$style.belopprad, classes]"
+    :delete-callback="deleteCallback"
     :multiline="stringMultiline || false"
   />
   <EditBeloppradMonetary
     v-if="isBeloppradMonetary(belopprad)"
     :belopprad="belopprad"
     :class="[$style.belopprad, classes]"
+    :delete-callback="deleteCallback"
     :show-saldo="monetaryShowSaldo || false"
   />
   <EditBeloppradDecimal
     v-if="isBeloppradDecimal(belopprad)"
     :belopprad="belopprad"
     :class="[$style.belopprad, classes]"
+    :delete-callback="deleteCallback"
   />
 </template>
 

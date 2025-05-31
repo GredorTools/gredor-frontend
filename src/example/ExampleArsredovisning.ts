@@ -9,9 +9,13 @@ export const exampleArsredovisning: Arsredovisning = {
   foretagsinformation: {
     foretagsnamn: "Exempelbolaget AB",
     organisationsnummer: "556999-9999",
-    adress: "Storgatan 1, 123 45 Exempelstad",
-    telefon: "0123-45 67 89",
-    redovisningsvaluta: "SEK",
+  },
+  redovisningsinformation: {
+    forfattare: "Styrelsen",
+    redovisningsvaluta: {
+      kod: "SEK",
+      namn: "kronor",
+    },
   },
   verksamhetsarNuvarande: {
     startdatum: "2024-01-01",
@@ -704,6 +708,29 @@ export const exampleArsredovisning: Arsredovisning = {
           "Övriga kortfristiga skulder, t.ex. mervärdesskatt, punktskatter, lagstadgade arbetsgivaravgifter som förfaller till betalning efterföljande månad, innehållen personalskatt och redovisningsmedel",
         __ParentId: "402",
         radrubrik: "Övriga skulder",
+      },
+      beloppNuvarandeAr: "750",
+      beloppForegaendeAr: "500",
+    } as Belopprad<"xbrli:monetaryItemType">,
+    {
+      taxonomyItem: {
+        __Level: 2,
+        __ParentId: "368",
+        abstrakt: "false",
+        datatyp: "xbrli:monetaryItemType",
+        dokumentation:
+          "Skulder som ska betalas inom 12 månader efter balansdagen",
+        elementnamn: "KortfristigaSkulder",
+        id: "416",
+        periodtyp: "instant",
+        radrubrik: "Summa kortfristiga skulder",
+        rowNumber: "107",
+        saldo: "credit",
+        standardrubrik: "Kortfristiga skulder",
+        tillhor: "se-gen-base",
+        typ: "item",
+        utokadDokumentation:
+          "Sammanslagning av följande poster; Checkräkningskredit, Övriga kortfristiga skulder till kreditinstitut, Förskott från kunder, Pågående arbeten för annans räkning (Skuld), Leverantörsskulder, Växelskulder, Kortfristiga skulder till koncernföretag, Kortfristiga skulder till intresseföretag och gemensamt styrda företag, Kortfristiga skulder till övriga företag som det finns ägarintresse i, Skatteskulder, Övriga kortfristiga skulder, Fakturerad men ej upparbetad intäkt och Upplupna kostnader och förutbetalda intäkter",
       },
       beloppNuvarandeAr: "750",
       beloppForegaendeAr: "500",

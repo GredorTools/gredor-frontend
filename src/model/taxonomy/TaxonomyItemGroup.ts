@@ -2,7 +2,7 @@ import type {
   TaxonomyItem,
   TaxonomyItemType,
 } from "@/model/taxonomy/TaxonomyItem.ts";
-import { groupItems } from "@/util/GroupingUtil.ts";
+import { GroupingUtil } from "@/util/GroupingUtil.ts";
 
 export interface TaxonomyItemGroup {
   items: TaxonomyItem<TaxonomyItemType>[];
@@ -26,7 +26,7 @@ export function groupTaxonomyItems(
   groupLevel: number,
   filter: (item: TaxonomyItem<TaxonomyItemType>) => boolean = () => true,
 ): TaxonomyItemGroup[] {
-  return groupItems(taxonomyItems, groupLevel, filter, (item) => ({
+  return GroupingUtil.groupItems(taxonomyItems, groupLevel, filter, (item) => ({
     id: item.id,
     level: item.__Level,
     isAbstract: item.abstrakt === "true",

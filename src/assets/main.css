@@ -1,8 +1,11 @@
 @import './base.css';
 
+body {
+    margin: 0;
+}
+
 #app {
     margin: 0 auto;
-    padding: 2rem;
     font-weight: normal;
 }
 
@@ -16,12 +19,20 @@
     body {
         display: flex;
         place-items: center;
+        background-color: #f6f6f6;
     }
 
     #app {
+        height: 100vh;
+        max-height: 100vh;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        padding: 0 2rem;
+        padding: 2rem;
         gap: 2em;
+
+        & > * {
+            height: 100%;
+            min-height: 0;
+        }
     }
 }

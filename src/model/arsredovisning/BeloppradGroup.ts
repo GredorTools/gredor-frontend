@@ -1,6 +1,6 @@
 import type { TaxonomyItemType } from "@/model/taxonomy/TaxonomyItem.ts";
-import { groupItems } from "@/util/GroupingUtil.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { GroupingUtil } from "@/util/GroupingUtil.ts";
 
 export interface BeloppradGroup {
   items: Belopprad<TaxonomyItemType>[];
@@ -25,7 +25,7 @@ export function groupBelopprader(
   groupLevel: number,
   filter: (item: Belopprad<TaxonomyItemType>) => boolean = () => true,
 ): BeloppradGroup[] {
-  return groupItems(belopprader, groupLevel, filter, (item) => ({
+  return GroupingUtil.groupItems(belopprader, groupLevel, filter, (item) => ({
     id: item.taxonomyItem.id,
     level: item.taxonomyItem.__Level,
     isAbstract: item.taxonomyItem.abstrakt === "true",

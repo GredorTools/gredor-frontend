@@ -13,6 +13,7 @@ import {
 import {
   type Belopprad,
   createBelopprad,
+  deleteBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
@@ -89,6 +90,10 @@ function addBelopprad(
           v-for="[belopprad, index] in enumerateForGroup(group)"
           :key="belopprad.taxonomyItem.id"
           v-model:belopprad="arsredovsining.forvaltningsberattelse[index]"
+          :delete-callback="
+            () =>
+              deleteBelopprad(belopprad, arsredovsining.forvaltningsberattelse)
+          "
           string-multiline
         />
       </tbody>

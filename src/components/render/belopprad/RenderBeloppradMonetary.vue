@@ -7,17 +7,29 @@ defineProps<{
   contextRefPrefix: "period" | "balans";
   showSaldo: boolean;
 }>();
+
+const extraSummarader = ["Årets resultat"];
+const superdelsummarader = [
+  "Rörelseresultat",
+  "Resultat efter finansiella poster",
+  "Resultat före skatt",
+];
 </script>
 
 <template>
   <tr
     :class="{
-      abstract: belopprad.taxonomyItem.abstrakt === 'true',
+      summa:
+        belopprad.taxonomyItem.radrubrik.startsWith('Summa ') ||
+        extraSummarader.includes(belopprad.taxonomyItem.radrubrik),
+      superdelsumma: superdelsummarader.includes(
+        belopprad.taxonomyItem.radrubrik,
+      ),
       [`level-${belopprad.taxonomyItem.__Level}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
-    <td>
+    <td class="rubrik">
       {{ belopprad.egetNamn || belopprad.taxonomyItem.radrubrik }}
     </td>
     <td>
@@ -45,7 +57,7 @@ defineProps<{
         decimals="INF"
         format="ixt:numspacecomma"
         scale="0"
-        unitRef="SEK"
+        unitRef="redovisningsvaluta"
       >
         {{
           FormatUtil.formatNumber(belopprad.beloppNuvarandeAr, {
@@ -77,7 +89,7 @@ defineProps<{
           decimals="INF"
           format="ixt:numspacecomma"
           scale="0"
-          unitRef="SEK"
+          unitRef="redovisningsvaluta"
           >{{
             FormatUtil.formatNumber(belopprad.beloppForegaendeAr, {
               removeSign: true,
@@ -90,28 +102,28 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.abstract.level-1 {
+.summa.level-1,
+.superdelsumma {
   font-weight: 600;
+
+  & td {
+    padding-top: 1.25rem;
+  }
+
+  & .rubrik {
+    font-style: italic;
+  }
 }
 
-.abstract.level-2 {
-  font-weight: 500;
-}
-
-.abstract.level-3 {
-  font-weight: 400;
-  text-decoration: underline;
-}
-
-.typ-delsumma {
-  font-weight: 500;
-}
-
-.typ-summa {
+.summa.level-2 {
   font-weight: 600;
+
+  & td {
+    padding-top: 0.5rem;
+  }
 }
 
-.typ-slutsumma {
-  font-weight: 700;
+.summa.level-3 {
+  font-weight: 500;
 }
 </style>

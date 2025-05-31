@@ -3,6 +3,7 @@ import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/Be
 
 defineProps<{
   showSaldo?: boolean;
+  deleteCallback: () => void;
 }>();
 
 const belopprad = defineModel<BeloppradMonetary>("belopprad", {
@@ -30,7 +31,7 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
     <td>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        v-model="belopprad.not"
+        v-model.trim="belopprad.not"
         type="text"
       />
     </td>
@@ -41,7 +42,7 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
       </template>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        v-model="belopprad.beloppNuvarandeAr"
+        v-model.trim="belopprad.beloppNuvarandeAr"
         type="text"
       />
     </td>
@@ -52,9 +53,12 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
       </template>
       <input
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        v-model="belopprad.beloppForegaendeAr"
+        v-model.trim="belopprad.beloppForegaendeAr"
         type="text"
       />
+    </td>
+    <td>
+      <button @click="deleteCallback">X</button>
     </td>
   </tr>
 </template>

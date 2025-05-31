@@ -10,6 +10,7 @@ const attrs = useAttrs();
 
 const props = defineProps<{
   multiline: boolean;
+  deleteCallback: () => void;
 }>();
 
 const belopprad = defineModel<BeloppradString>("belopprad", {
@@ -43,12 +44,15 @@ const trClasses = computed(() => [
           {{ belopprad.taxonomyItem.dokumentation }}
         </span>
       </td>
+      <td>
+        <button @click="deleteCallback">X</button>
+      </td>
     </tr>
     <tr :class="trClasses">
       <td
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
         :class="{ tooltip: belopprad.taxonomyItem.dokumentation }"
-        colspan="5"
+        colspan="6"
       >
         <textarea v-if="multiline" v-model="belopprad.text"></textarea>
       </td>
@@ -65,6 +69,9 @@ const trClasses = computed(() => [
     </td>
     <td v-if="!isAbstract" colspan="4">
       <input v-model="belopprad.text" type="text" />
+    </td>
+    <td>
+      <button v-if="!isAbstract" @click="deleteCallback">X</button>
     </td>
   </tr>
 </template>

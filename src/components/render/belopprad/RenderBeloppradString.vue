@@ -55,7 +55,33 @@ const computedHeader = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.header {
+.abstract.level-1 {
+  font-weight: 600;
+  font-size: 1.15rem;
+
+  &:not(:first-of-type) td {
+    padding-top: 2.25rem;
+  }
+}
+
+.abstract.level-2 {
+  font-weight: 600;
+  text-decoration: underline;
+
+  &:not(:first-of-type) td {
+    padding-top: 1.25rem;
+  }
+}
+
+.abstract.level-3 {
+  font-weight: 500;
+
+  &:not(:first-of-type) td {
+    padding-top: 0.75rem;
+  }
+}
+
+tr:not(.abstract) .header {
   font-weight: 600;
 }
 
