@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed, useAttrs } from "vue";
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
+import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
 
 defineOptions({
   inheritAttrs: false,
@@ -32,26 +34,17 @@ const trClasses = computed(() => [
 <template>
   <template v-if="multiline && !isAbstract">
     <tr :class="trClasses">
-      <td
-        :class="{ tooltip: belopprad.taxonomyItem.dokumentation }"
-        colspan="5"
-      >
-        <span class="tooltip-target">{{
-          belopprad.taxonomyItem.radrubrik
-        }}</span>
-
-        <span v-if="belopprad.taxonomyItem.dokumentation" class="tooltip-text">
-          {{ belopprad.taxonomyItem.dokumentation }}
-        </span>
+      <td colspan="5">
+        <BaseEditBeloppradTitle :belopprad="belopprad" />
       </td>
       <td>
-        <button @click="deleteCallback">X</button>
+        <button class="btn btn-danger" @click="deleteCallback">X</button>
       </td>
     </tr>
     <tr :class="trClasses">
       <td
         v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        :class="{ tooltip: belopprad.taxonomyItem.dokumentation }"
+        :class="{ 'gredor-tooltip': belopprad.taxonomyItem.dokumentation }"
         colspan="6"
       >
         <textarea v-if="multiline" v-model="belopprad.text"></textarea>
@@ -60,18 +53,17 @@ const trClasses = computed(() => [
   </template>
 
   <tr v-else :class="trClasses">
-    <td :class="{ tooltip: belopprad.taxonomyItem.dokumentation }">
-      <span class="tooltip-target">{{ belopprad.taxonomyItem.radrubrik }}</span>
-
-      <span v-if="belopprad.taxonomyItem.dokumentation" class="tooltip-text">
-        {{ belopprad.taxonomyItem.dokumentation }}
-      </span>
+    <td>
+      <BaseEditBeloppradTitle :belopprad="belopprad" />
     </td>
     <td v-if="!isAbstract" colspan="4">
       <input v-model="belopprad.text" type="text" />
     </td>
     <td>
-      <button v-if="!isAbstract" @click="deleteCallback">X</button>
+      <BaseEditBeloppradDeleteButton
+        v-if="!isAbstract"
+        :delete-callback="deleteCallback"
+      />
     </td>
   </tr>
 </template>

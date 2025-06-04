@@ -1,5 +1,7 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { RedovisningsvalutaSEK } from "@/data/redovisningsvalutor.ts";
+import { ForfattareStyrelsen } from "@/data/forfattare.ts";
 
 export const exampleArsredovisning: Arsredovisning = {
   metadata: {
@@ -11,11 +13,8 @@ export const exampleArsredovisning: Arsredovisning = {
     organisationsnummer: "556999-9999",
   },
   redovisningsinformation: {
-    forfattare: "Styrelsen",
-    redovisningsvaluta: {
-      kod: "SEK",
-      namn: "kronor",
-    },
+    forfattare: ForfattareStyrelsen,
+    redovisningsvaluta: RedovisningsvalutaSEK,
   },
   verksamhetsarNuvarande: {
     startdatum: "2024-01-01",
@@ -566,6 +565,29 @@ export const exampleArsredovisning: Arsredovisning = {
           "Registrerat kapital hos Bolagsverket, enligt aktiebolagslagen",
         __ParentId: "370",
         radrubrik: "Aktiekapital",
+      },
+      beloppNuvarandeAr: "25000",
+      beloppForegaendeAr: "25000",
+    } as Belopprad<"xbrli:monetaryItemType">,
+    {
+      taxonomyItem: {
+        __Level: 3,
+        __ParentId: "369",
+        abstrakt: "false",
+        datatyp: "xbrli:monetaryItemType",
+        dokumentation:
+          "Del av ägarkapitalet som är bundet, därmed skyddat mot utbetalningar, dvs. är icke-utdelningsbart kapital",
+        elementnamn: "BundetEgetKapital",
+        id: "376",
+        periodtyp: "instant",
+        radrubrik: "Summa bundet eget kapital",
+        rowNumber: "67",
+        saldo: "credit",
+        standardrubrik: "Bundet eget kapital",
+        tillhor: "se-gen-base",
+        typ: "item",
+        utokadDokumentation:
+          "Sammanslagning av följande poster; Aktiekapital, Ej registrerat aktiekapital, Bunden överkursfond, Uppskrivningsfond och Reservfond",
       },
       beloppNuvarandeAr: "25000",
       beloppForegaendeAr: "25000",

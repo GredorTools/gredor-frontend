@@ -16,21 +16,32 @@ defineProps<{
   >
     <ix:header>
       <ix:hidden>
-        <ix:nonNumeric contextRef="period_nuvarande" name="se-cd-base:Sprak"
-          >sv
-        </ix:nonNumeric>
-        <ix:nonNumeric contextRef="period_nuvarande" name="se-cd-base:Land"
-          >SE
+        <ix:nonNumeric
+          contextRef="period_nuvarande"
+          name="se-cd-base:SprakHandlingUpprattadList"
+          >se-mem-base:SprakSvenskaMember
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"
-          name="se-cd-base:Redovisningsvaluta"
-          >SEK
+          name="se-cd-base:LandForetagetsSateList"
+          >se-mem-base:LandSverigeMember
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"
-          name="se-cd-base:Beloppsformat"
-          >NORMALFORM
+          name="se-cd-base:RedovisningsvalutaHandlingList"
+          >{{
+            arsredovsining.redovisningsinformation.redovisningsvaluta.xbrlId
+          }}
+        </ix:nonNumeric>
+        <ix:nonNumeric
+          contextRef="period_nuvarande"
+          name="se-gen-base:FinansiellRapportList"
+          >{{ arsredovsining.redovisningsinformation.forfattare.xbrlId }}
+        </ix:nonNumeric>
+        <ix:nonNumeric
+          contextRef="period_nuvarande"
+          name="se-cd-base:BeloppsformatList"
+          >se-mem-base:BeloppsformatNormalformMember
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"
@@ -45,7 +56,7 @@ defineProps<{
       </ix:hidden>
       <ix:references>
         <link:schemaRef
-          xlink:href="http://xbrl.taxonomier.se/se/fr/gaap/k2/risbs/2017-09-30/se-k2-risbs-2017-09-30.xsd"
+          xlink:href="http://xbrl.taxonomier.se/se/fr/gaap/k2/risbs/2021-10-31/se-k2-risbs-2021-10-31.xsd"
           xlink:type="simple"
         />
       </ix:references>
@@ -106,7 +117,7 @@ defineProps<{
           </xbrli:entity>
           <xbrli:period>
             <xbrli:instant
-              >{{ arsredovsining.verksamhetsarTidigare[0].startdatum }}
+              >{{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
             </xbrli:instant>
           </xbrli:period>
         </xbrli:context>

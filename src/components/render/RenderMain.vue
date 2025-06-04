@@ -53,6 +53,7 @@ defineProps<{
 
 .sections-container {
   width: 100%;
+  font-family: "EB Garamond", serif;
 
   & > *:not(:last-child) {
     padding-bottom: 2em;
@@ -68,16 +69,20 @@ defineProps<{
 
 :deep(h1) {
   font-size: 1.6rem;
+  font-family: "FreeSans", sans-serif;
+  font-weight: 700;
 }
 
 :deep(h2) {
   font-size: 1.35rem;
+  font-weight: 600;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
 :deep(h3) {
   font-size: 1.15rem;
+  font-weight: 600;
   margin-top: 0;
 }
 </style>

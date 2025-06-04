@@ -1,0 +1,41 @@
+@import "./base.scss";
+@import "$fonts/ebgaramond/EBGaramond.css";
+@import "$fonts/freesans/FreeSans.css";
+@import "bootstrap/scss/bootstrap.scss";
+
+body {
+  margin: 0;
+}
+
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+    background-color: #f6f6f6;
+  }
+
+  #app {
+    height: 100vh;
+    max-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 2rem;
+    gap: 2em;
+
+    & > * {
+      height: 100%;
+      min-height: 0;
+    }
+  }
+}

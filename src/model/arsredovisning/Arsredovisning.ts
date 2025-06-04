@@ -24,13 +24,19 @@ export interface Foretagsinformation {
 }
 
 export interface Redovisningsinformation {
-  forfattare: string;
+  forfattare: Forfattare;
   redovisningsvaluta: Redovisningsvaluta;
+}
+
+export interface Forfattare {
+  namn: string;
+  xbrlId: string; // Exempel: "se-mem-base:FinansiellRapportStyrelsenAvgerArsredovisningMember"
 }
 
 export interface Redovisningsvaluta {
   kod: string;
   namn: string;
+  xbrlId: string; // Exempel: "se-mem-base:ValutaSvenskaKronorMember"
 }
 
 export interface Verksamhetsar {

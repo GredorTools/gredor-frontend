@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import type { BeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
+import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
+import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
 
 defineProps<{
   deleteCallback: () => void;
@@ -17,12 +19,8 @@ const belopprad = defineModel<BeloppradDecimal>("belopprad", {
       [`level-${belopprad.taxonomyItem.__Level}`]: true,
     }"
   >
-    <td :class="{ tooltip: belopprad.taxonomyItem.dokumentation }">
-      <span class="tooltip-target">{{ belopprad.taxonomyItem.radrubrik }}</span>
-
-      <span v-if="belopprad.taxonomyItem.dokumentation" class="tooltip-text">
-        {{ belopprad.taxonomyItem.dokumentation }}
-      </span>
+    <td>
+      <BaseEditBeloppradTitle :belopprad="belopprad" />
     </td>
     <td>
       <input v-model="belopprad.egetNamn" type="text" />
@@ -43,7 +41,7 @@ const belopprad = defineModel<BeloppradDecimal>("belopprad", {
       />
     </td>
     <td>
-      <button @click="deleteCallback">X</button>
+      <BaseEditBeloppradDeleteButton :delete-callback="deleteCallback" />
     </td>
   </tr>
 </template>

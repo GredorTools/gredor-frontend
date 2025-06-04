@@ -17,7 +17,7 @@ defineProps<{
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <td>
-      {{ belopprad.egetNamn || belopprad.taxonomyItem.radrubrik }}
+      {{ belopprad.egetNamn || belopprad.taxonomyItem.standardrubrik }}
     </td>
     <td></td>
     <td>

@@ -69,25 +69,8 @@ const classes = {
     text-decoration: underline;
   }
 
-  :global(.tooltip .tooltip-target) {
+  :global(.gredor-tooltip-target) {
     border-bottom: 1px dotted black;
-  }
-
-  :global(.tooltip .tooltip-text) {
-    display: none;
-    max-width: 320px;
-    background-color: black;
-    color: #fff;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-  }
-
-  :global(.tooltip:hover .tooltip-text) {
-    display: block;
   }
 }
 </style>

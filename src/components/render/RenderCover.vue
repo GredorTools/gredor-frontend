@@ -39,15 +39,10 @@ const rakenskapsarText = computed(() => {
     </div>
     <h1>Årsredovisning för räkenskapsåret {{ rakenskapsarText }}</h1>
     <p>
-      <ix:nonNumeric
-        contextRef="period_nuvarande"
-        name="se-gen-base:LopandeBokforingenAvslutasMening"
-      >
-        {{ arsredovsining.redovisningsinformation.forfattare }} avger härmed
-        följande årsredovisning<br />för räkenskapsåret
-        {{ arsredovsining.verksamhetsarNuvarande.startdatum }} –
-        {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}.
-      </ix:nonNumeric>
+      {{ arsredovsining.redovisningsinformation.forfattare.namn }} avger härmed
+      följande årsredovisning<br />för räkenskapsåret
+      {{ arsredovsining.verksamhetsarNuvarande.startdatum }} –
+      {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}.
     </p>
     <p class="currency-info">
       Om inte annat särskilt anges, redovisas alla belopp i hela

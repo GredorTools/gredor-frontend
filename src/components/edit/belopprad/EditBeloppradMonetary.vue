@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import BaseEditBeloppradContainer from "@/components/edit/belopprad/BaseEditBeloppradContainer.vue";
+import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
+import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
 
 defineProps<{
   showSaldo?: boolean;
@@ -12,18 +15,9 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
 </script>
 
 <template>
-  <tr
-    :class="{
-      abstract: belopprad.taxonomyItem.abstrakt === 'true',
-      [`level-${belopprad.taxonomyItem.__Level}`]: true,
-    }"
-  >
-    <td :class="{ tooltip: belopprad.taxonomyItem.dokumentation }">
-      <span class="tooltip-target">{{ belopprad.taxonomyItem.radrubrik }}</span>
-
-      <span v-if="belopprad.taxonomyItem.dokumentation" class="tooltip-text">
-        {{ belopprad.taxonomyItem.dokumentation }}
-      </span>
+  <BaseEditBeloppradContainer :belopprad="belopprad">
+    <td>
+      <BaseEditBeloppradTitle :belopprad="belopprad" />
     </td>
     <td>
       <input v-model="belopprad.egetNamn" type="text" />
@@ -37,7 +31,7 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
     </td>
     <td>
       <template v-if="showSaldo">
-        <span v-if="belopprad.taxonomyItem.saldo === 'debit'">-</span>
+        <span v-if="belopprad.taxonomyItem.saldo === 'debit'">&minus;</span>
         <span v-if="belopprad.taxonomyItem.saldo === 'credit'">+</span>
       </template>
       <input
@@ -48,7 +42,7 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
     </td>
     <td>
       <template v-if="showSaldo">
-        <span v-if="belopprad.taxonomyItem.saldo === 'debit'">-</span>
+        <span v-if="belopprad.taxonomyItem.saldo === 'debit'">&minus;</span>
         <span v-if="belopprad.taxonomyItem.saldo === 'credit'">+</span>
       </template>
       <input
@@ -58,9 +52,9 @@ const belopprad = defineModel<BeloppradMonetary>("belopprad", {
       />
     </td>
     <td>
-      <button @click="deleteCallback">X</button>
+      <BaseEditBeloppradDeleteButton :delete-callback="deleteCallback" />
     </td>
-  </tr>
+  </BaseEditBeloppradContainer>
 </template>
 
 <style lang="scss" scoped></style>

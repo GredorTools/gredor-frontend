@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from "node:url";
+import { resolve } from "path";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -24,6 +25,20 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      $fonts: resolve("./public/fonts"),
+    },
+  },
+  // Tysta ner deprecationvarningar från Bootstrap.
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: [
+          "import",
+          "mixed-decls",
+          "color-functions",
+          "global-builtin",
+        ],
+      },
     },
   },
 });

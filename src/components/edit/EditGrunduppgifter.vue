@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
+import { FORFATTARE_TYPER } from "@/data/forfattare.ts";
 
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
@@ -31,38 +33,39 @@ const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
 
   <div class="form-section">
     <div class="form-group">
-      <label for="forfattare">Författare till årsredovisningen:</label>
-      <input
+      <label for="forfattare">Författare:</label>
+      <select
         id="forfattare"
-        v-model.trim="arsredovisning.redovisningsinformation.forfattare"
+        v-model="arsredovisning.redovisningsinformation.forfattare"
         class="input-field"
-        type="text"
-      />
+      >
+        <option
+          v-for="forfattare in FORFATTARE_TYPER"
+          :key="forfattare.xbrlId"
+          :value="forfattare"
+        >
+          {{ forfattare.namn }}
+        </option>
+      </select>
     </div>
   </div>
 
   <div class="form-section">
     <div class="form-group">
-      <label for="valutakod">Redovisningsvaluta – kod:</label>
-      <input
+      <label for="valutakod">Redovisningsvaluta:</label>
+      <select
         id="valutakod"
-        v-model.trim="
-          arsredovisning.redovisningsinformation.redovisningsvaluta.kod
-        "
+        v-model="arsredovisning.redovisningsinformation.redovisningsvaluta"
         class="input-field"
-        type="text"
-      />
-    </div>
-    <div class="form-group">
-      <label for="valutanamn">Redovisningsvaluta – namn:</label>
-      <input
-        id="valutanamn"
-        v-model.trim="
-          arsredovisning.redovisningsinformation.redovisningsvaluta.namn
-        "
-        class="input-field"
-        type="text"
-      />
+      >
+        <option
+          v-for="redovisningsvaluta in REDOVISNINGSVALUTOR"
+          :key="redovisningsvaluta.xbrlId"
+          :value="redovisningsvaluta"
+        >
+          {{ redovisningsvaluta.kod }} – {{ redovisningsvaluta.namn }}
+        </option>
+      </select>
     </div>
   </div>
 

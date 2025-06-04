@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { FormatUtil } from "@/util/FormatUtil.ts";
 import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import { getDisplayNameForTaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 defineProps<{
   belopprad: BeloppradMonetary;
@@ -30,7 +31,10 @@ const superdelsummarader = [
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <td class="rubrik">
-      {{ belopprad.egetNamn || belopprad.taxonomyItem.radrubrik }}
+      {{
+        belopprad.egetNamn ||
+        getDisplayNameForTaxonomyItem(belopprad.taxonomyItem)
+      }}
     </td>
     <td>
       {{ belopprad.not }}
@@ -44,8 +48,9 @@ const superdelsummarader = [
             belopprad.beloppNuvarandeAr.trim() !== '0') ||
           belopprad.beloppNuvarandeAr.startsWith('-')
         "
-        >-</span
+        >&minus;</span
       >
+      <!-- @delete-whitespace -->
       <ix:nonFraction
         :contextRef="contextRefPrefix + '_nuvarande'"
         :name="
@@ -76,8 +81,9 @@ const superdelsummarader = [
               belopprad.beloppForegaendeAr.trim() !== '0') ||
             belopprad.beloppForegaendeAr.startsWith('-')
           "
-          >-</span
+          >&minus;</span
         >
+        <!-- @delete-whitespace -->
         <ix:nonFraction
           :contextRef="contextRefPrefix + '_foregaende'"
           :name="
@@ -90,7 +96,8 @@ const superdelsummarader = [
           format="ixt:numspacecomma"
           scale="0"
           unitRef="redovisningsvaluta"
-          >{{
+        >
+          {{
             FormatUtil.formatNumber(belopprad.beloppForegaendeAr, {
               removeSign: true,
             })
@@ -104,7 +111,7 @@ const superdelsummarader = [
 <style lang="scss" scoped>
 .summa.level-1,
 .superdelsumma {
-  font-weight: 600;
+  font-weight: 700;
 
   & td {
     padding-top: 1.25rem;

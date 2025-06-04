@@ -9,9 +9,8 @@ export class GroupingUtil {
    * inkluderas i utdatat.
    * @param filter - En funktion som används för att filtrera objekten. Endast
    * objekt som uppfyller villkoren i denna funktion inkluderas i utdatat.
-   * @param keyExtractor
-   * Funktion för att extrahera grupperingsegenskaper (id, nivå och om objektet
-   * är abstrakt).
+   * @param keyExtractor - Funktion för att extrahera grupperingsegenskaper
+   * (id, nivå och om objektet är abstrakt).
    * @return Array av grupperade objekt.
    */
   static groupItems<T>(

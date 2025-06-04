@@ -10,8 +10,11 @@ const props = defineProps<{
 }>();
 
 const computedHeader = computed(() => {
-  let result =
-    props.belopprad.egetNamn || props.belopprad.taxonomyItem.radrubrik;
+  const originalHeader =
+    props.belopprad.taxonomyItem.abstrakt === "true"
+      ? props.belopprad.taxonomyItem.radrubrik
+      : props.belopprad.taxonomyItem.standardrubrik;
+  let result = props.belopprad.egetNamn || originalHeader;
   if (props.headerMapper) {
     result = props.headerMapper(result);
   }
@@ -83,10 +86,10 @@ const computedHeader = computed(() => {
 
 tr:not(.abstract) .header {
   font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 p {
-  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 
   &:last-of-type {

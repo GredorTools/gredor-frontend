@@ -14,7 +14,7 @@ const arsredovsining = defineModel<Arsredovisning>({
 });
 
 async function importFile() {
-  const file = await FileUtil.importFile();
+  const file = await FileUtil.importFile(".gredor");
   if (file) {
     const dataContainer: DataContainer<Arsredovisning> = JSON.parse(file);
     // TODO: Validera
@@ -31,7 +31,7 @@ function exportFile() {
 
   FileUtil.exportFile(
     JSON.stringify(dataContainer),
-    `Gredor_${new Date().getTime()}.json`,
+    `Arsredovisning_${new Date().getTime()}.gredor`,
     "application/json",
   );
 }
@@ -42,22 +42,35 @@ type Mode =
   | "resultatrakning"
   | "balansrakning"
   | "noter";
+const availableModes: { [mode in Mode]: string } = {
+  grunduppgifter: "Grunduppgifter",
+  forvaltningsberattelse: "Förvaltningsberättelse",
+  resultatrakning: "Resultaträkning",
+  balansrakning: "Balansräkning",
+  noter: "Noter",
+};
 const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
 
 <template>
-  <button @click="importFile">Öppna…</button>
-  <button @click="exportFile">Spara som…</button>
+  <button class="btn btn-primary" @click="importFile">Öppna…</button>
+  <button class="btn btn-primary" @click="exportFile">Spara som…</button>
 
-  <div class="mode-selector">
-    <select v-model="currentMode">
-      <option value="grunduppgifter">Grunduppgifter</option>
-      <option value="forvaltningsberattelse">Förvaltningsberättelse</option>
-      <option value="resultatrakning">Resultaträkning</option>
-      <option value="balansrakning">Balansräkning</option>
-      <option value="noter">Noter</option>
-    </select>
-  </div>
+  <ul class="nav nav-tabs">
+    <li
+      v-for="[mode, modeName] in Object.entries(availableModes)"
+      :key="mode"
+      class="nav-item"
+    >
+      <a
+        :class="{ active: currentMode === mode }"
+        class="nav-link"
+        href="#"
+        @click="currentMode = mode as Mode"
+        >{{ modeName }}</a
+      >
+    </li>
+  </ul>
 
   <div class="editor">
     <Suspense v-if="currentMode === 'grunduppgifter'">

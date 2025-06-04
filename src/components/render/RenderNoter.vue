@@ -9,6 +9,7 @@ import {
   groupBelopprader,
 } from "@/model/arsredovisning/BeloppradGroup.ts";
 import { computed, h, type VNode } from "vue";
+import { getDisplayNameForTaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const props = defineProps<{
   arsredovsining: Arsredovisning;
@@ -66,7 +67,9 @@ function getValueColumnHeaderCell(
                 "Not " +
                 (index + 1) +
                 ": " +
-                beloppradGroup.items[0].taxonomyItem.radrubrik
+                getDisplayNameForTaxonomyItem(
+                  beloppradGroup.items[0].taxonomyItem,
+                )
               }}
             </h3>
           </th>

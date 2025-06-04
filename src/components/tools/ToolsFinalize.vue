@@ -7,14 +7,14 @@ const props = defineProps<{
   arsredovsining: Arsredovisning;
 }>();
 
-function exportArsredovisning() {
+async function exportArsredovisning() {
   const arsredovisningForExport = document.getElementById(
     "arsredovisning-for-export",
   );
 
   if (arsredovisningForExport) {
     const { foretagsinformation } = props.arsredovsining;
-    const xhtml = DocumentUtil.convertVueHTMLToiXBRL(
+    const xhtml = await DocumentUtil.convertVueHTMLToiXBRL(
       arsredovisningForExport,
       `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
     );
@@ -24,7 +24,9 @@ function exportArsredovisning() {
 </script>
 
 <template>
-  <button @click="exportArsredovisning()">Exportera</button>
+  <button class="btn btn-primary" @click="exportArsredovisning()">
+    Exportera iXBRL-fil
+  </button>
 </template>
 
 <style lang="scss" scoped></style>

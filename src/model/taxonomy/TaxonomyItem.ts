@@ -27,3 +27,13 @@ export interface TaxonomyItem<T extends TaxonomyItemType> {
   dokumentation?: string;
   utokadDokumentation?: string;
 }
+
+export function getDisplayNameForTaxonomyItem(
+  item: TaxonomyItem<TaxonomyItemType>,
+): string {
+  // Av någon anledning blir det någorlunda rätt när man gör så här
+  if (item.abstrakt !== "true" && item.datatyp === "xbrli:stringItemType") {
+    return item.standardrubrik;
+  }
+  return item.radrubrik;
+}

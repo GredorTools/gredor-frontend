@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import type {
-  TaxonomyItem,
-  TaxonomyItemType,
+import {
+  getDisplayNameForTaxonomyItem,
+  type TaxonomyItem,
+  type TaxonomyItemType,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
 import {
@@ -99,7 +100,7 @@ function addBelopprad(
       </tbody>
     </table>
 
-    <select v-model="beloppItemToAdd">
+    <select v-model="beloppItemToAdd" class="form-select">
       <option
         v-for="taxonomyItem in group.items"
         :key="taxonomyItem.id"
@@ -108,7 +109,7 @@ function addBelopprad(
       >
         {{
           "\u00a0".repeat((taxonomyItem.__Level - 1) * 4) +
-          taxonomyItem.radrubrik
+          getDisplayNameForTaxonomyItem(taxonomyItem)
         }}
       </option>
     </select>
@@ -123,7 +124,7 @@ function addBelopprad(
 
 <style lang="scss" scoped>
 table {
-  width: 800px;
+  width: 100%;
   margin-bottom: 1rem;
 
   th,
