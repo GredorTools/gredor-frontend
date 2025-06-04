@@ -38,12 +38,26 @@ function addBelopprad(
   arsredovsining.value.resultatrakning.push(createBelopprad(taxonomyItem));
 
   if (taxonomyItem.__ParentId != null) {
+    // Lägg till föräldrar
     for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
       if (
         possibleParentTaxonomyItem.__Level > 0 &&
         possibleParentTaxonomyItem.id === taxonomyItem.__ParentId
       ) {
         addBelopprad(possibleParentTaxonomyItem, false);
+      }
+    }
+
+    // Lägg till summarader
+    let foundSelf = false;
+    for (const possibleSumTaxonomyItem of taxonomyItemsFromData) {
+      if (possibleSumTaxonomyItem.id === taxonomyItem.id) {
+        foundSelf = true;
+      }
+
+      if (foundSelf && possibleSumTaxonomyItem.__Level < taxonomyItem.__Level) {
+        addBelopprad(possibleSumTaxonomyItem, false);
+        break;
       }
     }
   }
