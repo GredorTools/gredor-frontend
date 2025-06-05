@@ -26,7 +26,7 @@ export default typescriptEslint.config(
         "error",
         "always",
         {
-          ignoreTags: ["ix:nonFraction", "ix:nonNumeric"],
+          ignoreTags: ["ix:nonFraction", "ix:nonNumeric", "ix:tuple"],
         },
       ],
     },

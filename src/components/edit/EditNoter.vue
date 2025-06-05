@@ -56,6 +56,7 @@ function addBelopprad(
   arsredovsining.value.noter.push(createBelopprad(taxonomyItem));
 
   if (taxonomyItem.__ParentId != null) {
+    // Lägg till föräldrar
     for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
       if (
         possibleParentTaxonomyItem.__Level > 0 &&

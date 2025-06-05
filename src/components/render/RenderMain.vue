@@ -6,6 +6,7 @@ import RenderIXBRLHeader from "@/components/render/RenderIXBRLHeader.vue";
 import RenderForvaltningsberattelse from "@/components/render/RenderForvaltningsberattelse.vue";
 import RenderNoter from "@/components/render/RenderNoter.vue";
 import RenderCover from "@/components/render/RenderCover.vue";
+import RenderSignatures from "@/components/render/RenderSignatures.vue";
 
 defineProps<{
   arsredovsining: Arsredovisning;
@@ -26,6 +27,7 @@ defineProps<{
         <RenderBalansrakning :arsredovsining="arsredovsining" />
         <div class="page-break"></div>
         <RenderNoter :arsredovsining="arsredovsining" />
+        <RenderSignatures :arsredovsining="arsredovsining" />
       </div>
     </div>
   </div>

@@ -226,14 +226,15 @@ export class DocumentUtil {
 
     fixTag(
       "ix:nonNumeric",
-      ["contextRef"],
+      ["contextRef", "continuedAt", "tupleRef"],
       "http://www.xbrl.org/2013/inlineXBRL",
     );
     fixTag(
       "ix:nonFraction",
-      ["contextRef", "unitRef"],
+      ["contextRef", "tupleRef", "unitRef"],
       "http://www.xbrl.org/2013/inlineXBRL",
     );
+    fixTag("ix:tuple", ["tupleID"], "http://www.xbrl.org/2013/inlineXBRL");
     fixTag("link:schemaRef", [], "http://www.xbrl.org/2003/linkbase");
     fixTag("xbrli:startDate", [], "http://www.xbrl.org/2003/instance");
     fixTag("xbrli:endDate", [], "http://www.xbrl.org/2003/instance");
@@ -265,7 +266,7 @@ export class DocumentUtil {
         'xmlns:se-gaap-ext="http://www.taxonomier.se/se/fr/gaap/gaap-ext/2021-10-31">',
     );
     xhtml = xmlFormat(xhtml, { collapseContent: true });
-    xhtml = xhtml.replace(/\s*<!--\s*@delete-whitespace\s?.+?-->\s*/g, "");
+    xhtml = xhtml.replace(/\s*<!--\s*@delete-whitespace\s?.*?-->\s*/g, "");
 
     return xhtml;
   }

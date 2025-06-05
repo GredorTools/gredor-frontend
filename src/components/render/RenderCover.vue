@@ -48,6 +48,99 @@ const rakenskapsarText = computed(() => {
       Om inte annat särskilt anges, redovisas alla belopp i hela
       {{ arsredovsining.redovisningsinformation.redovisningsvaluta.namn }}.
     </p>
+    <div class="certification">
+      <h2>Fastställelseintyg</h2>
+      <p>
+        <ix:nonNumeric
+          contextRef="balans_nuvarande"
+          continuedAt="intygande_forts"
+          name="se-bol-base:ArsstammaIntygande"
+        >
+          <ix:nonNumeric
+            contextRef="balans_nuvarande"
+            name="se-bol-base:FaststallelseResultatBalansrakning"
+          >
+            <!-- @delete-whitespace -->
+            Jag intygar att resultaträkningen och balansräkningen har
+            fastställts på årsstämma
+            <!-- @delete-whitespace -->
+          </ix:nonNumeric>
+          {{ " " }}
+          <ix:nonNumeric
+            contextRef="balans_nuvarande"
+            name="se-bol-base:Arsstamma"
+            >{{ new Date().toISOString().split("T")[0] }}
+          </ix:nonNumeric>
+          .<br />
+          <ix:nonNumeric
+            contextRef="balans_nuvarande"
+            name="se-bol-base:ArsstammaResultatDispositionGodkannaStyrelsensForslag"
+          >
+            <!-- @delete-whitespace -->
+            Årsstämman beslöt att godkänna styrelsens förslag till
+            vinstdisposition.
+            <!-- @delete-whitespace -->
+          </ix:nonNumeric>
+        </ix:nonNumeric>
+      </p>
+      <p>
+        <ix:continuation id="intygande_forts">
+          <ix:nonNumeric
+            contextRef="balans_nuvarande"
+            name="se-bol-base:IntygandeOriginalInnehall"
+          >
+            <!-- @delete-whitespace -->
+            Jag intygar att innehållet i dessa elektroniska handlingar
+            överensstämmer med originalen och att originalen undertecknats av
+            samtliga personer som enligt lag ska underteckna dessa.
+            <!-- @delete-whitespace -->
+          </ix:nonNumeric>
+        </ix:continuation>
+      </p>
+
+      <p>
+        <strong>
+          <ix:nonNumeric
+            contextRef="balans_nuvarande"
+            name="se-bol-base:UnderskriftFaststallelseintygElektroniskt"
+          >
+            <!-- @delete-whitespace -->
+            Elektroniskt underskriven av
+            <!-- @delete-whitespace -->
+          </ix:nonNumeric>
+          :
+        </strong>
+        <br />
+        <ix:nonNumeric
+          contextRef="period_nuvarande"
+          name="se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn"
+        >
+          Karl
+        </ix:nonNumeric>
+        <ix:nonNumeric
+          contextRef="period_nuvarande"
+          name="se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn"
+        >
+          Karlsson
+        </ix:nonNumeric>
+        ,
+        <ix:nonNumeric
+          contextRef="period_nuvarande"
+          name="se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll"
+        >
+          <!-- @delete-whitespace -->
+          Styrelseledamot
+          <!-- @delete-whitespace -->
+        </ix:nonNumeric>
+        <br />
+        <ix:nonNumeric
+          id="ID_DATUM_UNDERTECKNANDE_FASTSTALLELSEINTYG"
+          contextRef="balans_nuvarande"
+          name="se-bol-base:UnderskriftFastallelseintygDatum"
+          >{{ new Date().toISOString().split("T")[0] }}
+        </ix:nonNumeric>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -62,5 +155,11 @@ h1 {
 
 .currency-info {
   margin-top: 2rem;
+}
+
+.certification {
+  margin-top: 20rem;
+  border: 0.25rem solid black;
+  padding: 1rem 2rem;
 }
 </style>

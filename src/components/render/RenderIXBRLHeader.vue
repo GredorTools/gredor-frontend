@@ -59,6 +59,10 @@ defineProps<{
           xlink:href="http://xbrl.taxonomier.se/se/fr/gaap/k2/risbs/2021-10-31/se-k2-risbs-2021-10-31.xsd"
           xlink:type="simple"
         />
+        <link:schemaRef
+          xlink:href="http://xbrl.taxonomier.se/se/fr/gaap/coa/rplc/2020-12-01/se-coa-rplc-2020-12-01.xsd"
+          xlink:type="simple"
+        />
       </ix:references>
       <ix:resources>
         <xbrli:context id="period_nuvarande">

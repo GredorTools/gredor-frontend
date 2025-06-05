@@ -17,11 +17,11 @@ export const exampleArsredovisning: Arsredovisning = {
     redovisningsvaluta: RedovisningsvalutaSEK,
   },
   verksamhetsarNuvarande: {
-    startdatum: "2024-01-01",
-    slutdatum: "2024-12-31",
+    startdatum: "2025-01-01",
+    slutdatum: "2025-12-31",
   },
   verksamhetsarTidigare: [
-    { startdatum: "2023-01-01", slutdatum: "2023-12-31" },
+    { startdatum: "2024-01-01", slutdatum: "2024-12-31" },
   ],
   forvaltningsberattelse: [
     {
