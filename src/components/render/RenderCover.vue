@@ -73,12 +73,15 @@ const rakenskapsarText = computed(() => {
           </ix:nonNumeric>
           .<br />
           <ix:nonNumeric
+            :name="
+              arsredovsining.faststallelseintyg.resultatdispositionBeslut.xbrlId
+            "
             contextRef="balans_nuvarande"
-            name="se-bol-base:ArsstammaResultatDispositionGodkannaStyrelsensForslag"
           >
             <!-- @delete-whitespace -->
-            Årsstämman beslöt att godkänna styrelsens förslag till
-            vinstdisposition.
+            {{
+              arsredovsining.faststallelseintyg.resultatdispositionBeslut.text
+            }}
             <!-- @delete-whitespace -->
           </ix:nonNumeric>
         </ix:nonNumeric>
@@ -115,13 +118,14 @@ const rakenskapsarText = computed(() => {
           contextRef="period_nuvarande"
           name="se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn"
         >
-          Karl
+          {{ arsredovsining.faststallelseintyg.underskrift.tilltalsnamn }}
         </ix:nonNumeric>
+        {{ " " }}
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn"
         >
-          Karlsson
+          {{ arsredovsining.faststallelseintyg.underskrift.efternamn }}
         </ix:nonNumeric>
         ,
         <ix:nonNumeric
@@ -129,7 +133,7 @@ const rakenskapsarText = computed(() => {
           name="se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll"
         >
           <!-- @delete-whitespace -->
-          Styrelseledamot
+          {{ arsredovsining.faststallelseintyg.underskrift.roll }}
           <!-- @delete-whitespace -->
         </ix:nonNumeric>
         <br />

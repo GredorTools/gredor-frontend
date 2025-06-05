@@ -3,7 +3,7 @@ import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
 import { FORFATTARE_TYPER } from "@/data/forfattare.ts";
 
-const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
+defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 </script>

@@ -8,6 +8,8 @@ import { type Ref, ref } from "vue";
 import EditNoter from "@/components/edit/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/EditForvaltningsberattelse.vue";
 import EditGrunduppgifter from "@/components/edit/EditGrunduppgifter.vue";
+import EditSignatures from "@/components/edit/EditSignatures.vue";
+import EditFaststallelseintyg from "@/components/edit/EditFaststallelseintyg.vue";
 
 const arsredovsining = defineModel<Arsredovisning>({
   required: true,
@@ -41,13 +43,17 @@ type Mode =
   | "forvaltningsberattelse"
   | "resultatrakning"
   | "balansrakning"
-  | "noter";
+  | "noter"
+  | "signaturer"
+  | "faststallelseintyg";
 const availableModes: { [mode in Mode]: string } = {
   grunduppgifter: "Grunduppgifter",
   forvaltningsberattelse: "Förvaltningsberättelse",
   resultatrakning: "Resultaträkning",
   balansrakning: "Balansräkning",
   noter: "Noter",
+  signaturer: "Signaturer",
+  faststallelseintyg: "Fastställelseintyg",
 };
 const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
@@ -87,6 +93,12 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     </Suspense>
     <Suspense v-if="currentMode === 'noter'">
       <EditNoter v-model:arsredovisning="arsredovsining" />
+    </Suspense>
+    <Suspense v-if="currentMode === 'signaturer'">
+      <EditSignatures v-model:arsredovisning="arsredovsining" />
+    </Suspense>
+    <Suspense v-if="currentMode === 'faststallelseintyg'">
+      <EditFaststallelseintyg v-model:arsredovisning="arsredovsining" />
     </Suspense>
   </div>
 </template>

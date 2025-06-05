@@ -12,12 +12,12 @@ defineProps<{
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <p>
-      <!-- TODO -->
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningOrt"
-        >Sundsvall
+        >{{ arsredovsining.redovisningsinformation.underskriftOrt }}
       </ix:nonNumeric>
+      {{ " " }}
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningDatum"
@@ -25,57 +25,51 @@ defineProps<{
       </ix:nonNumeric>
     </p>
     <ix:tuple
+      v-for="(_, index) in arsredovsining.redovisningsinformation.underskrifter"
+      :key="index"
+      :tupleID="'UnderskriftArsredovisningForetradareTuple' + index"
       name="se-gaap-ext:UnderskriftArsredovisningForetradareTuple"
-      tupleID="UnderskriftArsredovisningForetradareTuple1"
     />
-    <ix:tuple
-      name="se-gaap-ext:UnderskriftArsredovisningForetradareTuple"
-      tupleID="UnderskriftArsredovisningForetradareTuple2"
-    />
-    <!-- TODO -->
     <div>
-      <div class="name">
-        <i>Karl Karlsson</i>
+      <div
+        v-for="(underskrift, index) in arsredovsining.redovisningsinformation
+          .underskrifter"
+        :key="index"
+        class="name"
+      >
+        <i>{{ underskrift.tilltalsnamn }} {{ underskrift.efternamn }}</i>
         <br />
         <ix:nonNumeric
+          :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UnderskriftHandlingTilltalsnamn"
           order="1.0"
-          tupleRef="UnderskriftArsredovisningForetradareTuple1"
-          >Karl
+          >{{ underskrift.tilltalsnamn }}
         </ix:nonNumeric>
+        {{ " " }}
         <ix:nonNumeric
+          :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UnderskriftHandlingEfternamn"
           order="2.0"
-          tupleRef="UnderskriftArsredovisningForetradareTuple1"
-          >Karlsson
-        </ix:nonNumeric>
-      </div>
-      <div class="name">
-        <i>Karin Olsson</i>
-        <br />
-        <ix:nonNumeric
-          contextRef="period_nuvarande"
-          name="se-gen-base:UnderskriftHandlingTilltalsnamn"
-          order="1.0"
-          tupleRef="UnderskriftArsredovisningForetradareTuple2"
-          >Karin
-        </ix:nonNumeric>
-        <ix:nonNumeric
-          contextRef="period_nuvarande"
-          name="se-gen-base:UnderskriftHandlingEfternamn"
-          order="2.0"
-          tupleRef="UnderskriftArsredovisningForetradareTuple2"
-          >Olsson
+          >{{ underskrift.efternamn }}
         </ix:nonNumeric>
         <br />
         <ix:nonNumeric
+          v-if="underskrift.roll"
+          :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UnderskriftHandlingRoll"
           order="3.0"
-          tupleRef="UnderskriftArsredovisningForetradareTuple2"
-          >Verkställande direktör
+          >{{ underskrift.roll }}
+        </ix:nonNumeric>
+        <br />
+        <ix:nonNumeric
+          :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
+          contextRef="period_nuvarande"
+          name="se-gen-base:UndertecknandeDatum"
+          order="4.0"
+          >{{ underskrift.datum }}
         </ix:nonNumeric>
       </div>
     </div>

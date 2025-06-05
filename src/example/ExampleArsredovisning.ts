@@ -1,7 +1,8 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { RedovisningsvalutaSEK } from "@/data/redovisningsvalutor.ts";
-import { ForfattareStyrelsen } from "@/data/forfattare.ts";
+import { ForfattareStyrelsenOchVD } from "@/data/forfattare.ts";
+import { ResultatdispositionBeslutGodkannaVinst } from "@/data/faststallelseintyg.ts";
 
 export const exampleArsredovisning: Arsredovisning = {
   metadata: {
@@ -13,8 +14,32 @@ export const exampleArsredovisning: Arsredovisning = {
     organisationsnummer: "556999-9999",
   },
   redovisningsinformation: {
-    forfattare: ForfattareStyrelsen,
+    forfattare: ForfattareStyrelsenOchVD,
     redovisningsvaluta: RedovisningsvalutaSEK,
+    underskrifter: [
+      {
+        tilltalsnamn: "Karl",
+        efternamn: "Karlsson",
+        roll: "",
+        datum: "2026-03-12",
+      },
+      {
+        tilltalsnamn: "Karin",
+        efternamn: "Olsson",
+        roll: "Verkställande direktör",
+        datum: "2026-03-12",
+      },
+    ],
+    underskriftOrt: "Sundsvall",
+  },
+  faststallelseintyg: {
+    resultatdispositionBeslut: ResultatdispositionBeslutGodkannaVinst,
+    underskrift: {
+      tilltalsnamn: "Karl",
+      efternamn: "Karlsson",
+      roll: "Styrelseledamot",
+      datum: "2026-04-05",
+    },
   },
   verksamhetsarNuvarande: {
     startdatum: "2025-01-01",

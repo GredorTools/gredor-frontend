@@ -5,6 +5,7 @@ export interface Arsredovisning {
   metadata: Metadata;
   foretagsinformation: Foretagsinformation;
   redovisningsinformation: Redovisningsinformation;
+  faststallelseintyg: Faststallelseintyg;
   verksamhetsarNuvarande: Verksamhetsar;
   verksamhetsarTidigare: Verksamhetsar[];
   forvaltningsberattelse: Belopprad<TaxonomyItemType>[];
@@ -26,6 +27,8 @@ export interface Foretagsinformation {
 export interface Redovisningsinformation {
   forfattare: Forfattare;
   redovisningsvaluta: Redovisningsvaluta;
+  underskrifter: Underskrift[];
+  underskriftOrt: string;
 }
 
 export interface Forfattare {
@@ -37,6 +40,23 @@ export interface Redovisningsvaluta {
   kod: string;
   namn: string;
   xbrlId: string; // Exempel: "se-mem-base:ValutaSvenskaKronorMember"
+}
+
+export interface Underskrift {
+  tilltalsnamn: string;
+  efternamn: string;
+  roll: string;
+  datum: string; // Exempel: "2025-01-23"
+}
+
+export interface Faststallelseintyg {
+  resultatdispositionBeslut: ResultatdispositionBeslut;
+  underskrift: Underskrift;
+}
+
+export interface ResultatdispositionBeslut {
+  text: string;
+  xbrlId: string;
 }
 
 export interface Verksamhetsar {
