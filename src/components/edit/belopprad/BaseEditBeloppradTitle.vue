@@ -1,14 +1,19 @@
 <script lang="ts" setup>
-import { onMounted, useTemplateRef } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { Tooltip } from "bootstrap";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getDisplayNameForTaxonomyItem,
-  type TaxonomyItemType,
-} from "@/model/taxonomy/TaxonomyItem.ts";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
-const belopprad = defineModel<Belopprad<TaxonomyItemType>>("belopprad", {
+const props = defineProps<{
+  taxonomyManager: TaxonomyManager;
+}>();
+
+const belopprad = defineModel<Belopprad>("belopprad", {
   required: true,
+});
+
+const taxonomyItem = computed(() => {
+  return props.taxonomyManager.getItem(belopprad.value.taxonomyItemName);
 });
 
 const titleSpan = useTemplateRef("title-span");
@@ -24,12 +29,12 @@ onMounted(() => {
   <span
     ref="title-span"
     :class="{
-      'gredor-tooltip-target': !!belopprad.taxonomyItem.dokumentation,
+      'gredor-tooltip-target': !!taxonomyItem.properties.documentation,
     }"
-    :data-bs-title="belopprad.taxonomyItem.dokumentation"
+    :data-bs-title="taxonomyItem.properties.documentation"
     data-bs-placement="bottom"
     data-bs-toggle="tooltip"
-    >{{ getDisplayNameForTaxonomyItem(belopprad.taxonomyItem) }}</span
+    >{{ taxonomyItem.additionalData.displayLabel }}</span
   >
 </template>
 

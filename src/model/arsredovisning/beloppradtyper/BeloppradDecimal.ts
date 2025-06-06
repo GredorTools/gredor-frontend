@@ -1,7 +1,4 @@
-import type {
-  TaxonomyItem,
-  TaxonomyItemType,
-} from "@/model/taxonomy/TaxonomyItem.ts";
+import type { TaxonomyItem } from "@/util/TaxonomyManager.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export interface BeloppradDecimal extends Belopprad<"xbrli:decimalItemType"> {
@@ -11,7 +8,7 @@ export interface BeloppradDecimal extends Belopprad<"xbrli:decimalItemType"> {
 }
 
 export function isBeloppradDecimal(
-  belopprad: Belopprad<TaxonomyItemType>,
+  belopprad: Belopprad,
 ): belopprad is BeloppradDecimal {
-  return belopprad.taxonomyItem.datatyp === "xbrli:decimalItemType";
+  return belopprad.type === "xbrli:decimalItemType";
 }

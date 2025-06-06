@@ -1,89 +1,47 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import {
-  getDisplayNameForTaxonomyItem,
-  type TaxonomyItem,
-  type TaxonomyItemType,
-} from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
 import {
-  groupTaxonomyItems,
-  type TaxonomyItemGroup,
-} from "@/model/taxonomy/TaxonomyItemGroup.ts";
-import {
-  type Belopprad,
-  createBelopprad,
+  createBeloppradInList,
   deleteBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  getTaxonomyManager,
+  type TaxonomyItem,
+  TaxonomyRootName,
+} from "@/util/TaxonomyManager.ts";
 
+// TaxonomyManager och rader
+const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
+const taxonomyItemsFromData = taxonomyManager.getRoot();
+
+// Data
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
+const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 
-const taxonomyItemsFromData: TaxonomyItem<TaxonomyItemType>[] = await (
-  await fetch("data/taxonomy/k2/2021-10-31/Noter.json")
-).json();
-const groupedTaxonomyItems = groupTaxonomyItems(taxonomyItemsFromData, 1);
-
-const beloppItemToAdd = ref<TaxonomyItem<TaxonomyItemType> | null>(null);
-
-function enumerateForGroup(
-  group: TaxonomyItemGroup,
-): [Belopprad<TaxonomyItemType>, number][] {
-  const result: [Belopprad<TaxonomyItemType>, number][] = [];
-  for (let i = 0; i < arsredovsining.value.noter.length; i++) {
-    if (group.ids.has(arsredovsining.value.noter[i].taxonomyItem.id)) {
-      result.push([arsredovsining.value.noter[i], i]);
-    }
-  }
-  return result;
-}
-
-function addBelopprad(
-  taxonomyItem: TaxonomyItem<TaxonomyItemType>,
-  sort: boolean = true,
-) {
-  if (
-    arsredovsining.value.noter.some(
-      (belopprad) => belopprad.taxonomyItem.id === taxonomyItem.id,
-    )
-  ) {
-    // Finns redan
-    return;
-  }
-
-  arsredovsining.value.noter.push(createBelopprad(taxonomyItem));
-
-  if (taxonomyItem.__ParentId != null) {
-    // Lägg till föräldrar
-    for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
-      if (
-        possibleParentTaxonomyItem.__Level > 0 &&
-        possibleParentTaxonomyItem.id === taxonomyItem.__ParentId
-      ) {
-        addBelopprad(possibleParentTaxonomyItem, false);
-      }
-    }
-  }
-
-  if (sort) {
-    arsredovsining.value.noter.sort(
-      (a, b) =>
-        parseInt(a.taxonomyItem.rowNumber, 10) -
-        parseInt(b.taxonomyItem.rowNumber, 10),
-    );
-  }
+// Hjälpfunktioner
+function addBelopprad(taxonomyItem: TaxonomyItem) {
+  createBeloppradInList(
+    taxonomyManager,
+    arsredovsining.value.noter,
+    taxonomyItem,
+  );
 }
 </script>
 
 <template>
   <h3>Noter</h3>
-  <template v-for="group in groupedTaxonomyItems" :key="group.items[0].id">
+  <template
+    v-for="(group, groupIndex) in taxonomyItemsFromData.children[0].children"
+    :key="groupIndex"
+  >
     <table>
       <thead>
         <tr>
-          <th scope="col"></th>
+          <th scope="col">{{ group[0].additionalData.displayLabel }}</th>
           <th scope="col">Eget namn</th>
           <th scope="col">Not</th>
           <th scope="col">
@@ -97,26 +55,35 @@ function addBelopprad(
       </thead>
       <tbody>
         <EditBelopprad
-          v-for="[belopprad, index] in enumerateForGroup(group)"
-          :key="belopprad.taxonomyItem.id"
+          v-for="[index, belopprad] in [
+            ...arsredovsining.noter.entries(),
+          ].filter(([, b]) =>
+            group.childrenFlat.some(
+              (groupMember) => groupMember.xmlName === b.taxonomyItemName,
+            ),
+          )"
+          :key="belopprad.taxonomyItemName"
           v-model:belopprad="arsredovsining.noter[index]"
+          v-model:belopprader="arsredovsining.noter"
           :delete-callback="
-            () => deleteBelopprad(belopprad, arsredovsining.noter)
+            () =>
+              deleteBelopprad(taxonomyManager, belopprad, arsredovsining.noter)
           "
+          :taxonomy-manager="taxonomyManager"
         />
       </tbody>
     </table>
 
     <select v-model="beloppItemToAdd" class="form-select">
       <option
-        v-for="taxonomyItem in group.items"
-        :key="taxonomyItem.id"
-        :disabled="taxonomyItem.abstrakt === 'true'"
+        v-for="taxonomyItem in group.childrenFlat"
+        :key="taxonomyItem.xmlName"
+        :disabled="taxonomyItem.properties.abstract === 'true'"
         :value="taxonomyItem"
       >
         {{
-          "\u00a0".repeat((taxonomyItem.__Level - 1) * 4) +
-          getDisplayNameForTaxonomyItem(taxonomyItem)
+          "\u00a0".repeat((taxonomyItem.level - 1) * 4) +
+          taxonomyItem.additionalData.displayLabel
         }}
       </option>
     </select>

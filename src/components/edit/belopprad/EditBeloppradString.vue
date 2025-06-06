@@ -3,6 +3,7 @@ import { computed, useAttrs } from "vue";
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
 import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 defineOptions({
   inheritAttrs: false,
@@ -11,6 +12,7 @@ defineOptions({
 const attrs = useAttrs();
 
 const props = defineProps<{
+  taxonomyManager: TaxonomyManager;
   multiline: boolean;
   deleteCallback: () => void;
 }>();
@@ -19,8 +21,12 @@ const belopprad = defineModel<BeloppradString>("belopprad", {
   required: true,
 });
 
+const taxonomyItem = computed(() => {
+  return props.taxonomyManager.getItem(belopprad.value.taxonomyItemName);
+});
+
 const isAbstract = computed(
-  () => belopprad.value.taxonomyItem.abstrakt === "true",
+  () => taxonomyItem.value.properties.abstract === "true",
 );
 
 const trClasses = computed(() => [
@@ -35,7 +41,10 @@ const trClasses = computed(() => [
   <template v-if="multiline && !isAbstract">
     <tr :class="trClasses">
       <td colspan="5">
-        <BaseEditBeloppradTitle :belopprad="belopprad" />
+        <BaseEditBeloppradTitle
+          :belopprad="belopprad"
+          :taxonomy-manager="taxonomyManager"
+        />
       </td>
       <td>
         <button class="btn btn-danger" @click="deleteCallback">X</button>
@@ -43,8 +52,10 @@ const trClasses = computed(() => [
     </tr>
     <tr :class="trClasses">
       <td
-        v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
-        :class="{ 'gredor-tooltip': belopprad.taxonomyItem.dokumentation }"
+        v-if="!isAbstract"
+        :class="{
+          'gredor-tooltip': !!taxonomyItem.properties.documentation,
+        }"
         colspan="6"
       >
         <textarea v-if="multiline" v-model="belopprad.text"></textarea>
@@ -54,7 +65,10 @@ const trClasses = computed(() => [
 
   <tr v-else :class="trClasses">
     <td>
-      <BaseEditBeloppradTitle :belopprad="belopprad" />
+      <BaseEditBeloppradTitle
+        :belopprad="belopprad"
+        :taxonomy-manager="taxonomyManager"
+      />
     </td>
     <td v-if="!isAbstract" colspan="4">
       <input v-model="belopprad.text" type="text" />

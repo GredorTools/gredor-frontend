@@ -15,21 +15,23 @@ defineProps<{
 
 <template>
   <div class="ar-page">
-    <div id="arsredovisning-for-export">
-      <RenderIXBRLHeader :arsredovsining="arsredovsining" />
-      <div class="sections-container">
-        <RenderCover :arsredovsining="arsredovsining" />
-        <div class="page-break"></div>
-        <RenderForvaltningsberattelse :arsredovsining="arsredovsining" />
-        <div class="page-break"></div>
-        <RenderResultatrakning :arsredovsining="arsredovsining" />
-        <div class="page-break"></div>
-        <RenderBalansrakning :arsredovsining="arsredovsining" />
-        <div class="page-break"></div>
-        <RenderNoter :arsredovsining="arsredovsining" />
-        <RenderSignatures :arsredovsining="arsredovsining" />
+    <Suspense>
+      <div id="arsredovisning-for-export">
+        <RenderIXBRLHeader :arsredovsining="arsredovsining" />
+        <div class="sections-container">
+          <RenderCover :arsredovsining="arsredovsining" />
+          <div class="page-break"></div>
+          <RenderForvaltningsberattelse :arsredovsining="arsredovsining" />
+          <div class="page-break"></div>
+          <RenderResultatrakning :arsredovsining="arsredovsining" />
+          <div class="page-break"></div>
+          <RenderBalansrakning :arsredovsining="arsredovsining" />
+          <div class="page-break"></div>
+          <RenderNoter :arsredovsining="arsredovsining" />
+          <RenderSignatures :arsredovsining="arsredovsining" />
+        </div>
       </div>
-    </div>
+    </Suspense>
   </div>
 </template>
 

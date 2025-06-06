@@ -1,4 +1,4 @@
-import type { TaxonomyItemType } from "@/model/taxonomy/TaxonomyItem.ts";
+import type { TaxonomyItemType } from "@/util/TaxonomyManager.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { GroupingUtil } from "@/util/GroupingUtil.ts";
 

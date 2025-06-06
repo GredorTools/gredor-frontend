@@ -1,17 +1,26 @@
 <script lang="ts" setup>
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
-import type { TaxonomyItemType } from "@/model/taxonomy/TaxonomyItem.ts";
+import { computed } from "vue";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
-const belopprad = defineModel<Belopprad<TaxonomyItemType>>("belopprad", {
+const props = defineProps<{
+  taxonomyManager: TaxonomyManager;
+}>();
+
+const belopprad = defineModel<Belopprad>("belopprad", {
   required: true,
+});
+
+const taxonomyItem = computed(() => {
+  return props.taxonomyManager.getItem(belopprad.value.taxonomyItemName);
 });
 </script>
 
 <template>
   <tr
     :class="{
-      abstract: belopprad.taxonomyItem.abstrakt === 'true',
-      [`level-${belopprad.taxonomyItem.__Level}`]: true,
+      abstract: taxonomyItem.properties.abstract === 'true',
+      [`level-${taxonomyItem.level}`]: true,
     }"
   >
     <slot />

@@ -1,20 +1,25 @@
 <script lang="ts" setup>
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import { computed } from "vue";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
+  taxonomyManager: TaxonomyManager;
   belopprad: BeloppradString;
   contextRefPrefix: "period" | "balans";
   showHeader: boolean;
   headerMapper?: (text: string) => string;
 }>();
 
+const taxonomyItem = computed(() => {
+  return props.taxonomyManager.getItem(props.belopprad.taxonomyItemName);
+});
+
 const computedHeader = computed(() => {
-  const originalHeader =
-    props.belopprad.taxonomyItem.abstrakt === "true"
-      ? props.belopprad.taxonomyItem.radrubrik
-      : props.belopprad.taxonomyItem.standardrubrik;
-  let result = props.belopprad.egetNamn || originalHeader;
+  let result =
+    props.belopprad.egetNamn ||
+    taxonomyItem.value.additionalData.displayLabel ||
+    "";
   if (props.headerMapper) {
     result = props.headerMapper(result);
   }
@@ -26,8 +31,8 @@ const computedHeader = computed(() => {
   <tr
     v-if="showHeader || belopprad.text"
     :class="{
-      abstract: belopprad.taxonomyItem.abstrakt === 'true',
-      [`level-${belopprad.taxonomyItem.__Level}`]: true,
+      abstract: taxonomyItem.properties.abstract === 'true',
+      [`level-${taxonomyItem.level}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
@@ -38,11 +43,7 @@ const computedHeader = computed(() => {
       <ix:nonNumeric
         v-if="belopprad.text"
         :contextRef="contextRefPrefix + '_nuvarande'"
-        :name="
-          belopprad.taxonomyItem.tillhor +
-          ':' +
-          belopprad.taxonomyItem.elementnamn
-        "
+        :name="taxonomyItem.xmlName"
       >
         <p
           v-for="(line, index) in belopprad.text

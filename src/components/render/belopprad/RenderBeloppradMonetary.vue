@@ -1,40 +1,40 @@
 <script lang="ts" setup>
 import { FormatUtil } from "@/util/FormatUtil.ts";
 import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import { getDisplayNameForTaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import { computed } from "vue";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
-defineProps<{
+const props = defineProps<{
+  taxonomyManager: TaxonomyManager;
   belopprad: BeloppradMonetary;
   contextRefPrefix: "period" | "balans";
   showSaldo: boolean;
 }>();
 
-const extraSummarader = ["Årets resultat"];
 const superdelsummarader = [
   "Rörelseresultat",
   "Resultat efter finansiella poster",
   "Resultat före skatt",
 ];
+
+const taxonomyItem = computed(() => {
+  return props.taxonomyManager.getItem(props.belopprad.taxonomyItemName);
+});
 </script>
 
 <template>
   <tr
     :class="{
-      summa:
-        belopprad.taxonomyItem.radrubrik.startsWith('Summa ') ||
-        extraSummarader.includes(belopprad.taxonomyItem.radrubrik),
+      summa: taxonomyItem.additionalData.isTotalItem,
       superdelsumma: superdelsummarader.includes(
-        belopprad.taxonomyItem.radrubrik,
+        taxonomyItem.additionalData.displayLabel || '',
       ),
-      [`level-${belopprad.taxonomyItem.__Level}`]: true,
+      [`level-${taxonomyItem.level}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <td class="rubrik">
-      {{
-        belopprad.egetNamn ||
-        getDisplayNameForTaxonomyItem(belopprad.taxonomyItem)
-      }}
+      {{ belopprad.egetNamn || taxonomyItem.additionalData.displayLabel }}
     </td>
     <td>
       {{ belopprad.not }}
@@ -43,7 +43,7 @@ const superdelsummarader = [
       <span
         v-if="
           (showSaldo &&
-            belopprad.taxonomyItem.saldo === 'debit' &&
+            taxonomyItem.properties.balance === 'debit' &&
             belopprad.beloppNuvarandeAr.trim().length > 0 &&
             belopprad.beloppNuvarandeAr.trim() !== '0') ||
           belopprad.beloppNuvarandeAr.startsWith('-')
@@ -53,11 +53,7 @@ const superdelsummarader = [
       <!-- @delete-whitespace -->
       <ix:nonFraction
         :contextRef="contextRefPrefix + '_nuvarande'"
-        :name="
-          belopprad.taxonomyItem.tillhor +
-          ':' +
-          belopprad.taxonomyItem.elementnamn
-        "
+        :name="taxonomyItem.xmlName"
         :sign="belopprad.beloppNuvarandeAr.startsWith('-') ? '-' : undefined"
         decimals="INF"
         format="ixt:numspacecomma"
@@ -76,7 +72,7 @@ const superdelsummarader = [
         <span
           v-if="
             (showSaldo &&
-              belopprad.taxonomyItem.saldo === 'debit' &&
+              taxonomyItem.properties.balance === 'debit' &&
               belopprad.beloppForegaendeAr.trim().length > 0 &&
               belopprad.beloppForegaendeAr.trim() !== '0') ||
             belopprad.beloppForegaendeAr.startsWith('-')
@@ -86,11 +82,7 @@ const superdelsummarader = [
         <!-- @delete-whitespace -->
         <ix:nonFraction
           :contextRef="contextRefPrefix + '_foregaende'"
-          :name="
-            belopprad.taxonomyItem.tillhor +
-            ':' +
-            belopprad.taxonomyItem.elementnamn
-          "
+          :name="taxonomyItem.xmlName"
           :sign="belopprad.beloppForegaendeAr.startsWith('-') ? '-' : undefined"
           decimals="INF"
           format="ixt:numspacecomma"

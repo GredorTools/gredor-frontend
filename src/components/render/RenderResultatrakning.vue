@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import {
+  getTaxonomyManager,
+  TaxonomyRootName,
+} from "@/util/TaxonomyManager.ts";
+
+const taxonomyManager = await getTaxonomyManager(
+  TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
+);
 
 defineProps<{
   arsredovsining: Arsredovisning;
@@ -26,8 +34,9 @@ defineProps<{
     <tbody>
       <RenderBelopprad
         v-for="belopprad in arsredovsining.resultatrakning"
-        :key="belopprad.taxonomyItem.id"
+        :key="belopprad.taxonomyItemName"
         :belopprad="belopprad"
+        :taxonomy-manager="taxonomyManager"
         monetary-show-saldo
         string-show-header
       />

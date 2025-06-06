@@ -4,24 +4,18 @@ import type {
   Verksamhetsar,
 } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import { type BeloppradGroup } from "@/model/arsredovisning/BeloppradGroup.ts";
+import { h, type VNode } from "vue";
 import {
-  type BeloppradGroup,
-  groupBelopprader,
-} from "@/model/arsredovisning/BeloppradGroup.ts";
-import { computed, h, type VNode } from "vue";
-import { getDisplayNameForTaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+  getTaxonomyManager,
+  TaxonomyRootName,
+} from "@/util/TaxonomyManager.ts";
+
+const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 
 const props = defineProps<{
   arsredovsining: Arsredovisning;
 }>();
-
-const groupedBelopprader = computed(() =>
-  groupBelopprader(
-    props.arsredovsining.noter,
-    1,
-    (belopprad) => belopprad.taxonomyItem.__Level > 1,
-  ),
-);
 
 function getValueColumnHeaderCell(
   beloppradGroup: BeloppradGroup,
@@ -97,6 +91,7 @@ function getValueColumnHeaderCell(
           v-for="belopprad in beloppradGroup.items"
           :key="belopprad.taxonomyItem.id"
           :belopprad="belopprad"
+          :taxonomy-manager="taxonomyManager"
         />
       </tbody>
     </table>

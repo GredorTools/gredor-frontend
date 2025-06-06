@@ -2,25 +2,35 @@
 import type { BeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
 import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { computed } from "vue";
 
-defineProps<{
+const props = defineProps<{
+  taxonomyManager: TaxonomyManager;
   deleteCallback: () => void;
 }>();
 
 const belopprad = defineModel<BeloppradDecimal>("belopprad", {
   required: true,
 });
+
+const taxonomyItem = computed(() => {
+  return props.taxonomyManager.getItem(belopprad.value.taxonomyItemName);
+});
 </script>
 
 <template>
   <tr
     :class="{
-      abstract: belopprad.taxonomyItem.abstrakt === 'true',
-      [`level-${belopprad.taxonomyItem.__Level}`]: true,
+      abstract: taxonomyItem.properties.abstract === 'true',
+      [`level-${taxonomyItem.level}`]: true,
     }"
   >
     <td>
-      <BaseEditBeloppradTitle :belopprad="belopprad" />
+      <BaseEditBeloppradTitle
+        :belopprad="belopprad"
+        :taxonomy-manager="taxonomyManager"
+      />
     </td>
     <td>
       <input v-model="belopprad.egetNamn" type="text" />
@@ -28,14 +38,14 @@ const belopprad = defineModel<BeloppradDecimal>("belopprad", {
     <td></td>
     <td>
       <input
-        v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
+        v-if="taxonomyItem.properties.abstract !== 'true'"
         v-model.trim="belopprad.beloppNuvarandeAr"
         type="text"
       />
     </td>
     <td>
       <input
-        v-if="belopprad.taxonomyItem.abstrakt !== 'true'"
+        v-if="taxonomyItem.properties.abstract !== 'true'"
         v-model.trim="belopprad.beloppForegaendeAr"
         type="text"
       />

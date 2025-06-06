@@ -1,4 +1,3 @@
-import type { TaxonomyItemType } from "@/model/taxonomy/TaxonomyItem.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export interface Arsredovisning {
@@ -8,10 +7,10 @@ export interface Arsredovisning {
   faststallelseintyg: Faststallelseintyg;
   verksamhetsarNuvarande: Verksamhetsar;
   verksamhetsarTidigare: Verksamhetsar[];
-  forvaltningsberattelse: Belopprad<TaxonomyItemType>[];
-  resultatrakning: Belopprad<TaxonomyItemType>[];
-  balansrakning: Belopprad<TaxonomyItemType>[];
-  noter: Belopprad<TaxonomyItemType>[];
+  forvaltningsberattelse: Belopprad[];
+  resultatrakning: Belopprad[];
+  balansrakning: Belopprad[];
+  noter: Belopprad[];
 }
 
 export interface Metadata {

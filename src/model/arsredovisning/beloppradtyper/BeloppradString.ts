@@ -1,7 +1,4 @@
-import type {
-  TaxonomyItem,
-  TaxonomyItemType,
-} from "@/model/taxonomy/TaxonomyItem.ts";
+import type { TaxonomyItem } from "@/util/TaxonomyManager.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export interface BeloppradString extends Belopprad<"xbrli:stringItemType"> {
@@ -10,7 +7,7 @@ export interface BeloppradString extends Belopprad<"xbrli:stringItemType"> {
 }
 
 export function isBeloppradString(
-  belopprad: Belopprad<TaxonomyItemType>,
+  belopprad: Belopprad,
 ): belopprad is BeloppradString {
-  return belopprad.taxonomyItem.datatyp === "xbrli:stringItemType";
+  return belopprad.type === "xbrli:stringItemType";
 }

@@ -1,26 +1,30 @@
-import type {
-  TaxonomyItem,
-  TaxonomyItemType,
-} from "@/model/taxonomy/TaxonomyItem.ts";
+import {
+  type TaxonomyItem,
+  type TaxonomyItemType,
+  TaxonomyManager,
+} from "@/util/TaxonomyManager.ts";
 
-export interface Belopprad<T extends TaxonomyItemType> {
-  taxonomyItem: TaxonomyItem<T>;
+export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
+  taxonomyItemName: string;
+  type: T;
   egetNamn?: string;
 }
 
 export function createBelopprad<T extends TaxonomyItemType>(
   taxonomyItem: TaxonomyItem<T>,
 ): Belopprad<T> {
-  switch (taxonomyItem.datatyp) {
+  switch (taxonomyItem.properties.type) {
     case "xbrli:stringItemType":
       return {
-        taxonomyItem: taxonomyItem,
+        taxonomyItemName: taxonomyItem.xmlName,
+        type: taxonomyItem.properties.type,
       } as Belopprad<T>;
 
     case "xbrli:monetaryItemType":
     case "xbrli:decimalItemType":
       return {
-        taxonomyItem: taxonomyItem,
+        taxonomyItemName: taxonomyItem.xmlName,
+        type: taxonomyItem.properties.type,
         beloppNuvarandeAr: "",
         beloppForegaendeAr: "",
       } as Belopprad<T>;
@@ -32,31 +36,98 @@ export function createBelopprad<T extends TaxonomyItemType>(
     case "xbrli:sharesItemType":
       alert("Ännu ej implementerat");
       throw new Error(
-        `Unsupported taxonomy item data type: ${taxonomyItem.datatyp}`,
+        `Unsupported taxonomy item data type: ${taxonomyItem.properties.type}`,
       );
 
     default:
       throw new Error(
-        `Unknown taxonomy item data type: ${taxonomyItem.datatyp}`,
+        `Unknown taxonomy item data type: ${taxonomyItem.properties.type}`,
       );
   }
 }
 
-export function deleteBelopprad(
-  beloppradToDelete: Belopprad<TaxonomyItemType>,
-  from: Belopprad<TaxonomyItemType>[],
-): void {
+export function createBeloppradInList(
+  taxonomyManager: TaxonomyManager,
+  list: Belopprad[],
+  taxonomyItem: TaxonomyItem,
+  excludedSumRows: string[] = [],
+  sort: boolean = true,
+) {
+  if (
+    list.some(
+      (belopprad) => belopprad.taxonomyItemName === taxonomyItem.xmlName,
+    )
+  ) {
+    // Finns redan
+    return;
+  }
+
+  list.push(createBelopprad(taxonomyItem));
+
+  if (taxonomyItem.parent != null && taxonomyItem.parent.level > 0) {
+    // Lägg till föräldrar rekursivt
+    createBeloppradInList(
+      taxonomyManager,
+      list,
+      taxonomyItem.parent,
+      excludedSumRows,
+      false,
+    );
+
+    if (taxonomyItem.parent.parent != null) {
+      // Lägg till summarader
+      for (const possibleSumTaxonomyItem of taxonomyItem.parent.parent
+        .children) {
+        if (
+          possibleSumTaxonomyItem.additionalData.isTotalItem &&
+          possibleSumTaxonomyItem.rowNumber > taxonomyItem.rowNumber &&
+          possibleSumTaxonomyItem.level === taxonomyItem.level - 1 &&
+          !excludedSumRows.includes(possibleSumTaxonomyItem.xmlName)
+        ) {
+          createBeloppradInList(
+            taxonomyManager,
+            list,
+            possibleSumTaxonomyItem,
+            excludedSumRows,
+            false,
+          );
+          break;
+        }
+      }
+    }
+  }
+
+  // Sortera
+  if (sort) {
+    list.sort(
+      (a, b) =>
+        taxonomyManager.getItem(a.taxonomyItemName).rowNumber -
+        taxonomyManager.getItem(b.taxonomyItemName).rowNumber,
+    );
+  }
+}
+
+export async function deleteBelopprad(
+  taxonomyManager: TaxonomyManager,
+  beloppradToDelete: Belopprad,
+  from: Belopprad[],
+) {
+  const taxonomyItemToDelete = taxonomyManager.getItem(
+    beloppradToDelete.taxonomyItemName,
+  );
+
   for (let i = 0; i < from.length; i++) {
     const belopprad = from[i];
-    if (belopprad.taxonomyItem.id === beloppradToDelete.taxonomyItem.id) {
+    const taxonomyItem = taxonomyManager.getItem(belopprad.taxonomyItemName);
+    if (taxonomyItem.xmlName === taxonomyItemToDelete.xmlName) {
       // Ta bort raden
       from.splice(i, 1);
 
       // Radera abstrakta föräldrar rekursivt om de inte har några kvarvarande barn
-      deleteBeloppradAbstractParents(belopprad, from);
+      deleteBeloppradAbstractParents(taxonomyManager, belopprad, from);
 
       // Ta bort barnen rekursivt
-      deleteBeloppradChildren(belopprad, from);
+      deleteBeloppradChildren(taxonomyManager, belopprad, from);
 
       // Klar
       return;
@@ -65,44 +136,46 @@ export function deleteBelopprad(
 }
 
 function deleteBeloppradAbstractParents(
-  belopprad: Belopprad<TaxonomyItemType>,
-  from: Belopprad<TaxonomyItemType>[],
+  taxonomyManager: TaxonomyManager,
+  belopprad: Belopprad,
+  from: Belopprad[],
 ) {
-  const parentId = belopprad.taxonomyItem.__ParentId;
-  if (parentId) {
+  const taxonomyItem = taxonomyManager.getItem(belopprad.taxonomyItemName);
+  if (taxonomyItem.parent) {
     // Hitta föräldern i listan baserat på förälderns ID
-    const parent = from.find(
-      (item) =>
-        item.taxonomyItem.abstrakt === "true" &&
-        item.taxonomyItem.id === parentId,
+    const beloppradParent = from.find(
+      (item) => item.taxonomyItemName === taxonomyItem.parent?.xmlName,
     );
 
-    if (parent) {
+    if (beloppradParent) {
       // Kontrollera om föräldern har några kvarvarande barn
       const parentHasChildren = from.some(
-        (item) => item.taxonomyItem.__ParentId === parentId,
+        (item) => item.taxonomyItemName === beloppradParent.taxonomyItemName,
       );
       if (!parentHasChildren) {
         // Om föräldern inte har några barn kvar, ta bort föräldern
-        const index = from.indexOf(parent);
+        const index = from.indexOf(beloppradParent);
         if (index !== -1) {
           from.splice(index, 1);
         }
 
         // Kontrollera nästa nivå av föräldrar rekursivt
-        deleteBeloppradAbstractParents(parent, from);
+        deleteBeloppradAbstractParents(taxonomyManager, beloppradParent, from);
       }
     }
   }
 }
 
 function deleteBeloppradChildren(
-  belopprad: Belopprad<TaxonomyItemType>,
-  from: Belopprad<TaxonomyItemType>[],
+  taxonomyManager: TaxonomyManager,
+  belopprad: Belopprad,
+  from: Belopprad[],
 ): void {
   // Hitta barn till den aktuella beloppraden
   const children = from.filter(
-    (item) => item.taxonomyItem.__ParentId === belopprad.taxonomyItem.id,
+    (item) =>
+      taxonomyManager.getItem(item.taxonomyItemName).parent?.xmlName ===
+      belopprad.taxonomyItemName,
   );
 
   for (const child of children) {
@@ -113,6 +186,6 @@ function deleteBeloppradChildren(
     }
 
     // Ta bort barnets barn rekursivt
-    deleteBeloppradChildren(child, from);
+    deleteBeloppradChildren(taxonomyManager, child, from);
   }
 }

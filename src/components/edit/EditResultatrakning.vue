@@ -1,74 +1,37 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import {
-  getDisplayNameForTaxonomyItem,
-  type TaxonomyItem,
-  type TaxonomyItemType,
-} from "@/model/taxonomy/TaxonomyItem.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
 import {
-  createBelopprad,
+  createBeloppradInList,
   deleteBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  getTaxonomyManager,
+  type TaxonomyItem,
+  TaxonomyRootName,
+} from "@/util/TaxonomyManager.ts";
 
+// TaxonomyManager och rader
+const taxonomyManager = await getTaxonomyManager(
+  TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
+);
+const taxonomyItemsFromData = taxonomyManager.getRoot();
+
+// Data
 const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
+const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 
-const taxonomyItemsFromData: TaxonomyItem<TaxonomyItemType>[] = await (
-  await fetch("data/taxonomy/k2/2021-10-31/Kostnadsslagsindelad resultatr.json")
-).json();
-
-const beloppItemToAdd = ref<TaxonomyItem<TaxonomyItemType> | null>(null);
-
-function addBelopprad(
-  taxonomyItem: TaxonomyItem<TaxonomyItemType>,
-  sort: boolean = true,
-) {
-  if (
-    arsredovsining.value.resultatrakning.some(
-      (belopprad) => belopprad.taxonomyItem.id === taxonomyItem.id,
-    )
-  ) {
-    // Finns redan
-    return;
-  }
-
-  arsredovsining.value.resultatrakning.push(createBelopprad(taxonomyItem));
-
-  if (taxonomyItem.__ParentId != null) {
-    // Lägg till föräldrar
-    for (const possibleParentTaxonomyItem of taxonomyItemsFromData) {
-      if (
-        possibleParentTaxonomyItem.__Level > 0 &&
-        possibleParentTaxonomyItem.id === taxonomyItem.__ParentId
-      ) {
-        addBelopprad(possibleParentTaxonomyItem, false);
-      }
-    }
-
-    // Lägg till summarader
-    let foundSelf = false;
-    for (const possibleSumTaxonomyItem of taxonomyItemsFromData) {
-      if (possibleSumTaxonomyItem.id === taxonomyItem.id) {
-        foundSelf = true;
-      }
-
-      if (foundSelf && possibleSumTaxonomyItem.__Level < taxonomyItem.__Level) {
-        addBelopprad(possibleSumTaxonomyItem, false);
-        break;
-      }
-    }
-  }
-
-  if (sort) {
-    arsredovsining.value.resultatrakning.sort(
-      (a, b) =>
-        parseInt(a.taxonomyItem.rowNumber, 10) -
-        parseInt(b.taxonomyItem.rowNumber, 10),
-    );
-  }
+// Hjälpfunktioner
+function addBelopprad(taxonomyItem: TaxonomyItem) {
+  createBeloppradInList(
+    taxonomyManager,
+    arsredovsining.value.resultatrakning,
+    taxonomyItem,
+    ["se-gen-base:FinansiellaPoster", "se-gen-base:Bokslutsdispositioner"],
+  );
 }
 </script>
 
@@ -94,11 +57,18 @@ function addBelopprad(
     <tbody>
       <EditBelopprad
         v-for="(belopprad, index) in arsredovsining.resultatrakning"
-        :key="belopprad.taxonomyItem.id"
+        :key="belopprad.taxonomyItemName"
         v-model:belopprad="arsredovsining.resultatrakning[index]"
+        v-model:belopprader="arsredovsining.resultatrakning"
         :delete-callback="
-          () => deleteBelopprad(belopprad, arsredovsining.resultatrakning)
+          () =>
+            deleteBelopprad(
+              taxonomyManager,
+              belopprad,
+              arsredovsining.resultatrakning,
+            )
         "
+        :taxonomy-manager="taxonomyManager"
         monetary-show-saldo
       />
     </tbody>
@@ -106,14 +76,14 @@ function addBelopprad(
 
   <select v-model="beloppItemToAdd" class="form-select">
     <option
-      v-for="taxonomyItem in taxonomyItemsFromData"
-      :key="taxonomyItem.id"
-      :disabled="taxonomyItem.abstrakt === 'true'"
+      v-for="taxonomyItem in taxonomyItemsFromData.childrenFlat"
+      :key="taxonomyItem.xmlName"
+      :disabled="taxonomyItem.properties.abstract === 'true'"
       :value="taxonomyItem"
     >
       {{
-        "\u00a0".repeat(taxonomyItem.__Level * 4) +
-        getDisplayNameForTaxonomyItem(taxonomyItem)
+        "\u00a0".repeat(taxonomyItem.level * 4) +
+        taxonomyItem.additionalData.displayLabel
       }}
     </option>
   </select>

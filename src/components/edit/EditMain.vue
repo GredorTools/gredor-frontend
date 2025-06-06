@@ -10,6 +10,7 @@ import EditForvaltningsberattelse from "@/components/edit/EditForvaltningsberatt
 import EditGrunduppgifter from "@/components/edit/EditGrunduppgifter.vue";
 import EditSignatures from "@/components/edit/EditSignatures.vue";
 import EditFaststallelseintyg from "@/components/edit/EditFaststallelseintyg.vue";
+import { emptyArsredovisning } from "@/example/EmptyArsredovisning.ts";
 
 const arsredovsining = defineModel<Arsredovisning>({
   required: true,
@@ -38,6 +39,10 @@ function exportFile() {
   );
 }
 
+function clearData() {
+  arsredovsining.value = JSON.parse(JSON.stringify(emptyArsredovisning)); // Deep copy;
+}
+
 type Mode =
   | "grunduppgifter"
   | "forvaltningsberattelse"
@@ -61,6 +66,9 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 <template>
   <button class="btn btn-primary" @click="importFile">Öppna…</button>
   <button class="btn btn-primary" @click="exportFile">Spara som…</button>
+  <button class="btn btn-danger float-end" @click="clearData">
+    Rensa allt
+  </button>
 
   <ul class="nav nav-tabs">
     <li
