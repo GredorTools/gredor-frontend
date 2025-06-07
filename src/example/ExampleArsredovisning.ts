@@ -283,6 +283,6 @@ export const exampleArsredovisning: Arsredovisning = {
       beloppNuvarandeAr: "2",
       taxonomyItemName: "se-gen-base:MedelantaletAnstallda",
       type: "xbrli:decimalItemType",
-    } as Belopprad<"xbrli:monetaryItemType">,
+    } as Belopprad<"xbrli:decimalItemType">,
   ],
 };
