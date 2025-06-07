@@ -5,7 +5,7 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinalize from "@/components/tools/ToolsFinalize.vue";
 
-const arsredovsining = ref(exampleArsredovisning);
+const arsredovisning = ref(exampleArsredovisning);
 </script>
 
 <template>
@@ -14,17 +14,17 @@ const arsredovsining = ref(exampleArsredovisning);
   </header>
 
   <div class="editor">
-    <EditMain v-model="arsredovsining" />
+    <EditMain v-model="arsredovisning" />
   </div>
 
   <div>
-    <RenderMain :arsredovsining="arsredovsining" />
+    <RenderMain :arsredovisning="arsredovisning" />
   </div>
 
   <div></div>
 
   <div>
-    <ToolsFinalize :arsredovsining="arsredovsining" />
+    <ToolsFinalize :arsredovisning="arsredovisning" />
   </div>
 </template>
 

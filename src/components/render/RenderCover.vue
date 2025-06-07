@@ -3,14 +3,14 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 
 const props = defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 
 const rakenskapsarText = computed(() => {
-  const startdatumAr = props.arsredovsining.verksamhetsarNuvarande.startdatum
+  const startdatumAr = props.arsredovisning.verksamhetsarNuvarande.startdatum
     .trim()
     .split("-")[0];
-  const slutdatumAr = props.arsredovsining.verksamhetsarNuvarande.slutdatum
+  const slutdatumAr = props.arsredovisning.verksamhetsarNuvarande.slutdatum
     .trim()
     .split("-")[0];
   if (startdatumAr === slutdatumAr) {
@@ -27,26 +27,26 @@ const rakenskapsarText = computed(() => {
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-cd-base:ForetagetsNamn"
-        >{{ arsredovsining.foretagsinformation.foretagsnamn }}
+        >{{ arsredovisning.foretagsinformation.foretagsnamn }}
       </ix:nonNumeric>
       <br />
       <abbr>Org.nr</abbr>{{ " " }}
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-cd-base:Organisationsnummer"
-        >{{ arsredovsining.foretagsinformation.organisationsnummer }}
+        >{{ arsredovisning.foretagsinformation.organisationsnummer }}
       </ix:nonNumeric>
     </div>
     <h1>Årsredovisning för räkenskapsåret {{ rakenskapsarText }}</h1>
     <p>
-      {{ arsredovsining.redovisningsinformation.forfattare.namn }} avger härmed
+      {{ arsredovisning.redovisningsinformation.forfattare.namn }} avger härmed
       följande årsredovisning<br />för räkenskapsåret
-      {{ arsredovsining.verksamhetsarNuvarande.startdatum }} –
-      {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}.
+      {{ arsredovisning.verksamhetsarNuvarande.startdatum }} –
+      {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}.
     </p>
     <p class="currency-info">
       Om inte annat särskilt anges, redovisas alla belopp i hela
-      {{ arsredovsining.redovisningsinformation.redovisningsvaluta.namn }}.
+      {{ arsredovisning.redovisningsinformation.redovisningsvaluta.namn }}.
     </p>
     <div class="certification">
       <h2>Fastställelseintyg</h2>
@@ -74,13 +74,13 @@ const rakenskapsarText = computed(() => {
           .<br />
           <ix:nonNumeric
             :name="
-              arsredovsining.faststallelseintyg.resultatdispositionBeslut.xbrlId
+              arsredovisning.faststallelseintyg.resultatdispositionBeslut.xbrlId
             "
             contextRef="balans_nuvarande"
           >
             <!-- @delete-whitespace -->
             {{
-              arsredovsining.faststallelseintyg.resultatdispositionBeslut.text
+              arsredovisning.faststallelseintyg.resultatdispositionBeslut.text
             }}
             <!-- @delete-whitespace -->
           </ix:nonNumeric>
@@ -118,14 +118,14 @@ const rakenskapsarText = computed(() => {
           contextRef="period_nuvarande"
           name="se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn"
         >
-          {{ arsredovsining.faststallelseintyg.underskrift.tilltalsnamn }}
+          {{ arsredovisning.faststallelseintyg.underskrift.tilltalsnamn }}
         </ix:nonNumeric>
         {{ " " }}
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn"
         >
-          {{ arsredovsining.faststallelseintyg.underskrift.efternamn }}
+          {{ arsredovisning.faststallelseintyg.underskrift.efternamn }}
         </ix:nonNumeric>
         ,
         <ix:nonNumeric
@@ -133,7 +133,7 @@ const rakenskapsarText = computed(() => {
           name="se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll"
         >
           <!-- @delete-whitespace -->
-          {{ arsredovsining.faststallelseintyg.underskrift.roll }}
+          {{ arsredovisning.faststallelseintyg.underskrift.roll }}
           <!-- @delete-whitespace -->
         </ix:nonNumeric>
         <br />

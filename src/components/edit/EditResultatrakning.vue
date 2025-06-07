@@ -19,7 +19,7 @@ const taxonomyManager = await getTaxonomyManager(
 const taxonomyItemsFromData = taxonomyManager.getRoot();
 
 // Data
-const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 const beloppItemToAdd = ref<TaxonomyItem | null>(null);
@@ -28,7 +28,7 @@ const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 function addBelopprad(taxonomyItem: TaxonomyItem) {
   createBeloppradInList(
     taxonomyManager,
-    arsredovsining.value.resultatrakning,
+    arsredovisning.value.resultatrakning,
     taxonomyItem,
     ["se-gen-base:FinansiellaPoster", "se-gen-base:Bokslutsdispositioner"],
   );
@@ -44,28 +44,28 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
         <th scope="col">Eget namn</th>
         <th scope="col">Not</th>
         <th scope="col">
-          {{ arsredovsining.verksamhetsarNuvarande.startdatum }}<br />
-          –{{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+          {{ arsredovisning.verksamhetsarNuvarande.startdatum }}<br />
+          –{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </th>
         <th scope="col">
-          {{ arsredovsining.verksamhetsarTidigare[0].startdatum }}<br />
-          –{{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
+          {{ arsredovisning.verksamhetsarTidigare[0].startdatum }}<br />
+          –{{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
         </th>
         <th scope="col"><!-- Ta bort-knapp --></th>
       </tr>
     </thead>
     <tbody>
       <EditBelopprad
-        v-for="(belopprad, index) in arsredovsining.resultatrakning"
+        v-for="(belopprad, index) in arsredovisning.resultatrakning"
         :key="belopprad.taxonomyItemName"
-        v-model:belopprad="arsredovsining.resultatrakning[index]"
-        v-model:belopprader="arsredovsining.resultatrakning"
+        v-model:belopprad="arsredovisning.resultatrakning[index]"
+        v-model:belopprader="arsredovisning.resultatrakning"
         :delete-callback="
           () =>
             deleteBelopprad(
               taxonomyManager,
               belopprad,
-              arsredovsining.resultatrakning,
+              arsredovisning.resultatrakning,
             )
         "
         :taxonomy-manager="taxonomyManager"

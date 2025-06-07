@@ -4,7 +4,7 @@ import { FileUtil } from "@/util/FileUtil.ts";
 import { DocumentUtil } from "@/util/DocumentUtil.ts";
 
 const props = defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 
 async function exportArsredovisning() {
@@ -13,7 +13,7 @@ async function exportArsredovisning() {
   );
 
   if (arsredovisningForExport) {
-    const { foretagsinformation } = props.arsredovsining;
+    const { foretagsinformation } = props.arsredovisning;
     const xhtml = await DocumentUtil.convertVueHTMLToiXBRL(
       arsredovisningForExport,
       `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,

@@ -12,7 +12,7 @@ import EditSignatures from "@/components/edit/EditSignatures.vue";
 import EditFaststallelseintyg from "@/components/edit/EditFaststallelseintyg.vue";
 import { emptyArsredovisning } from "@/example/EmptyArsredovisning.ts";
 
-const arsredovsining = defineModel<Arsredovisning>({
+const arsredovisning = defineModel<Arsredovisning>({
   required: true,
 });
 
@@ -21,7 +21,7 @@ async function importFile() {
   if (file) {
     const dataContainer: DataContainer<Arsredovisning> = JSON.parse(file);
     // TODO: Validera
-    arsredovsining.value = dataContainer.data;
+    arsredovisning.value = dataContainer.data;
   }
 }
 
@@ -29,7 +29,7 @@ function exportFile() {
   const dataContainer: DataContainer<Arsredovisning> = {
     dataType: "Arsredovisning",
     version: 1,
-    data: arsredovsining.value,
+    data: arsredovisning.value,
   };
 
   FileUtil.exportFile(
@@ -40,7 +40,7 @@ function exportFile() {
 }
 
 function clearData() {
-  arsredovsining.value = JSON.parse(JSON.stringify(emptyArsredovisning)); // Deep copy;
+  arsredovisning.value = JSON.parse(JSON.stringify(emptyArsredovisning)); // Deep copy;
 }
 
 type Mode =
@@ -88,25 +88,25 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 
   <div class="editor">
     <Suspense v-if="currentMode === 'grunduppgifter'">
-      <EditGrunduppgifter v-model:arsredovisning="arsredovsining" />
+      <EditGrunduppgifter v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'forvaltningsberattelse'">
-      <EditForvaltningsberattelse v-model:arsredovisning="arsredovsining" />
+      <EditForvaltningsberattelse v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'resultatrakning'">
-      <EditResultatrakning v-model:arsredovisning="arsredovsining" />
+      <EditResultatrakning v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'balansrakning'">
-      <EditBalansrakning v-model:arsredovisning="arsredovsining" />
+      <EditBalansrakning v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'noter'">
-      <EditNoter v-model:arsredovisning="arsredovsining" />
+      <EditNoter v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'signaturer'">
-      <EditSignatures v-model:arsredovisning="arsredovsining" />
+      <EditSignatures v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'faststallelseintyg'">
-      <EditFaststallelseintyg v-model:arsredovisning="arsredovsining" />
+      <EditFaststallelseintyg v-model:arsredovisning="arsredovisning" />
     </Suspense>
   </div>
 </template>

@@ -11,7 +11,7 @@ const taxonomyManager = await getTaxonomyManager(
 );
 
 defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 </script>
 
@@ -22,18 +22,18 @@ defineProps<{
         <th scope="col"><h2>Resultaträkning</h2></th>
         <th scope="col">Not</th>
         <th scope="col">
-          {{ arsredovsining.verksamhetsarNuvarande.startdatum }}<br />
-          –{{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+          {{ arsredovisning.verksamhetsarNuvarande.startdatum }}<br />
+          –{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </th>
         <th scope="col">
-          {{ arsredovsining.verksamhetsarTidigare[0].startdatum }}<br />
-          –{{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
+          {{ arsredovisning.verksamhetsarTidigare[0].startdatum }}<br />
+          –{{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
         </th>
       </tr>
     </thead>
     <tbody>
       <RenderBelopprad
-        v-for="belopprad in arsredovsining.resultatrakning"
+        v-for="belopprad in arsredovisning.resultatrakning"
         :key="belopprad.taxonomyItemName"
         :belopprad="belopprad"
         :taxonomy-manager="taxonomyManager"

@@ -14,11 +14,11 @@ import {
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 
 const props = defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 
 const items = computed(() => {
-  return props.arsredovsining.noter.map((belopprad) => {
+  return props.arsredovisning.noter.map((belopprad) => {
     return {
       belopprad,
       taxonomyItem: taxonomyManager.getItem(belopprad.taxonomyItemName),
@@ -81,7 +81,7 @@ function getValueColumnHeaderCell(
             :is="
               getValueColumnHeaderCell(
                 headerTaxonomyItem,
-                arsredovsining.verksamhetsarNuvarande,
+                arsredovisning.verksamhetsarNuvarande,
               )
             "
           />
@@ -89,7 +89,7 @@ function getValueColumnHeaderCell(
             :is="
               getValueColumnHeaderCell(
                 headerTaxonomyItem,
-                arsredovsining.verksamhetsarTidigare[0],
+                arsredovisning.verksamhetsarTidigare[0],
               )
             "
           />

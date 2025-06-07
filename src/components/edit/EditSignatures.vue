@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
-const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 
 function addUnderskrift() {
-  arsredovsining.value.redovisningsinformation.underskrifter.push({
+  arsredovisning.value.redovisningsinformation.underskrifter.push({
     tilltalsnamn: "",
     efternamn: "",
     roll: "",
@@ -15,7 +15,7 @@ function addUnderskrift() {
 }
 
 function removeUnderskrift(index: number) {
-  arsredovsining.value.redovisningsinformation.underskrifter.splice(index, 1);
+  arsredovisning.value.redovisningsinformation.underskrifter.splice(index, 1);
 }
 </script>
 
@@ -25,13 +25,13 @@ function removeUnderskrift(index: number) {
     <label for="underskriftOrt">Ort för underskrift:</label>
     <input
       id="underskriftOrt"
-      v-model.trim="arsredovsining.redovisningsinformation.underskriftOrt"
+      v-model.trim="arsredovisning.redovisningsinformation.underskriftOrt"
       class="input-field"
       type="text"
     />
   </div>
   <div
-    v-for="(underskrift, index) in arsredovsining.redovisningsinformation
+    v-for="(underskrift, index) in arsredovisning.redovisningsinformation
       .underskrifter"
     :key="index"
     class="form-section"

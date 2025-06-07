@@ -9,7 +9,7 @@ import RenderCover from "@/components/render/RenderCover.vue";
 import RenderSignatures from "@/components/render/RenderSignatures.vue";
 
 defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 </script>
 
@@ -17,18 +17,18 @@ defineProps<{
   <div class="ar-page">
     <Suspense>
       <div id="arsredovisning-for-export">
-        <RenderIXBRLHeader :arsredovsining="arsredovsining" />
+        <RenderIXBRLHeader :arsredovisning="arsredovisning" />
         <div class="sections-container">
-          <RenderCover :arsredovsining="arsredovsining" />
+          <RenderCover :arsredovisning="arsredovisning" />
           <div class="page-break"></div>
-          <RenderForvaltningsberattelse :arsredovsining="arsredovsining" />
+          <RenderForvaltningsberattelse :arsredovisning="arsredovisning" />
           <div class="page-break"></div>
-          <RenderResultatrakning :arsredovsining="arsredovsining" />
+          <RenderResultatrakning :arsredovisning="arsredovisning" />
           <div class="page-break"></div>
-          <RenderBalansrakning :arsredovsining="arsredovsining" />
+          <RenderBalansrakning :arsredovisning="arsredovisning" />
           <div class="page-break"></div>
-          <RenderNoter :arsredovsining="arsredovsining" />
-          <RenderSignatures :arsredovsining="arsredovsining" />
+          <RenderNoter :arsredovisning="arsredovisning" />
+          <RenderSignatures :arsredovisning="arsredovisning" />
         </div>
       </div>
     </Suspense>

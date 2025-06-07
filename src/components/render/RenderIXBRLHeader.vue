@@ -2,7 +2,7 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
 defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 </script>
 
@@ -30,13 +30,13 @@ defineProps<{
           contextRef="period_nuvarande"
           name="se-cd-base:RedovisningsvalutaHandlingList"
           >{{
-            arsredovsining.redovisningsinformation.redovisningsvaluta.xbrlId
+            arsredovisning.redovisningsinformation.redovisningsvaluta.xbrlId
           }}
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-gen-base:FinansiellRapportList"
-          >{{ arsredovsining.redovisningsinformation.forfattare.xbrlId }}
+          >{{ arsredovisning.redovisningsinformation.forfattare.xbrlId }}
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"
@@ -46,12 +46,12 @@ defineProps<{
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-cd-base:RakenskapsarForstaDag"
-          >{{ arsredovsining.verksamhetsarNuvarande.startdatum }}
+          >{{ arsredovisning.verksamhetsarNuvarande.startdatum }}
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-cd-base:RakenskapsarSistaDag"
-          >{{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+          >{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </ix:nonNumeric>
       </ix:hidden>
       <ix:references>
@@ -68,67 +68,67 @@ defineProps<{
         <xbrli:context id="period_nuvarande">
           <xbrli:entity>
             <xbrli:identifier scheme="http://www.bolagsverket.se"
-              >{{ arsredovsining.foretagsinformation.organisationsnummer }}
+              >{{ arsredovisning.foretagsinformation.organisationsnummer }}
             </xbrli:identifier>
           </xbrli:entity>
           <xbrli:period>
             <xbrli:startDate
-              >{{ arsredovsining.verksamhetsarNuvarande.startdatum }}
+              >{{ arsredovisning.verksamhetsarNuvarande.startdatum }}
             </xbrli:startDate>
             <xbrli:endDate
-              >{{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+              >{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
             </xbrli:endDate>
           </xbrli:period>
         </xbrli:context>
         <xbrli:context id="balans_nuvarande">
           <xbrli:entity>
             <xbrli:identifier scheme="http://www.bolagsverket.se"
-              >{{ arsredovsining.foretagsinformation.organisationsnummer }}
+              >{{ arsredovisning.foretagsinformation.organisationsnummer }}
             </xbrli:identifier>
           </xbrli:entity>
           <xbrli:period>
             <xbrli:instant
-              >{{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+              >{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
             </xbrli:instant>
           </xbrli:period>
         </xbrli:context>
         <xbrli:context
-          v-if="arsredovsining.verksamhetsarTidigare?.length > 0"
+          v-if="arsredovisning.verksamhetsarTidigare?.length > 0"
           id="period_foregaende"
         >
           <xbrli:entity>
             <xbrli:identifier scheme="http://www.bolagsverket.se"
-              >{{ arsredovsining.foretagsinformation.organisationsnummer }}
+              >{{ arsredovisning.foretagsinformation.organisationsnummer }}
             </xbrli:identifier>
           </xbrli:entity>
           <xbrli:period>
             <xbrli:startDate
-              >{{ arsredovsining.verksamhetsarTidigare[0].startdatum }}
+              >{{ arsredovisning.verksamhetsarTidigare[0].startdatum }}
             </xbrli:startDate>
             <xbrli:endDate
-              >{{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
+              >{{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
             </xbrli:endDate>
           </xbrli:period>
         </xbrli:context>
         <xbrli:context
-          v-if="arsredovsining.verksamhetsarTidigare?.length > 0"
+          v-if="arsredovisning.verksamhetsarTidigare?.length > 0"
           id="balans_foregaende"
         >
           <xbrli:entity>
             <xbrli:identifier scheme="http://www.bolagsverket.se"
-              >{{ arsredovsining.foretagsinformation.organisationsnummer }}
+              >{{ arsredovisning.foretagsinformation.organisationsnummer }}
             </xbrli:identifier>
           </xbrli:entity>
           <xbrli:period>
             <xbrli:instant
-              >{{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
+              >{{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
             </xbrli:instant>
           </xbrli:period>
         </xbrli:context>
         <xbrli:unit id="redovisningsvaluta">
           <xbrli:measure
             >iso4217:{{
-              arsredovsining.redovisningsinformation.redovisningsvaluta.kod
+              arsredovisning.redovisningsinformation.redovisningsvaluta.kod
             }}
           </xbrli:measure>
         </xbrli:unit>

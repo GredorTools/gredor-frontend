@@ -19,7 +19,7 @@ const taxonomyManager = await getTaxonomyManager(
 const taxonomyItemsFromData = taxonomyManager.getRoot();
 
 // Data
-const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 const beloppItemToAdd = ref<TaxonomyItem | null>(null);
@@ -28,7 +28,7 @@ const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 function addBelopprad(taxonomyItem: TaxonomyItem) {
   createBeloppradInList(
     taxonomyManager,
-    arsredovsining.value.forvaltningsberattelse,
+    arsredovisning.value.forvaltningsberattelse,
     taxonomyItem,
   );
 }
@@ -49,21 +49,21 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
       <tbody>
         <EditBelopprad
           v-for="[index, belopprad] in [
-            ...arsredovsining.forvaltningsberattelse.entries(),
+            ...arsredovisning.forvaltningsberattelse.entries(),
           ].filter(([, b]) =>
             [group, ...group.childrenFlat].some(
               (groupMember) => groupMember.xmlName === b.taxonomyItemName,
             ),
           )"
           :key="belopprad.taxonomyItemName"
-          v-model:belopprad="arsredovsining.forvaltningsberattelse[index]"
-          v-model:belopprader="arsredovsining.forvaltningsberattelse"
+          v-model:belopprad="arsredovisning.forvaltningsberattelse[index]"
+          v-model:belopprader="arsredovisning.forvaltningsberattelse"
           :delete-callback="
             () =>
               deleteBelopprad(
                 taxonomyManager,
                 belopprad,
-                arsredovsining.forvaltningsberattelse,
+                arsredovisning.forvaltningsberattelse,
               )
           "
           :taxonomy-manager="taxonomyManager"

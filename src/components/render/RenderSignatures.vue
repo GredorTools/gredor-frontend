@@ -2,7 +2,7 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
 defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 </script>
 
@@ -15,7 +15,7 @@ defineProps<{
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningOrt"
-        >{{ arsredovsining.redovisningsinformation.underskriftOrt }}
+        >{{ arsredovisning.redovisningsinformation.underskriftOrt }}
       </ix:nonNumeric>
       {{ " " }}
       <ix:nonNumeric
@@ -25,14 +25,14 @@ defineProps<{
       </ix:nonNumeric>
     </p>
     <ix:tuple
-      v-for="(_, index) in arsredovsining.redovisningsinformation.underskrifter"
+      v-for="(_, index) in arsredovisning.redovisningsinformation.underskrifter"
       :key="index"
       :tupleID="'UnderskriftArsredovisningForetradareTuple' + index"
       name="se-gaap-ext:UnderskriftArsredovisningForetradareTuple"
     />
     <div>
       <div
-        v-for="(underskrift, index) in arsredovsining.redovisningsinformation
+        v-for="(underskrift, index) in arsredovisning.redovisningsinformation
           .underskrifter"
         :key="index"
         class="name"

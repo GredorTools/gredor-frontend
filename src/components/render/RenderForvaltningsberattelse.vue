@@ -11,7 +11,7 @@ const taxonomyManager = await getTaxonomyManager(
 );
 
 defineProps<{
-  arsredovsining: Arsredovisning;
+  arsredovisning: Arsredovisning;
 }>();
 </script>
 
@@ -21,7 +21,7 @@ defineProps<{
     <table>
       <tbody>
         <RenderBelopprad
-          v-for="belopprad in arsredovsining.forvaltningsberattelse"
+          v-for="belopprad in arsredovisning.forvaltningsberattelse"
           :key="belopprad.taxonomyItemName"
           :belopprad="belopprad"
           :taxonomy-manager="taxonomyManager"

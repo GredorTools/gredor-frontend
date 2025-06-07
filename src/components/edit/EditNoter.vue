@@ -17,7 +17,7 @@ const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 const taxonomyItemsFromData = taxonomyManager.getRoot();
 
 // Data
-const arsredovsining = defineModel<Arsredovisning>("arsredovisning", {
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 const beloppItemToAdd = ref<TaxonomyItem | null>(null);
@@ -26,7 +26,7 @@ const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 function addBelopprad(taxonomyItem: TaxonomyItem) {
   createBeloppradInList(
     taxonomyManager,
-    arsredovsining.value.noter,
+    arsredovisning.value.noter,
     taxonomyItem,
   );
 }
@@ -47,10 +47,10 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           <th scope="col">Eget namn</th>
           <th scope="col">Not</th>
           <th scope="col">
-            {{ arsredovsining.verksamhetsarNuvarande.slutdatum }}
+            {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
           </th>
           <th scope="col">
-            {{ arsredovsining.verksamhetsarTidigare[0].slutdatum }}
+            {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
           </th>
           <th scope="col"><!-- Ta bort-knapp --></th>
         </tr>
@@ -58,18 +58,18 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
       <tbody>
         <EditBelopprad
           v-for="[index, belopprad] in [
-            ...arsredovsining.noter.entries(),
+            ...arsredovisning.noter.entries(),
           ].filter(([, b]) =>
             [group, ...group.childrenFlat].some(
               (groupMember) => groupMember.xmlName === b.taxonomyItemName,
             ),
           )"
           :key="belopprad.taxonomyItemName"
-          v-model:belopprad="arsredovsining.noter[index]"
-          v-model:belopprader="arsredovsining.noter"
+          v-model:belopprad="arsredovisning.noter[index]"
+          v-model:belopprader="arsredovisning.noter"
           :delete-callback="
             () =>
-              deleteBelopprad(taxonomyManager, belopprad, arsredovsining.noter)
+              deleteBelopprad(taxonomyManager, belopprad, arsredovisning.noter)
           "
           :taxonomy-manager="taxonomyManager"
           string-multiline
