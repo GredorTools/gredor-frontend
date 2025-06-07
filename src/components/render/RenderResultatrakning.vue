@@ -50,6 +50,7 @@ table {
 
   th,
   &:deep(td) {
+    border-style: hidden;
     text-align: left;
     vertical-align: bottom;
     padding: 0.25rem 0;

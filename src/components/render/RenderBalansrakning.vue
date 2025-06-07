@@ -48,6 +48,7 @@ table {
 
   th,
   &:deep(td) {
+    border-style: hidden;
     text-align: left;
     padding: 0.25rem 0;
 
