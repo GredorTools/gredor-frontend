@@ -150,7 +150,9 @@ function deleteBeloppradAbstractParents(
     if (beloppradParent) {
       // Kontrollera om föräldern har några kvarvarande barn
       const parentHasChildren = from.some(
-        (item) => item.taxonomyItemName === beloppradParent.taxonomyItemName,
+        (item) =>
+          taxonomyManager.getItem(item.taxonomyItemName).parent?.xmlName ===
+          beloppradParent.taxonomyItemName,
       );
       if (!parentHasChildren) {
         // Om föräldern inte har några barn kvar, ta bort föräldern
