@@ -52,7 +52,7 @@ export class DocumentUtil {
         @font-face {
             font-family: "${fontReference.fontFamily}";
             font-weight: ${fontReference.fontWeight};
-            font-style: "${fontReference.fontStyle}";
+            font-style: ${fontReference.fontStyle};
             src: ${fontReference.srcBase64};
             unicode-range: "${fontReference.unicodeRange}";
         }`;

@@ -102,7 +102,7 @@ const rakenskapsarText = computed(() => {
       </p>
 
       <p>
-        <strong>
+        <span class="signature-header">
           <ix:nonNumeric
             contextRef="balans_nuvarande"
             name="se-bol-base:UnderskriftFaststallelseintygElektroniskt"
@@ -112,7 +112,7 @@ const rakenskapsarText = computed(() => {
             <!-- @delete-whitespace -->
           </ix:nonNumeric>
           :
-        </strong>
+        </span>
         <br />
         <ix:nonNumeric
           contextRef="period_nuvarande"
@@ -165,5 +165,9 @@ h1 {
   margin-top: 20rem;
   border: 0.25rem solid black;
   padding: 1rem 2rem;
+}
+
+.signature-header {
+  font-weight: 600;
 }
 </style>

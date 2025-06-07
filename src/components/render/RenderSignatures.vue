@@ -37,7 +37,9 @@ defineProps<{
         :key="index"
         class="name"
       >
-        <i>{{ underskrift.tilltalsnamn }} {{ underskrift.efternamn }}</i>
+        <span class="signature"
+          >{{ underskrift.tilltalsnamn }} {{ underskrift.efternamn }}</span
+        >
         <br />
         <ix:nonNumeric
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
@@ -86,5 +88,10 @@ defineProps<{
   width: 49%;
   vertical-align: top;
   margin-bottom: 1rem;
+
+  .signature {
+    font-weight: 600;
+    font-style: italic;
+  }
 }
 </style>
