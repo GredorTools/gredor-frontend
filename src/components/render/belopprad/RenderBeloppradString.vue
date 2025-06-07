@@ -68,6 +68,12 @@ const computedHeader = computed(() => {
   }
 }
 
+.level-2:not(.abstract) {
+  &:not(:last-of-type) td {
+    padding-bottom: 1rem;
+  }
+}
+
 .abstract.level-2 {
   font-weight: 600;
   text-decoration: underline;
@@ -91,10 +97,10 @@ tr:not(.abstract) .header {
 }
 
 p {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 
-  &:last-of-type {
-    margin-bottom: 1rem;
+  &:not(:last-of-type) {
+    margin-bottom: 0.5rem;
   }
 }
 </style>

@@ -30,6 +30,8 @@ onMounted(() => {
     ref="title-span"
     :class="{
       'gredor-tooltip-target': !!taxonomyItem.properties.documentation,
+      abstract: taxonomyItem.properties.abstract === 'true',
+      [`level-${taxonomyItem.level}`]: true,
     }"
     :data-bs-title="taxonomyItem.properties.documentation"
     data-bs-placement="bottom"
@@ -38,4 +40,27 @@ onMounted(() => {
   >
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.abstract.level-1 {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.abstract.level-2 {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.abstract.level-3 {
+  font-weight: 500;
+}
+
+.abstract.level-4 {
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.gredor-tooltip-target {
+  border-bottom: 1px dotted black;
+}
+</style>

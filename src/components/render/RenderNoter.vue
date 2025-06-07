@@ -4,10 +4,10 @@ import type {
   Verksamhetsar,
 } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
-import { type BeloppradGroup } from "@/model/arsredovisning/BeloppradGroup.ts";
-import { h, type VNode } from "vue";
+import { computed, h, type VNode } from "vue";
 import {
   getTaxonomyManager,
+  type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
 
@@ -17,20 +17,29 @@ const props = defineProps<{
   arsredovsining: Arsredovisning;
 }>();
 
+const items = computed(() => {
+  return props.arsredovsining.noter.map((belopprad) => {
+    return {
+      belopprad,
+      taxonomyItem: taxonomyManager.getItem(belopprad.taxonomyItemName),
+    };
+  });
+});
+
 function getValueColumnHeaderCell(
-  beloppradGroup: BeloppradGroup,
+  taxonomyItem: TaxonomyItem,
   verksamhetsar: Verksamhetsar,
 ): VNode {
   const attrs = { scope: "col" };
 
-  const firstNonStringItem = beloppradGroup.items.find(
-    (belopprad) => belopprad.taxonomyItem.datatyp !== "xbrli:stringItemType",
+  const firstNonStringItem = taxonomyItem.childrenFlat.find(
+    (child) => child.properties.type !== "xbrli:stringItemType",
   );
   if (!firstNonStringItem) {
     // Finns inga icke-sträng-värden, vi ska inte ha någon kolumnrubrik
     return h("th", attrs);
   }
-  switch (firstNonStringItem.taxonomyItem.periodtyp) {
+  switch (firstNonStringItem.properties.periodType) {
     case "duration":
       return h("th", attrs, [
         verksamhetsar.startdatum,
@@ -41,7 +50,7 @@ function getValueColumnHeaderCell(
     case "instant":
       return h("th", attrs, [verksamhetsar.slutdatum]);
     default:
-      throw new Error("Unknown periodtyp");
+      throw new Error("Unknown periodType");
   }
 }
 </script>
@@ -50,8 +59,10 @@ function getValueColumnHeaderCell(
   <div>
     <h2>Noter</h2>
     <table
-      v-for="(beloppradGroup, index) in groupedBelopprader"
-      :key="beloppradGroup.items[0].taxonomyItem.id"
+      v-for="(
+        { belopprad: headerBelopprad, taxonomyItem: headerTaxonomyItem }, index
+      ) in items.filter((i) => i.taxonomyItem.level === 2)"
+      :key="headerBelopprad.taxonomyItemName"
     >
       <thead>
         <tr>
@@ -61,9 +72,7 @@ function getValueColumnHeaderCell(
                 "Not " +
                 (index + 1) +
                 ": " +
-                getDisplayNameForTaxonomyItem(
-                  beloppradGroup.items[0].taxonomyItem,
-                )
+                headerTaxonomyItem.additionalData.displayLabel
               }}
             </h3>
           </th>
@@ -71,7 +80,7 @@ function getValueColumnHeaderCell(
           <component
             :is="
               getValueColumnHeaderCell(
-                beloppradGroup,
+                headerTaxonomyItem,
                 arsredovsining.verksamhetsarNuvarande,
               )
             "
@@ -79,7 +88,7 @@ function getValueColumnHeaderCell(
           <component
             :is="
               getValueColumnHeaderCell(
-                beloppradGroup,
+                headerTaxonomyItem,
                 arsredovsining.verksamhetsarTidigare[0],
               )
             "
@@ -88,8 +97,14 @@ function getValueColumnHeaderCell(
       </thead>
       <tbody>
         <RenderBelopprad
-          v-for="belopprad in beloppradGroup.items"
-          :key="belopprad.taxonomyItem.id"
+          v-for="belopprad in items
+            .filter((i) =>
+              [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat].some(
+                (c) => c.xmlName === i.belopprad.taxonomyItemName,
+              ),
+            )
+            .map((i) => i.belopprad)"
+          :key="belopprad.taxonomyItemName"
           :belopprad="belopprad"
           :taxonomy-manager="taxonomyManager"
         />
@@ -99,8 +114,13 @@ function getValueColumnHeaderCell(
 </template>
 
 <style lang="scss" scoped>
+h3 {
+  margin-bottom: 0;
+}
+
 table {
   width: 100%;
+  margin-bottom: 1rem;
 
   th,
   &:deep(td) {

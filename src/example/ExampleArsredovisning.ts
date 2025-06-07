@@ -99,6 +99,7 @@ export const exampleArsredovisning: Arsredovisning = {
     {
       beloppForegaendeAr: "1100",
       beloppNuvarandeAr: "1100",
+      not: "2",
       taxonomyItemName: "se-gen-base:Personalkostnader",
       type: "xbrli:monetaryItemType",
     } as Belopprad<"xbrli:monetaryItemType">,
@@ -255,5 +256,33 @@ export const exampleArsredovisning: Arsredovisning = {
       type: "xbrli:monetaryItemType",
     } as Belopprad<"xbrli:monetaryItemType">,
   ],
-  noter: [],
+  noter: [
+    {
+      taxonomyItemName: "se-gen-base:RedovisningsprinciperAbstract",
+      type: "xbrli:stringItemType",
+    },
+    {
+      taxonomyItemName: "se-gen-base:RedovisningsVarderingsprinciper",
+      text: "Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag.",
+      type: "xbrli:stringItemType",
+    } as Belopprad<"xbrli:stringItemType">,
+    {
+      taxonomyItemName: "se-gen-base:UpplysningarResultatrakningenAbstract",
+      type: "xbrli:stringItemType",
+    },
+    {
+      taxonomyItemName: "se-gen-base:NotMedelantaletAnstallda",
+      type: "xbrli:stringItemType",
+    },
+    {
+      taxonomyItemName: "se-gen-base:MedelantaletAnstalldaAbstract",
+      type: "xbrli:stringItemType",
+    },
+    {
+      beloppForegaendeAr: "2",
+      beloppNuvarandeAr: "2",
+      taxonomyItemName: "se-gen-base:MedelantaletAnstallda",
+      type: "xbrli:decimalItemType",
+    } as Belopprad<"xbrli:monetaryItemType">,
+  ],
 };

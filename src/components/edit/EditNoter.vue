@@ -35,13 +35,15 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 <template>
   <h3>Noter</h3>
   <template
-    v-for="(group, groupIndex) in taxonomyItemsFromData.children[0].children"
+    v-for="(
+      group, groupIndex
+    ) in taxonomyItemsFromData.children[0].children.flatMap((c) => c.children)"
     :key="groupIndex"
   >
     <table>
       <thead>
         <tr>
-          <th scope="col">{{ group[0].additionalData.displayLabel }}</th>
+          <th scope="col">{{ group.additionalData.displayLabel }}</th>
           <th scope="col">Eget namn</th>
           <th scope="col">Not</th>
           <th scope="col">
@@ -58,7 +60,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           v-for="[index, belopprad] in [
             ...arsredovsining.noter.entries(),
           ].filter(([, b]) =>
-            group.childrenFlat.some(
+            [group, ...group.childrenFlat].some(
               (groupMember) => groupMember.xmlName === b.taxonomyItemName,
             ),
           )"
@@ -70,13 +72,14 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
               deleteBelopprad(taxonomyManager, belopprad, arsredovsining.noter)
           "
           :taxonomy-manager="taxonomyManager"
+          string-multiline
         />
       </tbody>
     </table>
 
     <select v-model="beloppItemToAdd" class="form-select">
       <option
-        v-for="taxonomyItem in group.childrenFlat"
+        v-for="taxonomyItem in [group, ...group.childrenFlat]"
         :key="taxonomyItem.xmlName"
         :disabled="taxonomyItem.properties.abstract === 'true'"
         :value="taxonomyItem"

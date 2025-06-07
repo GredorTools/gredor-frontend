@@ -41,13 +41,17 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     :key="groupIndex"
   >
     <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ group.additionalData.displayLabel }}</th>
+        </tr>
+      </thead>
       <tbody>
-        <h4>{{ group.additionalData.displayLabel }}</h4>
         <EditBelopprad
           v-for="[index, belopprad] in [
             ...arsredovsining.forvaltningsberattelse.entries(),
           ].filter(([, b]) =>
-            group.childrenFlat.some(
+            [group, ...group.childrenFlat].some(
               (groupMember) => groupMember.xmlName === b.taxonomyItemName,
             ),
           )"
@@ -70,7 +74,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 
     <select v-model="beloppItemToAdd" class="form-select">
       <option
-        v-for="taxonomyItem in group.childrenFlat"
+        v-for="taxonomyItem in [group, ...group.childrenFlat]"
         :key="taxonomyItem.xmlName"
         :disabled="taxonomyItem.properties.abstract === 'true'"
         :value="taxonomyItem"
