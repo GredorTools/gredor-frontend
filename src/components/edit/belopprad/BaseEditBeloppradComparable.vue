@@ -11,7 +11,7 @@ const props = defineProps<{
   numPreviousYears: number;
   allowNot?: boolean;
   isSummarad?: boolean;
-  showSaldo?: boolean;
+  showBalanceSign?: boolean;
   deleteCallback: () => void;
 }>();
 
@@ -46,7 +46,7 @@ const taxonomyItem = computed(() => {
       />
     </td>
     <td class="value-container">
-      <template v-if="showSaldo">
+      <template v-if="showBalanceSign">
         <span v-if="taxonomyItem.properties.balance === 'debit'">&minus;</span>
         <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
       </template>
@@ -58,7 +58,7 @@ const taxonomyItem = computed(() => {
       />
     </td>
     <td v-for="i in numPreviousYears" :key="i" class="value-container">
-      <template v-if="showSaldo">
+      <template v-if="showBalanceSign">
         <span v-if="taxonomyItem.properties.balance === 'debit'">&minus;</span>
         <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
       </template>

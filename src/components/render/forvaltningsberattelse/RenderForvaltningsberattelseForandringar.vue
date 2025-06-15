@@ -8,6 +8,7 @@ import {
   type Belopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
+import BaseRenderBeloppradLevel1Header from "@/components/render/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
 const props = defineProps<{
   arsredovisning: Arsredovisning;
@@ -52,7 +53,7 @@ function getContextRef(belopprad: Belopprad) {
     <thead>
       <tr>
         <th scope="col">
-          {{ groupTaxonomyItem.additionalData.displayLabel }}
+          <BaseRenderBeloppradLevel1Header :taxonomy-item="groupTaxonomyItem" />
         </th>
         <th
           v-for="columnName in table.columnNames"

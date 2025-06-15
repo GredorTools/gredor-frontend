@@ -14,7 +14,9 @@ const props = defineProps<{
   taxonomyManager: TaxonomyManager;
   belopprad: Belopprad;
   comparableNumPreviousYears?: number;
-  monetaryShowSaldo?: boolean;
+  comparableAllowNot?: boolean;
+  comparableDisplayAsTotalItem?: boolean;
+  monetaryShowBalanceSign?: boolean;
   stringShowHeader?: boolean;
 }>();
 
@@ -45,16 +47,20 @@ const contextRefPrefix = computed(() => {
   />
   <RenderBeloppradMonetary
     v-if="isBeloppradMonetary(belopprad)"
+    :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
-    :show-saldo="monetaryShowSaldo || false"
+    :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradDecimal
     v-if="isBeloppradDecimal(belopprad)"
+    :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />

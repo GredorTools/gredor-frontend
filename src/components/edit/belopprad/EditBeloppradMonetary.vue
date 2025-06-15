@@ -12,7 +12,7 @@ const props = defineProps<{
   taxonomyManager: TaxonomyManager;
   numPreviousYears: number;
   allowNot: boolean;
-  showSaldo: boolean;
+  showBalanceSign: boolean;
   deleteCallback: () => void;
 }>();
 
@@ -52,7 +52,7 @@ const isSummarad = computed(() => {
     :delete-callback="deleteCallback"
     :is-summarad="isSummarad"
     :num-previous-years="numPreviousYears"
-    :show-saldo="showSaldo"
+    :show-balance-sign="showBalanceSign"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

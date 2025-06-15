@@ -76,7 +76,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
         "
         :taxonomy-manager="taxonomyManager"
         comparable-allow-not
-        monetary-show-saldo
+        monetary-show-balance-sign
       />
     </tbody>
   </table>

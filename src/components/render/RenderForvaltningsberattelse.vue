@@ -8,23 +8,37 @@ import {
 import RenderForvaltningsberattelseFlerarsoversikt from "@/components/render/forvaltningsberattelse/RenderForvaltningsberattelseFlerarsoversikt.vue";
 import RenderForvaltningsberattelseForandringar from "@/components/render/forvaltningsberattelse/RenderForvaltningsberattelseForandringar.vue";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
+import { computed } from "vue";
 
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.FORVALTNINGSBERATTELSE,
 );
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
-defineProps<{
+const props = defineProps<{
   arsredovisning: Arsredovisning;
 }>();
+
+const mappedGroups = computed(() => {
+  return availableTaxonomyItems.children[0].children.map((group) => {
+    return {
+      group,
+      items: [...props.arsredovisning.forvaltningsberattelse.entries()].filter(
+        ([, b]) =>
+          isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
+      ),
+    };
+  });
+});
 </script>
 
 <template>
   <div>
     <h2>Förvaltningsberättelse</h2>
-    <template
-      v-for="(group, groupIndex) in availableTaxonomyItems.children[0].children"
+    <div
+      v-for="({ group, items }, groupIndex) in mappedGroups"
       :key="groupIndex"
+      class="group-container"
     >
       <RenderForvaltningsberattelseFlerarsoversikt
         v-if="group.xmlName === 'se-gen-base:Flerarsoversikt'"
@@ -41,14 +55,10 @@ defineProps<{
         :arsredovisning="arsredovisning"
         :taxonomy-manager="taxonomyManager"
       />
-      <table v-else>
+      <table v-else-if="items.length > 0">
         <tbody>
           <RenderBelopprad
-            v-for="[index, belopprad] in [
-              ...arsredovisning.forvaltningsberattelse.entries(),
-            ].filter(([, b]) =>
-              isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
-            )"
+            v-for="[index, belopprad] in items"
             :key="belopprad.taxonomyItemName"
             :belopprad="belopprad"
             :comparable-num-previous-years="0"
@@ -57,11 +67,17 @@ defineProps<{
           />
         </tbody>
       </table>
-    </template>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.group-container {
+  &:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+}
+
 table {
   width: 100%;
 

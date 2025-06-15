@@ -9,15 +9,10 @@ const props = defineProps<{
   belopprad: BaseBeloppradComparable;
   numPreviousYears: number;
   contextRefPrefix: "period" | "balans";
-  allowNot?: boolean;
-  showSaldo?: boolean;
+  allowNot: boolean;
+  showBalanceSign?: boolean;
+  displayAsTotalItem?: boolean;
 }>();
-
-const superdelsummarader = [
-  "Rörelseresultat",
-  "Resultat efter finansiella poster",
-  "Resultat före skatt",
-];
 
 const taxonomyItem = computed(() => {
   return props.taxonomyManager.getItem(
@@ -32,9 +27,7 @@ const taxonomyItem = computed(() => {
   <tr
     :class="{
       summa: taxonomyItem.additionalData.isTotalItem,
-      superdelsumma: superdelsummarader.includes(
-        taxonomyItem.additionalData.displayLabel || '',
-      ),
+      ['summa-forced']: displayAsTotalItem,
       [`level-${taxonomyItem.level}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
@@ -48,7 +41,7 @@ const taxonomyItem = computed(() => {
     <td class="value-container">
       <span
         v-if="
-          (showSaldo &&
+          (showBalanceSign &&
             taxonomyItem.properties.balance === 'debit' &&
             belopprad.beloppNuvarandeAr.trim().length > 0 &&
             belopprad.beloppNuvarandeAr.trim() !== '0') ||
@@ -77,7 +70,7 @@ const taxonomyItem = computed(() => {
       <template v-if="belopprad.beloppTidigareAr[i - 1] != null">
         <span
           v-if="
-            (showSaldo &&
+            (showBalanceSign &&
               taxonomyItem.properties.balance === 'debit' &&
               belopprad.beloppTidigareAr[i - 1].trim().length > 0 &&
               belopprad.beloppTidigareAr[i - 1].trim() !== '0') ||
@@ -110,7 +103,7 @@ const taxonomyItem = computed(() => {
 
 <style lang="scss" scoped>
 .summa.level-1,
-.superdelsumma {
+.summa-forced {
   font-weight: 700;
 
   & td {

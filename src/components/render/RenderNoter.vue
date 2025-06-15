@@ -34,7 +34,7 @@ function getValueColumnHeaderCell(
   taxonomyItem: TaxonomyItem,
   verksamhetsar: Verksamhetsar,
 ): VNode {
-  const attrs = { scope: "col" };
+  const attrs = { scope: "col", class: "value-container" };
 
   const firstNonStringItem = taxonomyItem.childrenFlat.find(
     (child) => child.properties.type !== "xbrli:stringItemType",
@@ -80,7 +80,6 @@ function getValueColumnHeaderCell(
               }}
             </h3>
           </th>
-          <th scope="col"></th>
           <component
             :is="
               getValueColumnHeaderCell(
@@ -146,12 +145,7 @@ table {
       white-space: nowrap;
     }
 
-    &:nth-child(2) {
-      min-width: 40px;
-    }
-
-    &:nth-child(3),
-    &:nth-child(4) {
+    &.value-container {
       text-align: right;
       min-width: 100px;
     }

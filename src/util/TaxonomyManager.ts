@@ -1,6 +1,9 @@
 // Typer för konceptegenskaper
 import { markRaw } from "vue";
-import { type CalculationProcessor, createNewCalculationProcessor } from "@/util/CalculationProcessor.ts";
+import {
+  type CalculationProcessor,
+  createNewCalculationProcessor,
+} from "@/util/CalculationProcessor.ts";
 
 // Typ för TaxonomyItemType
 export type TaxonomyItemType =
@@ -192,6 +195,9 @@ export class TaxonomyManager {
       } catch {
         // Posten finns inte redan sparad, eller i alla fall inte med samma pref.Label
         const originalItem = this.getItem(metadata.name); // Variant av posten utan pref.Label
+        originalItem.additionalData.displayLabel =
+          metadata.label || originalItem.properties.label;
+        
         item = {
           xmlName: originalItem.xmlName,
           properties: originalItem.properties,

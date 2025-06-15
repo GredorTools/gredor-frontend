@@ -4,6 +4,7 @@ import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { FormatUtil } from "@/util/FormatUtil.ts";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
+import BaseRenderBeloppradLevel1Header from "@/components/render/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
 defineProps<{
   arsredovisning: Arsredovisning;
@@ -17,9 +18,11 @@ defineProps<{
     <table>
       <thead>
         <tr>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <!-- TODO: allow-not = false -->
+          <th scope="col">
+            <BaseRenderBeloppradLevel1Header
+              :taxonomy-item="groupTaxonomyItem"
+            />
+          </th>
           <th class="value-container" scope="col">
             {{
               FormatUtil.formatDateForFlerarsoversikt(
@@ -59,7 +62,6 @@ defineProps<{
             Math.min(arsredovisning.verksamhetsarTidigare.length, 3)
           "
           :taxonomy-manager="taxonomyManager"
-          string-show-header
         />
       </tbody>
     </table>

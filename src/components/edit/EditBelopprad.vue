@@ -14,7 +14,7 @@ defineProps<{
   deleteCallback: () => void;
   comparableNumPreviousYears?: number;
   comparableAllowNot?: boolean;
-  monetaryShowSaldo?: boolean;
+  monetaryShowBalanceSign?: boolean;
   stringMultiline?: boolean;
 }>();
 
@@ -41,7 +41,7 @@ const belopprader = defineModel<Belopprad[]>("belopprader", {
     :belopprader="belopprader"
     :delete-callback="deleteCallback"
     :num-previous-years="comparableNumPreviousYears || 0"
-    :show-saldo="monetaryShowSaldo || false"
+    :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
   <EditBeloppradDecimal

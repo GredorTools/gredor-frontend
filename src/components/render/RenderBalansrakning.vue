@@ -20,11 +20,15 @@ defineProps<{
     <thead>
       <tr>
         <th scope="col"><h2>Balansräkning</h2></th>
-        <th scope="col">Not</th>
-        <th scope="col">
+        <th class="not-container" scope="col">Not</th>
+        <th class="value-container" scope="col">
           {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </th>
-        <th v-if="arsredovisning.verksamhetsarTidigare.length > 0" scope="col">
+        <th
+          v-if="arsredovisning.verksamhetsarTidigare.length > 0"
+          class="value-container"
+          scope="col"
+        >
           {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
         </th>
       </tr>
@@ -38,6 +42,7 @@ defineProps<{
           Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
         "
         :taxonomy-manager="taxonomyManager"
+        comparable-allow-not
         string-show-header
       />
     </tbody>
@@ -63,12 +68,11 @@ table {
       white-space: nowrap;
     }
 
-    &:nth-child(2) {
+    &.not-container {
       min-width: 40px;
     }
 
-    &:nth-child(3),
-    &:nth-child(4) {
+    &.value-container {
       text-align: right;
       min-width: 100px;
     }

@@ -10,6 +10,12 @@ const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
 );
 
+const superdelsummarader = [
+  "se-gen-base:Rorelseresultat",
+  "se-gen-base:ResultatEfterFinansiellaPoster",
+  "se-gen-base:ResultatForeSkatt",
+];
+
 defineProps<{
   arsredovisning: Arsredovisning;
 }>();
@@ -20,12 +26,16 @@ defineProps<{
     <thead>
       <tr>
         <th scope="col"><h2>Resultaträkning</h2></th>
-        <th scope="col">Not</th>
-        <th scope="col">
+        <th class="not-container" scope="col">Not</th>
+        <th class="value-container" scope="col">
           {{ arsredovisning.verksamhetsarNuvarande.startdatum }}<br />
           –{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </th>
-        <th v-if="arsredovisning.verksamhetsarTidigare.length > 0" scope="col">
+        <th
+          v-if="arsredovisning.verksamhetsarTidigare.length > 0"
+          class="value-container"
+          scope="col"
+        >
           {{ arsredovisning.verksamhetsarTidigare[0].startdatum }}<br />
           –{{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
         </th>
@@ -36,11 +46,15 @@ defineProps<{
         v-for="belopprad in arsredovisning.resultatrakning"
         :key="belopprad.taxonomyItemName"
         :belopprad="belopprad"
+        :comparable-display-as-total-item="
+          superdelsummarader.includes(belopprad.taxonomyItemName)
+        "
         :comparable-num-previous-years="
           Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
         "
         :taxonomy-manager="taxonomyManager"
-        monetary-show-saldo
+        comparable-allow-not
+        monetary-show-balance-sign
         string-show-header
       />
     </tbody>
@@ -67,12 +81,11 @@ table {
       white-space: nowrap;
     }
 
-    &:nth-child(2) {
+    &.not-container {
       min-width: 40px;
     }
 
-    &:nth-child(3),
-    &:nth-child(4) {
+    &.value-container {
       text-align: right;
       min-width: 100px;
     }

@@ -7,16 +7,19 @@ defineProps<{
   taxonomyManager: TaxonomyManager;
   belopprad: BeloppradDecimal;
   contextRefPrefix: "period" | "balans";
+  allowNot: boolean;
+  displayAsTotalItem: boolean;
 }>();
 </script>
 
 <template>
   <BaseRenderBeloppradComparable
+    :allow-not="allowNot"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-total-item="displayAsTotalItem"
     :num-previous-years="1"
     :taxonomy-manager="taxonomyManager"
-    allow-not
   />
 </template>
 

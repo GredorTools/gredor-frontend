@@ -7,18 +7,21 @@ defineProps<{
   taxonomyManager: TaxonomyManager;
   belopprad: BeloppradMonetary;
   contextRefPrefix: "period" | "balans";
-  showSaldo: boolean;
+  allowNot: boolean;
+  showBalanceSign: boolean;
+  displayAsTotalItem: boolean;
 }>();
 </script>
 
 <template>
   <BaseRenderBeloppradComparable
+    :allow-not="allowNot"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-total-item="displayAsTotalItem"
     :num-previous-years="1"
-    :show-saldo="showSaldo"
+    :show-balance-sign="showBalanceSign"
     :taxonomy-manager="taxonomyManager"
-    allow-not
   />
 </template>
 
