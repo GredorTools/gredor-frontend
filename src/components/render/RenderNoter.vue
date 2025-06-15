@@ -92,6 +92,7 @@ function getValueColumnHeaderCell(
                 arsredovisning.verksamhetsarTidigare[0],
               )
             "
+            v-if="arsredovisning.verksamhetsarTidigare.length > 0"
           />
         </tr>
       </thead>
@@ -106,6 +107,9 @@ function getValueColumnHeaderCell(
             .map((i) => i.belopprad)"
           :key="belopprad.taxonomyItemName"
           :belopprad="belopprad"
+          :comparable-num-previous-years="
+            Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+          "
           :taxonomy-manager="taxonomyManager"
         />
       </tbody>

@@ -3,19 +3,16 @@ import {
   type BeloppradMonetary,
   calculateValuesIntoBelopprad,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import BaseEditBeloppradContainer from "@/components/edit/belopprad/BaseEditBeloppradContainer.vue";
-import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
-import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
 import { computed } from "vue";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { getCalculationProcessor } from "@/util/CalculationProcessor.ts";
-
-const calculationProcessor = await getCalculationProcessor();
+import BaseEditBeloppradComparable from "@/components/edit/belopprad/BaseEditBeloppradComparable.vue";
 
 const props = defineProps<{
   taxonomyManager: TaxonomyManager;
-  showSaldo?: boolean;
+  numPreviousYears: number;
+  allowNot: boolean;
+  showSaldo: boolean;
   deleteCallback: () => void;
 }>();
 
@@ -35,7 +32,7 @@ const isSummarad = computed(() => {
 
   if (result) {
     calculateValuesIntoBelopprad(
-      calculationProcessor,
+      props.taxonomyManager.calculationProcessor,
       belopprader.value,
       belopprad.value,
     );
@@ -46,54 +43,15 @@ const isSummarad = computed(() => {
 </script>
 
 <template>
-  <BaseEditBeloppradContainer
+  <BaseEditBeloppradComparable
+    :allow-not="allowNot"
     :belopprad="belopprad"
+    :delete-callback="deleteCallback"
+    :is-summarad="isSummarad"
+    :num-previous-years="numPreviousYears"
+    :show-saldo="showSaldo"
     :taxonomy-manager="taxonomyManager"
-  >
-    <td>
-      <BaseEditBeloppradTitle
-        :belopprad="belopprad"
-        :taxonomy-manager="taxonomyManager"
-      />
-    </td>
-    <td>
-      <input v-model="belopprad.egetNamn" type="text" />
-    </td>
-    <td>
-      <input
-        v-if="taxonomyItem.properties.abstract !== 'true'"
-        v-model.trim="belopprad.not"
-        type="text"
-      />
-    </td>
-    <td>
-      <template v-if="showSaldo">
-        <span v-if="taxonomyItem.properties.balance === 'debit'">&minus;</span>
-        <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
-      </template>
-      <input
-        v-if="taxonomyItem.properties.abstract !== 'true'"
-        v-model.trim="belopprad.beloppNuvarandeAr"
-        :disabled="isSummarad"
-        type="text"
-      />
-    </td>
-    <td>
-      <template v-if="showSaldo">
-        <span v-if="taxonomyItem.properties.balance === 'debit'">&minus;</span>
-        <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
-      </template>
-      <input
-        v-if="taxonomyItem.properties.abstract !== 'true'"
-        v-model.trim="belopprad.beloppForegaendeAr"
-        :disabled="isSummarad"
-        type="text"
-      />
-    </td>
-    <td>
-      <BaseEditBeloppradDeleteButton :delete-callback="deleteCallback" />
-    </td>
-  </BaseEditBeloppradContainer>
+  />
 </template>
 
 <style lang="scss" scoped></style>

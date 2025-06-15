@@ -2,7 +2,7 @@
 import { markRaw } from "vue";
 import {
   type CalculationProcessor,
-  getCalculationProcessor,
+  createNewCalculationProcessor,
 } from "@/util/CalculationProcessor.ts";
 
 // Typ för TaxonomyItemType
@@ -111,8 +111,8 @@ type PresentationJsonConcept = [
 
 // Hjälpklass för att hantera taxonomiposter
 export class TaxonomyManager {
-  private readonly rootName: TaxonomyRootName;
-  private readonly calculationProcessor: CalculationProcessor;
+  public readonly calculationProcessor: CalculationProcessor;
+  public readonly rootName: TaxonomyRootName;
   private items: Map<string, TaxonomyItem>;
   private hierarchy: TaxonomyItem;
 
@@ -127,6 +127,7 @@ export class TaxonomyManager {
     this.items = new Map();
 
     for (const concept of conceptsJson.concepts) {
+      // TODO: Inkludera prefLabel i nyckel
       const xmlName = concept[1].iD.replace("_", ":");
       this.items.set(xmlName, {
         xmlName,
@@ -176,6 +177,18 @@ export class TaxonomyManager {
       }
 
       // Sätt parent
+      if (item.parent != null) {
+        // TODO: Kasta fel efter fixat
+        if (item.parent === parent) {
+          console.log(
+            `Item already has a parent: ${this.rootName} -- ${item.xmlName}`,
+          );
+        } else {
+          console.warn(
+            `Item already has a parent: ${this.rootName} -- ${item.xmlName} -- ${item.parent.xmlName} -> ${parent.xmlName}`,
+          );
+        }
+      }
       item.parent = parent;
       item.rowNumber = numRowsProcessed++;
       item.level = level;
@@ -263,7 +276,7 @@ export async function getTaxonomyManager(
     (await import(
       "@/data/taxonomy/k2/2021-10-31/presentation.json"
     )) as PresentationJson,
-    await getCalculationProcessor(),
+    await createNewCalculationProcessor(rootName),
   );
   taxonomyManagerSingletons.set(rootName, taxonomyManager);
   return taxonomyManager;

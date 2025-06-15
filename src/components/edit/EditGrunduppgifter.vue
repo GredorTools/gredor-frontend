@@ -92,25 +92,56 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-group">
-      <label for="startdatumTidigare">Startdatum senaste räkenskapsår:</label>
-      <input
-        id="startdatumTidigare"
-        v-model.trim="arsredovisning.verksamhetsarTidigare[0].startdatum"
-        class="input-field"
-        type="date"
-      />
-    </div>
-    <div class="form-group">
-      <label for="slutdatumTidigare">Slutdatum senaste räkenskapsår:</label>
-      <input
-        id="slutdatumTidigare"
-        v-model.trim="arsredovisning.verksamhetsarTidigare[0].slutdatum"
-        class="input-field"
-        type="date"
-      />
-    </div>
+  <div v-for="i in 3" :key="i" class="form-section">
+    <label :for="'verksamhetsarTidigareAktivt' + i"
+      >Verksamheten fanns {{ i }} år före nuvarande räkenskapsår:
+    </label>
+    <input
+      :id="'verksamhetsarTidigareAktivt' + i"
+      :checked="arsredovisning.verksamhetsarTidigare[i - 1] != null"
+      :disabled="arsredovisning.verksamhetsarTidigare.length > i"
+      type="checkbox"
+      @change="
+        (el) => {
+          if (el.target) {
+            if (el.target.checked) {
+              while (arsredovisning.verksamhetsarTidigare.length < i) {
+                arsredovisning.verksamhetsarTidigare.push({
+                  startdatum: '2000-01-01',
+                  slutdatum: '2000-12-31',
+                });
+              }
+            } else {
+              arsredovisning.verksamhetsarTidigare.splice(i - 1, 1);
+            }
+          }
+        }
+      "
+    />
+    <template v-if="arsredovisning.verksamhetsarTidigare.length > i - 1">
+      <div class="form-group">
+        <label for="startdatumTidigare"
+          >Startdatum tidigare räkenskapsår, {{ i }} år sedan:</label
+        >
+        <input
+          id="startdatumTidigare"
+          v-model.trim="arsredovisning.verksamhetsarTidigare[i - 1].startdatum"
+          class="input-field"
+          type="date"
+        />
+      </div>
+      <div class="form-group">
+        <label for="slutdatumTidigare"
+          >Slutdatum tidigare räkenskapsår, {{ i }} år sedan:</label
+        >
+        <input
+          id="slutdatumTidigare"
+          v-model.trim="arsredovisning.verksamhetsarTidigare[i - 1].slutdatum"
+          class="input-field"
+          type="date"
+        />
+      </div>
+    </template>
   </div>
 </template>
 

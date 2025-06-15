@@ -13,9 +13,9 @@ import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 const props = defineProps<{
   taxonomyManager: TaxonomyManager;
   belopprad: Belopprad;
+  comparableNumPreviousYears?: number;
   monetaryShowSaldo?: boolean;
   stringShowHeader?: boolean;
-  stringHeaderMapper?: (text: string) => string;
 }>();
 
 const contextRefPrefix = computed(() => {
@@ -38,7 +38,6 @@ const contextRefPrefix = computed(() => {
     v-if="isBeloppradString(belopprad)"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
-    :header-mapper="stringHeaderMapper"
     :show-header="stringShowHeader || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -46,6 +45,7 @@ const contextRefPrefix = computed(() => {
     v-if="isBeloppradMonetary(belopprad)"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :num-previous-years="comparableNumPreviousYears || 0"
     :show-saldo="monetaryShowSaldo || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -53,6 +53,7 @@ const contextRefPrefix = computed(() => {
     v-if="isBeloppradDecimal(belopprad)"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

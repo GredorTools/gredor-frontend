@@ -14,7 +14,7 @@ import {
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
-const taxonomyItemsFromData = taxonomyManager.getRoot();
+const availableTaxonomyItems = taxonomyManager.getRoot();
 
 // Data
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -37,19 +37,22 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
   <template
     v-for="(
       group, groupIndex
-    ) in taxonomyItemsFromData.children[0].children.flatMap((c) => c.children)"
+    ) in availableTaxonomyItems.children[0].children.flatMap((c) => c.children)"
     :key="groupIndex"
   >
     <table>
       <thead>
         <tr>
           <th scope="col">{{ group.additionalData.displayLabel }}</th>
-          <th scope="col">Eget namn</th>
-          <th scope="col">Not</th>
-          <th scope="col">
+          <th class="not-container" scope="col">Not</th>
+          <th class="value-container" scope="col">
             {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
           </th>
-          <th scope="col">
+          <th
+            v-if="arsredovisning.verksamhetsarTidigare.length > 0"
+            class="value-container"
+            scope="col"
+          >
             {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
           </th>
           <th scope="col"><!-- Ta bort-knapp --></th>
@@ -67,6 +70,9 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           :key="belopprad.taxonomyItemName"
           v-model:belopprad="arsredovisning.noter[index]"
           v-model:belopprader="arsredovisning.noter"
+          :comparable-num-previous-years="
+            Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+          "
           :delete-callback="
             () =>
               deleteBelopprad(taxonomyManager, belopprad, arsredovisning.noter)
@@ -104,7 +110,7 @@ table {
   width: 100%;
   margin-bottom: 1rem;
 
-  th,
+  &:deep(th),
   &:deep(td) {
     border-style: hidden;
     text-align: left;

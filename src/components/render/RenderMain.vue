@@ -49,15 +49,16 @@ defineProps<{
   border-image: none;
   line-height: 1.2;
   box-shadow: 0.25em 0.25em 0.3em #999;
-
-  /* Sidavskiljare */
-  /*background-size: 210mm 297mm;
-  background-image: linear-gradient(to top, grey 1px, transparent 1px);*/
 }
 
 .sections-container {
   width: 100%;
   font-family: "EB Garamond", serif;
+  padding: 1em;
+
+  & > *:not(:first-child) {
+    padding-top: 1em;
+  }
 
   & > *:not(:last-child) {
     padding-bottom: 2em;
@@ -65,7 +66,7 @@ defineProps<{
 }
 
 .page-break {
-  margin: 0 -2em;
+  margin: 0 -3em;
   page-break-after: always;
   background-size: 210mm 297mm;
   background-image: linear-gradient(to bottom, grey 1px, transparent 1px);

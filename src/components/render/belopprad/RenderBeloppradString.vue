@@ -8,22 +8,10 @@ const props = defineProps<{
   belopprad: BeloppradString;
   contextRefPrefix: "period" | "balans";
   showHeader: boolean;
-  headerMapper?: (text: string) => string;
 }>();
 
 const taxonomyItem = computed(() => {
   return props.taxonomyManager.getItem(props.belopprad.taxonomyItemName);
-});
-
-const computedHeader = computed(() => {
-  let result =
-    props.belopprad.egetNamn ||
-    taxonomyItem.value.additionalData.displayLabel ||
-    "";
-  if (props.headerMapper) {
-    result = props.headerMapper(result);
-  }
-  return result;
 });
 </script>
 
@@ -38,7 +26,7 @@ const computedHeader = computed(() => {
   >
     <td colspan="4">
       <div v-if="showHeader" class="header">
-        {{ computedHeader }}
+        {{ taxonomyItem.additionalData.displayLabel }}
       </div>
       <ix:nonNumeric
         v-if="belopprad.text"
@@ -59,12 +47,13 @@ const computedHeader = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.abstract.level-1 {
+.abstract.level-1,
+.level-1 .header {
   font-weight: 600;
   font-size: 1.15rem;
 
   &:not(:first-of-type) td {
-    padding-top: 2.25rem;
+    padding-top: 1.25rem;
   }
 }
 

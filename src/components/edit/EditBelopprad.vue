@@ -9,9 +9,11 @@ import EditBeloppradDecimal from "@/components/edit/belopprad/EditBeloppradDecim
 import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
-const props = defineProps<{
+defineProps<{
   taxonomyManager: TaxonomyManager;
   deleteCallback: () => void;
+  comparableNumPreviousYears?: number;
+  comparableAllowNot?: boolean;
   monetaryShowSaldo?: boolean;
   stringMultiline?: boolean;
 }>();
@@ -34,16 +36,20 @@ const belopprader = defineModel<Belopprad[]>("belopprader", {
   />
   <EditBeloppradMonetary
     v-if="isBeloppradMonetary(belopprad)"
+    :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :belopprader="belopprader"
     :delete-callback="deleteCallback"
+    :num-previous-years="comparableNumPreviousYears || 0"
     :show-saldo="monetaryShowSaldo || false"
     :taxonomy-manager="taxonomyManager"
   />
   <EditBeloppradDecimal
     v-if="isBeloppradDecimal(belopprad)"
+    :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :delete-callback="deleteCallback"
+    :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

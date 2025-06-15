@@ -1,3 +1,5 @@
+import type { TaxonomyRootName } from "@/util/TaxonomyManager.ts";
+
 export interface CalculationNode {
   concept: {
     name: string;
@@ -16,8 +18,13 @@ export interface CalculationConceptValue {
 export class CalculationProcessor {
   private readonly calculationTree: CalculationNode[];
 
-  constructor(calculationJson: { calculation: unknown[][] }) {
-    this.calculationTree = CalculationParser.parse(calculationJson);
+  constructor(
+    rootName: TaxonomyRootName,
+    calculationJson: {
+      calculation: unknown[][];
+    },
+  ) {
+    this.calculationTree = CalculationParser.parse(rootName, calculationJson);
   }
 
   calculateForConcept(
@@ -59,12 +66,12 @@ export class CalculationProcessor {
     node: CalculationNode,
     valueMap: Map<string, number>,
   ): number {
-    // If it's a leaf node, return its value from the value map
+    // Om det är en leaf-nod, returnera dess värde från värdemappningen
     if (!node.children || node.children.length === 0) {
       return valueMap.get(node.concept.name) || 0;
     }
 
-    // Calculate sum of children
+    // Beräkna summan av barnen
     let sum = 0;
     for (const child of node.children) {
       const childValue = this.calculateNode(child, valueMap);
@@ -77,14 +84,25 @@ export class CalculationProcessor {
 }
 
 class CalculationParser {
-  static parse(jsonData: { calculation: unknown[][] }): CalculationNode[] {
+  static parse(
+    rootName: TaxonomyRootName,
+    jsonData: { calculation: unknown[][] },
+  ): CalculationNode[] {
     const result: CalculationNode[] = [];
     for (const calculationArray of jsonData.calculation) {
-      if (!Array.isArray(calculationArray)) {
+      if (
+        !Array.isArray(calculationArray) ||
+        calculationArray[0] !== "linkRole"
+      ) {
         throw new Error("Invalid calculation data");
       }
 
-      // Find the "concept" nodes which are the roots
+      const linkRoleData = calculationArray[1] as { role: string };
+      if (linkRoleData.role !== rootName) {
+        continue;
+      }
+
+      // Hitta "concept"-noder som är rötterna
       let foundRoot = false;
       for (const item of calculationArray) {
         if (Array.isArray(item) && item[0] === "concept") {
@@ -126,7 +144,7 @@ class CalculationParser {
       node.balance = attributes.balance;
     }
 
-    // Process children (everything after the first 3 elements)
+    // Bearbeta barn (allt efter de första 3 elementen)
     const children = nodeArray
       .slice(3)
       .filter(
@@ -143,16 +161,11 @@ class CalculationParser {
   }
 }
 
-export async function getCalculationProcessor(): Promise<CalculationProcessor> {
-  if (calculationProcessorSingleton !== undefined) {
-    return calculationProcessorSingleton;
-  }
-
+export async function createNewCalculationProcessor(
+  rootName: TaxonomyRootName,
+): Promise<CalculationProcessor> {
   const calculationJson = await import(
     "@/data/taxonomy/k2/2021-10-31/calculation.json"
   );
-  calculationProcessorSingleton = new CalculationProcessor(calculationJson);
-  return calculationProcessorSingleton;
+  return new CalculationProcessor(rootName, calculationJson);
 }
-
-let calculationProcessorSingleton: CalculationProcessor | undefined;

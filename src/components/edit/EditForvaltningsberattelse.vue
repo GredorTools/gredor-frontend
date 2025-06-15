@@ -11,12 +11,14 @@ import {
   type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
+import EditForvaltningsberattelseFlerarsoversikt from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseFlerarsoversikt.vue";
+import EditForvaltningsberattelseForandringar from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseForandringar.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.FORVALTNINGSBERATTELSE,
 );
-const taxonomyItemsFromData = taxonomyManager.getRoot();
+const availableTaxonomyItems = taxonomyManager.getRoot();
 
 // Data
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -37,10 +39,25 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 <template>
   <h3>Förvaltningsberättelse</h3>
   <template
-    v-for="(group, groupIndex) in taxonomyItemsFromData.children[0].children"
+    v-for="(group, groupIndex) in availableTaxonomyItems.children[0].children"
     :key="groupIndex"
   >
-    <table>
+    <EditForvaltningsberattelseFlerarsoversikt
+      v-if="group.xmlName === 'se-gen-base:Flerarsoversikt'"
+      :arsredovisning="arsredovisning"
+      :group-taxonomy-item="
+        availableTaxonomyItems.childrenFlat.find(
+          (item) => item.xmlName === 'se-gen-base:Flerarsoversikt',
+        )!
+      "
+      :taxonomy-manager="taxonomyManager"
+    />
+    <EditForvaltningsberattelseForandringar
+      v-else-if="group.xmlName === 'se-gen-base:ForandringEgetKapital'"
+      :arsredovisning="arsredovisning"
+      :taxonomy-manager="taxonomyManager"
+    />
+    <table v-else>
       <thead>
         <tr>
           <th scope="col">{{ group.additionalData.displayLabel }}</th>
@@ -58,6 +75,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           :key="belopprad.taxonomyItemName"
           v-model:belopprad="arsredovisning.forvaltningsberattelse[index]"
           v-model:belopprader="arsredovisning.forvaltningsberattelse"
+          :comparable-num-previous-years="0"
           :delete-callback="
             () =>
               deleteBelopprad(
@@ -99,7 +117,7 @@ table {
   width: 100%;
   margin-bottom: 1rem;
 
-  th,
+  &:deep(th),
   &:deep(td) {
     border-style: hidden;
     text-align: left;
@@ -113,16 +131,11 @@ table {
       white-space: nowrap;
     }
 
-    &:nth-child(2) {
-      min-width: 120px;
-    }
-
-    &:nth-child(3) {
+    &.not-container {
       min-width: 40px;
     }
 
-    &:nth-child(4),
-    &:nth-child(5) {
+    &.value-container {
       text-align: right;
       min-width: 100px;
 

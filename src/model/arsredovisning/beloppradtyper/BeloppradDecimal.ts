@@ -1,11 +1,7 @@
-import type { TaxonomyItem } from "@/util/TaxonomyManager.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 
-export interface BeloppradDecimal extends Belopprad<"xbrli:decimalItemType"> {
-  taxonomyItem: TaxonomyItem<"xbrli:decimalItemType">;
-  beloppNuvarandeAr: string;
-  beloppForegaendeAr?: string;
-}
+export type BeloppradDecimal = BaseBeloppradComparable<"xbrli:decimalItemType">;
 
 export function isBeloppradDecimal(
   belopprad: Belopprad,

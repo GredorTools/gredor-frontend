@@ -266,8 +266,20 @@ export class DocumentUtil {
         'xmlns:se-gaap-ext="http://www.taxonomier.se/se/fr/gaap/gaap-ext/2021-10-31">',
     );
     xhtml = xmlFormat(xhtml, { collapseContent: true });
+
+    // Ta bort tomrum kring och inklusive <!-- @delete whitespace -->
+    // för att fixa rendrering i XHTML i de aktuella fallen
     xhtml = xhtml.replace(/\s*<!--\s*@delete-whitespace\s?.*?-->\s*/g, "");
 
+    // Fixa ">" blir felaktigt "&gt;" i style-tagg
+    xhtml = xhtml.replace(
+      /(<style[^>]*>)([\s\S]*?)(<\/style>)/g,
+      (match, openTag, content, closeTag) => {
+        return `${openTag}${content.replace(/&gt;/g, ">")}${closeTag}`;
+      },
+    );
+
+    // Returnera
     return xhtml;
   }
 }

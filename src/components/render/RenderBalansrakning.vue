@@ -24,7 +24,7 @@ defineProps<{
         <th scope="col">
           {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </th>
-        <th scope="col">
+        <th v-if="arsredovisning.verksamhetsarTidigare.length > 0" scope="col">
           {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
         </th>
       </tr>
@@ -34,6 +34,9 @@ defineProps<{
         v-for="belopprad in arsredovisning.balansrakning"
         :key="belopprad.taxonomyItemName"
         :belopprad="belopprad"
+        :comparable-num-previous-years="
+          Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+        "
         :taxonomy-manager="taxonomyManager"
         monetary-show-saldo
         string-show-header

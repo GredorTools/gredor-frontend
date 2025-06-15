@@ -7,7 +7,6 @@ import {
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
   taxonomyItemName: string;
   type: T;
-  egetNamn?: string;
 }
 
 export function createBelopprad<T extends TaxonomyItemType>(
@@ -26,7 +25,7 @@ export function createBelopprad<T extends TaxonomyItemType>(
         taxonomyItemName: taxonomyItem.xmlName,
         type: taxonomyItem.properties.type,
         beloppNuvarandeAr: "",
-        beloppForegaendeAr: "",
+        beloppTidigareAr: [""],
       } as Belopprad<T>;
 
     // TODO
