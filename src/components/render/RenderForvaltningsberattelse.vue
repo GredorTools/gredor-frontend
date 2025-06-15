@@ -74,7 +74,7 @@ const mappedGroups = computed(() => {
 <style lang="scss" scoped>
 .group-container {
   &:not(:last-of-type) {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 }
 
@@ -103,6 +103,12 @@ table {
     &.value-container {
       text-align: right;
       min-width: 100px;
+    }
+  }
+
+  &:deep(.level-1 + .abstract.level-2) {
+    td {
+      padding-top: 0; /* Fixar resultatdisposition */
     }
   }
 }

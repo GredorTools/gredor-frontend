@@ -7,11 +7,9 @@ defineProps<{
 </script>
 
 <template>
-  <th scope="col">
-    <div class="header">
-      {{ taxonomyItem.additionalData.displayLabel }}
-    </div>
-  </th>
+  <div class="header">
+    {{ taxonomyItem.additionalData.displayLabel }}
+  </div>
 </template>
 
 <style lang="scss" scoped>

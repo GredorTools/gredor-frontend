@@ -100,6 +100,7 @@ function getContextRef(belopprad: Belopprad) {
               }}
             </ix:nonFraction>
           </template>
+          <template v-else>&ndash;</template>
         </td>
       </tr>
     </tbody>
