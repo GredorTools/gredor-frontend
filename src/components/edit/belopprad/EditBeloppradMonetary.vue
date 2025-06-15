@@ -24,7 +24,10 @@ const belopprader = defineModel<Belopprad[]>("belopprader", {
 });
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(belopprad.value.taxonomyItemName);
+  return props.taxonomyManager.getItem(
+    belopprad.value.taxonomyItemName,
+    belopprad.value.labelType,
+  );
 });
 
 const isSummarad = computed(() => {

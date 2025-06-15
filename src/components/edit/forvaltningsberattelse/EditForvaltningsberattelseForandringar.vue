@@ -2,7 +2,10 @@
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
-import { deleteBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  deleteBelopprad,
+  isBeloppradInTaxonomyItemList,
+} from "@/model/arsredovisning/Belopprad.ts";
 import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
 
@@ -20,8 +23,9 @@ const groupTaxonomyItem = computed(() =>
 
 const belopprader = computed(() =>
   arsredovisning.value.forvaltningsberattelse.filter((belopprad) =>
-    groupTaxonomyItem.value.childrenFlat.some(
-      (c) => belopprad.taxonomyItemName === c.xmlName,
+    isBeloppradInTaxonomyItemList(
+      groupTaxonomyItem.value.childrenFlat,
+      belopprad,
     ),
   ),
 );

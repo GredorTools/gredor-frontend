@@ -5,6 +5,7 @@ import EditBelopprad from "@/components/edit/EditBelopprad.vue";
 import {
   createBeloppradInList,
   deleteBelopprad,
+  isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
 import {
   getTaxonomyManager,
@@ -63,9 +64,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           v-for="[index, belopprad] in [
             ...arsredovisning.noter.entries(),
           ].filter(([, b]) =>
-            [group, ...group.childrenFlat].some(
-              (groupMember) => groupMember.xmlName === b.taxonomyItemName,
-            ),
+            isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
           )"
           :key="belopprad.taxonomyItemName"
           v-model:belopprad="arsredovisning.noter[index]"

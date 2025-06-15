@@ -10,6 +10,7 @@ import {
   type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
+import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 
@@ -21,7 +22,10 @@ const items = computed(() => {
   return props.arsredovisning.noter.map((belopprad) => {
     return {
       belopprad,
-      taxonomyItem: taxonomyManager.getItem(belopprad.taxonomyItemName),
+      taxonomyItem: taxonomyManager.getItem(
+        belopprad.taxonomyItemName,
+        belopprad.labelType,
+      ),
     };
   });
 });
@@ -100,8 +104,9 @@ function getValueColumnHeaderCell(
         <RenderBelopprad
           v-for="belopprad in items
             .filter((i) =>
-              [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat].some(
-                (c) => c.xmlName === i.belopprad.taxonomyItemName,
+              isBeloppradInTaxonomyItemList(
+                [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat],
+                i.belopprad,
               ),
             )
             .map((i) => i.belopprad)"

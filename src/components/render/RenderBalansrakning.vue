@@ -38,7 +38,6 @@ defineProps<{
           Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
         "
         :taxonomy-manager="taxonomyManager"
-        monetary-show-saldo
         string-show-header
       />
     </tbody>

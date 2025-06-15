@@ -20,8 +20,10 @@ const props = defineProps<{
 
 const contextRefPrefix = computed(() => {
   switch (
-    props.taxonomyManager.getItem(props.belopprad.taxonomyItemName).properties
-      .periodType
+    props.taxonomyManager.getItem(
+      props.belopprad.taxonomyItemName,
+      props.belopprad.labelType,
+    ).properties.periodType
   ) {
     case "duration":
       return "period";

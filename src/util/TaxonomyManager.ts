@@ -1,9 +1,6 @@
 // Typer för konceptegenskaper
 import { markRaw } from "vue";
-import {
-  type CalculationProcessor,
-  createNewCalculationProcessor,
-} from "@/util/CalculationProcessor.ts";
+import { type CalculationProcessor, createNewCalculationProcessor } from "@/util/CalculationProcessor.ts";
 
 // Typ för TaxonomyItemType
 export type TaxonomyItemType =
@@ -35,6 +32,14 @@ export enum TaxonomyRootName {
   UNDERTECKNANDE_FORETRADARE_REVISIONSPATECKNING = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/undertecknande/foretradarerevisionspateckning",
 }
 
+export type LabelType =
+  | "periodEndLabel"
+  | "periodStartLabel"
+  | "terseLabel"
+  | "totalLabel"
+  | "verboseLabel"
+  | undefined;
+
 // Gränssnitt för konceptegenskaper
 interface ConceptProperties<T extends TaxonomyItemType = TaxonomyItemType> {
   abstract: "true" | "false";
@@ -63,7 +68,7 @@ interface PresentationConceptMetadata {
 }
 
 interface PresentationConceptDetails {
-  "pref.Label": string;
+  "pref.Label": LabelType;
   references: string;
   type: string;
 }
@@ -76,6 +81,7 @@ export interface TaxonomyItem<T extends TaxonomyItemType = TaxonomyItemType> {
   additionalData: {
     isTotalItem?: boolean;
     displayLabel?: string;
+    labelType?: string;
   };
   rowNumber: number;
   level: number;
@@ -127,9 +133,10 @@ export class TaxonomyManager {
     this.items = new Map();
 
     for (const concept of conceptsJson.concepts) {
-      // TODO: Inkludera prefLabel i nyckel
       const xmlName = concept[1].iD.replace("_", ":");
-      this.items.set(xmlName, {
+      // Använd en tom sträng som standard för pref.Label
+      const key = this.generateKey(xmlName);
+      this.items.set(key, {
         xmlName,
         properties: concept[1],
         additionalData: {},
@@ -143,16 +150,23 @@ export class TaxonomyManager {
     this.hierarchy = this.buildHierarchy(presentationJson.presentation);
   }
 
-  getItem(name: string): TaxonomyItem {
-    const result = this.items.get(name);
+  getItem(name: string, labelType: string = ""): TaxonomyItem {
+    const key = this.generateKey(name, labelType);
+    const result = this.items.get(key);
     if (result === undefined) {
-      throw new Error(`Item not found: ${name}`);
+      throw new Error(
+        `Item not found: "${name}" with labelType: "${labelType}"`,
+      );
     }
     return markRaw(result);
   }
 
   getRoot(): TaxonomyItem {
     return markRaw(this.hierarchy);
+  }
+
+  private generateKey(xmlName: string, labelType: string = ""): string {
+    return `${xmlName}|${labelType}`;
   }
 
   private buildHierarchy(
@@ -165,15 +179,30 @@ export class TaxonomyManager {
       parent: TaxonomyItem,
       level: number,
     ): TaxonomyItem => {
-      const [type, metadata, , ...childGroups] = node;
+      const [type, metadata, details, ...childGroups] = node;
 
       if (type !== "concept") {
         throw new Error(`Unexpected node type: ${type}`);
       }
 
-      const item = this.getItem(metadata.name);
-      if (item === undefined) {
-        throw new Error(`Item not found: ${metadata.name}`);
+      const labelType = details["pref.Label"] || "";
+      let item: TaxonomyItem;
+      try {
+        item = this.getItem(metadata.name, labelType);
+      } catch {
+        // Posten finns inte redan sparad, eller i alla fall inte med samma pref.Label
+        const originalItem = this.getItem(metadata.name); // Variant av posten utan pref.Label
+        item = {
+          xmlName: originalItem.xmlName,
+          properties: originalItem.properties,
+          additionalData: {},
+          children: originalItem.children,
+          childrenFlat: originalItem.childrenFlat,
+          rowNumber: -1,
+          level: -1,
+        };
+        const key = this.generateKey(metadata.name, labelType);
+        this.items.set(key, item);
       }
 
       // Sätt parent
@@ -199,17 +228,17 @@ export class TaxonomyManager {
       }
       item.additionalData.displayLabel =
         metadata.label || item.properties.label;
+      item.additionalData.labelType = details["pref.Label"];
 
       // Sätt barn
       for (const childGroup of childGroups) {
-        item.children = (item.children || []).concat(
-          processNode(childGroup, item, level + 1),
-        );
+        item.children.push(processNode(childGroup, item, level + 1));
       }
 
-      item.childrenFlat = item.children
-        .map((child) => [child, ...child.childrenFlat])
-        .flat();
+      for (const child of item.children) {
+        item.childrenFlat.push(child);
+        item.childrenFlat.push(...child.childrenFlat);
+      }
 
       // Returnera
       return item;

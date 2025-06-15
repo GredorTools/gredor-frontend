@@ -7,6 +7,7 @@ import {
 } from "@/util/TaxonomyManager.ts";
 import RenderForvaltningsberattelseFlerarsoversikt from "@/components/render/forvaltningsberattelse/RenderForvaltningsberattelseFlerarsoversikt.vue";
 import RenderForvaltningsberattelseForandringar from "@/components/render/forvaltningsberattelse/RenderForvaltningsberattelseForandringar.vue";
+import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.FORVALTNINGSBERATTELSE,
@@ -46,9 +47,7 @@ defineProps<{
             v-for="[index, belopprad] in [
               ...arsredovisning.forvaltningsberattelse.entries(),
             ].filter(([, b]) =>
-              [group, ...group.childrenFlat].some(
-                (groupMember) => groupMember.xmlName === b.taxonomyItemName,
-              ),
+              isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
             )"
             :key="belopprad.taxonomyItemName"
             :belopprad="belopprad"

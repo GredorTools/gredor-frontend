@@ -4,6 +4,10 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
 import { FormatUtil } from "@/util/FormatUtil.ts";
+import {
+  type Belopprad,
+  isBeloppradInTaxonomyItemList,
+} from "@/model/arsredovisning/Belopprad.ts";
 
 const props = defineProps<{
   arsredovisning: Arsredovisning;
@@ -16,8 +20,9 @@ const groupTaxonomyItem = computed(() =>
 
 const belopprader = computed(() =>
   props.arsredovisning.forvaltningsberattelse.filter((belopprad) =>
-    groupTaxonomyItem.value.childrenFlat.some(
-      (c) => belopprad.taxonomyItemName === c.xmlName,
+    isBeloppradInTaxonomyItemList(
+      groupTaxonomyItem.value.childrenFlat,
+      belopprad,
     ),
   ),
 );
@@ -29,6 +34,17 @@ const table = computed(() =>
     belopprader.value,
   ),
 );
+
+function getContextRef(belopprad: Belopprad) {
+  switch (belopprad.labelType) {
+    case "periodStartLabel":
+      return "balans_tidigare1";
+    case "periodEndLabel":
+      return "balans_nuvarande";
+    default:
+      return "period_nuvarande";
+  }
+}
 </script>
 
 <template>
@@ -58,21 +74,19 @@ const table = computed(() =>
           :key="columnIndex"
           class="value-container"
         >
-          <!-- TODO: contextRef ska vara balans_tidigare1 vid årets ingång -->
-          <!-- TODO: contextRef ska vara balans_nuvarande vid årets utgång -->
           <template v-if="cell != null">
             <span v-if="cell.belopprad.beloppNuvarandeAr.startsWith('-')"
               >&minus;</span
             >
             <!-- @delete-whitespace -->
             <ix:nonFraction
+              :contextRef="getContextRef(cell.belopprad)"
               :name="cell.taxonomyItem.xmlName"
               :sign="
                 cell.belopprad.beloppNuvarandeAr.startsWith('-')
                   ? '-'
                   : undefined
               "
-              contextRef="period_nuvarande"
               decimals="INF"
               format="ixt:numspacecomma"
               scale="0"

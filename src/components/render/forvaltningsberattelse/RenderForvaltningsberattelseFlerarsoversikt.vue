@@ -3,6 +3,7 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { FormatUtil } from "@/util/FormatUtil.ts";
+import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 
 defineProps<{
   arsredovisning: Arsredovisning;
@@ -47,8 +48,9 @@ defineProps<{
           v-for="[index, belopprad] in [
             ...arsredovisning.forvaltningsberattelse.entries(),
           ].filter(([, b]) =>
-            [groupTaxonomyItem, ...groupTaxonomyItem.childrenFlat].some(
-              (groupMember) => groupMember.xmlName === b.taxonomyItemName,
+            isBeloppradInTaxonomyItemList(
+              [groupTaxonomyItem, ...groupTaxonomyItem.childrenFlat],
+              b,
             ),
           )"
           :key="belopprad.taxonomyItemName"

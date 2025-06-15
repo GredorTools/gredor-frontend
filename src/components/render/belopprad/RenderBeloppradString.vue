@@ -11,7 +11,10 @@ const props = defineProps<{
 }>();
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(props.belopprad.taxonomyItemName);
+  return props.taxonomyManager.getItem(
+    props.belopprad.taxonomyItemName,
+    props.belopprad.labelType,
+  );
 });
 </script>
 

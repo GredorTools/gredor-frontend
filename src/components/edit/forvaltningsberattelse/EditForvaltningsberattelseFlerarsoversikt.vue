@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { deleteBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  deleteBelopprad,
+  isBeloppradInTaxonomyItemList,
+} from "@/model/arsredovisning/Belopprad.ts";
 import EditBelopprad from "@/components/edit/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
@@ -51,8 +54,9 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
         v-for="[index, belopprad] in [
           ...arsredovisning.forvaltningsberattelse.entries(),
         ].filter(([, b]) =>
-          [groupTaxonomyItem, ...groupTaxonomyItem.childrenFlat].some(
-            (groupMember) => groupMember.xmlName === b.taxonomyItemName,
+          isBeloppradInTaxonomyItemList(
+            [groupTaxonomyItem, ...groupTaxonomyItem.childrenFlat],
+            b,
           ),
         )"
         :key="belopprad.taxonomyItemName"
