@@ -243,7 +243,7 @@ export class DocumentUtil {
     doc.head.innerHTML += `
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
       <meta name="programvara" content="Gredor" />
-      <meta name="programversion" content="${import.meta.env.VITE_APP_VERSION}" />
+      <meta name="programversion" content="${__APP_VERSION__}" />
       <title>${title}</title>
       <style type="text/css">${rulesCss}</style>
     `;
