@@ -92,7 +92,10 @@ defineProps<{
             </xbrli:instant>
           </xbrli:period>
         </xbrli:context>
-        <template v-for="i in arsredovisning.verksamhetsarTidigare.length">
+        <template
+          v-for="i in arsredovisning.verksamhetsarTidigare.length"
+          :key="i"
+        >
           <xbrli:context :id="'period_tidigare' + i">
             <xbrli:entity>
               <xbrli:identifier scheme="http://www.bolagsverket.se"
