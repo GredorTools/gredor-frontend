@@ -6,7 +6,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run start",
+    "start": "npm run start:development",
+    "start:development": "vite --mode development",
+    "start:production": "vite --mode production",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
