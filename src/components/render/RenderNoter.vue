@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera noter i årsredovisningen.
+ * Visar noter grupperade efter typ med korrekt numrering och formatering.
+ */
+
 import type {
   Arsredovisning,
   Verksamhetsar,
@@ -15,6 +20,7 @@ import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller noterna. */
   arsredovisning: Arsredovisning;
 }>();
 

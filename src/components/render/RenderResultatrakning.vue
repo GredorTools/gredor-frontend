@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera resultaträkningen i årsredovisningen.
+ * Visar intäkter och kostnader i tabellformat med jämförelsetal för föregående år.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import {
@@ -17,6 +22,7 @@ const superdelsummarader = [
 ];
 
 defineProps<{
+  /** Årsredovisningen som innehåller resultaträkningen. */
   arsredovisning: Arsredovisning;
 }>();
 </script>

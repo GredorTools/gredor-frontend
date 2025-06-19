@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent som fungerar som en wrapper för olika typer av belopprader.
+ * Väljer automatiskt rätt komponent baserat på beloppradens typ (monetär, decimal eller sträng).
+ */
+
 import EditBeloppradMonetary from "@/components/edit/blocks/belopprad/EditBeloppradMonetary.vue";
 import EditBeloppradString from "@/components/edit/blocks/belopprad/EditBeloppradString.vue";
 
@@ -10,20 +15,33 @@ import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/Belopp
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan jämföra mellan år. */
   comparableNumPreviousYears?: number;
+
+  /** Huruvida notfält ska visas för belopprader där man kan jämföra mellan år. */
   comparableAllowNot?: boolean;
+
+  /** Huruvida balanstecken ska visas för monetära belopprader. */
   monetaryShowBalanceSign?: boolean;
+
+  /** Huruvida strängrader ska tillåta radbrytningar. */
   stringMultiline?: boolean;
 }>();
 
 const emit = defineEmits<{
+  /** Triggas när användaren tar bort beloppraden. */
   (e: "delete"): void;
 }>();
 
+/** Beloppraden som ska redigeras. */
 const belopprad = defineModel<Belopprad>("belopprad", {
   required: true,
 });
+
+/** Lista med alla belopprader i samma tabell. */
 const belopprader = defineModel<Belopprad[]>("belopprader", {
   required: true,
 });

@@ -1,12 +1,18 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att välja och lägga till taxonomiobjekt som belopprader.
+ */
+
 import { computed, ref } from "vue";
 import { type TaxonomyItem } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
+  /** Lista över taxonomiobjekt som kan väljas. */
   taxonomyItems: TaxonomyItem[];
 }>();
 
 const emit = defineEmits<{
+  /** Triggas när användaren väljer att lägga till en ny belopprad baserad på det valda taxonomiobjektet. */
   (e: "addBelopprad", taxonomyItem: TaxonomyItem): void;
 }>();
 

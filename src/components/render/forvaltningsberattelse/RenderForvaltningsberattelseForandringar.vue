@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera förändringar i eget kapital i förvaltningsberättelsen.
+ * Visar en tabell med kolumner för olika typer av eget kapital och rader för olika förändringar.
+ */
+
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
@@ -11,7 +16,10 @@ import {
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
   arsredovisning: Arsredovisning;
+
+  /** TaxonomyManager för att hantera taxonomiobjekt i förändringar i eget kapital. */
   taxonomyManager: TaxonomyManager;
 }>();
 

@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Huvudkomponenten för att rendera årsredovisningen i förhandsgranskningsläge.
+ * Sammanställer alla delar av årsredovisningen i ett dokument med korrekt formatering och sidbrytningar.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderResultatrakning from "@/components/render/RenderResultatrakning.vue";
 import RenderBalansrakning from "@/components/render/RenderBalansrakning.vue";
@@ -9,6 +14,7 @@ import RenderCover from "@/components/render/RenderCover.vue";
 import RenderSignatures from "@/components/render/RenderSignatures.vue";
 
 defineProps<{
+  /** Årsredovisningen som ska renderas. */
   arsredovisning: Arsredovisning;
 }>();
 </script>

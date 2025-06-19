@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/**
+ * Huvudkomponenten som sammanför alla delar av applikationen.
+ */
+
 import { ref } from "vue";
 import { exampleArsredovisning } from "@/example/ExampleArsredovisning.ts";
 import RenderMain from "@/components/render/RenderMain.vue";
@@ -14,7 +18,9 @@ if (import.meta.env.VITE_ENV_NAME)
 
 <template>
   <header>
-    <h1>Gredor<span class="environment">{{ environmentName }}</span></h1>
+    <h1>
+      Gredor<span class="environment">{{ environmentName }}</span>
+    </h1>
   </header>
 
   <div class="editor">

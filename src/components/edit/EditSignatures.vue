@@ -1,6 +1,12 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att hantera underskrifter i årsredovisningen.
+ * Tillåter användaren att lägga till, redigera och ta bort underskrifter med information om namn, efternamn, roll och datum.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
+/** Årsredovisningen som innehåller underskriftsinformation. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });

@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En baskomponent för att redigera belopprader där man kan jämföra värden mellan nuvarande och tidigare år.
+ * Används som grund för t.ex. monetära och decimala belopprader.
+ */
+
 import BaseEditBeloppradContainer from "@/components/edit/blocks/belopprad/BaseEditBeloppradContainer.vue";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
@@ -7,17 +12,28 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Antal tidigare räkenskapsår som ska visas för jämförelse. */
   numPreviousYears: number;
+
+  /** Huruvida notfält ska visas för beloppraden. */
   allowNot?: boolean;
+
+  /** Huruvida beloppraden är en summarad som inte kan redigeras direkt. */
   isSummarad?: boolean;
+
+  /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
   showBalanceSign?: boolean;
 }>();
 
 const emit = defineEmits<{
+  /** Triggas när användaren tar bort beloppraden. */
   (e: "delete"): void;
 }>();
 
+/** Beloppraden som ska redigeras. */
 const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
   required: true,
 });

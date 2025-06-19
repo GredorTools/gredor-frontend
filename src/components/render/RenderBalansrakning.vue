@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera balansräkningen i årsredovisningen.
+ * Visar tillgångar och skulder i tabellformat med jämförelsetal för föregående år.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import {
@@ -11,6 +16,7 @@ const taxonomyManager = await getTaxonomyManager(
 );
 
 defineProps<{
+  /** Årsredovisningen som innehåller balansräkningen. */
   arsredovisning: Arsredovisning;
 }>();
 </script>

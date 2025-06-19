@@ -1,16 +1,34 @@
 <script lang="ts" setup>
+/**
+ * En baskomponent för att rendera belopprader där man kan jämföra värden mellan nuvarande och tidigare år.
+ * Används som grund för t.ex. monetära och decimala belopprader.
+ */
+
 import { FormatUtil } from "@/util/FormatUtil.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Beloppraden som ska redigeras. */
   belopprad: BaseBeloppradComparable;
+
+  /** Antal tidigare räkenskapsår som ska visas. */
   numPreviousYears: number;
+
+  /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
+
+  /** Huruvida notfält ska visas för beloppraden. */
   allowNot: boolean;
+
+  /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
   showBalanceSign?: boolean;
+
+  /** Huruvida beloppraden ska tvångsvisas som en summarad. */
   displayAsTotalItem?: boolean;
 }>();
 

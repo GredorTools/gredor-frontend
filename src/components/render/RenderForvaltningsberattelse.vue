@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera förvaltningsberättelsen i årsredovisningen.
+ * Visar olika delar av förvaltningsberättelsen som flerårsöversikt, förändringar i eget kapital och resultatdisposition.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import {
@@ -16,6 +21,7 @@ const taxonomyManager = await getTaxonomyManager(
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller förvaltningsberättelsen. */
   arsredovisning: Arsredovisning;
 }>();
 
@@ -58,7 +64,7 @@ const mappedGroups = computed(() => {
       <table v-else-if="items.length > 0">
         <tbody>
           <RenderBelopprad
-            v-for="[index, belopprad] in items"
+            v-for="[, belopprad] in items"
             :key="belopprad.taxonomyItemName"
             :belopprad="belopprad"
             :comparable-num-previous-years="0"

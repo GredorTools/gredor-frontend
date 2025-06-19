@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Huvudkomponenten för redigering av årsredovisningen.
+ * Hanterar navigering mellan olika delar av årsredovisningen samt import och export av data.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditResultatrakning from "@/components/edit/EditResultatrakning.vue";
 import { FileUtil } from "@/util/FileUtil.ts";
@@ -12,6 +17,7 @@ import EditSignatures from "@/components/edit/EditSignatures.vue";
 import EditFaststallelseintyg from "@/components/edit/EditFaststallelseintyg.vue";
 import { emptyArsredovisning } from "@/example/EmptyArsredovisning.ts";
 
+/** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>({
   required: true,
 });

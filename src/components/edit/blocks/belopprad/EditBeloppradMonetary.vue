@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera belopprader som har monetära värden som datatyp.
+ * Hanterar automatiskt beräkning av summarader och visar balanstecken vid behov.
+ */
+
 import {
   type BeloppradMonetary,
   calculateValuesIntoBelopprad,
@@ -9,19 +14,30 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import BaseEditBeloppradComparable from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Antal tidigare räkenskapsår som ska visas för jämförelse. */
   numPreviousYears: number;
+
+  /** Huruvida notfält ska visas för beloppraden. */
   allowNot: boolean;
+
+  /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
   showBalanceSign: boolean;
 }>();
 
 const emit = defineEmits<{
+  /** Triggas när användaren tar bort beloppraden. */
   (e: "delete"): void;
 }>();
 
+/** Beloppraden med monetära värden som ska redigeras. */
 const belopprad = defineModel<BeloppradMonetary>("belopprad", {
   required: true,
 });
+
+/** Lista med alla belopprader i samma tabell, används för beräkning av summarader. */
 const belopprader = defineModel<Belopprad[]>("belopprader", {
   required: true,
 });

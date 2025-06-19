@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera noter i årsredovisningen.
+ * Visar noter grupperade efter typ och tillåter användaren att lägga till, redigera och ta bort noter.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
@@ -18,6 +23,7 @@ const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
 // Data
+/** Årsredovisningen som innehåller noterna. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });

@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera resultaträkningen i årsredovisningen.
+ * Visar intäkter och kostnader i tabellformat med möjlighet att lägga till, redigera och ta bort belopprader.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
@@ -19,6 +24,7 @@ const taxonomyManager = await getTaxonomyManager(
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
 // Data
+/** Årsredovisningen som innehåller resultaträkningen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });

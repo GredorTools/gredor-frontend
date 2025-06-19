@@ -1,12 +1,23 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera belopprader som har strängar som datatyp.
+ */
+
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Beloppraden med strängvärdet som ska renderas. */
   belopprad: BeloppradString;
+
+  /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
+
+  /** Huruvida rubriken ska visas. */
   showHeader: boolean;
 }>();
 

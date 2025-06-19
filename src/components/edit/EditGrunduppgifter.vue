@@ -1,8 +1,14 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera grunduppgifter i årsredovisningen.
+ * Hanterar information som företagsnamn, organisationsnummer, författare, redovisningsvaluta och räkenskapsår.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
 import { FORFATTARE_TYPER } from "@/data/forfattare.ts";
 
+/** Årsredovisningen som innehåller grunduppgifterna. */
 defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });

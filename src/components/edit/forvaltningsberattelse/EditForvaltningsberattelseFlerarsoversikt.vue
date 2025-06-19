@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera flerårsöversikten i förvaltningsberättelsen.
+ * Visar en tabell med nyckeltal för nuvarande och tidigare räkenskapsår.
+ */
+
 import {
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
@@ -6,13 +11,17 @@ import {
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { FormatUtil } from "../../../util/FormatUtil.ts";
+import { FormatUtil } from "@/util/FormatUtil.ts";
 
 defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
   taxonomyManager: TaxonomyManager;
+
+  /** Taxonomiobjekt som representerar gruppen av nyckeltal som ska visas. */
   groupTaxonomyItem: TaxonomyItem;
 }>();
 
+/** Årsredovisningen som innehåller förvaltningsberättelsen med flerårsöversikt. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });

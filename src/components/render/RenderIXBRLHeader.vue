@@ -1,7 +1,13 @@
 <script lang="ts" setup>
+/**
+ * En teknisk komponent för att rendera iXBRL-huvudet i årsredovisningen.
+ * Innehåller metadata, referenser, kontexter och enheter som krävs för iXBRL-export.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
 defineProps<{
+  /** Årsredovisningen som innehåller information för iXBRL-huvudet. */
   arsredovisning: Arsredovisning;
 }>();
 </script>

@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera belopprader som har strängar som datatyp.
+ */
+
 import { computed, useAttrs } from "vue";
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
@@ -12,15 +16,22 @@ defineOptions({
 const attrs = useAttrs();
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Huruvida radbrytningar ska vara tillåtna. */
   multiline: boolean;
+
+  /** Hur många tidigare räkenskapsår som visas i andra belopprader i samma tabell. */
   comparableNumPreviousYears: number;
 }>();
 
 const emit = defineEmits<{
+  /** Triggas när användaren tar bort beloppraden. */
   (e: "delete"): void;
 }>();
 
+/** Beloppraden med strängvärdet som ska redigeras. */
 const belopprad = defineModel<BeloppradString>("belopprad", {
   required: true,
 });

@@ -1,13 +1,20 @@
 <script lang="ts" setup>
+/**
+ * En komponent som visar rubriken för en belopprad med tooltip.
+ * Hanterar olika stilar baserat på beloppradens nivå och typ.
+ */
+
 import { computed, onMounted, useTemplateRef } from "vue";
 import { Tooltip } from "bootstrap";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
+  /** TaxonomyManager för att hämta information om beloppraden. */
   taxonomyManager: TaxonomyManager;
 }>();
 
+/** Beloppraden vars rubrik ska visas. */
 const belopprad = defineModel<Belopprad>("belopprad", {
   required: true,
 });

@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera balansräkningen i årsredovisningen.
+ * Visar tillgångar och skulder i tabellformat med möjlighet att lägga till, redigera och ta bort belopprader.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
@@ -20,6 +25,7 @@ const taxonomyManager = await getTaxonomyManager(
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
 // Data
+/** Årsredovisningen som innehåller balansräkningen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });

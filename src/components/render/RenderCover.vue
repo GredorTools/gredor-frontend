@@ -1,8 +1,14 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera försättsbladet i årsredovisningen.
+ * Visar företagsinformation, räkenskapsår och fastställelseintyg.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller information för försättsbladet. */
   arsredovisning: Arsredovisning;
 }>();
 

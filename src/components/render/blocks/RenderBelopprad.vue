@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent som fungerar som en wrapper för olika typer av belopprader.
+ * Väljer automatiskt rätt komponent baserat på beloppradens typ (monetär, decimal eller sträng).
+ */
+
 import RenderBeloppradMonetary from "@/components/render/blocks/belopprad/RenderBeloppradMonetary.vue";
 import RenderBeloppradString from "@/components/render/blocks/belopprad/RenderBeloppradString.vue";
 
@@ -11,12 +16,25 @@ import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Beloppraden som ska renderas. */
   belopprad: Belopprad;
+
+  /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan jämföra mellan år. */
   comparableNumPreviousYears?: number;
+
+  /** Huruvida notfält ska visas för belopprader där man kan jämföra mellan år. */
   comparableAllowNot?: boolean;
+
+  /** Huruvida beloppraden ska tvångsvisas som en summarad, för belopprader där man kan jämföra mellan år. */
   comparableDisplayAsTotalItem?: boolean;
+
+  /** Huruvida balanstecken ska visas för monetära belopprader. */
   monetaryShowBalanceSign?: boolean;
+
+  /** Huruvida strängrader ska tillåta radbrytningar. */
   stringShowHeader?: boolean;
 }>();
 

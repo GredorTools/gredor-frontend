@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera förvaltningsberättelsen i årsredovisningen.
+ * Visar olika delar av förvaltningsberättelsen som flerårsöversikt, förändringar i eget kapital och resultatdisposition.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
@@ -22,6 +27,7 @@ const taxonomyManager = await getTaxonomyManager(
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
 // Data
+/** Årsredovisningen som innehåller förvaltningsberättelsen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
