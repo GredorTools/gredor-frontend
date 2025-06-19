@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ref } from "vue";
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import EditBelopprad from "@/components/edit/EditBelopprad.vue";
+import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
   createBeloppradInList,
   deleteBelopprad,
@@ -11,6 +10,7 @@ import {
   type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
+import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -22,7 +22,6 @@ const availableTaxonomyItems = taxonomyManager.getRoot();
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
-const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 
 // Hjälpfunktioner
 function addBelopprad(taxonomyItem: TaxonomyItem) {
@@ -81,63 +80,10 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     </tbody>
   </table>
 
-  <select v-model="beloppItemToAdd" class="form-select">
-    <option
-      v-for="taxonomyItem in availableTaxonomyItems.childrenFlat"
-      :key="taxonomyItem.xmlName"
-      :disabled="taxonomyItem.properties.abstract === 'true'"
-      :value="taxonomyItem"
-    >
-      {{
-        "\u00a0".repeat(taxonomyItem.level * 4) +
-        taxonomyItem.additionalData.displayLabel
-      }}
-    </option>
-  </select>
-  <button
-    :disabled="beloppItemToAdd === null"
-    @click="beloppItemToAdd != null && addBelopprad(beloppItemToAdd)"
-  >
-    Lägg till rad
-  </button>
+  <EditItemSelector
+    :taxonomy-items="availableTaxonomyItems.childrenFlat"
+    @add-belopprad="addBelopprad"
+  />
 </template>
 
-<style lang="scss" scoped>
-table {
-  width: 100%;
-  margin-bottom: 1rem;
-
-  &:deep(th),
-  &:deep(td) {
-    border-style: hidden;
-    text-align: left;
-    padding: 0.25rem 0.5rem;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      white-space: nowrap;
-    }
-
-    &:nth-child(2) {
-      min-width: 40px;
-    }
-
-    &:nth-child(3),
-    &:nth-child(4) {
-      text-align: right;
-      min-width: 100px;
-
-      input {
-        text-align: right;
-      }
-    }
-
-    input {
-      width: 100%;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

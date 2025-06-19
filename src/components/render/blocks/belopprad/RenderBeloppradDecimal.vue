@@ -1,26 +1,24 @@
 <script lang="ts" setup>
 import type { BeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import BaseEditBeloppradComparable from "@/components/edit/belopprad/BaseEditBeloppradComparable.vue";
+import BaseRenderBeloppradComparable from "@/components/render/blocks/belopprad/BaseRenderBeloppradComparable.vue";
 
 defineProps<{
   taxonomyManager: TaxonomyManager;
-  numPreviousYears: number;
+  belopprad: BeloppradDecimal;
+  contextRefPrefix: "period" | "balans";
   allowNot: boolean;
-  deleteCallback: () => void;
+  displayAsTotalItem: boolean;
 }>();
-
-const belopprad = defineModel<BeloppradDecimal>("belopprad", {
-  required: true,
-});
 </script>
 
 <template>
-  <BaseEditBeloppradComparable
+  <BaseRenderBeloppradComparable
     :allow-not="allowNot"
     :belopprad="belopprad"
-    :delete-callback="deleteCallback"
-    :num-previous-years="numPreviousYears"
+    :context-ref-prefix="contextRefPrefix"
+    :display-as-total-item="displayAsTotalItem"
+    :num-previous-years="1"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

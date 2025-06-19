@@ -6,7 +6,7 @@ import {
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
-import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
+import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
 
 const props = defineProps<{
@@ -66,7 +66,7 @@ const table = computed(() =>
           :key="columnIndex"
           class="value-container"
         >
-          <template v-if="cell != null">
+          <div v-if="cell != null" class="value-contents">
             <input
               v-model.trim="cell.belopprad.beloppNuvarandeAr"
               type="text"
@@ -81,11 +81,21 @@ const table = computed(() =>
                   )
               "
             />
-          </template>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.value-contents {
+  display: flex;
+
+  input {
+    flex: 1;
+    margin-right: 0.25rem;
+    min-width: 100px;
+  }
+}
+</style>

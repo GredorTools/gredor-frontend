@@ -6,7 +6,7 @@ import {
 import { computed } from "vue";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import BaseEditBeloppradComparable from "@/components/edit/belopprad/BaseEditBeloppradComparable.vue";
+import BaseEditBeloppradComparable from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
 
 const props = defineProps<{
   taxonomyManager: TaxonomyManager;

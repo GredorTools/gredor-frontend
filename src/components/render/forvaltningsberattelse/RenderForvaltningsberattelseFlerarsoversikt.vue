@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { FormatUtil } from "@/util/FormatUtil.ts";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
-import BaseRenderBeloppradLevel1Header from "@/components/render/belopprad/BaseRenderBeloppradLevel1Header.vue";
+import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
 defineProps<{
   arsredovisning: Arsredovisning;

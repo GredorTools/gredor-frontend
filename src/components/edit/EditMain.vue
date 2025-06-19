@@ -119,4 +119,41 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 .editor {
   margin-top: 1rem;
 }
+
+:deep(table) {
+  width: 100%;
+  margin-bottom: 1rem;
+
+  th,
+  td {
+    border-style: hidden;
+    text-align: left;
+    padding: 0.25rem 0.5rem;
+
+    &:first-child {
+      width: 99%;
+    }
+
+    &:not(:first-child) {
+      white-space: nowrap;
+    }
+
+    &.not-container {
+      min-width: 40px;
+    }
+
+    &.value-container {
+      text-align: right;
+
+      input {
+        min-width: 100px;
+        text-align: right;
+      }
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+}
 </style>

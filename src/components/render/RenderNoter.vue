@@ -3,7 +3,7 @@ import type {
   Arsredovisning,
   Verksamhetsar,
 } from "@/model/arsredovisning/Arsredovisning.ts";
-import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { computed, h, type VNode } from "vue";
 import {
   getTaxonomyManager,

@@ -8,7 +8,7 @@ import {
   type Belopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
-import BaseRenderBeloppradLevel1Header from "@/components/render/belopprad/BaseRenderBeloppradLevel1Header.vue";
+import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
 const props = defineProps<{
   arsredovisning: Arsredovisning;
@@ -49,6 +49,7 @@ function getContextRef(belopprad: Belopprad) {
 </script>
 
 <template>
+  <!-- TODO: Hantera om tabellen blir för bred... -->
   <table xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">
     <thead>
       <tr>

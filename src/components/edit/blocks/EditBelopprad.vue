@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import EditBeloppradMonetary from "@/components/edit/belopprad/EditBeloppradMonetary.vue";
-import EditBeloppradString from "@/components/edit/belopprad/EditBeloppradString.vue";
+import EditBeloppradMonetary from "@/components/edit/blocks/belopprad/EditBeloppradMonetary.vue";
+import EditBeloppradString from "@/components/edit/blocks/belopprad/EditBeloppradString.vue";
 
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
-import EditBeloppradDecimal from "@/components/edit/belopprad/EditBeloppradDecimal.vue";
+import EditBeloppradDecimal from "@/components/edit/blocks/belopprad/EditBeloppradDecimal.vue";
 import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
@@ -30,6 +30,7 @@ const belopprader = defineModel<Belopprad[]>("belopprader", {
   <EditBeloppradString
     v-if="isBeloppradString(belopprad)"
     :belopprad="belopprad"
+    :comparable-num-previous-years="comparableNumPreviousYears || 0"
     :delete-callback="deleteCallback"
     :multiline="stringMultiline || false"
     :taxonomy-manager="taxonomyManager"
@@ -54,4 +55,4 @@ const belopprader = defineModel<Belopprad[]>("belopprader", {
   />
 </template>
 
-<style lang="scss" module></style>
+<style lang="scss" scoped></style>

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, useAttrs } from "vue";
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
-import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
-import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
+import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 defineOptions({
@@ -14,6 +14,7 @@ const attrs = useAttrs();
 const props = defineProps<{
   taxonomyManager: TaxonomyManager;
   multiline: boolean;
+  comparableNumPreviousYears: number;
   deleteCallback: () => void;
 }>();
 
@@ -43,7 +44,7 @@ const trClasses = computed(() => [
 <template>
   <template v-if="multiline && !isAbstract">
     <tr :class="trClasses">
-      <td colspan="5">
+      <td :colspan="comparableNumPreviousYears + 2">
         <BaseEditBeloppradTitle
           :belopprad="belopprad"
           :taxonomy-manager="taxonomyManager"
@@ -59,7 +60,7 @@ const trClasses = computed(() => [
         :class="{
           'gredor-tooltip': !!taxonomyItem.properties.documentation,
         }"
-        colspan="6"
+        :colspan="comparableNumPreviousYears + 3"
       >
         <textarea v-if="multiline" v-model="belopprad.text"></textarea>
       </td>
@@ -73,7 +74,7 @@ const trClasses = computed(() => [
         :taxonomy-manager="taxonomyManager"
       />
     </td>
-    <td v-if="!isAbstract" colspan="4">
+    <td v-if="!isAbstract" :colspan="comparableNumPreviousYears + 1">
       <input v-model="belopprad.text" type="text" />
     </td>
     <td>

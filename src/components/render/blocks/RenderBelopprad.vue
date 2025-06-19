@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import RenderBeloppradMonetary from "@/components/render/belopprad/RenderBeloppradMonetary.vue";
-import RenderBeloppradString from "@/components/render/belopprad/RenderBeloppradString.vue";
+import RenderBeloppradMonetary from "@/components/render/blocks/belopprad/RenderBeloppradMonetary.vue";
+import RenderBeloppradString from "@/components/render/blocks/belopprad/RenderBeloppradString.vue";
 
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
-import RenderBeloppradDecimal from "@/components/render/belopprad/RenderBeloppradDecimal.vue";
+import RenderBeloppradDecimal from "@/components/render/blocks/belopprad/RenderBeloppradDecimal.vue";
 import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";

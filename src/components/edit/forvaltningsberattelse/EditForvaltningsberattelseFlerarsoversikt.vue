@@ -3,7 +3,7 @@ import {
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
-import EditBelopprad from "@/components/edit/EditBelopprad.vue";
+import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { FormatUtil } from "../../../util/FormatUtil.ts";
