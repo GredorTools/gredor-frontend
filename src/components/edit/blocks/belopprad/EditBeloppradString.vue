@@ -15,7 +15,10 @@ const props = defineProps<{
   taxonomyManager: TaxonomyManager;
   multiline: boolean;
   comparableNumPreviousYears: number;
-  deleteCallback: () => void;
+}>();
+
+const emit = defineEmits<{
+  (e: "delete"): void;
 }>();
 
 const belopprad = defineModel<BeloppradString>("belopprad", {
@@ -51,7 +54,7 @@ const trClasses = computed(() => [
         />
       </td>
       <td>
-        <button class="btn btn-danger" @click="deleteCallback">X</button>
+        <button class="btn btn-danger" @click="emit('delete')">X</button>
       </td>
     </tr>
     <tr :class="trClasses">
@@ -80,7 +83,7 @@ const trClasses = computed(() => [
     <td>
       <BaseEditBeloppradDeleteButton
         v-if="!isAbstract"
-        :delete-callback="deleteCallback"
+        @delete="emit('delete')"
       />
     </td>
   </tr>

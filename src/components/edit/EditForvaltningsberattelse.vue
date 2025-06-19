@@ -74,7 +74,9 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           v-model:belopprad="arsredovisning.forvaltningsberattelse[index]"
           v-model:belopprader="arsredovisning.forvaltningsberattelse"
           :comparable-num-previous-years="0"
-          :delete-callback="
+          :taxonomy-manager="taxonomyManager"
+          string-multiline
+          @delete="
             () =>
               deleteBelopprad(
                 taxonomyManager,
@@ -82,8 +84,6 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
                 arsredovisning.forvaltningsberattelse,
               )
           "
-          :taxonomy-manager="taxonomyManager"
-          string-multiline
         />
       </tbody>
     </table>

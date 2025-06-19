@@ -65,7 +65,8 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
         :comparable-num-previous-years="
           Math.min(arsredovisning.verksamhetsarTidigare.length, 3)
         "
-        :delete-callback="
+        :taxonomy-manager="taxonomyManager"
+        @delete="
           () =>
             deleteBelopprad(
               taxonomyManager,
@@ -73,7 +74,6 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
               arsredovisning.forvaltningsberattelse,
             )
         "
-        :taxonomy-manager="taxonomyManager"
       />
     </tbody>
   </table>

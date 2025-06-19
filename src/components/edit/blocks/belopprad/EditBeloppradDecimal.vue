@@ -7,7 +7,10 @@ defineProps<{
   taxonomyManager: TaxonomyManager;
   numPreviousYears: number;
   allowNot: boolean;
-  deleteCallback: () => void;
+}>();
+
+const emit = defineEmits<{
+  (e: "delete"): void;
 }>();
 
 const belopprad = defineModel<BeloppradDecimal>("belopprad", {
@@ -19,9 +22,9 @@ const belopprad = defineModel<BeloppradDecimal>("belopprad", {
   <BaseEditBeloppradComparable
     :allow-not="allowNot"
     :belopprad="belopprad"
-    :delete-callback="deleteCallback"
     :num-previous-years="numPreviousYears"
     :taxonomy-manager="taxonomyManager"
+    @delete="emit('delete')"
   />
 </template>
 

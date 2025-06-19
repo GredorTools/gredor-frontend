@@ -70,12 +70,12 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
-          :delete-callback="
+          :taxonomy-manager="taxonomyManager"
+          string-multiline
+          @delete="
             () =>
               deleteBelopprad(taxonomyManager, belopprad, arsredovisning.noter)
           "
-          :taxonomy-manager="taxonomyManager"
-          string-multiline
         />
       </tbody>
     </table>

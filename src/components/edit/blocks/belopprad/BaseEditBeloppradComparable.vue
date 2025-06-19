@@ -12,7 +12,10 @@ const props = defineProps<{
   allowNot?: boolean;
   isSummarad?: boolean;
   showBalanceSign?: boolean;
-  deleteCallback: () => void;
+}>();
+
+const emit = defineEmits<{
+  (e: "delete"): void;
 }>();
 
 const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
@@ -78,7 +81,7 @@ const taxonomyItem = computed(() => {
       </div>
     </td>
     <td>
-      <BaseEditBeloppradDeleteButton :delete-callback="deleteCallback" />
+      <BaseEditBeloppradDeleteButton @delete="emit('delete')" />
     </td>
   </BaseEditBeloppradContainer>
 </template>

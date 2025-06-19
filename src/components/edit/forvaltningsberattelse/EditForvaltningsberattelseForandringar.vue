@@ -72,7 +72,7 @@ const table = computed(() =>
               type="text"
             />
             <BaseEditBeloppradDeleteButton
-              :delete-callback="
+              @delete="
                 () =>
                   deleteBelopprad(
                     taxonomyManager,

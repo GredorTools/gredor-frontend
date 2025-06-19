@@ -13,7 +13,10 @@ const props = defineProps<{
   numPreviousYears: number;
   allowNot: boolean;
   showBalanceSign: boolean;
-  deleteCallback: () => void;
+}>();
+
+const emit = defineEmits<{
+  (e: "delete"): void;
 }>();
 
 const belopprad = defineModel<BeloppradMonetary>("belopprad", {
@@ -49,11 +52,11 @@ const isSummarad = computed(() => {
   <BaseEditBeloppradComparable
     :allow-not="allowNot"
     :belopprad="belopprad"
-    :delete-callback="deleteCallback"
     :is-summarad="isSummarad"
     :num-previous-years="numPreviousYears"
     :show-balance-sign="showBalanceSign"
     :taxonomy-manager="taxonomyManager"
+    @delete="emit('delete')"
   />
 </template>
 

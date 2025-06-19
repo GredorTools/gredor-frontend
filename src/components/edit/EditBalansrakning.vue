@@ -83,7 +83,9 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
-          :delete-callback="
+          :taxonomy-manager="taxonomyManager"
+          comparable-allow-not
+          @delete="
             () =>
               deleteBelopprad(
                 taxonomyManager,
@@ -91,8 +93,6 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
                 arsredovisning.balansrakning,
               )
           "
-          :taxonomy-manager="taxonomyManager"
-          comparable-allow-not
         />
       </tbody>
     </table>
