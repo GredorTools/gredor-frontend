@@ -26,6 +26,10 @@ const taxonomyManager = await getTaxonomyManager(
 );
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
+const overgangK2AbstractItem = taxonomyManager.getItemByName(
+  "se-gen-base:ForandringIngaendeEgetKapitalOvergangK2Abstract",
+);
+
 // Data
 /** Årsredovisningen som innehåller förvaltningsberättelsen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -94,8 +98,19 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
       </tbody>
     </table>
 
+    <!--
+    Vi vill inte ha med "Specifikation av förändringar i ingående eget kapital vid övergång till K2",
+    det är extremt osannolikt att någon kommer ha nytta av den numera så det skräpar bara ner.
+    -->
     <EditItemSelector
-      :taxonomy-items="[group, ...group.childrenFlat]"
+      :taxonomy-items="[
+        group,
+        ...group.childrenFlat.filter(
+          (child) =>
+            child.xmlName !== overgangK2AbstractItem.xmlName &&
+            !overgangK2AbstractItem.childrenFlat.includes(child),
+        ),
+      ]"
       @add-belopprad="addBelopprad"
     />
   </template>
