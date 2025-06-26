@@ -7,7 +7,7 @@ export class DocumentUtil {
    *
    * @param elements - En samling av DOM-element som ska kontrolleras för
    * matchande CSS-regler.
-   * @return En sträng som innehåller den sammanfogade CSS-texten för alla
+   * @returns En sträng som innehåller den sammanfogade CSS-texten för alla
    * matchande regler.
    */
   static async getCssTextForUsedRules(
@@ -68,7 +68,7 @@ export class DocumentUtil {
    * CSS-stilmallar i dokumentet och extraherar detaljer som fontfamilj, vikt,
    * stil, källa (src) och unicode-område.
    *
-   * @return En array med objekt som innehåller typsnittsinformation:
+   * @returns En array med objekt som innehåller typsnittsinformation:
    * - fontFamily: Namnet på typsnittet.
    * - fontWeight: Vikten för typsnittet, t.ex. 400 för normal vikt.
    * - fontStyle: Stilen för typsnittet, t.ex. "normal", "italic".
@@ -149,7 +149,7 @@ export class DocumentUtil {
    * @param rootElement - HTML-elementet som ska konverteras. Elementets innehåll
    * bearbetas och omvandlas till iXBRL-format.
    * @param title - Titeln på det resulterande iXBRL-dokumentet.
-   * @return En sträng som representerar det konverterade iXBRL-innehållet.
+   * @returns En sträng som representerar det konverterade iXBRL-innehållet.
    */
   static async convertVueHTMLToiXBRL(
     rootElement: HTMLElement,

@@ -4,7 +4,7 @@ export class FileUtil {
    * returnerar filens innehåll som en sträng.
    *
    * @param accept - Tillåtna filtyper, kommaseparerat, t.ex. "image/*,.pdf"
-   * @return En Promise som returnerar innehållet i den valda filen som en
+   * @returns En Promise som returnerar innehållet i den valda filen som en
    * sträng, eller undefined om ingen fil valts.
    */
   static importFile(accept: string): Promise<string | undefined> {

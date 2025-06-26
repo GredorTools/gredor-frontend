@@ -27,6 +27,13 @@ export class CalculationProcessor {
     this.calculationTree = CalculationParser.parse(rootName, calculationJson);
   }
 
+  /**
+   * Beräknar värdet för en given konceptnamn baserat på angivna värden.
+   *
+   * @param conceptName - Namnet på det koncept som ska beräknas.
+   * @param values - En lista med värden för respektive koncept.
+   * @returns Det beräknade värdet för det angivna konceptet.
+   */
   calculateForConcept(
     conceptName: string,
     values: CalculationConceptValue[],
@@ -39,6 +46,12 @@ export class CalculationProcessor {
     return this.calculateNode(node, valueMap);
   }
 
+  /**
+   * Avgör om ett koncept är ett lönnod.
+   *
+   * @param conceptName - Namnet på det koncept som ska kontrolleras.
+   * @returns Sant om konceptet är ett lönnod, annars falskt.
+   */
   isLeafConcept(conceptName: string): boolean {
     const node = this.findNodeByConceptName(conceptName, this.calculationTree);
     return !node || !node.children || node.children.length === 0;

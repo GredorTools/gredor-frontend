@@ -9,7 +9,7 @@ export class FormatUtil {
    *
    * @param numberAsString - Strängrepresentation av ett tal som ska formateras.
    * @param options - Huruvida eventuella tecken (plus/minus) ska tas bort
-   * @return Den formaterade numeriska strängen med mellanslag som
+   * @returns Den formaterade numeriska strängen med mellanslag som
    * tusentalsseparator.
    */
   static formatNumber(numberAsString: string, options?: FormatOptions): string {
