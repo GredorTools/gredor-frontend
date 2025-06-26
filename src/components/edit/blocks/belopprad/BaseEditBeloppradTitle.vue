@@ -6,7 +6,10 @@
 
 import { computed, onMounted, useTemplateRef } from "vue";
 import { Tooltip } from "bootstrap";
-import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  type Belopprad,
+  getTaxonomyItemForBelopprad,
+} from "@/model/arsredovisning/Belopprad.ts";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
@@ -20,10 +23,7 @@ const belopprad = defineModel<Belopprad>("belopprad", {
 });
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(
-    belopprad.value.taxonomyItemName,
-    belopprad.value.labelType,
-  );
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
 const titleSpan = useTemplateRef("title-span");

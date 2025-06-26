@@ -8,6 +8,7 @@ import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/Belo
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 defineOptions({
   inheritAttrs: false,
@@ -37,10 +38,7 @@ const belopprad = defineModel<BeloppradString>("belopprad", {
 });
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(
-    belopprad.value.taxonomyItemName,
-    belopprad.value.labelType,
-  );
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
 const isAbstract = computed(

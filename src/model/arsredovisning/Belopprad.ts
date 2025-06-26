@@ -8,26 +8,28 @@ import {
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
   taxonomyItemName: string;
   labelType?: LabelType;
+  parentTaxonomyItemName?: string;
   type: T;
 }
 
 export function createBelopprad<T extends TaxonomyItemType>(
   taxonomyItem: TaxonomyItem<T>,
 ): Belopprad<T> {
+  const baseBeloppradData: Belopprad<T> = {
+    taxonomyItemName: taxonomyItem.xmlName,
+    labelType: taxonomyItem.additionalData.labelType,
+    parentTaxonomyItemName: taxonomyItem.parent?.xmlName,
+    type: taxonomyItem.properties.type,
+  };
+
   switch (taxonomyItem.properties.type) {
     case "xbrli:stringItemType":
-      return {
-        taxonomyItemName: taxonomyItem.xmlName,
-        labelType: taxonomyItem.additionalData.labelType,
-        type: taxonomyItem.properties.type,
-      } as Belopprad<T>;
+      return baseBeloppradData;
 
     case "xbrli:monetaryItemType":
     case "xbrli:decimalItemType":
       return {
-        taxonomyItemName: taxonomyItem.xmlName,
-        labelType: taxonomyItem.additionalData.labelType,
-        type: taxonomyItem.properties.type,
+        ...baseBeloppradData,
         beloppNuvarandeAr: "",
         beloppTidigareAr: [""],
       } as Belopprad<T>;
@@ -43,6 +45,10 @@ export function createBelopprad<T extends TaxonomyItemType>(
       );
 
     default:
+      if (taxonomyItem.properties.type.endsWith("@anonymousType")) {
+        return baseBeloppradData;
+      }
+
       throw new Error(
         `Unknown taxonomy item data type: ${taxonomyItem.properties.type}`,
       );
@@ -100,8 +106,8 @@ export function createBeloppradInList(
   if (sort) {
     list.sort(
       (a, b) =>
-        taxonomyManager.getItem(a.taxonomyItemName, a.labelType).rowNumber -
-        taxonomyManager.getItem(b.taxonomyItemName, b.labelType).rowNumber,
+        getTaxonomyItemForBelopprad(taxonomyManager, a).rowNumber -
+        getTaxonomyItemForBelopprad(taxonomyManager, b).rowNumber,
     );
   }
 }
@@ -131,7 +137,19 @@ export function isBeloppradCorrespondsToTaxonomyItem(
   return (
     taxonomyItem != null &&
     taxonomyItem.xmlName === belopprad.taxonomyItemName &&
-    taxonomyItem.additionalData.labelType === belopprad.labelType
+    taxonomyItem.additionalData.labelType == belopprad.labelType &&
+    taxonomyItem.parent?.xmlName == belopprad.parentTaxonomyItemName
+  );
+}
+
+export function getTaxonomyItemForBelopprad(
+  taxonomyManager: TaxonomyManager,
+  belopprad: Belopprad,
+): TaxonomyItem {
+  return taxonomyManager.getItemByCompleteInfo(
+    belopprad.taxonomyItemName,
+    belopprad.labelType,
+    belopprad.parentTaxonomyItemName,
   );
 }
 
@@ -140,16 +158,16 @@ export async function deleteBelopprad(
   beloppradToDelete: Belopprad,
   from: Belopprad[],
 ) {
-  const taxonomyItemToDelete = taxonomyManager.getItem(
-    beloppradToDelete.taxonomyItemName,
-    beloppradToDelete.labelType,
+  const taxonomyItemToDelete = getTaxonomyItemForBelopprad(
+    taxonomyManager,
+    beloppradToDelete,
   );
 
   for (let i = 0; i < from.length; i++) {
     const belopprad = from[i];
-    const taxonomyItem = taxonomyManager.getItem(
-      belopprad.taxonomyItemName,
-      belopprad.labelType,
+    const taxonomyItem = getTaxonomyItemForBelopprad(
+      taxonomyManager,
+      belopprad,
     );
     if (
       taxonomyItem.xmlName === taxonomyItemToDelete.xmlName &&
@@ -176,10 +194,7 @@ function deleteBeloppradAbstractParents(
   belopprad: Belopprad,
   from: Belopprad[],
 ) {
-  const taxonomyItem = taxonomyManager.getItem(
-    belopprad.taxonomyItemName,
-    belopprad.labelType,
-  );
+  const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, belopprad);
   if (taxonomyItem.parent) {
     // Hitta föräldern i listan baserat på förälderns ID
     const beloppradParent = from.find((item) =>
@@ -191,7 +206,7 @@ function deleteBeloppradAbstractParents(
       const parentHasChildren = from.some((item) =>
         isBeloppradCorrespondsToTaxonomyItem(
           beloppradParent,
-          taxonomyManager.getItem(item.taxonomyItemName, item.labelType).parent,
+          getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
         ),
       );
       if (!parentHasChildren) {
@@ -217,7 +232,7 @@ function deleteBeloppradChildren(
   const children = from.filter((item) =>
     isBeloppradCorrespondsToTaxonomyItem(
       belopprad,
-      taxonomyManager.getItem(item.taxonomyItemName, item.labelType).parent,
+      getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
     ),
   );
 

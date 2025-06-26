@@ -10,6 +10,7 @@ import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/Ba
 import { computed } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -39,10 +40,7 @@ const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
 });
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(
-    belopprad.value.taxonomyItemName,
-    belopprad.value.labelType,
-  );
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 </script>
 

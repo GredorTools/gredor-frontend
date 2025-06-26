@@ -6,6 +6,7 @@
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -22,10 +23,7 @@ const props = defineProps<{
 }>();
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(
-    props.belopprad.taxonomyItemName,
-    props.belopprad.labelType,
-  );
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
 });
 </script>
 

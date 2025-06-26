@@ -9,7 +9,10 @@ import {
   calculateValuesIntoBelopprad,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { computed } from "vue";
-import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  type Belopprad,
+  getTaxonomyItemForBelopprad,
+} from "@/model/arsredovisning/Belopprad.ts";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import BaseEditBeloppradComparable from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
 
@@ -43,10 +46,7 @@ const belopprader = defineModel<Belopprad[]>("belopprader", {
 });
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(
-    belopprad.value.taxonomyItemName,
-    belopprad.value.labelType,
-  );
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
 const isSummarad = computed(() => {

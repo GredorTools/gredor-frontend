@@ -25,7 +25,9 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
 });
 
 const groupTaxonomyItem = computed(() =>
-  props.taxonomyManager.getItem("se-gen-base:ForandringEgetKapitalAbstract"),
+  props.taxonomyManager.getItemByName(
+    "se-gen-base:ForandringEgetKapitalAbstract",
+  ),
 );
 
 const belopprader = computed(() =>

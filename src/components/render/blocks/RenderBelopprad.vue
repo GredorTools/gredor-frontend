@@ -9,7 +9,10 @@ import RenderBeloppradString from "@/components/render/blocks/belopprad/RenderBe
 
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
-import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  type Belopprad,
+  getTaxonomyItemForBelopprad,
+} from "@/model/arsredovisning/Belopprad.ts";
 import RenderBeloppradDecimal from "@/components/render/blocks/belopprad/RenderBeloppradDecimal.vue";
 import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import { computed } from "vue";
@@ -40,10 +43,8 @@ const props = defineProps<{
 
 const contextRefPrefix = computed(() => {
   switch (
-    props.taxonomyManager.getItem(
-      props.belopprad.taxonomyItemName,
-      props.belopprad.labelType,
-    ).properties.periodType
+    getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad)
+      .properties.periodType
   ) {
     case "duration":
       return "period";
