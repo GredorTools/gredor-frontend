@@ -128,7 +128,12 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 
 :deep(table) {
   width: 100%;
+  margin-top: 1rem;
   margin-bottom: 1rem;
+
+  &:not(:first-of-type) {
+    margin-top: 3rem;
+  }
 
   th,
   td {
