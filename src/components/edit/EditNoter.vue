@@ -17,6 +17,7 @@ import {
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
 import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
+import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
@@ -41,25 +42,35 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 <template>
   <h3>Noter</h3>
   <template
-    v-for="(
-      group, groupIndex
-    ) in availableTaxonomyItems.children[0].children.flatMap((c) => c.children)"
+    v-for="(group, groupIndex) in [
+      availableTaxonomyItems.children[0].children[0],
+      ...availableTaxonomyItems.children[0].children
+        .slice(1)
+        .flatMap((c) => c.children),
+    ]"
     :key="groupIndex"
   >
     <table>
       <thead>
         <tr>
           <th scope="col">{{ group.additionalData.displayLabel }}</th>
-          <th class="value-container" scope="col">
-            {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
-          </th>
-          <th
+          <component
+            :is="
+              getValueColumnHeaderCell(
+                group,
+                arsredovisning.verksamhetsarNuvarande,
+              )
+            "
+          />
+          <component
+            :is="
+              getValueColumnHeaderCell(
+                group,
+                arsredovisning.verksamhetsarTidigare[0],
+              )
+            "
             v-if="arsredovisning.verksamhetsarTidigare.length > 0"
-            class="value-container"
-            scope="col"
-          >
-            {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
-          </th>
+          />
           <th scope="col"><!-- Ta bort-knapp --></th>
         </tr>
       </thead>

@@ -4,21 +4,18 @@
  * Visar noter grupperade efter typ med korrekt numrering och formatering.
  */
 
-import type {
-  Arsredovisning,
-  Verksamhetsar,
-} from "@/model/arsredovisning/Arsredovisning.ts";
+import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
-import { computed, h, type VNode } from "vue";
+import { computed } from "vue";
 import {
   getTaxonomyManager,
-  type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
 import {
   getTaxonomyItemForBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
+import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
 
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
 
@@ -35,34 +32,6 @@ const items = computed(() => {
     };
   });
 });
-
-function getValueColumnHeaderCell(
-  taxonomyItem: TaxonomyItem,
-  verksamhetsar: Verksamhetsar,
-): VNode {
-  const attrs = { scope: "col", class: "value-container" };
-
-  const firstNonStringItem = taxonomyItem.childrenFlat.find(
-    (child) => child.properties.type !== "xbrli:stringItemType",
-  );
-  if (!firstNonStringItem) {
-    // Finns inga icke-sträng-värden, vi ska inte ha någon kolumnrubrik
-    return h("th", attrs);
-  }
-  switch (firstNonStringItem.properties.periodType) {
-    case "duration":
-      return h("th", attrs, [
-        verksamhetsar.startdatum,
-        h("br"),
-        "–",
-        verksamhetsar.slutdatum,
-      ]);
-    case "instant":
-      return h("th", attrs, [verksamhetsar.slutdatum]);
-    default:
-      throw new Error("Unknown periodType");
-  }
-}
 </script>
 
 <template>
@@ -71,7 +40,14 @@ function getValueColumnHeaderCell(
     <table
       v-for="(
         { belopprad: headerBelopprad, taxonomyItem: headerTaxonomyItem }, index
-      ) in items.filter((i) => i.taxonomyItem.level === 2)"
+      ) in items.filter(
+        (i) =>
+          i.taxonomyItem.xmlName ===
+            'se-gen-base:RedovisningsprinciperAbstract' ||
+          (i.taxonomyItem.level === 2 &&
+            i.taxonomyItem.parent?.xmlName !==
+              'se-gen-base:RedovisningsprinciperAbstract'),
+      )"
       :key="headerBelopprad.taxonomyItemName"
     >
       <thead>
