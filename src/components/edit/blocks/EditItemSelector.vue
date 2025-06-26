@@ -3,7 +3,8 @@
  * En komponent för att välja och lägga till taxonomiobjekt som belopprader.
  */
 
-import { computed, ref } from "vue";
+import { computed, markRaw, ref } from "vue";
+import VueSelect, { type Option } from "vue3-select-component";
 import { type TaxonomyItem } from "@/util/TaxonomyManager.ts";
 
 const props = defineProps<{
@@ -16,7 +17,7 @@ const emit = defineEmits<{
   (e: "addBelopprad", taxonomyItem: TaxonomyItem): void;
 }>();
 
-const taxonomyItemToAdd = ref<TaxonomyItem | null>(null);
+const taxonomyItemToAdd = ref<TaxonomyItem | null | undefined>();
 
 const minimumTaxonomyItemLevel = computed(() => {
   return Math.min(...props.taxonomyItems.map((item) => item.level));
@@ -25,24 +26,54 @@ const minimumTaxonomyItemLevel = computed(() => {
 
 <template>
   <div class="d-flex">
-    <select v-model="taxonomyItemToAdd" class="form-select">
-      <option
-        v-for="taxonomyItem in taxonomyItems"
-        :key="taxonomyItem.xmlName"
-        :disabled="taxonomyItem.properties.abstract === 'true'"
-        :value="taxonomyItem"
-      >
-        {{
-          "\u00a0".repeat((taxonomyItem.level - minimumTaxonomyItemLevel) * 4) +
-          taxonomyItem.additionalData.displayLabel
-        }}
-      </option>
-    </select>
+    <VueSelect
+      v-model="taxonomyItemToAdd"
+      :filter-by="
+        (option, label, search) =>
+          (option.value.properties.abstract !== 'true' &&
+            label.toLowerCase().includes(search.toLowerCase())) ||
+          option.value.childrenFlat.some(
+            (taxonomyItem) =>
+              taxonomyItem.properties.abstract !== 'true' &&
+              taxonomyItem.additionalData.displayLabel
+                ?.toLowerCase()
+                .includes(search.toLowerCase()),
+          )
+      "
+      :options="
+        taxonomyItems.map((taxonomyItem) => {
+          return {
+            label: taxonomyItem.additionalData.displayLabel,
+            value: markRaw(taxonomyItem),
+            disabled: taxonomyItem.properties.abstract === 'true',
+          };
+        }) as Option<TaxonomyItem>[]
+      "
+      class="custom-select"
+      placeholder="Välj…"
+    >
+      <template #option="{ option }">
+        <span>
+          {{
+            "\u00a0".repeat(
+              (option.value.level - minimumTaxonomyItemLevel) * 4,
+            ) + option.value.additionalData.displayLabel
+          }}
+        </span>
+      </template>
+
+      <template #no-options>Inga resultat hittades.</template>
+    </VueSelect>
     <button
-      :disabled="taxonomyItemToAdd === null"
+      :disabled="taxonomyItemToAdd == null"
       class="btn btn-primary"
       @click="
-        taxonomyItemToAdd != null && emit('addBelopprad', taxonomyItemToAdd)
+        () => {
+          if (taxonomyItemToAdd != null) {
+            emit('addBelopprad', taxonomyItemToAdd);
+            taxonomyItemToAdd = null;
+          }
+        }
       "
     >
       Lägg till rad
@@ -51,6 +82,29 @@ const minimumTaxonomyItemLevel = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+.custom-select {
+  /* TODO: Kan hamna för långt upp... */
+  --vs-menu-height: 24rem;
+
+  :deep(.menu) {
+    /* Så att dropdownen öppnas uppåt */
+    bottom: 100%;
+  }
+
+  :deep(.indicators-container > *) {
+    /* Fixa att ikornerna hamnar för långt upp/ner */
+    display: flex;
+  }
+}
+
+.custom-select-menu {
+  background: red;
+}
+
+.custom-select-indicators-container {
+  background: green;
+}
+
 button {
   margin-left: 1rem;
   white-space: nowrap;
