@@ -1,7 +1,12 @@
 <script lang="ts" setup>
+/**
+ * En baskomponent för att rendera vissa rubriker.
+ */
+
 import { type TaxonomyItem } from "@/util/TaxonomyManager.ts";
 
 defineProps<{
+  /** Taxonomiobjektet som ska användas för rubriken. */
   taxonomyItem: TaxonomyItem;
 }>();
 </script>

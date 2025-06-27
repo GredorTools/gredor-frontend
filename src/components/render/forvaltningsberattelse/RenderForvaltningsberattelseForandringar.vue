@@ -1,22 +1,33 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera förändringar i eget kapital i förvaltningsberättelsen.
+ * Visar en tabell med kolumner för olika typer av eget kapital och rader för olika förändringar.
+ */
+
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
-import { FormatUtil } from "@/util/FormatUtil.ts";
+import { formatNumber } from "@/util/formatUtils.ts";
 import {
   type Belopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
-import BaseRenderBeloppradLevel1Header from "@/components/render/belopprad/BaseRenderBeloppradLevel1Header.vue";
+import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
+import { getNonFractionScale, getUnitRef } from "@/util/renderUtils.ts";
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
   arsredovisning: Arsredovisning;
+
+  /** TaxonomyManager för att hantera taxonomiobjekt i förändringar i eget kapital. */
   taxonomyManager: TaxonomyManager;
 }>();
 
 const groupTaxonomyItem = computed(() =>
-  props.taxonomyManager.getItem("se-gen-base:ForandringEgetKapitalAbstract"),
+  props.taxonomyManager.getItemByName(
+    "se-gen-base:ForandringEgetKapitalAbstract",
+  ),
 );
 
 const belopprader = computed(() =>
@@ -49,6 +60,7 @@ function getContextRef(belopprad: Belopprad) {
 </script>
 
 <template>
+  <!-- TODO: Hantera om tabellen blir för bred... -->
   <table xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">
     <thead>
       <tr>
@@ -83,18 +95,18 @@ function getContextRef(belopprad: Belopprad) {
             <ix:nonFraction
               :contextRef="getContextRef(cell.belopprad)"
               :name="cell.taxonomyItem.xmlName"
+              :scale="getNonFractionScale(cell.taxonomyItem)"
               :sign="
                 cell.belopprad.beloppNuvarandeAr.startsWith('-')
                   ? '-'
                   : undefined
               "
+              :unitRef="getUnitRef(cell.taxonomyItem)"
               decimals="INF"
               format="ixt:numspacecomma"
-              scale="0"
-              unitRef="redovisningsvaluta"
             >
               {{
-                FormatUtil.formatNumber(cell.belopprad.beloppNuvarandeAr, {
+                formatNumber(cell.belopprad.beloppNuvarandeAr, {
                   removeSign: true,
                 })
               }}

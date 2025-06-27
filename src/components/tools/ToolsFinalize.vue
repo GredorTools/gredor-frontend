@@ -1,9 +1,15 @@
 <script lang="ts" setup>
+/**
+ * En komponent med verktyg för att slutföra och exportera årsredovisningen.
+ * Tillåter användaren att exportera årsredovisningen som en iXBRL-fil.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { FileUtil } from "@/util/FileUtil.ts";
-import { DocumentUtil } from "@/util/DocumentUtil.ts";
+import { requestSaveFile } from "@/util/fileUtils.ts";
+import { convertVueHTMLToiXBRL } from "@/util/documentUtils.ts";
 
 const props = defineProps<{
+  /** Årsredovisningen som ska exporteras. */
   arsredovisning: Arsredovisning;
 }>();
 
@@ -14,19 +20,26 @@ async function exportArsredovisning() {
 
   if (arsredovisningForExport) {
     const { foretagsinformation } = props.arsredovisning;
-    const xhtml = await DocumentUtil.convertVueHTMLToiXBRL(
+    const xhtml = await convertVueHTMLToiXBRL(
       arsredovisningForExport,
       `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
     );
-    FileUtil.exportFile(xhtml, "arsredovisning.xhtml", "text/html");
+    requestSaveFile(xhtml, "arsredovisning.xhtml", "text/html");
   }
 }
 </script>
 
 <template>
-  <button class="btn btn-primary" @click="exportArsredovisning()">
-    Exportera iXBRL-fil
-  </button>
+  <div class="finalize-tools d-flex justify-content-end">
+    <button class="btn btn-primary" @click="exportArsredovisning()">
+      Exportera iXBRL-fil
+    </button>
+  </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.finalize-tools {
+  /* Matcha pappret ovan */
+  width: 210mm;
+}
+</style>

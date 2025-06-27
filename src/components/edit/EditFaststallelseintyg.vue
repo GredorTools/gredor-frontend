@@ -1,17 +1,23 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera fastställelseintyget i årsredovisningen.
+ * Hanterar information om beslut om resultatdisposition och underskrift av fastställelseintyget.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
   FASTSTALLELSEINTYG_UNDERSKRIFT_ROLLER,
   RESULTATDISPOSITION_BESLUT,
 } from "@/data/faststallelseintyg.ts";
 
+/** Årsredovisningen som innehåller fastställelseintyget. */
 defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 </script>
 
 <template>
-  <h3>Grunduppgifter</h3>
+  <h2>Fastställelseintyg</h2>
   <div class="form-section">
     <div class="form-group">
       <label for="resultatdispositionBeslut">Beslut resultatdisposition:</label>

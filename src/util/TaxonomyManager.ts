@@ -1,30 +1,33 @@
-// Typer för konceptegenskaper
 import { markRaw } from "vue";
 import {
   type CalculationProcessor,
   createNewCalculationProcessor,
 } from "@/util/CalculationProcessor.ts";
 
-// Typ för TaxonomyItemType
+// Typ som representerar olika slags taxonomiobjekt
 export type TaxonomyItemType =
-  | "string"
   | "enum:enumerationItemType"
-  | "num:areaItemType"
   | "nonnum:domainItemType"
-  | "nonnum:textBlockItemType"
-  | "xbrli:booleanItemType"
-  | "xbrli:dateItemType"
   | "xbrli:decimalItemType"
-  | "xbrli:gYearMonthItemType"
   | "xbrli:monetaryItemType"
   | "xbrli:pureItemType"
   | "xbrli:sharesItemType"
   | "xbrli:stringItemType"
-  | "xsd:anyType"
   | `${string}@anonymousType`
-  | "gredor:section";
+  | "gredor:section"; // Specialare för Gredor - används bara internt
 
-// Typ för TaxonomyRootName
+// Följande finns med i concepts.json, men inte i presentationen för K2-årsredovisningar
+export type ExtendedTaxonomyItemType =
+  | TaxonomyItemType
+  | "string"
+  | "num:areaItemType"
+  | "nonnum:textBlockItemType"
+  | "xbrli:booleanItemType"
+  | "xbrli:dateItemType"
+  | "xbrli:gYearMonthItemType"
+  | "xsd:anyType";
+
+// Typ som representerar taxonomins olika rötter
 export enum TaxonomyRootName {
   ALLMAN_INFORMATION = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation",
   BALANSRAKNING = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/balansrakning",
@@ -35,6 +38,7 @@ export enum TaxonomyRootName {
   UNDERTECKNANDE_FORETRADARE_REVISIONSPATECKNING = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/undertecknande/foretradarerevisionspateckning",
 }
 
+// Typ som representerar olika slags etiketter
 export type LabelType =
   | "periodEndLabel"
   | "periodStartLabel"
@@ -82,9 +86,9 @@ export interface TaxonomyItem<T extends TaxonomyItemType = TaxonomyItemType> {
   properties: ConceptProperties<T>;
   metadata?: PresentationLinkRoleMetadata;
   additionalData: {
-    isTotalItem?: boolean;
+    isCalculatedItem?: boolean;
     displayLabel?: string;
-    labelType?: string;
+    labelType?: LabelType;
   };
   rowNumber: number;
   level: number;
@@ -153,23 +157,40 @@ export class TaxonomyManager {
     this.hierarchy = this.buildHierarchy(presentationJson.presentation);
   }
 
-  getItem(name: string, labelType: string = ""): TaxonomyItem {
-    const key = this.generateKey(name, labelType);
+  public getItemByName(name: string): TaxonomyItem {
+    const key = this.generateKey(name);
+    const result = this.items.get(key);
+    if (result === undefined) {
+      throw new Error(`Item not found: "${name}"`);
+    }
+    return markRaw(result);
+  }
+
+  public getItemByCompleteInfo(
+    name: string,
+    labelType?: LabelType,
+    parentName?: string,
+  ): TaxonomyItem {
+    const key = this.generateKey(name, labelType, parentName);
     const result = this.items.get(key);
     if (result === undefined) {
       throw new Error(
-        `Item not found: "${name}" with labelType: "${labelType}"`,
+        `Item not found: "${name}" with labelType: "${labelType}" and parentName: "${parentName}"`,
       );
     }
     return markRaw(result);
   }
 
-  getRoot(): TaxonomyItem {
+  public getRoot(): TaxonomyItem {
     return markRaw(this.hierarchy);
   }
 
-  private generateKey(xmlName: string, labelType: string = ""): string {
-    return `${xmlName}|${labelType}`;
+  private generateKey(
+    xmlName: string,
+    labelType?: LabelType,
+    parentXmlName?: string,
+  ): string {
+    return `${xmlName}|${labelType || ""}|${parentXmlName || ""}`;
   }
 
   private buildHierarchy(
@@ -188,49 +209,35 @@ export class TaxonomyManager {
         throw new Error(`Unexpected node type: ${type}`);
       }
 
-      const labelType = details["pref.Label"] || "";
-      let item: TaxonomyItem;
-      try {
-        item = this.getItem(metadata.name, labelType);
-      } catch {
-        // Posten finns inte redan sparad, eller i alla fall inte med samma pref.Label
-        const originalItem = this.getItem(metadata.name); // Variant av posten utan pref.Label
-        originalItem.additionalData.displayLabel =
-          metadata.label || originalItem.properties.label;
-        
-        item = {
-          xmlName: originalItem.xmlName,
-          properties: originalItem.properties,
-          additionalData: {},
-          children: originalItem.children,
-          childrenFlat: originalItem.childrenFlat,
-          rowNumber: -1,
-          level: -1,
-        };
-        const key = this.generateKey(metadata.name, labelType);
-        this.items.set(key, item);
+      const labelType = details["pref.Label"];
+
+      const key = this.generateKey(metadata.name, labelType, parent.xmlName);
+      if (this.items.get(key)) {
+        throw new Error(`Item already exists in ${this.rootName}: ${key}`);
       }
 
-      // Sätt parent
-      if (item.parent != null) {
-        // TODO: Kasta fel efter fixat
-        if (item.parent === parent) {
-          console.log(
-            `Item already has a parent: ${this.rootName} -- ${item.xmlName}`,
-          );
-        } else {
-          console.warn(
-            `Item already has a parent: ${this.rootName} -- ${item.xmlName} -- ${item.parent.xmlName} -> ${parent.xmlName}`,
-          );
-        }
-      }
-      item.parent = parent;
-      item.rowNumber = numRowsProcessed++;
-      item.level = level;
+      // Posten finns inte redan sparad - vilket är det vi förväntar oss.
+      // Hämta en "original"-variant av posten med endast grundläggande
+      // information, och skapa en ny variant som har allt
+      const originalItem = this.getItemByName(metadata.name);
+      originalItem.additionalData.displayLabel =
+        metadata.label || originalItem.properties.label;
+
+      const item: TaxonomyItem = {
+        xmlName: originalItem.xmlName,
+        properties: originalItem.properties,
+        additionalData: {},
+        children: originalItem.children,
+        childrenFlat: originalItem.childrenFlat,
+        rowNumber: numRowsProcessed++,
+        level,
+        parent,
+      };
+      this.items.set(key, item);
 
       // Sätt extra data
       if (!this.calculationProcessor.isLeafConcept(item.xmlName)) {
-        item.additionalData.isTotalItem = true;
+        item.additionalData.isCalculatedItem = true;
       }
       item.additionalData.displayLabel =
         metadata.label || item.properties.label;

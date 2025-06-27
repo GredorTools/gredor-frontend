@@ -1,18 +1,29 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera flerårsöversikten i förvaltningsberättelsen.
+ * Visar en tabell med nyckeltal för nuvarande och tidigare räkenskapsår.
+ */
+
 import {
+  createBelopprad,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
-import EditBelopprad from "@/components/edit/EditBelopprad.vue";
+import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { FormatUtil } from "../../../util/FormatUtil.ts";
+import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
   taxonomyManager: TaxonomyManager;
+
+  /** Taxonomiobjekt som representerar gruppen av nyckeltal som ska visas. */
   groupTaxonomyItem: TaxonomyItem;
 }>();
 
+/** Årsredovisningen som innehåller förvaltningsberättelsen med flerårsöversikt. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
@@ -23,11 +34,14 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
     <thead>
       <tr>
         <th scope="col">
-          {{ groupTaxonomyItem.additionalData.displayLabel }}
+          <BaseEditBeloppradTitle
+            :belopprad="createBelopprad(groupTaxonomyItem)"
+            :taxonomy-manager="taxonomyManager"
+          />
         </th>
         <th class="value-container" scope="col">
           {{
-            FormatUtil.formatDateForFlerarsoversikt(
+            formatDateForFlerarsoversikt(
               arsredovisning.verksamhetsarNuvarande.slutdatum,
             )
           }}
@@ -40,7 +54,7 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
           scope="col"
         >
           {{
-            FormatUtil.formatDateForFlerarsoversikt(
+            formatDateForFlerarsoversikt(
               arsredovisning.verksamhetsarTidigare[previousYearIndex - 1]
                 .slutdatum,
             )
@@ -65,7 +79,8 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
         :comparable-num-previous-years="
           Math.min(arsredovisning.verksamhetsarTidigare.length, 3)
         "
-        :delete-callback="
+        :taxonomy-manager="taxonomyManager"
+        @delete="
           () =>
             deleteBelopprad(
               taxonomyManager,
@@ -73,7 +88,6 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
               arsredovisning.forvaltningsberattelse,
             )
         "
-        :taxonomy-manager="taxonomyManager"
       />
     </tbody>
   </table>

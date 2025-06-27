@@ -1,8 +1,14 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera försättsbladet i årsredovisningen.
+ * Visar företagsinformation, räkenskapsår och fastställelseintyg.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller information för försättsbladet. */
   arsredovisning: Arsredovisning;
 }>();
 
@@ -69,9 +75,9 @@ const rakenskapsarText = computed(() => {
           <ix:nonNumeric
             contextRef="balans_nuvarande"
             name="se-bol-base:Arsstamma"
-            >{{ new Date().toISOString().split("T")[0] }}
-          </ix:nonNumeric>
-          .<br />
+            >{{ new Date().toISOString().split("T")[0] }} </ix:nonNumeric
+          ><!-- @delete-whitespace -->.
+          <br />
           <ix:nonNumeric
             :name="
               arsredovisning.faststallelseintyg.resultatdispositionBeslut.xbrlId
@@ -106,12 +112,8 @@ const rakenskapsarText = computed(() => {
           <ix:nonNumeric
             contextRef="balans_nuvarande"
             name="se-bol-base:UnderskriftFaststallelseintygElektroniskt"
-          >
-            <!-- @delete-whitespace -->
-            Elektroniskt underskriven av
-            <!-- @delete-whitespace -->
-          </ix:nonNumeric>
-          :
+            >Elektroniskt underskriven av</ix:nonNumeric
+          >:
         </span>
         <br />
         <ix:nonNumeric
@@ -125,9 +127,10 @@ const rakenskapsarText = computed(() => {
           contextRef="period_nuvarande"
           name="se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn"
         >
-          {{ arsredovisning.faststallelseintyg.underskrift.efternamn }}
-        </ix:nonNumeric>
-        ,
+          {{
+            arsredovisning.faststallelseintyg.underskrift.efternamn
+          }} </ix:nonNumeric
+        ><!-- @delete-whitespace -->,
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll"

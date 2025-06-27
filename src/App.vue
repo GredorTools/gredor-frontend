@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/**
+ * Huvudkomponenten som sammanför alla delar av applikationen.
+ */
+
 import { ref } from "vue";
 import { exampleArsredovisning } from "@/example/ExampleArsredovisning.ts";
 import RenderMain from "@/components/render/RenderMain.vue";
@@ -6,11 +10,17 @@ import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinalize from "@/components/tools/ToolsFinalize.vue";
 
 const arsredovisning = ref(exampleArsredovisning);
+
+let environmentName = "";
+if (import.meta.env.VITE_ENV_NAME)
+  environmentName = ` ${import.meta.env.VITE_ENV_NAME}`;
 </script>
 
 <template>
   <header>
-    <h1>Gredor</h1>
+    <h1>
+      Gredor<span class="environment">{{ environmentName }}</span>
+    </h1>
   </header>
 
   <div class="editor">
@@ -34,6 +44,11 @@ header {
 
   h1 {
     margin-bottom: 0;
+
+    .environment {
+      color: #566f41;
+      font-style: italic;
+    }
   }
 }
 
@@ -44,5 +59,8 @@ header {
   border-radius: 0.5rem;
   background-color: #fdfff8;
   padding: 1rem;
+  justify-self: end;
+
+  width: 100%;
 }
 </style>

@@ -4,6 +4,8 @@ import {
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import {
+  type Belopprad,
+  getTaxonomyItemForBelopprad,
   isBeloppradCorrespondsToTaxonomyItem,
   isTaxonomyItemInBeloppradList
 } from "@/model/arsredovisning/Belopprad.ts";
@@ -34,7 +36,7 @@ type TableCell = {
 export function getForandringarAsTable(
   taxonomyManager: TaxonomyManager,
   groupTaxonomyItem: TaxonomyItem,
-  belopprader: BeloppradMonetary[],
+  belopprader: Belopprad[],
 ) {
   // Extraherar rader från taxonomiträdet och skapar en platt struktur för enklare hantering
   const rows = groupTaxonomyItem.children
@@ -77,9 +79,9 @@ export function getForandringarAsTable(
       continue;
     }
 
-    const beloppradTaxonomyItem = taxonomyManager.getItem(
-      belopprad.taxonomyItemName,
-      belopprad.labelType,
+    const beloppradTaxonomyItem = getTaxonomyItemForBelopprad(
+      taxonomyManager,
+      belopprad,
     );
 
     const rowIndex = rowNames.findIndex(

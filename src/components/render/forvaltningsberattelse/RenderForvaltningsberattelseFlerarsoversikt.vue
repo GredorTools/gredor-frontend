@@ -1,14 +1,24 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera flerårsöversikten i förvaltningsberättelsen.
+ * Visar en tabell med nyckeltal för nuvarande och tidigare räkenskapsår.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { FormatUtil } from "@/util/FormatUtil.ts";
+import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
-import BaseRenderBeloppradLevel1Header from "@/components/render/belopprad/BaseRenderBeloppradLevel1Header.vue";
+import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
 defineProps<{
+  /** Årsredovisningen som innehåller förvaltningsberättelsen med flerårsöversikt. */
   arsredovisning: Arsredovisning;
+
+  /** Taxonomiobjekt som representerar gruppen av nyckeltal som ska visas. */
   groupTaxonomyItem: TaxonomyItem;
+
+  /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
   taxonomyManager: TaxonomyManager;
 }>();
 </script>
@@ -25,7 +35,7 @@ defineProps<{
           </th>
           <th class="value-container" scope="col">
             {{
-              FormatUtil.formatDateForFlerarsoversikt(
+              formatDateForFlerarsoversikt(
                 arsredovisning.verksamhetsarNuvarande.slutdatum,
               )
             }}
@@ -38,7 +48,7 @@ defineProps<{
             scope="col"
           >
             {{
-              FormatUtil.formatDateForFlerarsoversikt(
+              formatDateForFlerarsoversikt(
                 arsredovisning.verksamhetsarTidigare[previousYearIndex - 1]
                   .slutdatum,
               )
@@ -68,33 +78,4 @@ defineProps<{
   </div>
 </template>
 
-<style lang="scss" scoped>
-table {
-  width: 100%;
-
-  th,
-  &:deep(td) {
-    border-style: hidden;
-    text-align: left;
-    padding: 0.25rem 0;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      padding-left: 1rem;
-      white-space: nowrap;
-    }
-
-    &.not-container {
-      min-width: 40px;
-    }
-
-    &.value-container {
-      text-align: right;
-      min-width: 100px;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

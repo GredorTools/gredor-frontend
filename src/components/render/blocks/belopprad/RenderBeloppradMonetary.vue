@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import BaseRenderBeloppradComparable from "@/components/render/belopprad/BaseRenderBeloppradComparable.vue";
+/**
+ * En komponent för att redigera belopprader som har monetära värden som datatyp.
+ * Visar balanstecken vid behov.
+ */
 
-defineProps<{
-  taxonomyManager: TaxonomyManager;
-  belopprad: BeloppradMonetary;
-  contextRefPrefix: "period" | "balans";
-  allowNot: boolean;
-  showBalanceSign: boolean;
-  displayAsTotalItem: boolean;
-}>();
+import type { BeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import BaseRenderBeloppradComparable, {
+  type RenderBeloppradComparablePropsBase,
+} from "@/components/render/blocks/belopprad/BaseRenderBeloppradComparable.vue";
+
+defineProps<
+  RenderBeloppradComparablePropsBase<BeloppradMonetary> & {
+    /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
+    showBalanceSign: boolean;
+  }
+>();
 </script>
 
 <template>

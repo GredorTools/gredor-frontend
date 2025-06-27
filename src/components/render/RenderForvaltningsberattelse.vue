@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera förvaltningsberättelsen i årsredovisningen.
+ * Visar olika delar av förvaltningsberättelsen som flerårsöversikt, förändringar i eget kapital och resultatdisposition.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import {
   getTaxonomyManager,
   TaxonomyRootName,
@@ -16,6 +21,7 @@ const taxonomyManager = await getTaxonomyManager(
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
 const props = defineProps<{
+  /** Årsredovisningen som innehåller förvaltningsberättelsen. */
   arsredovisning: Arsredovisning;
 }>();
 
@@ -58,7 +64,7 @@ const mappedGroups = computed(() => {
       <table v-else-if="items.length > 0">
         <tbody>
           <RenderBelopprad
-            v-for="[index, belopprad] in items"
+            v-for="[, belopprad] in items"
             :key="belopprad.taxonomyItemName"
             :belopprad="belopprad"
             :comparable-num-previous-years="0"
@@ -79,33 +85,6 @@ const mappedGroups = computed(() => {
 }
 
 table {
-  width: 100%;
-
-  &:deep(th),
-  &:deep(td) {
-    border-style: hidden;
-    text-align: left;
-    padding: 0.25rem 0;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      padding-left: 1rem;
-      white-space: nowrap;
-    }
-
-    &.not-container {
-      min-width: 40px;
-    }
-
-    &.value-container {
-      text-align: right;
-      min-width: 100px;
-    }
-  }
-
   &:deep(.level-1 + .abstract.level-2) {
     td {
       padding-top: 0; /* Fixar resultatdisposition */

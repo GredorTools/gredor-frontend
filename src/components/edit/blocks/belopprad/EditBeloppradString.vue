@@ -1,9 +1,14 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att redigera belopprader som har strängar som datatyp.
+ */
+
 import { computed, useAttrs } from "vue";
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
-import BaseEditBeloppradTitle from "@/components/edit/belopprad/BaseEditBeloppradTitle.vue";
-import BaseEditBeloppradDeleteButton from "@/components/edit/belopprad/BaseEditBeloppradDeleteButton.vue";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
+import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 defineOptions({
   inheritAttrs: false,
@@ -12,20 +17,28 @@ defineOptions({
 const attrs = useAttrs();
 
 const props = defineProps<{
+  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Huruvida radbrytningar ska vara tillåtna. */
   multiline: boolean;
-  deleteCallback: () => void;
+
+  /** Hur många tidigare räkenskapsår som visas i andra belopprader i samma tabell. */
+  comparableNumPreviousYears: number;
 }>();
 
+const emit = defineEmits<{
+  /** Triggas när användaren tar bort beloppraden. */
+  (e: "delete"): void;
+}>();
+
+/** Beloppraden med strängvärdet som ska redigeras. */
 const belopprad = defineModel<BeloppradString>("belopprad", {
   required: true,
 });
 
 const taxonomyItem = computed(() => {
-  return props.taxonomyManager.getItem(
-    belopprad.value.taxonomyItemName,
-    belopprad.value.labelType,
-  );
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
 const isAbstract = computed(
@@ -43,14 +56,14 @@ const trClasses = computed(() => [
 <template>
   <template v-if="multiline && !isAbstract">
     <tr :class="trClasses">
-      <td colspan="5">
+      <td :colspan="comparableNumPreviousYears + 2">
         <BaseEditBeloppradTitle
           :belopprad="belopprad"
           :taxonomy-manager="taxonomyManager"
         />
       </td>
       <td>
-        <button class="btn btn-danger" @click="deleteCallback">X</button>
+        <button class="btn btn-danger" @click="emit('delete')">X</button>
       </td>
     </tr>
     <tr :class="trClasses">
@@ -59,7 +72,7 @@ const trClasses = computed(() => [
         :class="{
           'gredor-tooltip': !!taxonomyItem.properties.documentation,
         }"
-        colspan="6"
+        :colspan="comparableNumPreviousYears + 3"
       >
         <textarea v-if="multiline" v-model="belopprad.text"></textarea>
       </td>
@@ -73,13 +86,13 @@ const trClasses = computed(() => [
         :taxonomy-manager="taxonomyManager"
       />
     </td>
-    <td v-if="!isAbstract" colspan="4">
+    <td v-if="!isAbstract" :colspan="comparableNumPreviousYears + 1">
       <input v-model="belopprad.text" type="text" />
     </td>
     <td>
       <BaseEditBeloppradDeleteButton
         v-if="!isAbstract"
-        :delete-callback="deleteCallback"
+        @delete="emit('delete')"
       />
     </td>
   </tr>

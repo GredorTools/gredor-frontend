@@ -1,22 +1,23 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera resultaträkningen i årsredovisningen.
+ * Visar intäkter och kostnader i tabellformat med jämförelsetal för föregående år.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import RenderBelopprad from "@/components/render/RenderBelopprad.vue";
+import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import {
   getTaxonomyManager,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
+import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
 );
 
-const superdelsummarader = [
-  "se-gen-base:Rorelseresultat",
-  "se-gen-base:ResultatEfterFinansiellaPoster",
-  "se-gen-base:ResultatForeSkatt",
-];
-
 defineProps<{
+  /** Årsredovisningen som innehåller resultaträkningen. */
   arsredovisning: Arsredovisning;
 }>();
 </script>
@@ -43,12 +44,15 @@ defineProps<{
     </thead>
     <tbody>
       <RenderBelopprad
-        v-for="belopprad in arsredovisning.resultatrakning"
+        v-for="belopprad in arsredovisning.resultatrakning.filter((b) => {
+          const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, b);
+          return (
+            taxonomyItem.level > 1 ||
+            taxonomyItem.properties.abstract !== 'true'
+          );
+        })"
         :key="belopprad.taxonomyItemName"
         :belopprad="belopprad"
-        :comparable-display-as-total-item="
-          superdelsummarader.includes(belopprad.taxonomyItemName)
-        "
         :comparable-num-previous-years="
           Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
         "
@@ -63,32 +67,6 @@ defineProps<{
 
 <style lang="scss" scoped>
 table {
-  width: 100%;
-
-  th,
-  &:deep(td) {
-    border-style: hidden;
-    text-align: left;
-    vertical-align: bottom;
-    padding: 0.25rem 0;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      padding-left: 1rem;
-      white-space: nowrap;
-    }
-
-    &.not-container {
-      min-width: 40px;
-    }
-
-    &.value-container {
-      text-align: right;
-      min-width: 100px;
-    }
-  }
+  margin-bottom: 1rem;
 }
 </style>

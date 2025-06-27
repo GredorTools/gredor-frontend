@@ -1,8 +1,13 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+/**
+ * En komponent för att redigera förvaltningsberättelsen i årsredovisningen.
+ * Visar olika delar av förvaltningsberättelsen som flerårsöversikt, förändringar i eget kapital och resultatdisposition.
+ */
+
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import EditBelopprad from "@/components/edit/EditBelopprad.vue";
+import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
+  createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
@@ -14,6 +19,8 @@ import {
 } from "@/util/TaxonomyManager.ts";
 import EditForvaltningsberattelseFlerarsoversikt from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseFlerarsoversikt.vue";
 import EditForvaltningsberattelseForandringar from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseForandringar.vue";
+import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -21,11 +28,15 @@ const taxonomyManager = await getTaxonomyManager(
 );
 const availableTaxonomyItems = taxonomyManager.getRoot();
 
+const overgangK2AbstractItem = taxonomyManager.getItemByName(
+  "se-gen-base:ForandringIngaendeEgetKapitalOvergangK2Abstract",
+);
+
 // Data
+/** Årsredovisningen som innehåller förvaltningsberättelsen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
-const beloppItemToAdd = ref<TaxonomyItem | null>(null);
 
 // Hjälpfunktioner
 function addBelopprad(taxonomyItem: TaxonomyItem) {
@@ -56,12 +67,22 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     <EditForvaltningsberattelseForandringar
       v-else-if="group.xmlName === 'se-gen-base:ForandringEgetKapital'"
       :arsredovisning="arsredovisning"
+      :group-taxonomy-item="
+        availableTaxonomyItems.childrenFlat.find(
+          (item) => item.xmlName === 'se-gen-base:ForandringEgetKapital',
+        )!
+      "
       :taxonomy-manager="taxonomyManager"
     />
     <table v-else>
       <thead>
         <tr>
-          <th scope="col">{{ group.additionalData.displayLabel }}</th>
+          <th scope="col">
+            <BaseEditBeloppradTitle
+              :belopprad="createBelopprad(group)"
+              :taxonomy-manager="taxonomyManager"
+            />
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -75,7 +96,9 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           v-model:belopprad="arsredovisning.forvaltningsberattelse[index]"
           v-model:belopprader="arsredovisning.forvaltningsberattelse"
           :comparable-num-previous-years="0"
-          :delete-callback="
+          :taxonomy-manager="taxonomyManager"
+          string-multiline
+          @delete="
             () =>
               deleteBelopprad(
                 taxonomyManager,
@@ -83,69 +106,26 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
                 arsredovisning.forvaltningsberattelse,
               )
           "
-          :taxonomy-manager="taxonomyManager"
-          string-multiline
         />
       </tbody>
     </table>
 
-    <select v-model="beloppItemToAdd" class="form-select">
-      <option
-        v-for="taxonomyItem in [group, ...group.childrenFlat]"
-        :key="taxonomyItem.xmlName"
-        :disabled="taxonomyItem.properties.abstract === 'true'"
-        :value="taxonomyItem"
-      >
-        {{
-          "\u00a0".repeat((taxonomyItem.level - 1) * 4) +
-          taxonomyItem.additionalData.displayLabel
-        }}
-      </option>
-    </select>
-    <button
-      :disabled="beloppItemToAdd === null"
-      @click="beloppItemToAdd != null && addBelopprad(beloppItemToAdd)"
-    >
-      Lägg till rad
-    </button>
+    <!--
+    Vi vill inte ha med "Specifikation av förändringar i ingående eget kapital vid övergång till K2",
+    det är extremt osannolikt att någon kommer ha nytta av den numera så det skräpar bara ner.
+    -->
+    <EditItemSelector
+      :taxonomy-items="[
+        group,
+        ...group.childrenFlat.filter(
+          (child) =>
+            child.xmlName !== overgangK2AbstractItem.xmlName &&
+            !overgangK2AbstractItem.childrenFlat.includes(child),
+        ),
+      ]"
+      @add-belopprad="addBelopprad"
+    />
   </template>
 </template>
 
-<style lang="scss" scoped>
-table {
-  width: 100%;
-  margin-bottom: 1rem;
-
-  &:deep(th),
-  &:deep(td) {
-    border-style: hidden;
-    text-align: left;
-    padding: 0.25rem 0.5rem;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      white-space: nowrap;
-    }
-
-    &.not-container {
-      min-width: 40px;
-    }
-
-    &.value-container {
-      text-align: right;
-      min-width: 100px;
-
-      input {
-        text-align: right;
-      }
-    }
-
-    input {
-      width: 100%;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

@@ -1,7 +1,13 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera underskrifter i årsredovisningen.
+ * Visar ort, datum och underskrifter från personer som undertecknar årsredovisningen.
+ */
+
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 
 defineProps<{
+  /** Årsredovisningen som innehåller underskriftsinformation. */
   arsredovisning: Arsredovisning;
 }>();
 </script>
