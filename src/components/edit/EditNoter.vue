@@ -40,7 +40,6 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 </script>
 
 <template>
-  <h3>Noter</h3>
   <template
     v-for="(group, groupIndex) in [
       availableTaxonomyItems.children[0].children[0],

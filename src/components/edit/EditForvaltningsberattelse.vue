@@ -49,7 +49,6 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 </script>
 
 <template>
-  <h3>Förvaltningsberättelse</h3>
   <template
     v-for="(group, groupIndex) in availableTaxonomyItems.children[0].children"
     :key="groupIndex"

@@ -41,7 +41,6 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 </script>
 
 <template>
-  <h3>Resultaträkning</h3>
   <table>
     <thead>
       <tr>

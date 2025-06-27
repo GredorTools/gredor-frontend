@@ -43,7 +43,6 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 </script>
 
 <template>
-  <h3>Balansräkning</h3>
   <template
     v-for="(group, groupIndex) in [
       [
