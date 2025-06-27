@@ -11,6 +11,7 @@ import {
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hämta information om beloppraden. */
@@ -37,21 +38,32 @@ onMounted(() => {
 
 <template>
   <span
-    ref="title-span"
     :class="{
-      'gredor-tooltip-target': !!taxonomyItem.properties.documentation,
       abstract: taxonomyItem.properties.abstract === 'true',
+      'string-item': taxonomyItem.properties.type === 'xbrli:stringItemType',
+      summa:
+        taxonomyItem.additionalData.labelType === 'totalLabel' ||
+        taxonomyItem.additionalData.isCalculatedItem,
       [`level-${taxonomyItem.level}`]: true,
     }"
-    :data-bs-title="taxonomyItem.properties.documentation"
-    data-bs-placement="bottom"
-    data-bs-toggle="tooltip"
-    >{{ taxonomyItem.additionalData.displayLabel }}</span
-  >
+    >{{ taxonomyItem.additionalData.displayLabel }}
+    <span v-if="isPercentageTaxonomyItem(taxonomyItem)">[%]</span>
+    <span
+      v-if="!!taxonomyItem.properties.documentation"
+      ref="title-span"
+      :data-bs-title="taxonomyItem.properties.documentation"
+      class="info-icon"
+      data-bs-placement="bottom"
+      data-bs-toggle="tooltip"
+    >
+      ℹ️
+    </span>
+  </span>
 </template>
 
 <style lang="scss" scoped>
-.abstract.level-1 {
+.abstract.level-1,
+.string-item.level-1 {
   font-weight: 600;
   font-size: 1.2rem;
 }
@@ -70,7 +82,24 @@ onMounted(() => {
   text-decoration: underline;
 }
 
-.gredor-tooltip-target {
-  border-bottom: 1px dotted black;
+.summa.level-1 {
+  font-weight: 600;
+  font-style: italic;
+}
+
+.summa.level-2 {
+  font-weight: 600;
+}
+
+.summa.level-3 {
+  font-weight: 500;
+}
+
+.info-icon {
+  font-style: normal;
+
+  &:hover {
+    cursor: help;
+  }
 }
 </style>

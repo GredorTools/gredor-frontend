@@ -12,7 +12,7 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 
-const props = defineProps<{
+export interface EditBeloppradComparablePropsBase {
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
 
@@ -21,18 +21,24 @@ const props = defineProps<{
 
   /** Huruvida notfält ska visas för beloppraden. */
   allowNot?: boolean;
+}
 
-  /** Huruvida beloppraden är en summarad som inte kan redigeras direkt. */
-  isSummarad?: boolean;
-
-  /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
-  showBalanceSign?: boolean;
-}>();
-
-const emit = defineEmits<{
+export interface EditBeloppradComparableEmitsBase {
   /** Triggas när användaren tar bort beloppraden. */
   (e: "delete"): void;
-}>();
+}
+
+const props = defineProps<
+  EditBeloppradComparablePropsBase & {
+    /** Huruvida beloppraden är en summarad som inte kan redigeras direkt. */
+    isSummarad?: boolean;
+
+    /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
+    showBalanceSign?: boolean;
+  }
+>();
+
+const emit = defineEmits<EditBeloppradComparableEmitsBase>();
 
 /** Beloppraden som ska redigeras. */
 const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {

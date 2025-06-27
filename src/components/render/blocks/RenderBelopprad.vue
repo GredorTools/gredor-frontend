@@ -13,10 +13,10 @@ import {
   type Belopprad,
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
-import RenderBeloppradDecimal from "@/components/render/blocks/belopprad/RenderBeloppradDecimal.vue";
-import { isBeloppradDecimal } from "@/model/arsredovisning/beloppradtyper/BeloppradDecimal.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import RenderBeloppradNonmonetaryComparable from "@/components/render/blocks/belopprad/RenderBeloppradNonmonetaryComparable.vue";
+import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -65,7 +65,7 @@ const contextRefPrefix = computed(() => {
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradMonetary
-    v-if="isBeloppradMonetary(belopprad)"
+    v-else-if="isBeloppradMonetary(belopprad)"
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
@@ -74,8 +74,8 @@ const contextRefPrefix = computed(() => {
     :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
-  <RenderBeloppradDecimal
-    v-if="isBeloppradDecimal(belopprad)"
+  <RenderBeloppradNonmonetaryComparable
+    v-else-if="isBeloppradComparable(belopprad)"
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"

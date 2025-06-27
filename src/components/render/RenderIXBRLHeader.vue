@@ -5,11 +5,45 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import {
+  getUnitRef,
+  UNIT_REF_PURE,
+  UNIT_REF_REDOVISNINGSVALUTA,
+  UNIT_REF_SHARES,
+} from "@/util/renderUtils.ts";
+import {
+  getTaxonomyManager,
+  TaxonomyRootName,
+} from "@/util/TaxonomyManager.ts";
 
 defineProps<{
   /** Årsredovisningen som innehåller information för iXBRL-huvudet. */
   arsredovisning: Arsredovisning;
 }>();
+
+const allDecimalTaxonomyItems = [
+  await getTaxonomyManager(TaxonomyRootName.FORVALTNINGSBERATTELSE),
+  await getTaxonomyManager(
+    TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
+  ),
+  await getTaxonomyManager(TaxonomyRootName.BALANSRAKNING),
+  await getTaxonomyManager(TaxonomyRootName.NOTER),
+]
+  .flatMap((taxonomyManager) =>
+    taxonomyManager
+      .getRoot()
+      .childrenFlat.filter(
+        (taxonomyItem) =>
+          taxonomyItem.properties.type === "xbrli:decimalItemType",
+      ),
+  )
+  // Ta bort dubbletter
+  .filter(
+    (taxonomyItem1, i, taxonomyItems) =>
+      taxonomyItems.findIndex(
+        (taxonomyItem2) => taxonomyItem2.xmlName === taxonomyItem1.xmlName,
+      ) === i,
+  );
 </script>
 
 <template>
@@ -130,19 +164,29 @@ defineProps<{
             </xbrli:period>
           </xbrli:context>
         </template>
-        <xbrli:unit id="redovisningsvaluta">
+        <xbrli:unit :id="UNIT_REF_REDOVISNINGSVALUTA">
           <xbrli:measure
             >iso4217:{{
               arsredovisning.redovisningsinformation.redovisningsvaluta.kod
             }}
           </xbrli:measure>
         </xbrli:unit>
-        <xbrli:unit id="procent">
+        <xbrli:unit :id="UNIT_REF_PURE">
           <xbrli:measure>xbrli:pure</xbrli:measure>
         </xbrli:unit>
-        <xbrli:unit id="antal-anstallda">
-          <xbrli:measure>se-k2-type:AntalAnstallda</xbrli:measure>
+        <xbrli:unit :id="UNIT_REF_SHARES">
+          <xbrli:measure>xbrli:shares</xbrli:measure>
         </xbrli:unit>
+        <template
+          v-for="taxonomyItem in allDecimalTaxonomyItems"
+          :key="taxonomyItem.xmlName"
+        >
+          <xbrli:unit :id="getUnitRef(taxonomyItem)">
+            <xbrli:measure
+              >se-k2-type:{{ taxonomyItem.properties.name }}
+            </xbrli:measure>
+          </xbrli:unit>
+        </template>
       </ix:resources>
     </ix:header>
   </div>

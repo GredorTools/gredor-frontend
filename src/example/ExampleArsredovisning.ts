@@ -62,13 +62,13 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName: "se-gen-base:VerksamhetenAbstract",
       type: "xbrli:stringItemType",
       text: "Verksamheten har varit att grilla körv.\n\nBolaget har sitt säte i Halmstads kommun.",
-    } as Belopprad<"xbrli:monetaryItemType">,
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItemName: "se-gen-base:VasentligaHandelserRakenskapsaret",
       parentTaxonomyItemName: "se-gen-base:VerksamhetenAbstract",
       type: "xbrli:stringItemType",
       text: "Mängden körv som grillas har ökat från 1st/månad till 2st/månad.",
-    } as Belopprad<"xbrli:monetaryItemType">,
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItemName: "se-gen-base:Flerarsoversikt",
       parentTaxonomyItemName: "se-gen-base:ForvaltningsberattelseAbstract",
@@ -88,6 +88,13 @@ export const exampleArsredovisning: Arsredovisning = {
       beloppNuvarandeAr: "3750",
       beloppTidigareAr: ["-1000", "500", "600"],
     } as Belopprad<"xbrli:monetaryItemType">,
+    {
+      taxonomyItemName: "se-gen-base:Soliditet",
+      parentTaxonomyItemName: "se-gen-base:Flerarsoversikt",
+      type: "xbrli:pureItemType",
+      beloppNuvarandeAr: "98",
+      beloppTidigareAr: ["99", "95", "73"],
+    } as Belopprad<"xbrli:pureItemType">,
     {
       taxonomyItemName: "se-gen-base:ForandringEgetKapital",
       labelType: "terseLabel",
@@ -373,6 +380,7 @@ export const exampleArsredovisning: Arsredovisning = {
       taxonomyItemName: "se-gen-base:Personalkostnader",
       parentTaxonomyItemName: "se-gen-base:RorelsekostnaderAbstract",
       type: "xbrli:monetaryItemType",
+      not: "2",
       beloppNuvarandeAr: "1100",
       beloppTidigareAr: ["1100"],
     } as Belopprad<"xbrli:monetaryItemType">,
@@ -598,7 +606,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName: "se-gen-base:RedovisningsprinciperAbstract",
       type: "xbrli:stringItemType",
       text: "Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag.",
-    } as Belopprad<"xbrli:monetaryItemType">,
+    } as Belopprad<"xbrli:stringItemType">,
     {
       taxonomyItemName: "se-gen-base:UpplysningarResultatrakningenAbstract",
       labelType: "terseLabel",

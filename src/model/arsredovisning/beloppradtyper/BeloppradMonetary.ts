@@ -29,21 +29,18 @@ export function calculateValuesIntoBelopprad(
       } as CalculationConceptValue;
     },
   );
-  // TODO: Flera tidigare år
-  const conceptValuesForegaendeAr: CalculationConceptValue[] = belopprader.map(
-    (belopprad) => {
-      return {
-        conceptName: belopprad.taxonomyItemName,
-        value: isBeloppradMonetary(belopprad)
-          ? parseInt(
-              belopprad.beloppTidigareAr != null
-                ? belopprad.beloppTidigareAr[0]
-                : "0",
-            )
-          : 0,
-      } as CalculationConceptValue;
-    },
-  );
+
+  const conceptValuesTidigareArList: CalculationConceptValue[][] =
+    resultBelopprad.beloppTidigareAr.map((_, i) =>
+      belopprader.map((belopprad) => {
+        return {
+          conceptName: belopprad.taxonomyItemName,
+          value: isBeloppradMonetary(belopprad)
+            ? parseInt(belopprad.beloppTidigareAr[i])
+            : 0,
+        } as CalculationConceptValue;
+      }),
+    );
 
   resultBelopprad.beloppNuvarandeAr = calculationProcessor
     .calculateForConcept(
@@ -51,10 +48,13 @@ export function calculateValuesIntoBelopprad(
       conceptValuesNuvarandeAr,
     )
     .toString();
-  resultBelopprad.beloppTidigareAr[0] = calculationProcessor
-    .calculateForConcept(
-      resultBelopprad.taxonomyItemName,
-      conceptValuesForegaendeAr,
-    )
-    .toString();
+
+  for (let i = 0; i < resultBelopprad.beloppTidigareAr.length; i++) {
+    resultBelopprad.beloppTidigareAr[i] = calculationProcessor
+      .calculateForConcept(
+        resultBelopprad.taxonomyItemName,
+        conceptValuesTidigareArList[i],
+      )
+      .toString();
+  }
 }

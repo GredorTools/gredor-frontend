@@ -8,32 +8,24 @@ import {
   type BeloppradMonetary,
   calculateValuesIntoBelopprad,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import {
   type Belopprad,
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
-import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import BaseEditBeloppradComparable from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
+import BaseEditBeloppradComparable, {
+  type EditBeloppradComparableEmitsBase,
+  type EditBeloppradComparablePropsBase,
+} from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
 
-const props = defineProps<{
-  /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
-  taxonomyManager: TaxonomyManager;
+const props = defineProps<
+  EditBeloppradComparablePropsBase & {
+    /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
+    showBalanceSign: boolean;
+  }
+>();
 
-  /** Antal tidigare räkenskapsår som ska visas för jämförelse. */
-  numPreviousYears: number;
-
-  /** Huruvida notfält ska visas för beloppraden. */
-  allowNot: boolean;
-
-  /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
-  showBalanceSign: boolean;
-}>();
-
-const emit = defineEmits<{
-  /** Triggas när användaren tar bort beloppraden. */
-  (e: "delete"): void;
-}>();
+const emit = defineEmits<EditBeloppradComparableEmitsBase>();
 
 /** Beloppraden med monetära värden som ska redigeras. */
 const belopprad = defineModel<BeloppradMonetary>("belopprad", {
@@ -49,18 +41,15 @@ const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
-const isSummarad = computed(() => {
-  const result = taxonomyItem.value.additionalData.isTotalItem;
-
-  if (result) {
+watch(belopprader.value, () => {
+  // Räkna automatiskt ut summor
+  if (taxonomyItem.value.additionalData.isCalculatedItem) {
     calculateValuesIntoBelopprad(
       props.taxonomyManager.calculationProcessor,
       belopprader.value,
       belopprad.value,
     );
   }
-
-  return result;
 });
 </script>
 
@@ -68,7 +57,7 @@ const isSummarad = computed(() => {
   <BaseEditBeloppradComparable
     :allow-not="allowNot"
     :belopprad="belopprad"
-    :is-summarad="isSummarad"
+    :is-summarad="taxonomyItem.additionalData.isCalculatedItem"
     :num-previous-years="numPreviousYears"
     :show-balance-sign="showBalanceSign"
     :taxonomy-manager="taxonomyManager"

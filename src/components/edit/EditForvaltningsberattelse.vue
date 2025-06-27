@@ -7,6 +7,7 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
+  createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
@@ -19,6 +20,7 @@ import {
 import EditForvaltningsberattelseFlerarsoversikt from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseFlerarsoversikt.vue";
 import EditForvaltningsberattelseForandringar from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseForandringar.vue";
 import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -65,6 +67,11 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     <EditForvaltningsberattelseForandringar
       v-else-if="group.xmlName === 'se-gen-base:ForandringEgetKapital'"
       :arsredovisning="arsredovisning"
+      :group-taxonomy-item="
+        availableTaxonomyItems.childrenFlat.find(
+          (item) => item.xmlName === 'se-gen-base:ForandringEgetKapital',
+        )!
+      "
       :taxonomy-manager="taxonomyManager"
     />
     <table v-else>
