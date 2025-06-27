@@ -70,7 +70,12 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     <table v-else>
       <thead>
         <tr>
-          <th scope="col">{{ group.additionalData.displayLabel }}</th>
+          <th scope="col">
+            <BaseEditBeloppradTitle
+              :belopprad="createBelopprad(group)"
+              :taxonomy-manager="taxonomyManager"
+            />
+          </th>
         </tr>
       </thead>
       <tbody>

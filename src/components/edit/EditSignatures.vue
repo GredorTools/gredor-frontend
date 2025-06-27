@@ -26,7 +26,7 @@ function removeUnderskrift(index: number) {
 </script>
 
 <template>
-  <h3>Personinformation</h3>
+  <h2>Signaturer</h2>
   <div class="form-group">
     <label for="underskriftOrt">Ort för underskrift:</label>
     <input

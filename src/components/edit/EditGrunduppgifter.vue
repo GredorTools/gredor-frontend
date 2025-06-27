@@ -15,7 +15,7 @@ defineModel<Arsredovisning>("arsredovisning", {
 </script>
 
 <template>
-  <h3>Grunduppgifter</h3>
+  <h2>Grunduppgifter</h2>
   <div class="form-section">
     <div class="form-group">
       <label for="foretagsnamn">Företagsnamn:</label>

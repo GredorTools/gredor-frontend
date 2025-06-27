@@ -70,11 +70,16 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
 
 <template>
-  <button class="btn btn-primary" @click="importFile">Öppna…</button>
-  <button class="btn btn-primary" @click="exportFile">Spara som…</button>
-  <button class="btn btn-danger float-end" @click="clearData">
-    Rensa allt
-  </button>
+  <div class="d-flex justify-content-between">
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" @click="importFile">Öppna…</button>
+      <button class="btn btn-primary" @click="exportFile">Spara som…</button>
+    </div>
+    <button class="btn btn-danger float-end" @click="clearData">
+      Rensa allt
+    </button>
+  </div>
+  <hr />
 
   <ul class="nav nav-tabs">
     <li
@@ -118,8 +123,8 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 </template>
 
 <style lang="scss" scoped>
-.mode-selector {
-  margin-top: 3rem;
+.nav {
+  margin-top: 2rem;
 }
 
 .editor {

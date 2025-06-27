@@ -59,5 +59,8 @@ header {
   border-radius: 0.5rem;
   background-color: #fdfff8;
   padding: 1rem;
+  justify-self: end;
+
+  width: 100%;
 }
 </style>

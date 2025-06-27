@@ -17,7 +17,7 @@ defineModel<Arsredovisning>("arsredovisning", {
 </script>
 
 <template>
-  <h3>Grunduppgifter</h3>
+  <h2>Fastställelseintyg</h2>
   <div class="form-section">
     <div class="form-group">
       <label for="resultatdispositionBeslut">Beslut resultatdisposition:</label>

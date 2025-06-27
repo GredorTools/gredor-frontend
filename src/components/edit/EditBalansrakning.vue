@@ -7,6 +7,7 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
+  createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
@@ -17,6 +18,7 @@ import {
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
 import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -58,7 +60,12 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     <table>
       <thead>
         <tr>
-          <th scope="col">{{ group[0].additionalData.displayLabel }}</th>
+          <th scope="col">
+            <BaseEditBeloppradTitle
+              :belopprad="createBelopprad(group[0])"
+              :taxonomy-manager="taxonomyManager"
+            />
+          </th>
           <th class="not-container" scope="col">Not</th>
           <th class="value-container" scope="col">
             {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}

@@ -96,4 +96,34 @@ defineProps<{
   font-weight: 600;
   margin-top: 0;
 }
+
+:deep(table) {
+  width: 100%;
+
+  th,
+  td {
+    border-style: hidden;
+    text-align: left;
+    vertical-align: bottom;
+    padding: 0.25rem 0;
+
+    &:first-child {
+      width: 99%;
+    }
+
+    &:not(:first-child) {
+      padding-left: 1rem;
+      white-space: nowrap;
+    }
+
+    &.not-container {
+      min-width: 40px;
+    }
+
+    &.value-container {
+      text-align: right;
+      min-width: 100px;
+    }
+  }
+}
 </style>

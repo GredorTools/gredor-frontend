@@ -5,6 +5,7 @@
  */
 
 import {
+  createBelopprad,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
@@ -12,6 +13,7 @@ import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { FormatUtil } from "@/util/FormatUtil.ts";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
@@ -32,7 +34,10 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
     <thead>
       <tr>
         <th scope="col">
-          {{ groupTaxonomyItem.additionalData.displayLabel }}
+          <BaseEditBeloppradTitle
+            :belopprad="createBelopprad(groupTaxonomyItem)"
+            :taxonomy-manager="taxonomyManager"
+          />
         </th>
         <th class="value-container" scope="col">
           {{

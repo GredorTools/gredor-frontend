@@ -30,9 +30,16 @@ async function exportArsredovisning() {
 </script>
 
 <template>
-  <button class="btn btn-primary" @click="exportArsredovisning()">
-    Exportera iXBRL-fil
-  </button>
+  <div class="finalize-tools d-flex justify-content-end">
+    <button class="btn btn-primary" @click="exportArsredovisning()">
+      Exportera iXBRL-fil
+    </button>
+  </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.finalize-tools {
+  /* Matcha pappret ovan */
+  width: 210mm;
+}
+</style>
