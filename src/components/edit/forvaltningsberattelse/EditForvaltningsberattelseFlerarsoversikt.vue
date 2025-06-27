@@ -12,7 +12,7 @@ import {
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { FormatUtil } from "@/util/FormatUtil.ts";
+import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 defineProps<{
@@ -41,7 +41,7 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
         </th>
         <th class="value-container" scope="col">
           {{
-            FormatUtil.formatDateForFlerarsoversikt(
+            formatDateForFlerarsoversikt(
               arsredovisning.verksamhetsarNuvarande.slutdatum,
             )
           }}
@@ -54,7 +54,7 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
           scope="col"
         >
           {{
-            FormatUtil.formatDateForFlerarsoversikt(
+            formatDateForFlerarsoversikt(
               arsredovisning.verksamhetsarTidigare[previousYearIndex - 1]
                 .slutdatum,
             )

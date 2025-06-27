@@ -7,7 +7,7 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { FormatUtil } from "@/util/FormatUtil.ts";
+import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 
@@ -35,7 +35,7 @@ defineProps<{
           </th>
           <th class="value-container" scope="col">
             {{
-              FormatUtil.formatDateForFlerarsoversikt(
+              formatDateForFlerarsoversikt(
                 arsredovisning.verksamhetsarNuvarande.slutdatum,
               )
             }}
@@ -48,7 +48,7 @@ defineProps<{
             scope="col"
           >
             {{
-              FormatUtil.formatDateForFlerarsoversikt(
+              formatDateForFlerarsoversikt(
                 arsredovisning.verksamhetsarTidigare[previousYearIndex - 1]
                   .slutdatum,
               )

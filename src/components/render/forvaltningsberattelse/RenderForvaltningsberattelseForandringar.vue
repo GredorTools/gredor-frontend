@@ -8,7 +8,7 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
-import { FormatUtil } from "@/util/FormatUtil.ts";
+import { formatNumber } from "@/util/formatUtils.ts";
 import {
   type Belopprad,
   isBeloppradInTaxonomyItemList,
@@ -105,7 +105,7 @@ function getContextRef(belopprad: Belopprad) {
               unitRef="redovisningsvaluta"
             >
               {{
-                FormatUtil.formatNumber(cell.belopprad.beloppNuvarandeAr, {
+                formatNumber(cell.belopprad.beloppNuvarandeAr, {
                   removeSign: true,
                 })
               }}

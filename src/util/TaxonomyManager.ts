@@ -1,30 +1,33 @@
-// Typer för konceptegenskaper
 import { markRaw } from "vue";
 import {
   type CalculationProcessor,
   createNewCalculationProcessor,
 } from "@/util/CalculationProcessor.ts";
 
-// Typ för TaxonomyItemType
+// Typ som representerar olika slags taxonomiobjekt
 export type TaxonomyItemType =
-  | "string"
   | "enum:enumerationItemType"
-  | "num:areaItemType"
   | "nonnum:domainItemType"
-  | "nonnum:textBlockItemType"
-  | "xbrli:booleanItemType"
-  | "xbrli:dateItemType"
   | "xbrli:decimalItemType"
-  | "xbrli:gYearMonthItemType"
   | "xbrli:monetaryItemType"
   | "xbrli:pureItemType"
   | "xbrli:sharesItemType"
   | "xbrli:stringItemType"
-  | "xsd:anyType"
   | `${string}@anonymousType`
-  | "gredor:section";
+  | "gredor:section"; // Specialare för Gredor - används bara internt
 
-// Typ för TaxonomyRootName
+// Följande finns med i concepts.json, men inte i presentationen för K2-årsredovisningar
+export type ExtendedTaxonomyItemType =
+  | TaxonomyItemType
+  | "string"
+  | "num:areaItemType"
+  | "nonnum:textBlockItemType"
+  | "xbrli:booleanItemType"
+  | "xbrli:dateItemType"
+  | "xbrli:gYearMonthItemType"
+  | "xsd:anyType";
+
+// Typ som representerar taxonomins olika rötter
 export enum TaxonomyRootName {
   ALLMAN_INFORMATION = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation",
   BALANSRAKNING = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/balansrakning",
@@ -35,6 +38,7 @@ export enum TaxonomyRootName {
   UNDERTECKNANDE_FORETRADARE_REVISIONSPATECKNING = "http://www.taxonomier.se/se/fr/gaap/k2/role/form/undertecknande/foretradarerevisionspateckning",
 }
 
+// Typ som representerar olika slags etiketter
 export type LabelType =
   | "periodEndLabel"
   | "periodStartLabel"
@@ -82,7 +86,7 @@ export interface TaxonomyItem<T extends TaxonomyItemType = TaxonomyItemType> {
   properties: ConceptProperties<T>;
   metadata?: PresentationLinkRoleMetadata;
   additionalData: {
-    isTotalItem?: boolean;
+    isCalculatedItem?: boolean;
     displayLabel?: string;
     labelType?: LabelType;
   };
@@ -153,7 +157,7 @@ export class TaxonomyManager {
     this.hierarchy = this.buildHierarchy(presentationJson.presentation);
   }
 
-  getItemByName(name: string): TaxonomyItem {
+  public getItemByName(name: string): TaxonomyItem {
     const key = this.generateKey(name);
     const result = this.items.get(key);
     if (result === undefined) {
@@ -162,7 +166,7 @@ export class TaxonomyManager {
     return markRaw(result);
   }
 
-  getItemByCompleteInfo(
+  public getItemByCompleteInfo(
     name: string,
     labelType?: LabelType,
     parentName?: string,
@@ -177,7 +181,7 @@ export class TaxonomyManager {
     return markRaw(result);
   }
 
-  getRoot(): TaxonomyItem {
+  public getRoot(): TaxonomyItem {
     return markRaw(this.hierarchy);
   }
 
@@ -233,7 +237,7 @@ export class TaxonomyManager {
 
       // Sätt extra data
       if (!this.calculationProcessor.isLeafConcept(item.xmlName)) {
-        item.additionalData.isTotalItem = true;
+        item.additionalData.isCalculatedItem = true;
       }
       item.additionalData.displayLabel =
         metadata.label || item.properties.label;

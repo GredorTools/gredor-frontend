@@ -5,8 +5,8 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { FileUtil } from "@/util/FileUtil.ts";
-import { DocumentUtil } from "@/util/DocumentUtil.ts";
+import { requestSaveFile } from "@/util/fileUtils.ts";
+import { convertVueHTMLToiXBRL } from "@/util/documentUtils.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
@@ -20,11 +20,11 @@ async function exportArsredovisning() {
 
   if (arsredovisningForExport) {
     const { foretagsinformation } = props.arsredovisning;
-    const xhtml = await DocumentUtil.convertVueHTMLToiXBRL(
+    const xhtml = await convertVueHTMLToiXBRL(
       arsredovisningForExport,
       `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
     );
-    FileUtil.exportFile(xhtml, "arsredovisning.xhtml", "text/html");
+    requestSaveFile(xhtml, "arsredovisning.xhtml", "text/html");
   }
 }
 </script>

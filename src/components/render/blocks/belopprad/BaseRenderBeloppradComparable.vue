@@ -4,7 +4,7 @@
  * Används som grund för t.ex. monetära och decimala belopprader.
  */
 
-import { FormatUtil } from "@/util/FormatUtil.ts";
+import { formatNumber } from "@/util/formatUtils.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
@@ -75,12 +75,12 @@ const taxonomyItem = computed(() => {
         scale="0"
         unitRef="redovisningsvaluta"
       >
-        {{
-          FormatUtil.formatNumber(belopprad.beloppNuvarandeAr, {
-            removeSign: true,
-          })
-        }}
       </ix:nonFraction>
+          {{
+            formatNumber(belopprad.beloppNuvarandeAr, {
+              removeSign: true,
+            })
+          }}
     </td>
     <td v-for="i in numPreviousYears" :key="i" class="value-container">
       <template v-if="belopprad.beloppTidigareAr[i - 1] != null">
