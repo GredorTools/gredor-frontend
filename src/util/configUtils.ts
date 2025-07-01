@@ -14,3 +14,9 @@
 export function getConfigValue(key: EnvironmentKey): string | undefined {
   return window.config[key] || import.meta.env[key];
 }
+
+declare global {
+  interface Window {
+    config: EnvironmentConfig;
+  }
+}
