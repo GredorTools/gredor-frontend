@@ -271,10 +271,13 @@ export class TaxonomyManager {
       const rootItem: TaxonomyItem<"gredor:section"> = {
         xmlName: metadata.role || "",
         properties: {
+          type: "gredor:section",
           name: metadata.role || "",
           label: metadata.definition || "",
           iD: metadata.role || "",
-          type: "gredor:section",
+          abstract: "false",
+          namespace: "",
+          nillable: "false",
         },
         metadata: {
           definition: metadata.definition,
@@ -314,10 +317,10 @@ export async function getTaxonomyManager(
     rootName,
     (await import(
       "@/data/taxonomy/k2/2021-10-31/concepts.json"
-    )) as ConceptsJson,
+    )) as unknown as ConceptsJson,
     (await import(
       "@/data/taxonomy/k2/2021-10-31/presentation.json"
-    )) as PresentationJson,
+    )) as unknown as PresentationJson,
     await createNewCalculationProcessor(rootName),
   );
   taxonomyManagerSingletons.set(rootName, taxonomyManager);

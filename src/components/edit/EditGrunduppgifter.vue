@@ -107,9 +107,9 @@ defineModel<Arsredovisning>("arsredovisning", {
       :disabled="arsredovisning.verksamhetsarTidigare.length > i"
       type="checkbox"
       @change="
-        (el) => {
-          if (el.target) {
-            if (el.target.checked) {
+        (event: Event) => {
+          if (event.target) {
+            if ((<HTMLInputElement>event.target).checked) {
               while (arsredovisning.verksamhetsarTidigare.length < i) {
                 arsredovisning.verksamhetsarTidigare.push({
                   startdatum: '2000-01-01',

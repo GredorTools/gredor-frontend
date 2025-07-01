@@ -32,9 +32,9 @@ export function requestOpenFile<T extends OpenResolveAsTypes>(
         resolve(undefined);
       } else {
         if (resolveAs === "bytes") {
-          resolve(target.files[0].bytes());
+          resolve(target.files[0].bytes() as Promise<OpenReturnType<T>>);
         } else if (resolveAs === "string") {
-          resolve(target.files[0].text());
+          resolve(target.files[0].text() as Promise<OpenReturnType<T>>);
         } else {
           throw new Error(`Unsupported resolver: ${resolveAs}`);
         }
