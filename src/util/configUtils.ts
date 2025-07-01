@@ -17,6 +17,6 @@ export function getConfigValue(key: EnvironmentKey): string | undefined {
 
 declare global {
   interface Window {
-    config: EnvironmentConfig;
+    config: EnvironmentConfig; // Kommer från config.js
   }
 }
