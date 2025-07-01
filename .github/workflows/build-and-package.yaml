@@ -50,6 +50,7 @@ jobs:
           images: ${{ env.IMAGE_REF }}
 
       - name: Build and push
+        id: push
         uses: docker/build-push-action@v6
         with:
           push: ${{ github.event_name != 'pull_request' }}
