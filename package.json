@@ -13,11 +13,14 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "generate-api-types": "npx openapi-typescript src/openapi/gredor-backend-v1.yaml -o ./src/openapi/gredor-backend-v1.d.ts"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.6",
+    "byte-base64": "^1.1.0",
+    "openapi-fetch": "^0.14.0",
     "vue": "^3.5.13",
     "vue3-select-component": "^0.11.7",
     "xml-formatter": "^3.6.6"
@@ -36,6 +39,7 @@
     "jiti": "^2.4.2",
     "minimist": "^1.2.8",
     "npm-run-all2": "^7.0.2",
+    "openapi-typescript": "^7.8.0",
     "prettier": "3.5.3",
     "sass-embedded": "^1.89.0",
     "typescript": "~5.8.0",

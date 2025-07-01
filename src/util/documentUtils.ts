@@ -92,8 +92,9 @@ export async function convertVueHTMLToiXBRL(
   fixTag("xbrli:endDate", [], "http://www.xbrl.org/2003/instance");
 
   let version = __APP_VERSION__;
-  if (import.meta.env.VITE_ENV_NAME)
+  if (import.meta.env.VITE_ENV_NAME) {
     version = `${__APP_VERSION__} ${import.meta.env.VITE_ENV_NAME}`;
+  }
 
   // Skapa slutlig HTML
   doc.head.innerHTML += `

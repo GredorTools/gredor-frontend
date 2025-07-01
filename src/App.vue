@@ -12,8 +12,9 @@ import ToolsFinalize from "@/components/tools/ToolsFinalize.vue";
 const arsredovisning = ref(exampleArsredovisning);
 
 let environmentName = "";
-if (import.meta.env.VITE_ENV_NAME)
+if (import.meta.env.VITE_ENV_NAME) {
   environmentName = ` ${import.meta.env.VITE_ENV_NAME}`;
+}
 </script>
 
 <template>

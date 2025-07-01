@@ -1,0 +1,191 @@
+---
+openapi: 3.1.0
+components:
+  schemas:
+    Handlingsinfo:
+      type: object
+      properties:
+        typ:
+          $ref: "#/components/schemas/TypEnum1"
+        dokumentlangd:
+          type: integer
+          format: int32
+        idnummer:
+          type: string
+        sha256checksumma:
+          type: string
+          format: binary
+    InlamningOK:
+      type: object
+      properties:
+        orgnr:
+          type: string
+        avsandare:
+          type: string
+        undertecknare:
+          type: string
+        handlingsinfo:
+          $ref: "#/components/schemas/Handlingsinfo"
+        url:
+          type: string
+    KontrolleraSvar:
+      type: object
+      properties:
+        orgnr:
+          type: string
+        utfall:
+          type: array
+          items:
+            $ref: "#/components/schemas/KontrolleraUtfall"
+    KontrolleraUtfall:
+      type: object
+      properties:
+        kod:
+          type: string
+        text:
+          type: string
+        typ:
+          $ref: "#/components/schemas/TypEnum"
+        tekniskinformation:
+          type: array
+          items:
+            $ref: "#/components/schemas/KontrolleraUtfallTekniskInformation"
+    KontrolleraUtfallTekniskInformation:
+      type: object
+      properties:
+        meddelande:
+          type: string
+        element:
+          type: string
+        varde:
+          type: string
+    LocalDate:
+      type: string
+      format: date
+      examples:
+      - 2022-03-10
+    PreparationRequest:
+      type: object
+      required:
+      - companyOrgnr
+      - signerPnr
+      - signedPdf
+      properties:
+        companyOrgnr:
+          type: string
+        signerPnr:
+          type: string
+        signedPdf:
+          type: string
+          format: binary
+    SkapaTokenOK:
+      type: object
+      properties:
+        token:
+          $ref: "#/components/schemas/UUID"
+        avtalstext:
+          type: string
+        avtalstextAndrad:
+          $ref: "#/components/schemas/LocalDate"
+    SubmissionRequest:
+      type: object
+      required:
+      - companyOrgnr
+      - signerPnr
+      - signedPdf
+      - ixbrl
+      properties:
+        companyOrgnr:
+          type: string
+        signerPnr:
+          type: string
+        signedPdf:
+          type: string
+          format: binary
+        ixbrl:
+          type: string
+          format: binary
+    TypEnum:
+      type: string
+      enum:
+      - info
+      - warn
+      - error
+    TypEnum1:
+      type: string
+      enum:
+      - arsredovisning_komplett
+      - arsredovisning_kompletteras
+      - revisionsberattelse
+    UUID:
+      type: string
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+paths:
+  /v1/submission-flow/prepare:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreparationRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkapaTokenOK"
+        "400":
+          description: Bad Request
+      summary: Prepare
+      tags:
+      - Submission Flow Resource
+  /v1/submission-flow/submit:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmissionRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InlamningOK"
+        "400":
+          description: Bad Request
+      summary: Submit
+      tags:
+      - Submission Flow Resource
+  /v1/submission-flow/validate:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmissionRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KontrolleraSvar"
+        "400":
+          description: Bad Request
+      summary: Validate
+      tags:
+      - Submission Flow Resource
+info:
+  title: gredor-backend API
+  version: 1.0-SNAPSHOT
+servers:
+- url: http://localhost:8080
+- url: https://api.acc.test.gredor.se
+- url: https://api.gredor.se

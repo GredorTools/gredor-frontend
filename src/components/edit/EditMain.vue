@@ -23,7 +23,7 @@ const arsredovisning = defineModel<Arsredovisning>({
 });
 
 async function importFile() {
-  const file = await requestOpenFile(".gredor");
+  const file = await requestOpenFile(".gredor", "string");
   if (file) {
     const dataContainer: DataContainer<Arsredovisning> = JSON.parse(file);
     // TODO: Validera
@@ -138,6 +138,10 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 
   &:not(:first-of-type) {
     margin-top: 3rem;
+  }
+
+  th {
+    vertical-align: bottom;
   }
 
   th,
