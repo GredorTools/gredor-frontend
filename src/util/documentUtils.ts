@@ -1,4 +1,5 @@
 import xmlFormat from "xml-formatter";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 /**
  * Konverterar innehållet i ett Vue HTML-element till iXBRL-format.
@@ -92,8 +93,9 @@ export async function convertVueHTMLToiXBRL(
   fixTag("xbrli:endDate", [], "http://www.xbrl.org/2003/instance");
 
   let version = __APP_VERSION__;
-  if (import.meta.env.VITE_ENV_NAME) {
-    version = `${__APP_VERSION__} ${import.meta.env.VITE_ENV_NAME}`;
+  const environmentName = getConfigValue("VITE_ENV_NAME");
+  if (environmentName) {
+    version = `${__APP_VERSION__} ${environmentName}`;
   }
 
   // Skapa slutlig HTML

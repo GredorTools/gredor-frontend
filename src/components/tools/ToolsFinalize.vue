@@ -10,6 +10,7 @@ import { convertVueHTMLToiXBRL } from "@/util/documentUtils.ts";
 import { base64encode, bytesToBase64 } from "byte-base64";
 import createClient from "openapi-fetch";
 import type { paths } from "@/openapi/gredor-backend-v1";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
@@ -49,7 +50,7 @@ async function sendArsredovisning() {
   }
 
   const client = createClient<paths>({
-    baseUrl: import.meta.env.VITE_GREDOR_BACKEND_BASEURL,
+    baseUrl: getConfigValue("VITE_GREDOR_BACKEND_BASEURL"),
   });
 
   const {

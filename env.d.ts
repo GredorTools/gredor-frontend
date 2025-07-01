@@ -2,11 +2,9 @@
 
 declare const __APP_VERSION__: string;
 
-interface ImportMetaEnv {
-  readonly VITE_ENV_NAME?: string;
-  readonly VITE_GREDOR_BACKEND_BASEURL?: string;
-}
+type EnvironmentKey = "VITE_ENV_NAME" | "VITE_GREDOR_BACKEND_BASEURL";
+type EnvironmentConfig = Record<EnvironmentKey, string>;
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv;
+  readonly env: EnvironmentConfig;
 }

@@ -8,19 +8,20 @@ import { exampleArsredovisning } from "@/example/ExampleArsredovisning.ts";
 import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinalize from "@/components/tools/ToolsFinalize.vue";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 const arsredovisning = ref(exampleArsredovisning);
 
-let environmentName = "";
-if (import.meta.env.VITE_ENV_NAME) {
-  environmentName = ` ${import.meta.env.VITE_ENV_NAME}`;
-}
+const environmentName = getConfigValue("VITE_ENV_NAME");
 </script>
 
 <template>
   <header>
     <h1>
-      Gredor<span class="environment">{{ environmentName }}</span>
+      Gredor
+      <span v-if="environmentName" class="environment">{{
+        environmentName
+      }}</span>
     </h1>
   </header>
 
