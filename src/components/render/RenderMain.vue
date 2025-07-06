@@ -5,13 +5,13 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import RenderResultatrakning from "@/components/render/RenderResultatrakning.vue";
-import RenderBalansrakning from "@/components/render/RenderBalansrakning.vue";
-import RenderIXBRLHeader from "@/components/render/RenderIXBRLHeader.vue";
-import RenderForvaltningsberattelse from "@/components/render/RenderForvaltningsberattelse.vue";
-import RenderNoter from "@/components/render/RenderNoter.vue";
-import RenderCover from "@/components/render/RenderCover.vue";
-import RenderSignatures from "@/components/render/RenderSignatures.vue";
+import RenderResultatrakning from "@/components/render/sections/RenderResultatrakning.vue";
+import RenderBalansrakning from "@/components/render/sections/RenderBalansrakning.vue";
+import RenderIXBRLHeader from "@/components/render/sections/RenderIXBRLHeader.vue";
+import RenderForvaltningsberattelse from "@/components/render/sections/RenderForvaltningsberattelse.vue";
+import RenderNoter from "@/components/render/sections/RenderNoter.vue";
+import RenderCover from "@/components/render/sections/RenderCover.vue";
+import RenderSignatures from "@/components/render/sections/RenderSignatures.vue";
 import { useTemplateRef } from "vue";
 
 defineProps<{

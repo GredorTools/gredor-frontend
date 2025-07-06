@@ -17,8 +17,8 @@ import {
   type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
-import EditForvaltningsberattelseFlerarsoversikt from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseFlerarsoversikt.vue";
-import EditForvaltningsberattelseForandringar from "@/components/edit/forvaltningsberattelse/EditForvaltningsberattelseForandringar.vue";
+import EditForvaltningsberattelseFlerarsoversikt from "@/components/edit/sections/forvaltningsberattelse/EditForvaltningsberattelseFlerarsoversikt.vue";
+import EditForvaltningsberattelseForandringar from "@/components/edit/sections/forvaltningsberattelse/EditForvaltningsberattelseForandringar.vue";
 import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 

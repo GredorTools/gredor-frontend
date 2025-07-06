@@ -10,8 +10,8 @@ import {
   getTaxonomyManager,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
-import RenderForvaltningsberattelseFlerarsoversikt from "@/components/render/forvaltningsberattelse/RenderForvaltningsberattelseFlerarsoversikt.vue";
-import RenderForvaltningsberattelseForandringar from "@/components/render/forvaltningsberattelse/RenderForvaltningsberattelseForandringar.vue";
+import RenderForvaltningsberattelseFlerarsoversikt from "@/components/render/sections/forvaltningsberattelse/RenderForvaltningsberattelseFlerarsoversikt.vue";
+import RenderForvaltningsberattelseForandringar from "@/components/render/sections/forvaltningsberattelse/RenderForvaltningsberattelseForandringar.vue";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import { computed } from "vue";
 

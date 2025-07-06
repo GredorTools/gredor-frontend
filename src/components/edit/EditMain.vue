@@ -5,19 +5,19 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import EditResultatrakning from "@/components/edit/EditResultatrakning.vue";
+import EditResultatrakning from "@/components/edit/sections/EditResultatrakning.vue";
 import {
   parseGredorFile,
   requestOpenFile,
   requestSaveFile,
 } from "@/util/fileUtils.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
-import EditBalansrakning from "@/components/edit/EditBalansrakning.vue";
+import EditBalansrakning from "@/components/edit/sections/EditBalansrakning.vue";
 import { type Ref, ref } from "vue";
-import EditNoter from "@/components/edit/EditNoter.vue";
-import EditForvaltningsberattelse from "@/components/edit/EditForvaltningsberattelse.vue";
-import EditGrunduppgifter from "@/components/edit/EditGrunduppgifter.vue";
-import EditSignatures from "@/components/edit/EditSignatures.vue";
+import EditNoter from "@/components/edit/sections/EditNoter.vue";
+import EditForvaltningsberattelse from "@/components/edit/sections/EditForvaltningsberattelse.vue";
+import EditGrunduppgifter from "@/components/edit/sections/EditGrunduppgifter.vue";
+import EditSignatures from "@/components/edit/sections/EditSignatures.vue";
 import { emptyArsredovisning } from "@/example/EmptyArsredovisning.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
