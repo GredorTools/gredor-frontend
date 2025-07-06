@@ -9,29 +9,101 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
+import {
+  type OnboardingTourStep,
+  VueOnboardingTour,
+} from "vue-onboarding-tour";
+import type { ComponentExposed } from "vue-component-type-helpers";
 
 const arsredovisning = ref(exampleArsredovisning);
 
 const environmentName = getConfigValue("VITE_ENV_NAME");
+
+// Rundtur
+const tour = ref<ComponentExposed<typeof VueOnboardingTour>>();
+
+function startTour() {
+  // @ts-expect-error Något fel med typerna i VueOnboardingTour - nedan ska fungera
+  tour.value?.startTour();
+}
+
+function endTour() {
+  window.scrollTo(0, 0);
+}
+
+const tourSteps: OnboardingTourStep[] = [
+  {
+    title: "Välkommen till Gredor!",
+    description:
+      "Du kommer nu att få en rundtur genom de olika funktionerna i tjänsten.",
+  },
+  {
+    target: "#editor",
+    title: "Redigera årsredovisningen",
+    description:
+      "På vänster sida av skärmen har du redigeraren, där du bland annat" +
+      " lägger till fält i årsredovisningen.",
+  },
+  {
+    target: "#renderer",
+    title: "Förhandsgranska årsredovisningen",
+    description:
+      "Och på höger sida av skärmen har du en förhandsgranskning som visar" +
+      " hur årsredovisningen kommer att se ut.",
+  },
+  {
+    target: "#tools",
+    title: "När du är klar…",
+    description:
+      "När du är klar med din årsredovisning använder du verktygen" +
+      " här för att färdigställa och lämna in den till Bolagsverket." +
+      "<ul>" +
+      "<li>Verktyget <strong>Färdigställ inför årsstämma</strong> låter dig" +
+      " färdigställa årsredovisningen inför ditt företags årsstämma.</li>" +
+      "<li>Efter årsstämman använder du verktyget <strong>Skicka in till" +
+      " Bolagsverket efter årsstämma</strong> för att lämna in årsredovisningen" +
+      " till Bolagsverket.</li>" +
+      "</ul>",
+  },
+  {
+    target: "#documentation",
+    title: "Mer information",
+    description:
+      "Mer information om hur Gredor fungerar och vad som är viktigt att tänka" +
+      " på hittar du här nere.",
+  },
+];
 </script>
 
 <template>
+  <VueOnboardingTour
+    ref="tour"
+    :steps="tourSteps"
+    label-terminate="Avsluta rundtur"
+    tour-id="appTour"
+    @end-tour="endTour"
+  />
+
   <main class="d-flex flex-column">
-    <header>
+    <header class="d-flex flex-row justify-content-between">
       <h1>
         Gredor
         <span v-if="environmentName" class="environment">{{
           environmentName
         }}</span>
       </h1>
+
+      <button id="tour-btn" class="btn btn-success" @click="startTour">
+        Rundtur
+      </button>
     </header>
 
     <div class="d-flex flex overflow-hidden gap-4">
-      <div class="editor">
+      <div id="editor">
         <EditMain v-model="arsredovisning" />
       </div>
 
-      <div class="renderer">
+      <div id="renderer">
         <RenderMain
           :arsredovisning="arsredovisning"
           :show-faststallelseintyg="false"
@@ -41,17 +113,17 @@ const environmentName = getConfigValue("VITE_ENV_NAME");
 
     <div class="d-flex justify-content-between">
       <div class="help-hint d-flex align-items-center">
-        <strong>⬇️ Behöver du hjälp? Skrolla ner lite! ⬇️</strong>
+        <strong>⬇️ Mer information om Gredor finns nedan! ⬇️</strong>
       </div>
 
-      <div>
+      <div id="tools">
         <ToolsFinish :arsredovisning="arsredovisning" />
       </div>
     </div>
   </main>
   <div class="aside-container">
     <hr />
-    <aside>
+    <aside id="documentation">
       <div></div>
       <div class="text-center">
         <h2>Om Gredor</h2>
@@ -178,7 +250,7 @@ main {
   padding: 2rem;
   gap: 2em;
 
-  .editor {
+  #editor {
     overflow-y: auto;
 
     border: 1px solid #566f41;
@@ -190,7 +262,7 @@ main {
     width: 100%;
   }
 
-  .renderer {
+  #renderer {
     /* För skuggan */
     padding: 0 0.5em 0.5em 0px;
   }
@@ -206,7 +278,7 @@ main {
   background-color: #e5e5e5;
 }
 
-aside {
+#documentation {
   margin: 0 auto;
   font-weight: normal;
 
