@@ -94,6 +94,7 @@ components:
       - signerPnr
       - signedPdf
       - ixbrl
+      - notificationEmail
       properties:
         companyOrgnr:
           type: string
@@ -105,6 +106,8 @@ components:
         ixbrl:
           type: string
           format: binary
+        notificationEmail:
+          type: string
     TypEnum:
       type: string
       enum:
@@ -121,6 +124,24 @@ components:
       type: string
       format: uuid
       pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    ValidationRequest:
+      type: object
+      required:
+      - companyOrgnr
+      - signerPnr
+      - signedPdf
+      - ixbrl
+      properties:
+        companyOrgnr:
+          type: string
+        signerPnr:
+          type: string
+        signedPdf:
+          type: string
+          format: binary
+        ixbrl:
+          type: string
+          format: binary
 paths:
   /v1/submission-flow/prepare:
     post:
@@ -168,7 +189,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubmissionRequest"
+              $ref: "#/components/schemas/ValidationRequest"
         required: true
       responses:
         "200":
@@ -182,10 +203,10 @@ paths:
       summary: Validate
       tags:
       - Submission Flow Resource
-info:
-  title: gredor-backend API
-  version: 1.0-SNAPSHOT
 servers:
 - url: http://localhost:8080
 - url: https://api.acc.test.gredor.se
 - url: https://api.gredor.se
+info:
+  title: gredor-backend API
+  version: 1.0-SNAPSHOT

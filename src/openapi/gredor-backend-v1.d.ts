@@ -117,7 +117,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["SubmissionRequest"];
+                    "application/json": components["schemas"]["ValidationRequest"];
                 };
             };
             responses: {
@@ -199,6 +199,7 @@ export interface components {
             signedPdf: string;
             /** Format: binary */
             ixbrl: string;
+            notificationEmail: string;
         };
         /** @enum {string} */
         TypEnum: "info" | "warn" | "error";
@@ -206,6 +207,14 @@ export interface components {
         TypEnum1: "arsredovisning_komplett" | "arsredovisning_kompletteras" | "revisionsberattelse";
         /** Format: uuid */
         UUID: string;
+        ValidationRequest: {
+            companyOrgnr: string;
+            signerPnr: string;
+            /** Format: binary */
+            signedPdf: string;
+            /** Format: binary */
+            ixbrl: string;
+        };
     };
     responses: never;
     parameters: never;

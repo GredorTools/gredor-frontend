@@ -12,20 +12,43 @@ import RenderForvaltningsberattelse from "@/components/render/RenderForvaltnings
 import RenderNoter from "@/components/render/RenderNoter.vue";
 import RenderCover from "@/components/render/RenderCover.vue";
 import RenderSignatures from "@/components/render/RenderSignatures.vue";
+import { useTemplateRef } from "vue";
 
 defineProps<{
   /** Årsredovisningen som ska renderas. */
   arsredovisning: Arsredovisning;
+
+  /** Huruvida fastställelseintyget ska visas. **/
+  showFaststallelseintyg: boolean;
 }>();
+
+const arsredovisningRoot = useTemplateRef("arsredovisning-root");
+const arsredovisningContent = useTemplateRef("arsredovisning-content");
+
+defineExpose({
+  getArsredovisningRoot: () => {
+    // Vi vill inte returnera roten förrän innehållet har laddats in
+    if (arsredovisningContent.value != null) {
+      return arsredovisningRoot.value;
+    }
+  },
+});
 </script>
 
 <template>
-  <div class="ar-page">
+  <div
+    id="arsredovisning-for-export"
+    ref="arsredovisning-root"
+    class="arsredovisning-root"
+  >
     <Suspense>
-      <div id="arsredovisning-for-export">
+      <div>
         <RenderIXBRLHeader :arsredovisning="arsredovisning" />
-        <div class="sections-container">
-          <RenderCover :arsredovisning="arsredovisning" />
+        <div ref="arsredovisning-content" class="arsredovisning-content">
+          <RenderCover
+            :arsredovisning="arsredovisning"
+            :show-faststallelseintyg="showFaststallelseintyg"
+          />
           <div class="page-break"></div>
           <RenderForvaltningsberattelse :arsredovisning="arsredovisning" />
           <div class="page-break"></div>
@@ -42,88 +65,5 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.ar-page {
-  width: 210mm;
-  height: 100%;
-  max-height: 297mm;
-  overflow-y: scroll;
-
-  background-color: white;
-
-  padding: 1em 2em 2em;
-  border: 1px solid rgb(240, 240, 240);
-  border-image: none;
-  line-height: 1.2;
-  box-shadow: 0.25em 0.25em 0.3em #999;
-}
-
-.sections-container {
-  width: 100%;
-  font-family: "EB Garamond", serif;
-  padding: 1em;
-
-  & > *:not(:first-child) {
-    padding-top: 1em;
-  }
-
-  & > *:not(:last-child) {
-    padding-bottom: 2em;
-  }
-}
-
-.page-break {
-  margin: 0 -3em;
-  page-break-after: always;
-  background-size: 210mm 297mm;
-  background-image: linear-gradient(to bottom, grey 1px, transparent 1px);
-}
-
-:deep(h1) {
-  font-size: 1.6rem;
-  font-family: "FreeSans", sans-serif;
-  font-weight: 700;
-}
-
-:deep(h2) {
-  font-size: 1.35rem;
-  font-weight: 600;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-:deep(h3) {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-top: 0;
-}
-
-:deep(table) {
-  width: 100%;
-
-  th,
-  td {
-    border-style: hidden;
-    text-align: left;
-    vertical-align: bottom;
-    padding: 0.25rem 0;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      padding-left: 1rem;
-      white-space: nowrap;
-    }
-
-    &.not-container {
-      min-width: 40px;
-    }
-
-    &.value-container {
-      text-align: right;
-      min-width: 100px;
-    }
-  }
-}
+@import "@/assets/render.scss";
 </style>

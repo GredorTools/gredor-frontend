@@ -1,43 +1,23 @@
-type OpenResolveAsTypes = "string" | "bytes";
-type OpenReturnType<T extends OpenResolveAsTypes> = T extends "string"
-  ? string
-  : T extends "bytes"
-    ? Uint8Array<ArrayBufferLike>
-    : never;
+import type { DataContainer, DataType } from "@/model/DataContainer.ts";
 
 /**
- * Ber användaren att välja en JSON-fil för import, läser dess innehåll, och
- * returnerar filens innehåll som en sträng.
+ * Ber användaren att välja en fil för import och returnerar den.
  *
  * @param accept - Tillåtna filtyper, kommaseparerat, t.ex. "image/*,.pdf"
- * @param resolveAs - Huruvida funktionen ska returnera en sträng eller bytes
- * @returns En Promise som returnerar innehållet i den valda filen som en
- * sträng, eller undefined om ingen fil valts.
+ * @returns En Promise som returnerar den valda filen, eller null om ingen fil
+ * har valts.
  */
-export function requestOpenFile<T extends OpenResolveAsTypes>(
-  accept: string,
-  resolveAs: T,
-): Promise<OpenReturnType<T> | undefined> {
-  return new Promise<OpenReturnType<T> | undefined>((resolve) => {
+export function requestOpenFile(accept: string): Promise<File | null> {
+  return new Promise<File | null>((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
     input.setAttribute("accept", accept);
     input.onchange = function (event) {
       const target = event.target as HTMLInputElement;
-      if (
-        target.files == null ||
-        target.files.length < 1 ||
-        target.files[0] == null
-      ) {
-        resolve(undefined);
+      if (target.files && target.files[0]) {
+        resolve(target.files[0]);
       } else {
-        if (resolveAs === "bytes") {
-          resolve(target.files[0].bytes() as Promise<OpenReturnType<T>>);
-        } else if (resolveAs === "string") {
-          resolve(target.files[0].text() as Promise<OpenReturnType<T>>);
-        } else {
-          throw new Error(`Unsupported resolver: ${resolveAs}`);
-        }
+        resolve(null);
       }
     };
     input.click();
@@ -68,4 +48,19 @@ export function requestSaveFile(
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }, 0);
+}
+
+export function parseGredorFile<T>(
+  json: string,
+  allowedDataTypes: DataType[],
+): DataContainer<T> {
+  // TODO: Återkoppling till användaren också
+  const dataContainer: DataContainer<T> = JSON.parse(json);
+  if (!dataContainer.dataType) {
+    throw new Error("File is not a Gredor file");
+  }
+  if (!allowedDataTypes.includes(dataContainer.dataType)) {
+    throw new Error("Data type is not allowed");
+  }
+  return dataContainer;
 }

@@ -49,6 +49,7 @@ export interface Underskrift {
 }
 
 export interface Faststallelseintyg {
+  datumArsstamma: string; // Exempel: "2025-02-18"
   resultatdispositionBeslut: ResultatdispositionBeslut;
   underskrift: Underskrift;
 }

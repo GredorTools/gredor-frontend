@@ -1,0 +1,92 @@
+.arsredovisning-root {
+  width: 210mm;
+  height: 100%;
+  max-height: 297mm;
+  overflow-y: scroll;
+
+  background-color: white;
+
+  padding: 1em 2em 2em;
+  line-height: 1.2;
+
+  @media screen {
+    border: 1px solid rgb(240, 240, 240);
+    border-image: none;
+    box-shadow: 0.25em 0.25em 0.3em #999;
+  }
+}
+
+.arsredovisning-content {
+  width: 100%;
+  font-family: "EB Garamond", serif;
+  padding: 1em;
+
+  background-color: white;
+
+  & > *:not(:first-child) {
+    padding-top: 1em;
+  }
+
+  & > *:not(:last-child) {
+    padding-bottom: 2em;
+  }
+
+  .page-break {
+    margin: 0 -3em;
+    page-break-after: always;
+    background-size: 210mm 297mm;
+
+    @media screen {
+      background-image: linear-gradient(to bottom, grey 1px, transparent 1px);
+    }
+  }
+
+  :deep(h1) {
+    font-size: 1.6rem;
+    font-family: "FreeSans", sans-serif;
+    font-weight: 700;
+  }
+
+  :deep(h2) {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  :deep(h3) {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 0;
+  }
+
+  :deep(table) {
+    width: 100%;
+
+    th,
+    td {
+      border-style: hidden;
+      text-align: left;
+      vertical-align: bottom;
+      padding: 0.25rem 0;
+
+      &:first-child {
+        width: 99%;
+      }
+
+      &:not(:first-child) {
+        padding-left: 1rem;
+        white-space: nowrap;
+      }
+
+      &.not-container {
+        min-width: 40px;
+      }
+
+      &.value-container {
+        text-align: right;
+        min-width: 100px;
+      }
+    }
+  }
+}

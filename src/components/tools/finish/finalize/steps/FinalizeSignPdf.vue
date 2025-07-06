@@ -1,0 +1,193 @@
+<script lang="ts" setup>
+/**
+ * En komponent som genererar en PDF-fil för signering, och sedan ber användaren
+ * signera den och ladda upp den signerade versionen av filen. Samtidigt
+ * genereras iXBRL-data från den renderade HTML-filen, vilket krävs för vidare
+ * processsteg. Den signerade PDF-filen används för verifiering av behörighet.
+ */
+
+import { useDropZone } from "@vueuse/core";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { requestOpenFile } from "@/util/fileUtils.ts";
+import CommonWizardButtons, {
+  type CommonWizardButtonsEmits,
+} from "@/components/tools/finish/common/blocks/CommonWizardButtons.vue";
+import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
+import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { ComponentExposed } from "vue-component-type-helpers";
+import RenderMain from "@/components/render/RenderMain.vue";
+import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
+
+const props = defineProps<
+  CommonStepProps & {
+    /** Årsredovisningen som ska skickas in till Bolagsverket. */
+    arsredovisning: Arsredovisning;
+  }
+>();
+
+/** Årsredovisningen som en signerad PDF, används av backend för att verifiera
+ * behörighet. */
+const signedPdf = defineModel<Uint8Array | undefined>("signedPdf", {
+  required: true,
+});
+
+/** Årsredovisningen i iXBRL-format. */
+const ixbrl = defineModel<string | undefined>("ixbrl", {
+  required: true,
+});
+
+const emit = defineEmits<CommonWizardButtonsEmits>();
+
+const signedPdfFilename = ref<string | undefined>();
+
+const renderMain = ref<ComponentExposed<typeof RenderMain>>();
+
+async function exportUnsignedPdf() {
+  if (!ixbrl.value) {
+    return;
+  }
+
+  const printWindow = window.open("", "", "popup,width=800,height=800");
+  if (!printWindow) {
+    return;
+  }
+
+  const htmlToWrite = `${ixbrl.value}
+  <script type="text/javascript">
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        window.close();
+      }, 250);
+    }, 250);
+  <\/script>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(htmlToWrite);
+}
+
+const signedPdfDropZoneRef = ref<HTMLDivElement>();
+const { isOverDropZone: isOverSignedPdfDropZone } = useDropZone(
+  signedPdfDropZoneRef,
+  {
+    onDrop: (files: File[] | null) => {
+      if (files) {
+        handleSignedPdfFile(files[0]);
+      }
+    },
+    dataTypes: ["application/pdf"],
+    multiple: false,
+    preventDefaultForUnhandled: false,
+  },
+);
+
+async function importSignedPdfFile() {
+  const file = await requestOpenFile(".pdf");
+  await handleSignedPdfFile(file);
+}
+
+async function handleSignedPdfFile(file: File | null | undefined) {
+  if (file) {
+    signedPdf.value = await file.bytes();
+    signedPdfFilename.value = file.name;
+  }
+}
+
+const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
+  renderMain,
+  arsredovisning: props.arsredovisning,
+  ixbrlOutput: ixbrl,
+});
+let reportGeneratorIntervalId: number | undefined;
+onMounted(() => {
+  // Timeout så att förhandsgranskningen hinner ladda in innan vi skapar iXBRL
+  setTimeout(async () => {
+    // Konvertera renderad HTML till iXBRL
+    reportGeneratorIntervalId = tryGenerateIXBRLInInterval();
+  }, 250);
+});
+
+onBeforeUnmount(() => {
+  if (reportGeneratorIntervalId != null) {
+    clearInterval(reportGeneratorIntervalId);
+  }
+});
+</script>
+
+<template>
+  <div class="d-flex flex-column gap-3">
+    <h4>
+      Steg {{ currentStepNumber }}/{{ numSteps }}: Signera årsredovisningen
+    </h4>
+
+    <div v-if="arsredovisning" hidden>
+      <RenderMain
+        ref="renderMain"
+        :arsredovisning="arsredovisning"
+        :show-faststallelseintyg="false"
+      />
+    </div>
+
+    <p>
+      Vi börjar med att signera årsredovisningen. Bla bla... Kör skriv ut som
+      PDF...
+    </p>
+
+    <div class="download-zone">
+      <button
+        :disabled="!ixbrl"
+        class="btn btn-primary"
+        @click="exportUnsignedPdf"
+      >
+        {{
+          ixbrl
+            ? "Ladda ner årsredovisningen i PDF-format"
+            : "Bearbetar – du kan snart ladda ner årsredovisningen…"
+        }}
+      </button>
+    </div>
+
+    <div
+      ref="signedPdfDropZoneRef"
+      :class="{ hover: isOverSignedPdfDropZone }"
+      class="drop-zone"
+    >
+      Släpp din signerade .pdf-fil här
+      <button class="btn btn-outline-primary" @click="importSignedPdfFile">
+        Eller tryck här för att välja fil
+      </button>
+      <div v-if="signedPdfFilename">Vald fil: {{ signedPdfFilename }}</div>
+      <div v-else>&nbsp;</div>
+    </div>
+
+    <CommonWizardButtons
+      :next-button-disabled="signedPdfFilename == null"
+      :previous-button-hidden="currentStepNumber === 1"
+      @go-to-previous-step="emit('goToPreviousStep')"
+      @go-to-next-step="emit('goToNextStep')"
+    />
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.download-zone,
+.drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  height: 10rem;
+}
+
+.drop-zone {
+  border: 2px dashed #646464;
+  border-radius: 0.5rem;
+
+  &.hover {
+    background-color: #cfd8c7;
+  }
+}
+</style>

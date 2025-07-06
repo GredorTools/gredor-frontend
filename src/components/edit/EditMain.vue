@@ -6,7 +6,11 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditResultatrakning from "@/components/edit/EditResultatrakning.vue";
-import { requestOpenFile, requestSaveFile } from "@/util/fileUtils.ts";
+import {
+  parseGredorFile,
+  requestOpenFile,
+  requestSaveFile,
+} from "@/util/fileUtils.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/EditBalansrakning.vue";
 import { type Ref, ref } from "vue";
@@ -14,7 +18,6 @@ import EditNoter from "@/components/edit/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/EditForvaltningsberattelse.vue";
 import EditGrunduppgifter from "@/components/edit/EditGrunduppgifter.vue";
 import EditSignatures from "@/components/edit/EditSignatures.vue";
-import EditFaststallelseintyg from "@/components/edit/EditFaststallelseintyg.vue";
 import { emptyArsredovisning } from "@/example/EmptyArsredovisning.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
@@ -23,24 +26,26 @@ const arsredovisning = defineModel<Arsredovisning>({
 });
 
 async function importFile() {
-  const file = await requestOpenFile(".gredor", "string");
-  if (file) {
-    const dataContainer: DataContainer<Arsredovisning> = JSON.parse(file);
-    // TODO: Validera
-    arsredovisning.value = dataContainer.data;
+  const file = await requestOpenFile(".gredorutkast,.gredorfardig");
+  const json = await file?.text();
+  if (json) {
+    arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+      "arsredovisning_utkast",
+      "arsredovisning_fardig",
+    ]).data;
   }
 }
 
 function exportFile() {
   const dataContainer: DataContainer<Arsredovisning> = {
-    dataType: "Arsredovisning",
+    dataType: "arsredovisning_utkast",
     version: 1,
     data: arsredovisning.value,
   };
 
   requestSaveFile(
     JSON.stringify(dataContainer),
-    `Arsredovisning_${new Date().getTime()}.gredor`,
+    `Arsredovisning_${new Date().getTime()}.gredorutkast`,
     "application/json",
   );
 }
@@ -55,8 +60,7 @@ type Mode =
   | "resultatrakning"
   | "balansrakning"
   | "noter"
-  | "signaturer"
-  | "faststallelseintyg";
+  | "signaturer";
 const availableModes: { [mode in Mode]: string } = {
   grunduppgifter: "Grunduppgifter",
   forvaltningsberattelse: "Förvaltningsberättelse",
@@ -64,7 +68,6 @@ const availableModes: { [mode in Mode]: string } = {
   balansrakning: "Balansräkning",
   noter: "Noter",
   signaturer: "Signaturer",
-  faststallelseintyg: "Fastställelseintyg",
 };
 const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
@@ -115,9 +118,6 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     </Suspense>
     <Suspense v-if="currentMode === 'signaturer'">
       <EditSignatures v-model:arsredovisning="arsredovisning" />
-    </Suspense>
-    <Suspense v-if="currentMode === 'faststallelseintyg'">
-      <EditFaststallelseintyg v-model:arsredovisning="arsredovisning" />
     </Suspense>
   </div>
 </template>

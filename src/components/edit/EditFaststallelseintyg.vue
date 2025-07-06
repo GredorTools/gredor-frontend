@@ -34,52 +34,54 @@ defineModel<Arsredovisning>("arsredovisning", {
         </option>
       </select>
     </div>
-  </div>
-  <div class="form-section">
     <div class="form-group">
-      <label for="tilltalsnamn">Underskrift, tilltalsnamn:</label>
-      <input
-        id="tilltalsnamn"
-        v-model.trim="
-          arsredovisning.faststallelseintyg.underskrift.tilltalsnamn
-        "
-        class="input-field"
-        type="text"
-      />
-    </div>
-    <div class="form-group">
-      <label for="efternamn">Underskrift, efternamn:</label>
-      <input
-        id="efternamn"
-        v-model.trim="arsredovisning.faststallelseintyg.underskrift.efternamn"
-        class="input-field"
-        type="text"
-      />
-    </div>
-    <div class="form-group">
-      <label for="roll">Underskrift, befattning:</label>
-      <select
-        id="roll"
-        v-model="arsredovisning.faststallelseintyg.underskrift.roll"
-        class="input-field"
-      >
-        <option
-          v-for="roll in FASTSTALLELSEINTYG_UNDERSKRIFT_ROLLER"
-          :key="roll"
-          :value="roll"
-        >
-          {{ roll }}
-        </option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="datum">Underskrift, datum:</label>
+      <label for="resultatdispositionBeslut">Datum för årsstämma:</label>
       <input
         id="datum"
-        v-model.trim="arsredovisning.faststallelseintyg.underskrift.datum"
+        v-model.trim="arsredovisning.faststallelseintyg.datumArsstamma"
         class="input-field"
         type="date"
       />
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="row">
+      <div class="form-group col">
+        <label for="tilltalsnamn">Underskrift, tilltalsnamn:</label>
+        <input
+          id="tilltalsnamn"
+          v-model.trim="
+            arsredovisning.faststallelseintyg.underskrift.tilltalsnamn
+          "
+          class="input-field"
+          type="text"
+        />
+      </div>
+      <div class="form-group col">
+        <label for="efternamn">Underskrift, efternamn:</label>
+        <input
+          id="efternamn"
+          v-model.trim="arsredovisning.faststallelseintyg.underskrift.efternamn"
+          class="input-field"
+          type="text"
+        />
+      </div>
+      <div class="form-group col">
+        <label for="roll">Underskrift, befattning:</label>
+        <select
+          id="roll"
+          v-model="arsredovisning.faststallelseintyg.underskrift.roll"
+          class="input-field"
+        >
+          <option
+            v-for="roll in FASTSTALLELSEINTYG_UNDERSKRIFT_ROLLER"
+            :key="roll"
+            :value="roll"
+          >
+            {{ roll }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </template>

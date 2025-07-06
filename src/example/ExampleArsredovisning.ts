@@ -1,7 +1,6 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { RedovisningsvalutaSEK } from "@/data/redovisningsvalutor.ts";
 import { ForfattareStyrelsenOchVD } from "@/data/forfattare.ts";
-import { ResultatdispositionBeslutGodkannaVinst } from "@/data/faststallelseintyg.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export const exampleArsredovisning: Arsredovisning = {
@@ -33,12 +32,16 @@ export const exampleArsredovisning: Arsredovisning = {
     underskriftOrt: "Sundsvall",
   },
   faststallelseintyg: {
-    resultatdispositionBeslut: ResultatdispositionBeslutGodkannaVinst,
+    datumArsstamma: "",
+    resultatdispositionBeslut: {
+      text: "",
+      xbrlId: "",
+    },
     underskrift: {
-      tilltalsnamn: "Karl",
-      efternamn: "Karlsson",
-      roll: "Styrelseledamot",
-      datum: "2026-04-05",
+      tilltalsnamn: "",
+      efternamn: "",
+      roll: "",
+      datum: "",
     },
   },
   verksamhetsarNuvarande: {

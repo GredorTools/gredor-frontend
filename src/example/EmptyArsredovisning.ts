@@ -1,7 +1,6 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { RedovisningsvalutaSEK } from "@/data/redovisningsvalutor.ts";
 import { ForfattareStyrelsen } from "@/data/forfattare.ts";
-import { ResultatdispositionBeslutGodkannaVinst } from "@/data/faststallelseintyg.ts";
 
 export const emptyArsredovisning: Arsredovisning = {
   metadata: {
@@ -26,12 +25,16 @@ export const emptyArsredovisning: Arsredovisning = {
     underskriftOrt: "",
   },
   faststallelseintyg: {
-    resultatdispositionBeslut: ResultatdispositionBeslutGodkannaVinst,
+    datumArsstamma: "",
+    resultatdispositionBeslut: {
+      text: "",
+      xbrlId: "",
+    },
     underskrift: {
       tilltalsnamn: "",
       efternamn: "",
-      roll: "Styrelseledamot",
-      datum: new Date().toISOString().split("T")[0],
+      roll: "",
+      datum: "",
     },
   },
   verksamhetsarNuvarande: {
