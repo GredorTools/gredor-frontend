@@ -86,6 +86,7 @@ const forandringarTable = computed(() =>
           <div v-if="cell != null" class="value-contents">
             <input
               v-model.trim="cell.belopprad.beloppNuvarandeAr"
+              class="form-control"
               type="text"
             />
             <BaseEditBeloppradDeleteButton
@@ -112,7 +113,12 @@ const forandringarTable = computed(() =>
   input {
     flex: 1;
     margin-right: 0.25rem;
-    min-width: 100px;
+    min-width: 100px !important;
+
+    &.form-control {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   }
 }
 </style>

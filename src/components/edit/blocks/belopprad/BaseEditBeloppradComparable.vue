@@ -65,11 +65,13 @@ const taxonomyItem = computed(() => {
       <input
         v-if="taxonomyItem.properties.abstract !== 'true'"
         v-model.trim="belopprad.not"
+        class="form-control"
+        maxlength="2"
         type="text"
       />
     </td>
     <td class="value-container">
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
         <template v-if="showBalanceSign">
           <span v-if="taxonomyItem.properties.balance === 'debit'"
             >&minus;</span
@@ -80,12 +82,13 @@ const taxonomyItem = computed(() => {
           v-if="taxonomyItem.properties.abstract !== 'true'"
           v-model.trim="belopprad.beloppNuvarandeAr"
           :disabled="isSummarad"
+          class="form-control"
           type="text"
         />
       </div>
     </td>
     <td v-for="i in numPreviousYears" :key="i" class="value-container">
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
         <template v-if="showBalanceSign">
           <span v-if="taxonomyItem.properties.balance === 'debit'"
             >&minus;</span
@@ -96,6 +99,7 @@ const taxonomyItem = computed(() => {
           v-if="taxonomyItem.properties.abstract !== 'true'"
           v-model.trim="belopprad.beloppTidigareAr[i - 1]"
           :disabled="isSummarad"
+          class="form-control"
           type="text"
         />
       </div>
@@ -106,4 +110,9 @@ const taxonomyItem = computed(() => {
   </BaseEditBeloppradContainer>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+input.form-control {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+</style>

@@ -74,7 +74,11 @@ const trClasses = computed(() => [
         }"
         :colspan="comparableNumPreviousYears + 3"
       >
-        <textarea v-if="multiline" v-model="belopprad.text"></textarea>
+        <textarea
+          v-if="multiline"
+          v-model="belopprad.text"
+          class="form-control"
+        ></textarea>
       </td>
     </tr>
   </template>

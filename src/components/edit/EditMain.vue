@@ -142,6 +142,10 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 
   th {
     vertical-align: bottom;
+
+    &.value-container {
+      padding-right: 1rem;
+    }
   }
 
   th,
@@ -159,14 +163,14 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     }
 
     &.not-container {
-      min-width: 40px;
+      min-width: 50px;
     }
 
     &.value-container {
       text-align: right;
 
       input {
-        min-width: 100px;
+        min-width: 120px;
         text-align: right;
       }
     }
