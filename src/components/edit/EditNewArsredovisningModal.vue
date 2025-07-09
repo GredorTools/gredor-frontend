@@ -39,35 +39,30 @@ const busy = ref<boolean>(false);
 
 async function handleSieFile(file: File) {
   busy.value = true;
-  setTimeout(async () => {
-    try {
-      const sieFileText = await file.text();
-      await mapSieFileIntoArsredovisning(sieFileText, arsredovisning.value);
-    } finally {
-      busy.value = false;
-    }
-  }, 100);
+  try {
+    const sieFileText = await file.text();
+    await mapSieFileIntoArsredovisning(sieFileText, arsredovisning.value);
+  } finally {
+    busy.value = false;
+  }
 }
 
-function fetchRecordsAndEmit() {
+async function fetchRecordsAndEmit() {
   busy.value = true;
-  setTimeout(async () => {
-    try {
-      await fetchRecords();
-    } catch (error) {
-      console.error(error);
-      alert(
-        "Misslyckades med att hämta företagets namn och räkenskapsår från Bolagsverket.",
-      );
-    } finally {
-      modal.value?.hide();
-      emit(
-        "arsredovisningCreated",
-        JSON.parse(JSON.stringify(arsredovisning.value)),
-      ); // Deep copy
-      busy.value = false;
-    }
-  }, 100);
+  try {
+    await fetchRecords();
+  } catch (error) {
+    console.error(error);
+    alert(
+      "Misslyckades med att hämta företagets namn och räkenskapsår från Bolagsverket.",
+    );
+  } finally {
+    emit(
+      "arsredovisningCreated",
+      JSON.parse(JSON.stringify(arsredovisning.value)), // Deep copy
+    );
+    modal.value?.hide();
+  }
 }
 
 async function fetchRecords() {
