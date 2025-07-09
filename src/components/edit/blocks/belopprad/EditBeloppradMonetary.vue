@@ -56,6 +56,7 @@ watch(belopprader.value, () => {
 <template>
   <BaseEditBeloppradComparable
     :allow-not="allowNot"
+    :allowed-value-regex="/^-?\d*$/"
     :belopprad="belopprad"
     :is-summarad="taxonomyItem.additionalData.isCalculatedItem"
     :num-previous-years="numPreviousYears"

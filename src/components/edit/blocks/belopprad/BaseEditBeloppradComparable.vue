@@ -21,6 +21,9 @@ export interface EditBeloppradComparablePropsBase {
 
   /** Huruvida notfält ska visas för beloppraden. */
   allowNot?: boolean;
+
+  /** Reguljärt uttryck som definierar vilka värden som är tillåtna. */
+  allowedValueRegex?: RegExp;
 }
 
 export interface EditBeloppradComparableEmitsBase {
@@ -48,6 +51,25 @@ const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
 const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
+
+// Hjälpfunktioner
+function onBeforeValueInput(event: InputEvent) {
+  if (!props.allowedValueRegex) {
+    return;
+  }
+
+  // För att bara tillåta vissa tecken i värdet
+  if (event.inputType.startsWith("insert")) {
+    const inputElement = event.target as HTMLInputElement;
+    const newValue =
+      inputElement.value.substring(0, inputElement.selectionStart || 0) +
+      (event.data ?? "") +
+      inputElement.value.substring(inputElement.selectionEnd || 0);
+    if (!props.allowedValueRegex.test(newValue.trim())) {
+      event.preventDefault();
+    }
+  }
+}
 </script>
 
 <template>
@@ -84,6 +106,7 @@ const taxonomyItem = computed(() => {
           :disabled="isSummarad"
           class="form-control"
           type="text"
+          @beforeinput="(event) => onBeforeValueInput(event as InputEvent)"
         />
       </div>
     </td>
@@ -101,6 +124,7 @@ const taxonomyItem = computed(() => {
           :disabled="isSummarad"
           class="form-control"
           type="text"
+          @beforeinput="(event) => onBeforeValueInput(event as InputEvent)"
         />
       </div>
     </td>
