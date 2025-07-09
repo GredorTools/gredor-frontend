@@ -59,6 +59,12 @@ components:
           type: string
         varde:
           type: string
+    KravPaRevisionsberattelseEnum:
+      type: string
+      enum:
+      - ja
+      - nej
+      - uppgift_saknas
     LocalDate:
       type: string
       format: date
@@ -78,6 +84,35 @@ components:
         signedPdf:
           type: string
           format: binary
+    Rakenskapsperiod:
+      type: object
+      properties:
+        from:
+          $ref: "#/components/schemas/LocalDate"
+        tom:
+          $ref: "#/components/schemas/LocalDate"
+        kravPaRevisionsberattelse:
+          $ref: "#/components/schemas/KravPaRevisionsberattelseEnum"
+        revisorsplikt:
+          $ref: "#/components/schemas/RevisorspliktEnum"
+    RecordsResponse:
+      type: object
+      required:
+      - foretagsnamn
+      - rakenskapsperioder
+      properties:
+        foretagsnamn:
+          type: string
+        rakenskapsperioder:
+          type: array
+          items:
+            $ref: "#/components/schemas/Rakenskapsperiod"
+    RevisorspliktEnum:
+      type: string
+      enum:
+      - ja
+      - nej
+      - uppgift_saknas
     SkapaTokenOK:
       type: object
       properties:
@@ -143,6 +178,24 @@ components:
           type: string
           format: binary
 paths:
+  /v1/information/records/{orgnr}:
+    get:
+      parameters:
+      - name: orgnr
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordsResponse"
+      summary: Records
+      tags:
+      - Information Resource
   /v1/submission-flow/prepare:
     post:
       requestBody:

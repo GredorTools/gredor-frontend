@@ -11,7 +11,7 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
-} from "@/components/tools/finish/common/blocks/CommonWizardButtons.vue";
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";

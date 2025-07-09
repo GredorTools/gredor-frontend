@@ -6,17 +6,16 @@
  * processsteg. Den signerade PDF-filen används för verifiering av behörighet.
  */
 
-import { useDropZone } from "@vueuse/core";
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import { requestOpenFile } from "@/util/fileUtils.ts";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
-} from "@/components/tools/finish/common/blocks/CommonWizardButtons.vue";
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import RenderMain from "@/components/render/RenderMain.vue";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
+import CommonFileInput from "@/components/common/CommonFileInput.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -38,7 +37,7 @@ const ixbrl = defineModel<string | undefined>("ixbrl", {
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
-const signedPdfFilename = ref<string | undefined>();
+const hasPickedSignedPdfFile = ref<boolean>(false);
 
 const renderMain = ref<ComponentExposed<typeof RenderMain>>();
 
@@ -67,31 +66,9 @@ async function exportUnsignedPdf() {
   printWindow.document.write(htmlToWrite);
 }
 
-const signedPdfDropZoneRef = ref<HTMLDivElement>();
-const { isOverDropZone: isOverSignedPdfDropZone } = useDropZone(
-  signedPdfDropZoneRef,
-  {
-    onDrop: (files: File[] | null) => {
-      if (files) {
-        handleSignedPdfFile(files[0]);
-      }
-    },
-    dataTypes: ["application/pdf"],
-    multiple: false,
-    preventDefaultForUnhandled: false,
-  },
-);
-
-async function importSignedPdfFile() {
-  const file = await requestOpenFile(".pdf");
-  await handleSignedPdfFile(file);
-}
-
-async function handleSignedPdfFile(file: File | null | undefined) {
-  if (file) {
-    signedPdf.value = await file.bytes();
-    signedPdfFilename.value = file.name;
-  }
+async function handleSignedPdfFile(file: File) {
+  signedPdf.value = await file.bytes();
+  hasPickedSignedPdfFile.value = true;
 }
 
 const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
@@ -148,21 +125,15 @@ onBeforeUnmount(() => {
       </button>
     </div>
 
-    <div
-      ref="signedPdfDropZoneRef"
-      :class="{ hover: isOverSignedPdfDropZone }"
-      class="drop-zone"
-    >
-      Släpp din signerade .pdf-fil här
-      <button class="btn btn-outline-primary" @click="importSignedPdfFile">
-        Eller tryck här för att välja fil
-      </button>
-      <div v-if="signedPdfFilename">Vald fil: {{ signedPdfFilename }}</div>
-      <div v-else>&nbsp;</div>
-    </div>
+    <CommonFileInput
+      :allowed-data-types="['application/pdf']"
+      :allowed-file-extensions="['.pdf']"
+      drag-and-drop-text-override="Dra och släpp din signerade .pdf-fil här"
+      @file-picked="handleSignedPdfFile"
+    />
 
     <CommonWizardButtons
-      :next-button-disabled="signedPdfFilename == null"
+      :next-button-disabled="!hasPickedSignedPdfFile"
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
@@ -171,23 +142,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-.download-zone,
-.drop-zone {
+.download-zone {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
 
   height: 10rem;
-}
-
-.drop-zone {
-  border: 2px dashed #646464;
-  border-radius: 0.5rem;
-
-  &.hover {
-    background-color: #cfd8c7;
-  }
 }
 </style>

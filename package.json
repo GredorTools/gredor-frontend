@@ -10,17 +10,19 @@
     "start": "npm run start:development",
     "start:development": "vite --mode development",
     "start:production": "vite --mode production",
-    "build": "run-p generate-api-types type-check \"build-only {@}\" --",
+    "build": "run-s generate-api-types generate-taxonomy-types type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "generate-api-types": "npx openapi-typescript src/openapi/gredor-backend-v1.yaml -o ./src/openapi/gredor-backend-v1.d.ts"
+    "generate-api-types": "npx openapi-typescript src/openapi/gredor-backend-v1.yaml -o ./src/openapi/gredor-backend-v1.d.ts",
+    "generate-taxonomy-types": "npx tsx tools/taxonomyItemIdGeneratorTool.ts -o ./src/data/taxonomy/k2/2021-10-31/taxonomyItemIds.d.ts"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@vueuse/core": "^13.5.0",
     "bootstrap": "^5.3.6",
     "byte-base64": "^1.1.0",
+    "decimal.js": "^10.5.0",
     "openapi-fetch": "^0.14.0",
     "validator": "^13.15.15",
     "vue": "^3.5.13",
@@ -35,6 +37,7 @@
     "@types/node": "^22.14.0",
     "@types/validator": "^13.15.2",
     "@types/xlsx": "^0.0.35",
+    "@types/yargs": "^17.0.33",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.27.0",
@@ -52,6 +55,6 @@
     "vite": "^6.2.4",
     "vite-plugin-vue-devtools": "^7.7.2",
     "vue-tsc": "^2.2.8",
-    "xlsx-republish": "^0.20.3"
+    "yargs": "^18.0.0"
   }
 }

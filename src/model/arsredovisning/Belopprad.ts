@@ -4,6 +4,7 @@ import {
   type TaxonomyItemType,
   TaxonomyManager,
 } from "@/util/TaxonomyManager.ts";
+import { reactive } from "vue";
 
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
   taxonomyItemName: string;
@@ -65,13 +66,14 @@ export function createBeloppradInList(
   taxonomyItem: TaxonomyItem,
   excludedSumRows: string[] = [],
   sort: boolean = true,
-) {
+): Belopprad | undefined {
   if (isTaxonomyItemInBeloppradList(list, taxonomyItem)) {
     // Finns redan
     return;
   }
 
-  list.push(createBelopprad(taxonomyItem));
+  const belopprad = reactive(createBelopprad(taxonomyItem));
+  list.push(belopprad);
 
   if (taxonomyItem.parent != null && taxonomyItem.parent.level > 0) {
     // Lägg till föräldrar rekursivt
@@ -113,6 +115,31 @@ export function createBeloppradInList(
         getTaxonomyItemForBelopprad(taxonomyManager, a).rowNumber -
         getTaxonomyItemForBelopprad(taxonomyManager, b).rowNumber,
     );
+  }
+
+  return belopprad;
+}
+
+export function getOrCreateBeloppradInList(
+  taxonomyManager: TaxonomyManager,
+  list: Belopprad[],
+  taxonomyItem: TaxonomyItem,
+): Belopprad {
+  const existingBelopprad = list.find((belopprad) =>
+    isBeloppradCorrespondsToTaxonomyItem(belopprad, taxonomyItem),
+  );
+  if (existingBelopprad) {
+    return existingBelopprad;
+  } else {
+    const createdBelopprad = createBeloppradInList(
+      taxonomyManager,
+      list,
+      taxonomyItem,
+    );
+    if (createdBelopprad == null) {
+      throw new Error("Belopprad was not created for unknown reason");
+    }
+    return createdBelopprad;
   }
 }
 

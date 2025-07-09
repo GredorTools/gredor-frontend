@@ -4,6 +4,44 @@
  */
 
 export interface paths {
+    "/v1/information/records/{orgnr}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Records */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    orgnr: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RecordsResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/submission-flow/prepare": {
         parameters: {
             query?: never;
@@ -179,6 +217,8 @@ export interface components {
             element?: string;
             varde?: string;
         };
+        /** @enum {string} */
+        KravPaRevisionsberattelseEnum: "ja" | "nej" | "uppgift_saknas";
         /** Format: date */
         LocalDate: string;
         PreparationRequest: {
@@ -187,6 +227,18 @@ export interface components {
             /** Format: binary */
             signedPdf: string;
         };
+        Rakenskapsperiod: {
+            from?: components["schemas"]["LocalDate"];
+            tom?: components["schemas"]["LocalDate"];
+            kravPaRevisionsberattelse?: components["schemas"]["KravPaRevisionsberattelseEnum"];
+            revisorsplikt?: components["schemas"]["RevisorspliktEnum"];
+        };
+        RecordsResponse: {
+            foretagsnamn: string;
+            rakenskapsperioder: components["schemas"]["Rakenskapsperiod"][];
+        };
+        /** @enum {string} */
+        RevisorspliktEnum: "ja" | "nej" | "uppgift_saknas";
         SkapaTokenOK: {
             token?: components["schemas"]["UUID"];
             avtalstext?: string;

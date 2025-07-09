@@ -4,14 +4,14 @@
  * skicka in årsredovisningen till Bolagsverket.
  */
 
-import { useDropZone } from "@vueuse/core";
-import { ref } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { parseGredorFile, requestOpenFile } from "@/util/fileUtils.ts";
+import { parseGredorFile } from "@/util/fileUtils.ts";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
-} from "@/components/tools/finish/common/blocks/CommonWizardButtons.vue";
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
+import CommonFileInput from "@/components/common/CommonFileInput.vue";
+import { ref } from "vue";
 
 defineProps<CommonStepProps>();
 
@@ -31,63 +31,20 @@ const signedPdf = defineModel<Uint8Array | undefined>("signedPdf", {
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
-const arsredovisningFilename = ref<string | undefined>();
-const signedPdfFilename = ref<string | undefined>();
+const hasPickedArsredovisningFile = ref<boolean>(false);
+const hasPickedSignedPdfFile = ref<boolean>(false);
 
-const arsredovsisningDropZoneRef = ref<HTMLDivElement>();
-const { isOverDropZone: isOverArsredovisningDropZone } = useDropZone(
-  arsredovsisningDropZoneRef,
-  {
-    onDrop: (files: File[] | null) => {
-      if (files) {
-        handleArsredovisningFile(files[0]);
-      }
-    },
-    multiple: false,
-    preventDefaultForUnhandled: false,
-  },
-);
-
-const signedPdfDropZoneRef = ref<HTMLDivElement>();
-const { isOverDropZone: isOverSignedPdfDropZone } = useDropZone(
-  signedPdfDropZoneRef,
-  {
-    onDrop: (files: File[] | null) => {
-      if (files) {
-        handleSignedPdfFile(files[0]);
-      }
-    },
-    dataTypes: ["application/pdf"],
-    multiple: false,
-    preventDefaultForUnhandled: false,
-  },
-);
-
-async function importArsredovisningFile() {
-  const file = await requestOpenFile(".gredorfardig");
-  await handleArsredovisningFile(file);
+async function handleArsredovisningFile(file: File) {
+  const json = await file.text();
+  arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+    "arsredovisning_fardig",
+  ]).data;
+  hasPickedArsredovisningFile.value = true;
 }
 
-async function importSignedPdfFile() {
-  const file = await requestOpenFile(".pdf");
-  await handleSignedPdfFile(file);
-}
-
-async function handleArsredovisningFile(file: File | null | undefined) {
-  if (file) {
-    const json = await file.text();
-    arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
-      "arsredovisning_fardig",
-    ]).data;
-    arsredovisningFilename.value = file.name;
-  }
-}
-
-async function handleSignedPdfFile(file: File | null | undefined) {
-  if (file) {
-    signedPdf.value = await file.bytes();
-    signedPdfFilename.value = file.name;
-  }
+async function handleSignedPdfFile(file: File) {
+  signedPdf.value = await file.bytes();
+  hasPickedSignedPdfFile.value = true;
 }
 </script>
 
@@ -96,40 +53,21 @@ async function handleSignedPdfFile(file: File | null | undefined) {
     <div class="d-flex flex-column gap-3">
       <h4>Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp filer</h4>
 
-      <div
-        ref="arsredovsisningDropZoneRef"
-        :class="{ hover: isOverArsredovisningDropZone }"
-        class="drop-zone"
-      >
-        Dra och släpp din .gredorfardig-fil här
-        <button
-          class="btn btn-outline-primary"
-          @click="importArsredovisningFile"
-        >
-          Eller tryck här för att välja fil
-        </button>
-        <div v-if="arsredovisningFilename">
-          Vald fil: {{ arsredovisningFilename }} ✅
-        </div>
-        <div v-else>&nbsp;</div>
-      </div>
-      <div
-        ref="signedPdfDropZoneRef"
-        :class="{ hover: isOverSignedPdfDropZone }"
-        class="drop-zone"
-      >
-        Dra och släpp din signerade .pdf-fil här
-        <button class="btn btn-outline-primary" @click="importSignedPdfFile">
-          Eller tryck här för att välja fil
-        </button>
-        <div v-if="signedPdfFilename">Vald fil: {{ signedPdfFilename }} ✅</div>
-        <div v-else>&nbsp;</div>
-      </div>
+      <CommonFileInput
+        :allowed-file-extensions="['.gredorfardig']"
+        @file-picked="handleArsredovisningFile"
+      />
+      <CommonFileInput
+        :allowed-data-types="['application/pdf']"
+        :allowed-file-extensions="['.pdf']"
+        drag-and-drop-text-override="Dra och släpp din signerade .pdf-fil här"
+        @file-picked="handleSignedPdfFile"
+      />
     </div>
 
     <CommonWizardButtons
       :next-button-disabled="
-        arsredovisningFilename == null || signedPdfFilename == null
+        !hasPickedArsredovisningFile || !handleSignedPdfFile
       "
       previous-button-hidden
       @go-to-previous-step="emit('goToPreviousStep')"

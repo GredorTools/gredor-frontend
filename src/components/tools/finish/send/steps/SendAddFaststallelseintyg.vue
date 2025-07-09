@@ -10,7 +10,7 @@ import RenderFaststallelseintyg from "@/components/render/blocks/RenderFaststall
 import { computed } from "vue";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
-} from "@/components/tools/finish/common/blocks/CommonWizardButtons.vue";
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 
 defineProps<CommonStepProps>();
