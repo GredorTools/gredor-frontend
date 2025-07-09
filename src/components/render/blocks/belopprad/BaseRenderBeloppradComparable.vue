@@ -47,10 +47,21 @@ const props = defineProps<
 const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
 });
+
+const shouldDisplay = computed(() => {
+  // Visa endast beloppraden om det någon av kolumnerna kommer ha något värde
+  return (
+    props.belopprad.beloppNuvarandeAr.length > 0 ||
+    props.belopprad.beloppTidigareAr
+      .slice(0, props.numPreviousYears)
+      .some((b) => b.length > 0)
+  );
+});
 </script>
 
 <template>
   <tr
+    v-if="shouldDisplay"
     :class="{
       summa:
         taxonomyItem.additionalData.labelType === 'totalLabel' ||
