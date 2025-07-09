@@ -1,6 +1,10 @@
 @import "./base.scss";
 @import "$fonts/ebgaramond/EBGaramond.css";
 @import "$fonts/freesans/FreeSans.css";
+
+$tooltip-max-width: 320px;
+$tooltip-padding-x: 0.75rem;
+$tooltip-padding-y: 0.5rem;
 @import "bootstrap/scss/bootstrap.scss";
 
 body {

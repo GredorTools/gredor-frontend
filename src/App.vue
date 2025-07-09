@@ -3,8 +3,8 @@
  * Huvudkomponenten som sammanför alla delar av applikationen.
  */
 
-import { ref } from "vue";
-import { exampleArsredovisning } from "@/example/ExampleArsredovisning.ts";
+import { onMounted, ref, useTemplateRef } from "vue";
+import { exampleArsredovisning } from "@/example/exampleArsredovisning.ts";
 import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
@@ -14,10 +14,34 @@ import {
   VueOnboardingTour,
 } from "vue-onboarding-tour";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { Tooltip } from "bootstrap";
+import { useGredorStorage } from "@/util/storageUtils.ts";
 
 const arsredovisning = ref(exampleArsredovisning);
 
 const environmentName = getConfigValue("VITE_ENV_NAME");
+
+// Tooltip för rundtur - visas automatiskt när sidan laddas första gången
+const tourBtn = useTemplateRef("tour-btn");
+const tourTooltipHasBeenDisplayed = useGredorStorage(
+  "AppTourTooltipHasBeenDisplayed",
+  false,
+);
+if (!tourTooltipHasBeenDisplayed.value) {
+  onMounted(() => {
+    const element = tourBtn.value;
+    if (element) {
+      const tooltip = new Tooltip(element);
+      setTimeout(() => {
+        tooltip.show();
+        setTimeout(() => {
+          tooltip.hide();
+          tourTooltipHasBeenDisplayed.value = true;
+        }, 5000);
+      }, 500);
+    }
+  });
+}
 
 // Rundtur
 const tour = ref<ComponentExposed<typeof VueOnboardingTour>>();
@@ -35,7 +59,7 @@ const tourSteps: OnboardingTourStep[] = [
   {
     title: "Välkommen till Gredor!",
     description:
-      "Du kommer nu att få en rundtur genom de olika funktionerna i tjänsten.",
+      "Du kommer nu att få en snabb rundtur genom de olika delarna av tjänsten.",
   },
   {
     target: "#editor",
@@ -46,10 +70,11 @@ const tourSteps: OnboardingTourStep[] = [
   },
   {
     target: "#renderer",
-    title: "Förhandsgranska årsredovisningen",
+    title: "Live-förhandsgranskning",
     description:
       "Och på höger sida av skärmen har du en förhandsgranskning som visar" +
-      " hur årsredovisningen kommer att se ut.",
+      " hur årsredovisningen kommer att se ut. Den uppdateras live när du" +
+      " redigerar årsredovisningen.",
   },
   {
     target: "#tools",
@@ -93,7 +118,17 @@ const tourSteps: OnboardingTourStep[] = [
         }}</span>
       </h1>
 
-      <button id="tour-btn" class="btn btn-success" @click="startTour">
+      <button
+        id="tour-btn"
+        ref="tour-btn"
+        class="btn btn-success"
+        data-bs-offset="[0, 12]"
+        data-bs-placement="left"
+        data-bs-title="Första gången här? Ta rundturen!"
+        data-bs-toggle="tooltip"
+        data-bs-trigger="manual"
+        @click="startTour"
+      >
         Rundtur
       </button>
     </header>
@@ -145,6 +180,11 @@ const tourSteps: OnboardingTourStep[] = [
             Meatloaf shoulder turducken, tongue venison shankle meatball
             tenderloin sausage porchetta beef jerky chuck.
           </p>
+          <p>
+            Gredor är utvecklat av småföretagare för småföretagare. Vår vision
+            är att det ska vara enkelt och smidigt att driva ett litet bolag –
+            utan att man ska behöva lägga en massa pengar på programvara.
+          </p>
         </div>
       </div>
       <div class="card">
@@ -153,10 +193,10 @@ const tourSteps: OnboardingTourStep[] = [
         </div>
         <div class="card-body">
           <p>
-            Målgruppen för Gredor är företagare som är bekväma med att ställa
-            upp årsredovisningen själv. Har du exempelvis tidigare skrivit din
-            årsredovisning i Word och sedan postat den till Bolagsverket, kan
-            Gredor vara ett bra alternativ för dig.
+            Målgruppen för Gredor är främst företagare som är bekväma med att
+            ställa upp årsredovisningen själva. Har du exempelvis tidigare
+            skrivit din årsredovisning i Word och sedan postat den till
+            Bolagsverket, kan Gredor vara ett bra alternativ för dig.
           </p>
           <p>
             Vi som arbetar med Gredor har begränsad möjlighet att ge support;
@@ -181,7 +221,7 @@ const tourSteps: OnboardingTourStep[] = [
       </div>
       <div class="card">
         <div class="card-header">
-          <strong>TODO</strong>
+          <strong>Sponsorer</strong>
         </div>
         <div class="card-body">TODO</div>
       </div>
@@ -191,14 +231,14 @@ const tourSteps: OnboardingTourStep[] = [
         </div>
         <div class="card-body">
           <p>
-            Gredor är ett open-source-projekt. Programvaran är AGPL-licensierad,
-            och källkoden finns på
+            Gredor är ett open-source-projekt. Programvaran är
+            AGPLv3-licensierad, och källkoden finns på
             <a href="https://github.com/GredorTools" target="_blank">GitHub</a>.
           </p>
           <p>
             Bidrag till projektet uppskattas stort! Om du vill bidra, öppna
-            gärna en issue och/eller utkasts-PR för att få tidig återkoppling på
-            dina tänkta ändringar.
+            gärna en issue och/eller utkasts-PR i GitHub-repot för att få tidig
+            återkoppling på dina tänkta ändringar.
           </p>
         </div>
       </div>
