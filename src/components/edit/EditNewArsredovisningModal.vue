@@ -148,7 +148,7 @@ const orgnrRegex = /^\d{6}-\d{4}$/;
 
       <p>
         Tänk på att kontrollera i efterhand att fälten blev korrekt ifyllda, och
-        att själv fylla i de uppgifter som återstår själv (bland annat noter).
+        att själv fylla i de uppgifter som återstår (bland annat noter).
       </p>
 
       <CommonFileInput
