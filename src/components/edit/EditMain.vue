@@ -13,7 +13,7 @@ import {
 } from "@/util/fileUtils.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/sections/EditBalansrakning.vue";
-import { type Ref, ref } from "vue";
+import { nextTick, type Ref, ref } from "vue";
 import EditNoter from "@/components/edit/sections/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/sections/EditForvaltningsberattelse.vue";
 import EditGrunduppgifter from "@/components/edit/sections/EditGrunduppgifter.vue";
@@ -27,8 +27,15 @@ const arsredovisning = defineModel<Arsredovisning>({
   required: true,
 });
 
+const newArsredovisningModalRenderId = ref<number>(0);
 const newArsredovisningModal =
   ref<ComponentExposed<typeof EditNewArsredovisningModal>>();
+
+async function showNewArsredovisningModal() {
+  newArsredovisningModalRenderId.value++; // Så att komponenten nollställs
+  await nextTick(); // Vänta tills den har uppdaterats
+  newArsredovisningModal.value?.show(); // Nu kan vi visa modalen
+}
 
 async function importFile() {
   const file = await requestOpenFile(".gredorutkast,.gredorfardig");
@@ -56,6 +63,7 @@ function exportFile() {
 }
 
 async function importSIE() {
+  // TODO: Visa meddelande om att saker rensas...
   const file = await requestOpenFile(".se,.si,.sie");
   const text = await file?.text();
   if (text) {
@@ -84,7 +92,7 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 <template>
   <div class="d-flex justify-content-between">
     <div class="d-flex gap-2">
-      <button class="btn btn-primary" @click="newArsredovisningModal?.show()">
+      <button class="btn btn-primary" @click="showNewArsredovisningModal">
         Ny årsredovisning…
       </button>
       <button class="btn btn-primary" @click="importFile">Öppna…</button>
@@ -134,6 +142,7 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
   </div>
 
   <EditNewArsredovisningModal
+    :key="`modal-render-${newArsredovisningModalRenderId}`"
     ref="newArsredovisningModal"
     @arsredovisning-created="(value) => (arsredovisning = value)"
   />

@@ -53,7 +53,6 @@ onMounted(() => {
           <h3 class="modal-title">{{ title }}</h3>
         </div>
         <div v-if="modalHasBeenShown" class="modal-body">
-          <!-- TODO: Prop för att ladda om ifall rutan öppnas igen -->
           <slot />
         </div>
         <div :id="footerTeleportPointId" class="modal-footer"></div>
@@ -64,9 +63,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .modal-dialog {
-  min-width: var(--bs-modal-width) !important;
-  width: fit-content !important;
-  max-width: unset !important;
+  min-width: var(--bs-modal-width);
+  width: fit-content;
+  max-width: unset;
 }
 
 .modal-body {

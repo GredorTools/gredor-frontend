@@ -7,7 +7,7 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
 import { convertVueHTMLToiXBRL } from "@/util/documentUtils.ts";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
@@ -17,6 +17,7 @@ const props = defineProps<{
   arsredovisning: Arsredovisning;
 }>();
 
+const finalizeWizardRenderId = ref<number>(0);
 const finalizeWizard = ref<ComponentExposed<typeof FinalizeWizard>>();
 const sendWizard = ref<ComponentExposed<typeof SendWizard>>();
 
@@ -40,6 +41,16 @@ async function exportArsredovisning() {
     requestSaveFile(ixbrl, "arsredovisning.xhtml", "text/html");
   }
 }
+
+async function showFinalizeWizard() {
+  finalizeWizardRenderId.value++; // Så att komponenten nollställs
+  await nextTick(); // Vänta tills den har uppdaterats
+  finalizeWizard.value?.show(); // Nu kan vi visa modalen
+}
+
+function showSendWizard() {
+  sendWizard.value?.show();
+}
 </script>
 
 <template>
@@ -47,14 +58,19 @@ async function exportArsredovisning() {
     <button class="btn btn-outline-primary" @click="exportArsredovisning()">
       Exportera iXBRL-fil (test)
     </button>
-    <button class="btn btn-primary" @click="finalizeWizard?.show()">
+    <button class="btn btn-primary" @click="showFinalizeWizard">
       Färdigställ inför årsstämma
     </button>
-    <button class="btn btn-primary" @click="sendWizard?.show()">
+    <button class="btn btn-primary" @click="showSendWizard">
       Skicka in till Bolagsverket efter årsstämma
     </button>
   </div>
-  <FinalizeWizard ref="finalizeWizard" :arsredovisning="arsredovisning" />
+
+  <FinalizeWizard
+    :key="finalizeWizardRenderId"
+    ref="finalizeWizard"
+    :arsredovisning="arsredovisning"
+  />
   <SendWizard ref="sendWizard" />
 </template>
 
