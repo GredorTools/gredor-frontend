@@ -48,9 +48,11 @@ const isValidFaststallelseintyg = computed(() => {
         <EditFaststallelseintyg :arsredovisning="arsredovisning" />
       </div>
       <h5>Förhandsgranskning</h5>
-      <div class="arsredovisning-root">
-        <div class="arsredovisning-content">
-          <RenderFaststallelseintyg :arsredovisning="arsredovisning" />
+      <div class="preview">
+        <div class="arsredovisning-root">
+          <div class="arsredovisning-content">
+            <RenderFaststallelseintyg :arsredovisning="arsredovisning" />
+          </div>
         </div>
       </div>
     </div>
@@ -64,4 +66,8 @@ const isValidFaststallelseintyg = computed(() => {
 
 <style lang="scss" scoped>
 @import "@/assets/render.scss";
+
+.preview {
+  padding: 0.5rem;
+}
 </style>

@@ -60,12 +60,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
+  <div class="d-flex flex-col preview-container">
     <h4>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Förhandsgranska
       årsredovisningen
     </h4>
-    <div v-if="arsredovisning">
+    <p>
+      Observera att det är Bolagsverket som skapar det slutgiltiga dokumentet,
+      och att det eventuellt kan se lite annorlunda ut.
+    </p>
+    <div v-if="arsredovisning" class="preview">
       <RenderMain
         ref="renderMain"
         :arsredovisning="arsredovisning"
@@ -83,8 +87,17 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-:deep(.arsredovisning-root) {
-  max-height: unset;
-  overflow: unset;
+.preview-container {
+  width: min-content;
+}
+
+p {
+  margin: 1rem 0;
+}
+
+.preview {
+  overflow: scroll;
+  flex: 1;
+  padding: 0.5rem;
 }
 </style>
