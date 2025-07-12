@@ -288,7 +288,7 @@ main {
   height: 100vh;
   max-height: 100vh;
   padding: 2rem;
-  gap: 2em;
+  gap: 2rem;
 
   #editor {
     overflow-y: auto;
@@ -304,7 +304,7 @@ main {
 
   #renderer {
     /* För skuggan */
-    padding: 0 0.5em 0.5em 0px;
+    padding: 0 0.5rem 0.5rem 0px;
   }
 
   .help-hint {
@@ -325,7 +325,7 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 2rem 6rem 4rem 6rem;
-  gap: 2em;
+  gap: 2rem;
 }
 
 header {

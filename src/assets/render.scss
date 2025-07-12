@@ -6,31 +6,31 @@
 
   background-color: white;
 
-  padding: 1em 2em 2em;
+  padding: 1rem 2rem 2rem;
   line-height: 1.2;
 
   @media screen {
     border: 1px solid rgb(240, 240, 240);
     border-image: none;
-    box-shadow: 0.25em 0.25em 0.3em #999;
+    box-shadow: 0.25rem 0.25rem 0.3rem #999;
   }
 }
 
 .arsredovisning-content {
   width: 100%;
   font-family: "EB Garamond", serif;
-  padding: 1em;
+  padding: 1rem;
 
   & > *:not(:first-child) {
-    padding-top: 1em;
+    padding-top: 1rem;
   }
 
   & > *:not(:last-child) {
-    padding-bottom: 2em;
+    padding-bottom: 2rem;
   }
 
   .page-break {
-    margin: 0 -3em;
+    margin: 0 -3rem;
     page-break-after: always;
     background-size: 210mm 297mm;
 
