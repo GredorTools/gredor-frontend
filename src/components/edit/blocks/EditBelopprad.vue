@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 /**
  * En komponent som fungerar som en wrapper för olika typer av belopprader.
- * Väljer automatiskt rätt komponent baserat på beloppradens typ (monetär, decimal eller sträng).
+ * Väljer automatiskt rätt komponent baserat på beloppradens typ (monetär, icke-monetär eller sträng).
  */
 
 import EditBeloppradMonetary from "@/components/edit/blocks/belopprad/EditBeloppradMonetary.vue";
@@ -33,6 +33,10 @@ const props = defineProps<{
 
   /** Huruvida strängrader ska tillåta radbrytningar. */
   stringMultiline?: boolean;
+
+  /** Minsta nivå för strängbelopprader; belopprader som är strängar och ligger
+   * högre upp i hierarkin kommer inte att renderas. */
+  stringMinimumLevel?: number;
 }>();
 
 const emit = defineEmits<{
@@ -60,7 +64,7 @@ const taxonomyItem = computed(() => {
     v-if="
       taxonomyItem.properties.type !== 'xbrli:stringItemType' ||
       taxonomyItem.childrenFlat.length < 1 ||
-      taxonomyItem.level > 1
+      taxonomyItem.level > (stringMinimumLevel ?? -1)
     "
   >
     <EditBeloppradString

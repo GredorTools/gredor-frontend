@@ -79,6 +79,7 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
         :comparable-num-previous-years="
           Math.min(arsredovisning.verksamhetsarTidigare.length, 3)
         "
+        :string-minimum-level="1"
         :taxonomy-manager="taxonomyManager"
         @delete="
           () =>

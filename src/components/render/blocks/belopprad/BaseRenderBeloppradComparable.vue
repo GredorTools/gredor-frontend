@@ -21,8 +21,12 @@ export interface RenderBeloppradComparablePropsBase<
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
 
-  /** Beloppraden med decimalvärden som ska redigeras. */
+  /** Beloppraden med jämförbara värden som ska redigeras. */
   belopprad: T;
+
+  /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
+   * nivå, även om den inte är en belopprad av den nivån. */
+  renderAsLevel?: number;
 
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
@@ -48,26 +52,19 @@ const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
 });
 
-const shouldDisplay = computed(() => {
-  // Visa endast beloppraden om det någon av kolumnerna kommer ha något värde
-  return (
-    props.belopprad.beloppNuvarandeAr.length > 0 ||
-    props.belopprad.beloppTidigareAr
-      .slice(0, props.numPreviousYears)
-      .some((b) => b.length > 0)
-  );
-});
+const renderLevel = computed(
+  () => props.renderAsLevel ?? taxonomyItem.value.level,
+);
 </script>
 
 <template>
   <tr
-    v-if="shouldDisplay"
     :class="{
       summa:
         taxonomyItem.additionalData.labelType === 'totalLabel' ||
         taxonomyItem.additionalData.isCalculatedItem,
       ['summa-forced']: displayAsTotalItem,
-      [`level-${taxonomyItem.level}`]: true,
+      [`level-${renderLevel}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >

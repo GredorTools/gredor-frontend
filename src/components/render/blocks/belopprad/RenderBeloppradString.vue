@@ -15,6 +15,10 @@ const props = defineProps<{
   /** Beloppraden med strängvärdet som ska renderas. */
   belopprad: BeloppradString;
 
+  /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
+   * nivå, även om den inte är en belopprad av den nivån. */
+  renderAsLevel?: number;
+
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
 
@@ -22,9 +26,13 @@ const props = defineProps<{
   showHeader: boolean;
 }>();
 
-const taxonomyItem = computed(() => {
-  return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
-});
+const taxonomyItem = computed(() =>
+  getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad),
+);
+
+const renderLevel = computed(
+  () => props.renderAsLevel ?? taxonomyItem.value.level,
+);
 </script>
 
 <template>
@@ -32,7 +40,7 @@ const taxonomyItem = computed(() => {
     v-if="showHeader || belopprad.text"
     :class="{
       abstract: taxonomyItem.properties.abstract === 'true',
-      [`level-${taxonomyItem.level}`]: true,
+      [`level-${renderLevel}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 /**
  * En komponent som fungerar som en wrapper för olika typer av belopprader.
- * Väljer automatiskt rätt komponent baserat på beloppradens typ (monetär, decimal eller sträng).
+ * Väljer automatiskt rätt komponent baserat på beloppradens typ (monetär, icke-monetär eller sträng).
  */
 
 import RenderBeloppradMonetary from "@/components/render/blocks/belopprad/RenderBeloppradMonetary.vue";
@@ -25,19 +25,26 @@ const props = defineProps<{
   /** Beloppraden som ska renderas. */
   belopprad: Belopprad;
 
-  /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan jämföra mellan år. */
+  /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
+   * nivå, även om den inte är en belopprad av den nivån. */
+  renderAsLevel?: number;
+
+  /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan
+   * jämföra mellan år. */
   comparableNumPreviousYears?: number;
 
-  /** Huruvida notfält ska visas för belopprader där man kan jämföra mellan år. */
+  /** Huruvida notfält ska visas för belopprader där man kan jämföra mellan år.
+   * */
   comparableAllowNot?: boolean;
 
-  /** Huruvida beloppraden ska tvångsvisas som en summarad, för belopprader där man kan jämföra mellan år. */
+  /** Huruvida beloppraden ska tvångsvisas som en summarad, för belopprader där
+   * man kan jämföra mellan år. */
   comparableDisplayAsTotalItem?: boolean;
 
   /** Huruvida balanstecken ska visas för monetära belopprader. */
   monetaryShowBalanceSign?: boolean;
 
-  /** Huruvida strängrader ska tillåta radbrytningar. */
+  /** Huruvida rubriker för strängrader ska visas. */
   stringShowHeader?: boolean;
 }>();
 
@@ -61,6 +68,7 @@ const contextRefPrefix = computed(() => {
     v-if="isBeloppradString(belopprad)"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :render-as-level="renderAsLevel"
     :show-header="stringShowHeader || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -71,6 +79,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
+    :render-as-level="renderAsLevel"
     :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -81,6 +90,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
+    :render-as-level="renderAsLevel"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

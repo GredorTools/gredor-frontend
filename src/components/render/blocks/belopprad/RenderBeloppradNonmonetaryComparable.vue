@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 /**
- * En komponent för att redigera belopprader som har icke-monetära jämförbara värden som datatyp.
+ * En komponent för att redigera belopprader som har icke-monetära jämförbara
+ * värden som datatyp (t.ex. decimalvärden, aktievärden)
  */
 
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
@@ -18,6 +19,7 @@ defineProps<RenderBeloppradComparablePropsBase<BaseBeloppradComparable>>();
     :context-ref-prefix="contextRefPrefix"
     :display-as-total-item="displayAsTotalItem"
     :num-previous-years="1"
+    :render-as-level="renderAsLevel"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

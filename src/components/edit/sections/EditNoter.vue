@@ -86,6 +86,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
+          :string-minimum-level="1"
           :taxonomy-manager="taxonomyManager"
           string-multiline
           @delete="

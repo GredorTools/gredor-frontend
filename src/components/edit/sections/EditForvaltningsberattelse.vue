@@ -95,6 +95,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           v-model:belopprad="arsredovisning.forvaltningsberattelse[index]"
           v-model:belopprader="arsredovisning.forvaltningsberattelse"
           :comparable-num-previous-years="0"
+          :string-minimum-level="1"
           :taxonomy-manager="taxonomyManager"
           string-multiline
           @delete="

@@ -10,7 +10,7 @@ import {
   getTaxonomyManager,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
-import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
@@ -20,6 +20,28 @@ defineProps<{
   /** Årsredovisningen som innehåller resultaträkningen. */
   arsredovisning: Arsredovisning;
 }>();
+
+function getRenderAsLevelForBelopprad(
+  belopprad: Belopprad,
+): number | undefined {
+  if (belopprad.type === "xbrli:stringItemType") {
+    // Alla rubriker ska se likadana ut
+    return 2;
+  }
+
+  if (
+    [
+      "se-gen-base:FinansiellaPoster",
+      "se-gen-base:Bokslutsdispositioner",
+    ].includes(belopprad.taxonomyItemName)
+  ) {
+    // Dessa summarader ska renderas som nivå 2-belopprader för att se bra ut
+    // (de ska se ut som summaraderna för rörelseintäker och röreleskostnader)
+    return 2;
+  }
+
+  return undefined; // Låt RenderBelopprad bestämma baserat på egentliga nivån
+}
 </script>
 
 <template>
@@ -45,17 +67,18 @@ defineProps<{
     <tbody>
       <RenderBelopprad
         v-for="belopprad in arsredovisning.resultatrakning.filter((b) => {
-          const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, b);
-          return (
-            taxonomyItem.level > 1 ||
-            taxonomyItem.properties.abstract !== 'true'
-          );
+          return ![
+            // Dessa vill vi inte ska renderas
+            'se-gen-base:RorelseresultatAbstract',
+            'se-gen-base:SkatterAbstract',
+          ].includes(b.taxonomyItemName);
         })"
         :key="belopprad.taxonomyItemName"
         :belopprad="belopprad"
         :comparable-num-previous-years="
           Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
         "
+        :render-as-level="getRenderAsLevelForBelopprad(belopprad)"
         :taxonomy-manager="taxonomyManager"
         comparable-allow-not
         monetary-show-balance-sign
