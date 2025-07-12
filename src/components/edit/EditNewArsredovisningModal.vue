@@ -176,7 +176,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
 }
 
 h5:not(:first-of-type) {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
 }
 
 input {

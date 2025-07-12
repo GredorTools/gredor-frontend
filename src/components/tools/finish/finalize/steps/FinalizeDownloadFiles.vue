@@ -79,10 +79,8 @@ function exportFile() {
 <style lang="scss" scoped>
 .download-zone {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
 
   height: 10rem;
 }
