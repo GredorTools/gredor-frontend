@@ -8,6 +8,7 @@ import type { TaxonomyItemId } from "@/data/taxonomy/k2/2021-10-31/taxonomyItemI
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
   type Belopprad,
+  deleteBelopprad,
   getOrCreateBeloppradInList,
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
@@ -46,6 +47,7 @@ export async function mapSieFileIntoArsredovisning(
   const beloppraderAdded: Belopprad[] = [];
   const taxonomyManagersForBelopprad: Map<Belopprad, TaxonomyManager> =
     new Map();
+  const beloppradListsForBelopprad: Map<Belopprad, Belopprad[]> = new Map();
 
   // Rensa befintliga belopprader i resultaträkningen och balansräkningen
   arsredovisning.resultatrakning = [];
@@ -93,6 +95,7 @@ export async function mapSieFileIntoArsredovisning(
             belopprad.beloppTidigareAr = ["0"];
             beloppraderAdded.push(belopprad);
             taxonomyManagersForBelopprad.set(belopprad, taxonomyManager);
+            beloppradListsForBelopprad.set(belopprad, beloppradListToAddInto);
           }
 
           // Uppdatera beloppet för nuvarande och tidigare år med det nya värdet
@@ -137,7 +140,7 @@ export async function mapSieFileIntoArsredovisning(
         .round()
         .toString();
 
-      // Gör om "0" -> "" på icke-summarader
+      // Gör om "0" -> "" på icke-summarader, och ta bort tomma belopprader
       if (
         taxonomyManagersForBelopprad.get(belopprad) != null &&
         !getTaxonomyItemForBelopprad(
@@ -150,6 +153,17 @@ export async function mapSieFileIntoArsredovisning(
         }
         if (belopprad.beloppTidigareAr[0] === "0") {
           belopprad.beloppTidigareAr[0] = "";
+        }
+
+        if (
+          !belopprad.beloppNuvarandeAr &&
+          !belopprad.beloppTidigareAr.some((b) => b)
+        ) {
+          deleteBelopprad(
+            taxonomyManagersForBelopprad.get(belopprad)!,
+            belopprad,
+            beloppradListsForBelopprad.get(belopprad)!,
+          );
         }
       }
     }
