@@ -6,7 +6,7 @@ import type { Arsredovisning, Verksamhetsar } from "@/model/arsredovisning/Arsre
 
 /**
  * Fyller automatiskt i soliditet i flerårsöversikten för de senaste två
- * räkenskapsåren. Funkar endast med
+ * räkenskapsåren.
  *
  * @param arsredovisning - Årsredovisningen som ska få soliditeten ifylld
  */
