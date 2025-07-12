@@ -432,7 +432,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName: "se-gen-base:SkatterAbstract",
       type: "xbrli:monetaryItemType",
       beloppNuvarandeAr: "772",
-      beloppTidigareAr: ["0"],
+      beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItemName: "se-gen-base:AretsResultat",
