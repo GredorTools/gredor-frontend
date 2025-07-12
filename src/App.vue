@@ -205,12 +205,12 @@ const tourSteps: OnboardingTourStep[] = [
             <a
               href="https://bolagsverket.se/foretag/aktiebolag/arsredovisningforaktiebolag.759.html#h-Innehallienarsredovisning"
               >Bolagsverkets exempel</a
-            >,
+            >
+            och
             <a
               href="https://www.bfn.se/informationsmaterial/vagledningar/#arsredovisningk2"
               >Bokföringsnämndens vägledning</a
-            >
-            alternativt en redovisningskonsult.
+            >, alternativt en redovisningskonsult.
             <strong>Gredor tillhandahålls utan några garantier.</strong>
           </p>
           <p>
@@ -256,8 +256,9 @@ const tourSteps: OnboardingTourStep[] = [
           <p>
             De uppgifter som skickas över internet är, utöver sådant som skickas
             automatiskt för att kunna ansluta (t.ex. ip-adress), din
-            årsredovisning och de filer du laddar upp. Dessa sparas inte på
-            Gredors servrar, utan tas bort så fort som möjligt. Däremot sparar
+            årsredovisning, de filer du laddar upp samt personuppgifter du
+            skriver in. Personnummer lagras på Gredors servrar i en vecka för
+            att förhindra spam, i övrigt sparas inget där. Däremot sparar
             Bolagsverket din årsredovisning när du skickar in den dit, annars
             hade tjänsten varit någorlunda värdelös 😉
           </p>
