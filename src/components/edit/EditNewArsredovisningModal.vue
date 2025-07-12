@@ -17,6 +17,7 @@ import createClient from "openapi-fetch";
 import type { paths } from "@/openapi/gredor-backend-v1";
 import { getConfigValue } from "@/util/configUtils.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 
 const emit = defineEmits<{
   /** Triggas när användaren är färdig med flödet. */
@@ -106,7 +107,7 @@ async function fetchRecords() {
   // TODO: Om krav på revisionsberättelse, visa meddelande
 }
 
-const orgnrRegex = /^\d{6}-\d{4}$/;
+const orgnrRegex = /^\d{6}-?\d{4}$/;
 </script>
 
 <template>
@@ -123,14 +124,18 @@ const orgnrRegex = /^\d{6}-\d{4}$/;
         företagets namn och senaste räkenskapsår från Bolagsverket.
       </p>
 
-      <p>Format: XXXXXX-XXXX (10 siffror med bindestreck)</p>
-
       <input
         v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
         :disabled="busy"
         maxlength="11"
         placeholder="Skriv företagets organisationsnummer här…"
         type="text"
+        @input="
+          arsredovisning.foretagsinformation.organisationsnummer =
+            tryFormatOrgnr(
+              arsredovisning.foretagsinformation.organisationsnummer,
+            )
+        "
       />
 
       <h5>Bokföringsimport (frivilligt)</h5>

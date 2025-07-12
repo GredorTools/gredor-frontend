@@ -7,6 +7,7 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
 import { FORFATTARE_TYPER } from "@/data/forfattare.ts";
+import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 
 /** Årsredovisningen som innehåller grunduppgifterna. */
 defineModel<Arsredovisning>("arsredovisning", {
@@ -32,6 +33,12 @@ defineModel<Arsredovisning>("arsredovisning", {
         v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
         class="input-field"
         type="text"
+        @input="
+          arsredovisning.foretagsinformation.organisationsnummer =
+            tryFormatOrgnr(
+              arsredovisning.foretagsinformation.organisationsnummer,
+            )
+        "
       />
     </div>
   </div>

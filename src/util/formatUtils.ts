@@ -45,3 +45,18 @@ export function formatDateForFlerarsoversikt(balanceDateStr: string): string {
   // Annars, returnera år och månad
   return `${year}-${month.toString().padStart(2, "0")}`;
 }
+
+/**
+ * Formatera ett organisationsnummer om möjligt (lägg till bindestreck). Indatat
+ * formateras endast om det är en sträng som endast innehåller tio siffror.
+ *
+ * @param orgnr - Organisationsnumret att försöka formatera
+ * @returns Det formaterade organisationsnumret om det formaterades, annars det
+ * värde som skickades in i funktionen
+ */
+export function tryFormatOrgnr(orgnr: string) {
+  if (/^\d{10}$/.test(orgnr)) {
+    return orgnr.substring(0, 6) + "-" + orgnr.substring(6);
+  }
+  return orgnr;
+}
