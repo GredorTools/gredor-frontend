@@ -14,6 +14,7 @@ import {
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { SIE_MAPPINGS } from "@/data/sie/SIE_MAPPINGS.ts";
+import { autofillSoliditet } from "@/util/autofillUtils.ts";
 
 export interface SieMapping {
   basAccounts: { start: number; end: number }[];
@@ -159,7 +160,7 @@ export async function mapSieFileIntoArsredovisning(
           !belopprad.beloppNuvarandeAr &&
           !belopprad.beloppTidigareAr.some((b) => b)
         ) {
-          deleteBelopprad(
+          await deleteBelopprad(
             taxonomyManagersForBelopprad.get(belopprad)!,
             belopprad,
             beloppradListsForBelopprad.get(belopprad)!,
@@ -169,7 +170,8 @@ export async function mapSieFileIntoArsredovisning(
     }
   }
 
-  // TODO: Räkna ut soliditet
+  // Räkna ut soliditet
+  await autofillSoliditet(arsredovisning);
 }
 
 /**

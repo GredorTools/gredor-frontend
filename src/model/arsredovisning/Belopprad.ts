@@ -60,13 +60,13 @@ export function createBelopprad<T extends TaxonomyItemType>(
   }
 }
 
-export function createBeloppradInList(
+export function createBeloppradInList<T extends TaxonomyItemType>(
   taxonomyManager: TaxonomyManager,
   list: Belopprad[],
-  taxonomyItem: TaxonomyItem,
+  taxonomyItem: TaxonomyItem<T>,
   excludedSumRows: string[] = [],
   sort: boolean = true,
-): Belopprad | undefined {
+): Belopprad<T> | undefined {
   if (isTaxonomyItemInBeloppradList(list, taxonomyItem)) {
     // Finns redan
     return;
@@ -117,19 +117,19 @@ export function createBeloppradInList(
     );
   }
 
-  return belopprad;
+  return belopprad as Belopprad<T>;
 }
 
-export function getOrCreateBeloppradInList(
+export function getOrCreateBeloppradInList<T extends TaxonomyItemType>(
   taxonomyManager: TaxonomyManager,
   list: Belopprad[],
-  taxonomyItem: TaxonomyItem,
-): Belopprad {
+  taxonomyItem: TaxonomyItem<T>,
+): Belopprad<T> {
   const existingBelopprad = list.find((belopprad) =>
     isBeloppradCorrespondsToTaxonomyItem(belopprad, taxonomyItem),
   );
   if (existingBelopprad) {
-    return existingBelopprad;
+    return existingBelopprad as Belopprad<T>;
   } else {
     const createdBelopprad = createBeloppradInList(
       taxonomyManager,
