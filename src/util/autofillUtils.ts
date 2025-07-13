@@ -1,5 +1,5 @@
 import { getTaxonomyManager, TaxonomyRootName } from "@/util/TaxonomyManager.ts";
-import { getOrCreateBeloppradInList } from "@/model/arsredovisning/Belopprad.ts";
+import { getOrCreateBeloppradInList, getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import Decimal from "decimal.js";
 import type { Arsredovisning, Verksamhetsar } from "@/model/arsredovisning/Arsredovisning.ts";
@@ -84,6 +84,42 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
         arsredovisning.verksamhetsarTidigare[0],
       ).toString();
     }
+  }
+}
+
+/**
+ * Fyller automatiskt i notnummer för raden för personalkostnader i
+ * resultaträkningen, om det finns en not för medelantalet anställda.
+ *
+ * @param arsredovisning - Årsredovisningen som ska få notnumret ifyllt
+ */
+export async function autofillPersonalkostnaderNot(
+  arsredovisning: Arsredovisning,
+) {
+  const personalkostnaderBelopprad = arsredovisning.resultatrakning.find(
+    (belopprad) =>
+      belopprad.taxonomyItemName === "se-gen-base:Personalkostnader",
+  );
+  const notMedelandataletAnstalldaBelopprad = arsredovisning.noter.find(
+    (belopprad) =>
+      belopprad.taxonomyItemName === "se-gen-base:NotMedelantaletAnstallda",
+  );
+
+  if (
+    personalkostnaderBelopprad != null &&
+    notMedelandataletAnstalldaBelopprad != null
+  ) {
+    const taxonomyManagerNoter = await getTaxonomyManager(
+      TaxonomyRootName.NOTER,
+    );
+    personalkostnaderBelopprad.not = (
+      arsredovisning.noter
+        .filter(
+          (b) =>
+            getTaxonomyItemForBelopprad(taxonomyManagerNoter, b).level === 2,
+        )
+        .indexOf(notMedelandataletAnstalldaBelopprad) + 1
+    ).toString();
   }
 }
 

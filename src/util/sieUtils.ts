@@ -14,7 +14,10 @@ import {
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { SIE_MAPPINGS } from "@/data/sie/SIE_MAPPINGS.ts";
-import { autofillSoliditet } from "@/util/autofillUtils.ts";
+import {
+  autofillPersonalkostnaderNot,
+  autofillSoliditet,
+} from "@/util/autofillUtils.ts";
 
 export interface SieMapping {
   basAccounts: { start: number; end: number }[];
@@ -172,6 +175,9 @@ export async function mapSieFileIntoArsredovisning(
 
   // Räkna ut soliditet
   await autofillSoliditet(arsredovisning);
+
+  // Fyll i not för personalkostnader i resultaträkning
+  await autofillPersonalkostnaderNot(arsredovisning);
 }
 
 /**
