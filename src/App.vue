@@ -112,7 +112,10 @@ const tourSteps: OnboardingTourStep[] = [
   <main class="d-flex flex-column">
     <header class="d-flex flex-row justify-content-between">
       <h1>
-        Gredor
+        <img
+          alt="Gredor – gratis årsredovisning"
+          src="/src/assets/img/logo.svg"
+        />
         <span v-if="environmentName" class="environment">{{
           environmentName
         }}</span>
@@ -336,8 +339,13 @@ header {
     margin-bottom: 0;
 
     .environment {
+      position: relative;
+      left: 16px;
+      top: -3px;
       color: #566f41;
+      font-weight: 600;
       font-style: italic;
+      font-size: 18pt;
     }
   }
 }
