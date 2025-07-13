@@ -107,16 +107,20 @@ export async function autofillPersonalkostnaderNot(
 
   if (
     personalkostnaderBelopprad != null &&
-    notMedelandataletAnstalldaBelopprad != null
+    notMedelandataletAnstalldaBelopprad != null &&
+    isBeloppradComparable(personalkostnaderBelopprad)
   ) {
-    const taxonomyManagerNoter = await getTaxonomyManager(
+    const noterTaxonomyManager = await getTaxonomyManager(
       TaxonomyRootName.NOTER,
     );
+
+    // Räkna ut notnumret
     personalkostnaderBelopprad.not = (
       arsredovisning.noter
         .filter(
-          (b) =>
-            getTaxonomyItemForBelopprad(taxonomyManagerNoter, b).level === 2,
+          (belopprad) =>
+            getTaxonomyItemForBelopprad(noterTaxonomyManager, belopprad)
+              .level === 2,
         )
         .indexOf(notMedelandataletAnstalldaBelopprad) + 1
     ).toString();
