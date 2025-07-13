@@ -107,6 +107,8 @@ const forandringarTable = computed(() =>
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/extendables.scss";
+
 .value-contents {
   display: flex;
 
@@ -116,6 +118,8 @@ const forandringarTable = computed(() =>
     min-width: 100px !important;
 
     &.form-control {
+      @extend %text-input;
+
       padding-left: 0.5rem;
       padding-right: 0.5rem;
     }

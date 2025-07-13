@@ -158,6 +158,8 @@ defineModel<Arsredovisning>("arsredovisning", {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/extendables.scss";
+
 .form-section {
   margin: 1.5rem 0;
   padding: 1.5rem;
@@ -184,20 +186,9 @@ label {
 }
 
 .input-field {
-  padding: 0.7rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  background-color: #fff;
-  transition:
-    border-color 0.3s,
-    box-shadow 0.3s;
+  @extend %text-input;
 
-  &:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
-    outline: none;
-  }
+  padding: 0.7rem;
 }
 
 h3 {

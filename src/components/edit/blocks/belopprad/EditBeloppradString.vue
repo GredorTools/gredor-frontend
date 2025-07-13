@@ -103,11 +103,15 @@ const trClasses = computed(() => [
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/extendables.scss";
+
 .full-width td > * {
   width: 100%;
 }
 
 textarea {
+  @extend %text-input;
+  
   min-height: 6rem;
   resize: vertical;
 }
