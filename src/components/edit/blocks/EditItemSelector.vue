@@ -25,7 +25,7 @@ const minimumTaxonomyItemLevel = computed(() => {
 </script>
 
 <template>
-  <div class="d-flex">
+  <div class="selector-container">
     <VueSelect
       v-model="taxonomyItemToAdd"
       :filter-by="
@@ -82,9 +82,16 @@ const minimumTaxonomyItemLevel = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+.selector-container {
+  display: flex;
+  padding: 0 0.5rem;
+}
+
 .custom-select {
   /* TODO: Kan hamna för långt upp... */
   --vs-menu-height: 24rem;
+
+  --vs-border: 1px solid var(--bs-border-color);
 
   :deep(.menu) {
     /* Så att dropdownen öppnas uppåt */
