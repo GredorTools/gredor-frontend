@@ -234,8 +234,9 @@ const tourSteps: OnboardingTourStep[] = [
         </div>
         <div class="card-body">
           <p>
-            Gredor är ett open-source-projekt. Programvaran är
-            AGPLv3-licensierad, och källkoden finns på
+            Gredor är ett open-source-projekt. Programvaran distribueras under
+            AGPLv3-licens (med en tilläggsklausul för friare sammansättning med
+            annan programvara), och källkoden finns på
             <a href="https://github.com/GredorTools" target="_blank">GitHub</a>.
           </p>
           <p>
