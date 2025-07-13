@@ -73,13 +73,13 @@ const renderLevel = computed(
   font-size: 1.15rem;
 
   &:not(:first-of-type) td {
-    padding-top: 1.25rem;
+    padding-top: 1.5rem;
   }
 }
 
 .level-2:not(.abstract) {
   &:not(:last-of-type) td {
-    padding-bottom: 1rem;
+    padding-bottom: 1.25rem;
   }
 }
 
@@ -94,10 +94,6 @@ const renderLevel = computed(
 
 .abstract.level-3 {
   font-weight: 500;
-
-  &:not(:first-of-type) td {
-    padding-top: 0.75rem;
-  }
 }
 
 tr:not(.abstract) .header {

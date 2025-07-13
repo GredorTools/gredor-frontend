@@ -168,7 +168,11 @@ const renderLevel = computed(
   font-weight: 500;
 }
 
-.summa + *:not(.summa) td {
+.summa + :deep(*:not(.summa) td) {
   padding-top: 1.25rem;
+}
+
+.summa + :deep(.level-3:not(.summa) td) {
+  padding-top: 0.75rem;
 }
 </style>

@@ -91,5 +91,9 @@ function getRenderAsLevelForBelopprad(
 <style lang="scss" scoped>
 table {
   margin-bottom: 1rem;
+
+  th {
+    padding-bottom: 1.5rem !important;
+  }
 }
 </style>

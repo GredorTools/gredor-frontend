@@ -55,4 +55,10 @@ defineProps<{
   </table>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+table {
+  th {
+    padding-bottom: 1.5rem !important;
+  }
+}
+</style>
