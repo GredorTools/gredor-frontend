@@ -20,6 +20,9 @@ const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
 
+  /** Huruvida borttag ska tillåtas. */
+  allowDelete: boolean;
+
   /** Huruvida radbrytningar ska vara tillåtna. */
   multiline: boolean;
 
@@ -63,7 +66,13 @@ const trClasses = computed(() => [
         />
       </td>
       <td>
-        <button class="btn btn-danger" @click="emit('delete')">X</button>
+        <button
+          v-if="allowDelete"
+          class="btn btn-danger"
+          @click="emit('delete')"
+        >
+          X
+        </button>
       </td>
     </tr>
     <tr :class="trClasses">
@@ -93,7 +102,7 @@ const trClasses = computed(() => [
     <td v-if="!isAbstract" :colspan="comparableNumPreviousYears + 1">
       <input v-model="belopprad.text" type="text" />
     </td>
-    <td>
+    <td v-if="allowDelete">
       <BaseEditBeloppradDeleteButton
         v-if="!isAbstract"
         @delete="emit('delete')"
@@ -111,7 +120,7 @@ const trClasses = computed(() => [
 
 textarea {
   @extend %text-input;
-  
+
   min-height: 6rem;
   resize: vertical;
 }

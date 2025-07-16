@@ -16,6 +16,9 @@ export interface EditBeloppradComparablePropsBase {
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
 
+  /** Huruvida borttag ska tillåtas. */
+  allowDelete: boolean;
+
   /** Antal tidigare räkenskapsår som ska visas för jämförelse. */
   numPreviousYears: number;
 
@@ -128,7 +131,7 @@ function onBeforeValueInput(event: InputEvent) {
         />
       </div>
     </td>
-    <td>
+    <td v-if="allowDelete">
       <BaseEditBeloppradDeleteButton @delete="emit('delete')" />
     </td>
   </BaseEditBeloppradContainer>

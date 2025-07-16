@@ -65,26 +65,28 @@ export class CalculationProcessor {
   /**
    * Avgör om ett koncept ingår i beräkningen av ett annat koncepts värde.
    *
-   * @param conceptName - Namnet på det koncept som man vill veta huruvida det
-   * ingår i summakonceptet `sumConceptName`
+   * @param conceptNames - Namnet på det koncept eller de koncept som man vill
+   * veta huruvida det/de ingår i summakonceptet `sumConceptName`
    * @param sumConceptName - Namnet på summakonceptet
-   * @returns Huruvida `conceptName` ingår i beräkningen av `sumConceptName`
+   * @returns Huruvida något `conceptName` ingår i beräkningen av
+   * `sumConceptName`
    */
   public isConceptIncludedInSum(
-    conceptName: string,
+    conceptNames: string | string[],
     sumConceptName: string,
   ): boolean {
-    let result = false;
-
+    if (!Array.isArray(conceptNames)) {
+      conceptNames = [conceptNames];
+    }
+    
     const sumNode = this.nodes.get(sumConceptName);
     for (const sumNodeChild of sumNode?.childrenFlat ?? []) {
-      if (sumNodeChild.concept.name === conceptName) {
-        result = true;
-        break;
+      if (conceptNames.includes(sumNodeChild.concept.name)) {
+        return true;
       }
     }
 
-    return result;
+    return false;
   }
 
   private calculateNode(

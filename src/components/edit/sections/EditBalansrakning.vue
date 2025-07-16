@@ -7,18 +7,19 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
+  type Belopprad,
   createBelopprad,
-  createBeloppradInList,
-  deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
 import {
   getTaxonomyManager,
-  type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
-import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
+import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
+import { computed } from "vue";
+
+const maxNumPreviousYears = 1;
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -32,36 +33,59 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 
-// Hjälpfunktioner
-function addBelopprad(taxonomyItem: TaxonomyItem) {
-  createBeloppradInList(
-    taxonomyManager,
-    arsredovisning.value.balansrakning,
-    taxonomyItem,
-  );
-}
+// Förpopulera rader
+const { prepopulateSection } = usePrepopulateSection({
+  taxonomyManager,
+  availableTaxonomyItems,
+  arsredovisning: arsredovisning,
+  sectionName: "balansrakning",
+  maxNumPreviousYears,
+});
+const belopprader = prepopulateSection();
+
+const groups = [
+  [
+    ...availableTaxonomyItems.children[0].children[0].childrenFlat,
+    availableTaxonomyItems.children[0].children[1],
+  ],
+  [
+    ...availableTaxonomyItems.children[0].children[2].childrenFlat,
+    availableTaxonomyItems.children[0].children[3],
+  ],
+];
+
+const groupedBelopprader = computed(() =>
+  belopprader.value.reduce(
+    (result: Belopprad[][], belopprad: Belopprad) => {
+      let groupIndex = -1;
+
+      for (let i = 0; i < groups.length; i++) {
+        if (isBeloppradInTaxonomyItemList(groups[i], belopprad)) {
+          groupIndex = i;
+          break;
+        }
+      }
+
+      if (groupIndex > -1) {
+        result[groupIndex].push(belopprad);
+      }
+
+      return result;
+    },
+    [[], []],
+  ),
+);
 </script>
 
 <template>
-  <template
-    v-for="(group, groupIndex) in [
-      [
-        availableTaxonomyItems.children[0].children[0],
-        availableTaxonomyItems.children[0].children[1],
-      ],
-      [
-        availableTaxonomyItems.children[0].children[2],
-        availableTaxonomyItems.children[0].children[3],
-      ],
-    ]"
-    :key="groupIndex"
-  >
+  <template v-for="(group, groupIndex) in groups" :key="groupIndex">
     <table>
       <thead>
         <tr>
           <th scope="col">
             <BaseEditBeloppradTitle
-              :belopprad="createBelopprad(group[0])"
+              v-if="group[0].parent"
+              :belopprad="createBelopprad(group[0].parent)"
               :taxonomy-manager="taxonomyManager"
             />
           </th>
@@ -81,38 +105,21 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
       </thead>
       <tbody>
         <EditBelopprad
-          v-for="[index, belopprad] in [
-            ...arsredovisning.balansrakning.entries(),
-          ].filter(([, b]) =>
-            isBeloppradInTaxonomyItemList(
-              [...group[0].childrenFlat, group[1]],
-              b,
-            ),
-          )"
+          v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
           :key="belopprad.taxonomyItemName"
-          v-model:belopprad="arsredovisning.balansrakning[index]"
-          v-model:belopprader="arsredovisning.balansrakning"
+          v-model:belopprad="groupedBelopprader[groupIndex][index]"
+          v-model:belopprader="groupedBelopprader[groupIndex]"
           :comparable-num-previous-years="
-            Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+            Math.min(
+              arsredovisning.verksamhetsarTidigare.length,
+              maxNumPreviousYears,
+            )
           "
           :taxonomy-manager="taxonomyManager"
           comparable-allow-not
-          @delete="
-            () =>
-              deleteBelopprad(
-                taxonomyManager,
-                belopprad,
-                arsredovisning.balansrakning,
-              )
-          "
         />
       </tbody>
     </table>
-
-    <EditItemSelector
-      :taxonomy-items="[...group[0].childrenFlat, group[1]]"
-      @add-belopprad="addBelopprad"
-    />
   </template>
 </template>
 

@@ -22,6 +22,9 @@ const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
 
+  /** Huruvida borttag ska tillåtas. */
+  allowDelete?: boolean;
+
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan jämföra mellan år. */
   comparableNumPreviousYears?: number;
 
@@ -69,6 +72,7 @@ const taxonomyItem = computed(() => {
   >
     <EditBeloppradString
       v-if="isBeloppradString(belopprad)"
+      :allow-delete="allowDelete || false"
       :belopprad="belopprad"
       :comparable-num-previous-years="comparableNumPreviousYears || 0"
       :multiline="stringMultiline || false"
@@ -77,6 +81,7 @@ const taxonomyItem = computed(() => {
     />
     <EditBeloppradMonetary
       v-else-if="isBeloppradMonetary(belopprad)"
+      :allow-delete="allowDelete || false"
       :allow-not="comparableAllowNot || false"
       :belopprad="belopprad"
       :belopprader="belopprader"
@@ -87,6 +92,7 @@ const taxonomyItem = computed(() => {
     />
     <EditBeloppradNonmonetaryComparable
       v-else-if="isBeloppradComparable(belopprad)"
+      :allow-delete="allowDelete || false"
       :allow-not="comparableAllowNot || false"
       :belopprad="belopprad"
       :num-previous-years="comparableNumPreviousYears || 0"

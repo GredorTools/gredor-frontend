@@ -81,6 +81,7 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
         "
         :string-minimum-level="1"
         :taxonomy-manager="taxonomyManager"
+        allow-delete
         @delete="
           () =>
             deleteBelopprad(

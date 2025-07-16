@@ -97,6 +97,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           :comparable-num-previous-years="0"
           :string-minimum-level="1"
           :taxonomy-manager="taxonomyManager"
+          allow-delete
           string-multiline
           @delete="
             () =>

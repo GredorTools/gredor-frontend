@@ -22,6 +22,7 @@ const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
 
 <template>
   <BaseEditBeloppradComparable
+    :allow-delete="allowDelete"
     :allow-not="allowNot"
     :belopprad="belopprad"
     :num-previous-years="numPreviousYears"

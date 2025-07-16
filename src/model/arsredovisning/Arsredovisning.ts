@@ -63,3 +63,9 @@ export interface Verksamhetsar {
   startdatum: string; // Exempel: "2024-01-01"
   slutdatum: string; // Exempel: "2024-12-31"
 }
+
+export type BeloppradSectionName = {
+  [K in keyof Arsredovisning]: Arsredovisning[K] extends Belopprad[]
+    ? K
+    : never;
+}[keyof Arsredovisning];

@@ -41,14 +41,16 @@ const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
-onMounted(() => {
+// Räkna automatiskt ut summor
+function createSumWatcher(
+  belopprad: BeloppradMonetary,
+  belopprader: Belopprad[],
+) {
   if (taxonomyItem.value.additionalData.isCalculatedItem) {
-    // Räkna automatiskt ut summor
-    
-    const sumPartBelopprader = belopprader.value.filter((otherBelopprad) =>
+    const sumPartBelopprader = belopprader.filter((otherBelopprad) =>
       props.taxonomyManager.calculationProcessor.isConceptIncludedInSum(
         otherBelopprad.taxonomyItemName,
-        belopprad.value.taxonomyItemName,
+        belopprad.taxonomyItemName,
       ),
     );
 
@@ -57,16 +59,26 @@ onMounted(() => {
         calculateValuesIntoBelopprad(
           props.taxonomyManager.calculationProcessor,
           sumPartBelopprader,
-          belopprad.value,
+          belopprad,
         );
       });
     }
   }
-});
+}
+
+onMounted(() => createSumWatcher(belopprad.value, belopprader.value));
+watch(
+  [belopprad, belopprader],
+  ([newBelopprad, newBelopprader]) => {
+    createSumWatcher(newBelopprad, newBelopprader);
+  },
+  { deep: false },
+);
 </script>
 
 <template>
   <BaseEditBeloppradComparable
+    :allow-delete="allowDelete"
     :allow-not="allowNot"
     :allowed-value-regex="/^-?\d*$/"
     :belopprad="belopprad"

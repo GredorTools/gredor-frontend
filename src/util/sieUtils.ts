@@ -54,8 +54,8 @@ export async function mapSieFileIntoArsredovisning(
   const beloppradListsForBelopprad: Map<Belopprad, Belopprad[]> = new Map();
 
   // Rensa befintliga belopprader i resultaträkningen och balansräkningen
-  arsredovisning.resultatrakning = [];
-  arsredovisning.balansrakning = [];
+  arsredovisning.resultatrakning.length = 0;
+  arsredovisning.balansrakning.length = 0;
 
   // Iterera över varje BAS-kontonummer och dess värden från den parsade filen
   for (const [basAccount, value] of Object.entries(parseResult)) {
@@ -163,7 +163,7 @@ export async function mapSieFileIntoArsredovisning(
           !belopprad.beloppNuvarandeAr &&
           !belopprad.beloppTidigareAr.some((b) => b)
         ) {
-          await deleteBelopprad(
+          deleteBelopprad(
             taxonomyManagersForBelopprad.get(belopprad)!,
             belopprad,
             beloppradListsForBelopprad.get(belopprad)!,

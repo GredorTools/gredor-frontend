@@ -4,7 +4,7 @@ import {
   type TaxonomyItemType,
   TaxonomyManager,
 } from "@/util/TaxonomyManager.ts";
-import { reactive } from "vue";
+import { type Reactive, reactive } from "vue";
 
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
   taxonomyItemName: string;
@@ -64,7 +64,8 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
   taxonomyManager: TaxonomyManager,
   list: Belopprad[],
   taxonomyItem: TaxonomyItem<T>,
-  excludedSumRows: string[] = [],
+  belopprad: Reactive<Belopprad<T>> | null = null,
+  excludedSumRows: string[] | "all" = [],
   sort: boolean = true,
 ): Belopprad<T> | undefined {
   if (isTaxonomyItemInBeloppradList(list, taxonomyItem)) {
@@ -72,7 +73,9 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
     return;
   }
 
-  const belopprad = reactive(createBelopprad(taxonomyItem));
+  if (belopprad == null) {
+    belopprad = reactive(createBelopprad(taxonomyItem));
+  }
   list.push(belopprad);
 
   if (taxonomyItem.parent != null && taxonomyItem.parent.level > 0) {
@@ -81,28 +84,31 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
       taxonomyManager,
       list,
       taxonomyItem.parent,
+      null,
       excludedSumRows,
       false,
     );
 
-    if (taxonomyItem.parent.parent != null) {
+    if (excludedSumRows !== "all") {
       // Lägg till summarader
-      for (const possibleSumTaxonomyItem of taxonomyItem.parent.parent
-        .children) {
+      for (const possibleSumTaxonomyItem of taxonomyItem.root?.childrenFlat ??
+        []) {
         if (
           possibleSumTaxonomyItem.additionalData.isCalculatedItem &&
-          possibleSumTaxonomyItem.rowNumber > taxonomyItem.rowNumber &&
-          possibleSumTaxonomyItem.level === taxonomyItem.level - 1 &&
-          !excludedSumRows.includes(possibleSumTaxonomyItem.xmlName)
+          !excludedSumRows.includes(possibleSumTaxonomyItem.xmlName) &&
+          taxonomyManager.calculationProcessor.isConceptIncludedInSum(
+            taxonomyItem.xmlName,
+            possibleSumTaxonomyItem.xmlName,
+          )
         ) {
           createBeloppradInList(
             taxonomyManager,
             list,
             possibleSumTaxonomyItem,
+            null,
             excludedSumRows,
             false,
           );
-          break;
         }
       }
     }
@@ -184,7 +190,7 @@ export function getTaxonomyItemForBelopprad(
   );
 }
 
-export async function deleteBelopprad(
+export function deleteBelopprad(
   taxonomyManager: TaxonomyManager,
   beloppradToDelete: Belopprad,
   from: Belopprad[],
@@ -208,11 +214,14 @@ export async function deleteBelopprad(
       // Ta bort raden
       from.splice(i, 1);
 
-      // Radera abstrakta föräldrar rekursivt om de inte har några kvarvarande barn
+      // Ta bort abstrakta föräldrar rekursivt om de inte har några kvarvarande barn
       deleteBeloppradAbstractParents(taxonomyManager, belopprad, from);
 
       // Ta bort barnen rekursivt
       deleteBeloppradChildren(taxonomyManager, belopprad, from);
+
+      // Ta bort summarader som inte har några värden som bygger upp summan
+      deleteBeloppradEmptySums(taxonomyManager, belopprad, from);
 
       // Klar
       return;
@@ -277,4 +286,55 @@ function deleteBeloppradChildren(
     // Ta bort barnets barn rekursivt
     deleteBeloppradChildren(taxonomyManager, child, from);
   }
+}
+
+function deleteBeloppradEmptySums(
+  taxonomyManager: TaxonomyManager,
+  belopprad: Belopprad,
+  from: Belopprad[],
+) {
+  for (const possibleSumBelopprad of from) {
+    if (
+      !getTaxonomyItemForBelopprad(taxonomyManager, possibleSumBelopprad)
+        .additionalData.isCalculatedItem
+    ) {
+      continue;
+    }
+
+    if (
+      !taxonomyManager.calculationProcessor.isConceptIncludedInSum(
+        belopprad.taxonomyItemName,
+        possibleSumBelopprad.taxonomyItemName,
+      )
+    ) {
+      continue;
+    }
+
+    if (
+      !taxonomyManager.calculationProcessor.isConceptIncludedInSum(
+        from.map((b) => b.taxonomyItemName),
+        possibleSumBelopprad.taxonomyItemName,
+      )
+    ) {
+      deleteBelopprad(taxonomyManager, possibleSumBelopprad, from);
+    }
+  }
+}
+
+export function isSumBeloppradEmpty(
+  taxonomyManager: TaxonomyManager,
+  sumBelopprad: Belopprad,
+  section: Belopprad[],
+) {
+  if (
+    !getTaxonomyItemForBelopprad(taxonomyManager, sumBelopprad).additionalData
+      .isCalculatedItem
+  ) {
+    return false;
+  }
+
+  return !taxonomyManager.calculationProcessor.isConceptIncludedInSum(
+    section.map((b) => b.taxonomyItemName),
+    sumBelopprad.taxonomyItemName,
+  );
 }

@@ -88,6 +88,7 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
           "
           :string-minimum-level="1"
           :taxonomy-manager="taxonomyManager"
+          allow-delete
           string-multiline
           @delete="
             () =>

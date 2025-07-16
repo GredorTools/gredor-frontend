@@ -7,21 +7,18 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
-  createBeloppradInList,
-  deleteBelopprad,
-} from "@/model/arsredovisning/Belopprad.ts";
-import {
   getTaxonomyManager,
-  type TaxonomyItem,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
-import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
+import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
+
+const maxNumPreviousYears = 1;
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
 );
-const availableTaxonomyItems = taxonomyManager.getRoot();
+const availableTaxonomyItems = taxonomyManager.getRoot().children[0];
 
 // Data
 /** Årsredovisningen som innehåller resultaträkningen. */
@@ -29,15 +26,15 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 
-// Hjälpfunktioner
-function addBelopprad(taxonomyItem: TaxonomyItem) {
-  createBeloppradInList(
-    taxonomyManager,
-    arsredovisning.value.resultatrakning,
-    taxonomyItem,
-    ["se-gen-base:FinansiellaPoster", "se-gen-base:Bokslutsdispositioner"],
-  );
-}
+// Förpopulering
+const { prepopulateSection } = usePrepopulateSection({
+  taxonomyManager,
+  availableTaxonomyItems,
+  arsredovisning: arsredovisning,
+  sectionName: "resultatrakning",
+  maxNumPreviousYears,
+});
+const belopprader = prepopulateSection();
 </script>
 
 <template>
@@ -63,32 +60,22 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     </thead>
     <tbody>
       <EditBelopprad
-        v-for="(belopprad, index) in arsredovisning.resultatrakning"
+        v-for="(belopprad, index) in belopprader"
         :key="belopprad.taxonomyItemName"
-        v-model:belopprad="arsredovisning.resultatrakning[index]"
-        v-model:belopprader="arsredovisning.resultatrakning"
+        v-model:belopprad="belopprader[index]"
+        v-model:belopprader="belopprader"
         :comparable-num-previous-years="
-          Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+          Math.min(
+            arsredovisning.verksamhetsarTidigare.length,
+            maxNumPreviousYears,
+          )
         "
         :taxonomy-manager="taxonomyManager"
         comparable-allow-not
         monetary-show-balance-sign
-        @delete="
-          () =>
-            deleteBelopprad(
-              taxonomyManager,
-              belopprad,
-              arsredovisning.resultatrakning,
-            )
-        "
       />
     </tbody>
   </table>
-
-  <EditItemSelector
-    :taxonomy-items="availableTaxonomyItems.childrenFlat"
-    @add-belopprad="addBelopprad"
-  />
 </template>
 
 <style lang="scss" scoped></style>

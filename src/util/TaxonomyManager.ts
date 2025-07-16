@@ -95,6 +95,7 @@ export interface TaxonomyItem<T extends TaxonomyItemType = TaxonomyItemType> {
   children: TaxonomyItem[];
   childrenFlat: TaxonomyItem[];
   parent?: TaxonomyItem;
+  root?: TaxonomyItem;
 }
 
 // JSON-typer
@@ -201,6 +202,7 @@ export class TaxonomyManager {
     const processNode = (
       node: PresentationJsonConcept,
       parent: TaxonomyItem,
+      root: TaxonomyItem,
       level: number,
     ): TaxonomyItem => {
       const [type, metadata, details, ...childGroups] = node;
@@ -232,6 +234,7 @@ export class TaxonomyManager {
         rowNumber: numRowsProcessed++,
         level,
         parent,
+        root,
       };
       this.items.set(key, item);
 
@@ -245,7 +248,7 @@ export class TaxonomyManager {
 
       // Sätt barn
       for (const childGroup of childGroups) {
-        item.children.push(processNode(childGroup, item, level + 1));
+        item.children.push(processNode(childGroup, item, root, level + 1));
       }
 
       for (const child of item.children) {
@@ -289,9 +292,10 @@ export class TaxonomyManager {
         children: [],
         childrenFlat: [],
       };
+      rootItem.root = rootItem;
 
       rootItem.children = childGroups.map((childGroup) =>
-        processNode(childGroup, rootItem, 0),
+        processNode(childGroup, rootItem, rootItem, 0),
       );
       rootItem.childrenFlat = rootItem.children
         .map((child) => [child, ...child.childrenFlat])

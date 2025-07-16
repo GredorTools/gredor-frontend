@@ -1,9 +1,14 @@
-import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  type Belopprad,
+  isSumBeloppradEmpty,
+} from "@/model/arsredovisning/Belopprad.ts";
 import {
   type CalculationConceptValue,
   CalculationProcessor,
 } from "@/util/CalculationProcessor.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 export type BeloppradMonetary =
   BaseBeloppradComparable<"xbrli:monetaryItemType">;
@@ -57,4 +62,31 @@ export function calculateValuesIntoBelopprad(
       )
       .toString();
   }
+}
+
+export function isBeloppradHasValidMonetaryValue(
+  taxonomyManager: TaxonomyManager,
+  belopprad: BeloppradMonetary,
+  arsredovisning: Arsredovisning,
+  section: Belopprad[],
+  maxNumPreviousYears: number,
+): boolean {
+  function isBeloppValidMonetaryValue(stringValue: string): boolean {
+    const parsedInt = parseInt(stringValue, 10);
+    return !isNaN(parsedInt) && parsedInt !== 0;
+  }
+
+  return (
+    (isBeloppValidMonetaryValue(belopprad.beloppNuvarandeAr) ||
+      belopprad.beloppTidigareAr
+        .slice(
+          0,
+          Math.min(
+            arsredovisning.verksamhetsarTidigare.length,
+            maxNumPreviousYears,
+          ),
+        )
+        .some((belopp) => isBeloppValidMonetaryValue(belopp))) &&
+    !isSumBeloppradEmpty(taxonomyManager, belopprad, section)
+  );
 }
