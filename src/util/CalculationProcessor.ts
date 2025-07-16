@@ -61,6 +61,14 @@ export class CalculationProcessor {
     return !node || !node.children || node.children.length === 0;
   }
 
+  /**
+   * Avgör om ett koncept ingår i beräkningen av ett annat koncepts värde.
+   *
+   * @param conceptName - Namnet på det koncept som man vill veta huruvida det
+   * ingår i summakonceptet `sumConceptName`
+   * @param sumConceptName - Namnet på summakonceptet
+   * @returns Huruvida `conceptName` ingår i beräkningen av `sumConceptName`
+   */
   public isConceptIncludedInSum(
     conceptName: string,
     sumConceptName: string,
