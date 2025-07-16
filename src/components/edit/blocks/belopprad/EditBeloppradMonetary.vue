@@ -8,7 +8,7 @@ import {
   type BeloppradMonetary,
   calculateValuesIntoBelopprad,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import { computed, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 import {
   type Belopprad,
   getTaxonomyItemForBelopprad,
@@ -41,14 +41,26 @@ const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
 
-watch(belopprader.value, () => {
-  // Räkna automatiskt ut summor
+onMounted(() => {
   if (taxonomyItem.value.additionalData.isCalculatedItem) {
-    calculateValuesIntoBelopprad(
-      props.taxonomyManager.calculationProcessor,
-      belopprader.value,
-      belopprad.value,
+    // Räkna automatiskt ut summor
+    
+    const sumPartBelopprader = belopprader.value.filter((otherBelopprad) =>
+      props.taxonomyManager.calculationProcessor.isConceptIncludedInSum(
+        otherBelopprad.taxonomyItemName,
+        belopprad.value.taxonomyItemName,
+      ),
     );
+
+    for (const sumPartBelopprad of sumPartBelopprader) {
+      watch(sumPartBelopprad, () => {
+        calculateValuesIntoBelopprad(
+          props.taxonomyManager.calculationProcessor,
+          sumPartBelopprader,
+          belopprad.value,
+        );
+      });
+    }
   }
 });
 </script>

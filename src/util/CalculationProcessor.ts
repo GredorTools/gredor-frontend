@@ -17,6 +17,7 @@ export interface CalculationConceptValue {
 
 export class CalculationProcessor {
   private readonly calculationTree: CalculationNode[];
+  private readonly nodes: Map<string, CalculationNode>; // <conceptName, node>
 
   constructor(
     rootName: TaxonomyRootName,
@@ -25,6 +26,9 @@ export class CalculationProcessor {
     },
   ) {
     this.calculationTree = CalculationParser.parse(rootName, calculationJson);
+
+    this.nodes = new Map<string, CalculationNode>();
+    this.buildNodeMap(this.calculationTree, this.nodes);
   }
 
   /**
@@ -39,7 +43,7 @@ export class CalculationProcessor {
     values: CalculationConceptValue[],
   ): number {
     const valueMap = new Map(values.map((v) => [v.conceptName, v.value]));
-    const node = this.findNodeByConceptName(conceptName, this.calculationTree);
+    const node = this.nodes.get(conceptName);
     if (!node) {
       throw new Error(`Concept ${conceptName} not found in calculation tree`);
     }
@@ -53,26 +57,28 @@ export class CalculationProcessor {
    * @returns Sant om konceptet är ett lövnod, annars falskt.
    */
   public isLeafConcept(conceptName: string): boolean {
-    const node = this.findNodeByConceptName(conceptName, this.calculationTree);
+    const node = this.nodes.get(conceptName);
     return !node || !node.children || node.children.length === 0;
   }
 
-  private findNodeByConceptName(
+  public isConceptIncludedInSum(
     conceptName: string,
-    nodes: CalculationNode[],
-  ): CalculationNode | null {
-    for (const node of nodes) {
-      if (node.concept.name === conceptName) {
-        return node;
-      }
-      if (node.children) {
-        const found = this.findNodeByConceptName(conceptName, node.children);
-        if (found) {
-          return found;
-        }
+    sumConceptName: string,
+  ): boolean {
+    let result = false;
+
+    const sumNode = this.nodes.get(sumConceptName);
+    for (const sumNodeChild of sumNode?.children ?? []) {
+      if (sumNodeChild.concept.name === conceptName) {
+        result = true;
+      } else if (
+        this.isConceptIncludedInSum(conceptName, sumNodeChild.concept.name)
+      ) {
+        result = true;
       }
     }
-    return null;
+
+    return result;
   }
 
   private calculateNode(
@@ -93,6 +99,18 @@ export class CalculationProcessor {
     }
 
     return sum;
+  }
+
+  private buildNodeMap(
+    nodes: CalculationNode[],
+    map: Map<string, CalculationNode>,
+  ): void {
+    for (const node of nodes) {
+      this.nodes.set(node.concept.name, node);
+      if (node.children) {
+        this.buildNodeMap(node.children, map);
+      }
+    }
   }
 }
 
