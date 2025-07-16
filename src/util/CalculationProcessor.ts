@@ -7,7 +7,8 @@ export interface CalculationNode {
   };
   weight?: string;
   balance?: "credit" | "debit";
-  children?: CalculationNode[];
+  children: CalculationNode[];
+  childrenFlat: CalculationNode[];
 }
 
 export interface CalculationConceptValue {
@@ -76,13 +77,10 @@ export class CalculationProcessor {
     let result = false;
 
     const sumNode = this.nodes.get(sumConceptName);
-    for (const sumNodeChild of sumNode?.children ?? []) {
+    for (const sumNodeChild of sumNode?.childrenFlat ?? []) {
       if (sumNodeChild.concept.name === conceptName) {
         result = true;
-      } else if (
-        this.isConceptIncludedInSum(conceptName, sumNodeChild.concept.name)
-      ) {
-        result = true;
+        break;
       }
     }
 
@@ -173,6 +171,8 @@ class CalculationParser {
         name: conceptInfo.name,
         label: conceptInfo.label,
       },
+      children: [],
+      childrenFlat: [],
     };
 
     if (attributes.weight) {
@@ -194,6 +194,9 @@ class CalculationParser {
 
     if (children.length > 0) {
       node.children = children;
+      node.childrenFlat = node.children
+        .map((child) => [child, ...child.childrenFlat])
+        .flat();
     }
 
     return node;
