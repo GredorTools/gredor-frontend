@@ -5,6 +5,19 @@ import {
   TaxonomyManager,
 } from "@/util/TaxonomyManager.ts";
 import { type Reactive, reactive } from "vue";
+import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import {
+  hasBeloppradMonetaryValue,
+  isBeloppradMonetary,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import {
+  hasBeloppradComparableValue,
+  isBeloppradComparable,
+} from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import {
+  hasBeloppradStringValue,
+  isBeloppradString,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
   taxonomyItemName: string;
@@ -292,7 +305,7 @@ function deleteBeloppradEmptySums(
   taxonomyManager: TaxonomyManager,
   belopprad: Belopprad,
   from: Belopprad[],
-) {
+): void {
   for (const possibleSumBelopprad of from) {
     if (
       !getTaxonomyItemForBelopprad(taxonomyManager, possibleSumBelopprad)
@@ -321,11 +334,39 @@ function deleteBeloppradEmptySums(
   }
 }
 
+export function hasBeloppradValue(
+  taxonomyManager: TaxonomyManager,
+  belopprad: Belopprad,
+  arsredovisning: Arsredovisning,
+  section: Belopprad[],
+  maxNumPreviousYears: number,
+): boolean {
+  if (isBeloppradMonetary(belopprad)) {
+    return hasBeloppradMonetaryValue(
+      taxonomyManager,
+      belopprad,
+      arsredovisning,
+      section,
+      maxNumPreviousYears,
+    );
+  } else if (isBeloppradComparable(belopprad)) {
+    return hasBeloppradComparableValue(
+      belopprad,
+      arsredovisning,
+      maxNumPreviousYears,
+    );
+  } else if (isBeloppradString(belopprad)) {
+    return hasBeloppradStringValue(belopprad);
+  } else {
+    throw new Error("Unknown belopprad type");
+  }
+}
+
 export function isSumBeloppradEmpty(
   taxonomyManager: TaxonomyManager,
   sumBelopprad: Belopprad,
   section: Belopprad[],
-) {
+): boolean {
   if (
     !getTaxonomyItemForBelopprad(taxonomyManager, sumBelopprad).additionalData
       .isCalculatedItem

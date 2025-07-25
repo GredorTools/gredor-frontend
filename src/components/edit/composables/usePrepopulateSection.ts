@@ -3,15 +3,13 @@ import {
   createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
-  isBeloppradCorrespondsToTaxonomyItem
+  hasBeloppradValue,
+  isBeloppradCorrespondsToTaxonomyItem,
+  isBeloppradInTaxonomyItemList
 } from "@/model/arsredovisning/Belopprad.ts";
-import { reactive, type Ref, ref, watch } from "vue";
+import { computed, reactive, type Ref, ref, watch } from "vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning, BeloppradSectionName } from "@/model/arsredovisning/Arsredovisning.ts";
-import {
-  isBeloppradHasValidMonetaryValue,
-  isBeloppradMonetary
-} from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 /**
  * Argument som krävs för att generera en iXBRL-årsredovisning.
@@ -50,8 +48,6 @@ function prepopulateSection(args: Args) {
 /**
  * Intern hjälpfunktion för att utföra den faktiska förpopuleringen.
  *
- * TODO: Få att funka med icke-monetära belopprader
- *
  * @param args - Argument som krävs för förpopuleringen.
  * @param belopprader - Vue-referens till resulterande listan med belopprader.
  */
@@ -79,31 +75,28 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
 
     // Skapa en watcher som triggas när man ändrar beloppraden
     watch(belopprad, (newBelopprad: Belopprad) => {
-      if (isBeloppradMonetary(newBelopprad)) {
-        if (
-          (newBelopprad.not?.length ?? 0) > 0 ||
-          isBeloppradHasValidMonetaryValue(
-            taxonomyManager,
-            newBelopprad,
-            arsredovisning.value,
-            section,
-            maxNumPreviousYears,
-          )
-        ) {
-          // Om beloppraden innehåller värden, lägg till den i den faktiska
-          // årsredovisningen
-          createBeloppradInList(
-            taxonomyManager,
-            section,
-            taxonomyItem,
-            belopprad,
-            "all",
-          );
-        } else {
-          // Om beloppraden inte innehåller värden tar vi bort den från den
-          // faktiska årsredovisningen
-          deleteBelopprad(taxonomyManager, newBelopprad, section);
-        }
+      if (
+        hasBeloppradValue(
+          taxonomyManager,
+          newBelopprad,
+          arsredovisning.value,
+          section,
+          maxNumPreviousYears,
+        )
+      ) {
+        // Om beloppraden innehåller värden, lägg till den i den faktiska
+        // årsredovisningen
+        createBeloppradInList(
+          taxonomyManager,
+          section,
+          taxonomyItem,
+          belopprad,
+          "all",
+        );
+      } else {
+        // Om beloppraden inte innehåller värden tar vi bort den från den
+        // faktiska årsredovisningen
+        deleteBelopprad(taxonomyManager, newBelopprad, section);
       }
     });
 
@@ -126,8 +119,53 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
   );
 }
 
+/**
+ * Funktion för att gruppera förpopulade belopprader i ett specifikt avsnitt i
+ * årsredovisningen.
+ *
+ * @param prepoulatedBelopprader - De förpopulerade beloppraderna man har fått
+ * från `prepopulateSection`.
+ * @param groups - Listor med taxonomiobjekt som bildar grupperna. Varje post i
+ * listan utgör en grupp. (Om `groups` är TaxonomyItem[][] är det varje post på
+ * första nivån som används.)
+ * @returns En reaktiv lista med grupperade belopprader.
+ */
+function groupPrepopulatedSection(
+  prepoulatedBelopprader: Ref<Belopprad[]>,
+  groups: TaxonomyItem[] | TaxonomyItem[][],
+) {
+  return computed(() => {
+    const taxonomyItemsPerGroup = groups.map((group) => {
+      if ("childrenFlat" in group) {
+        // groups is TaxonomyItem[]
+        return [group, ...group.childrenFlat];
+      } else {
+        // groups is TaxonomyItem[][]
+        return group;
+      }
+    });
+
+    return prepoulatedBelopprader.value.reduce(
+      (result: Belopprad[][], belopprad: Belopprad) => {
+        for (let i = 0; i < groups.length; i++) {
+          if (
+            isBeloppradInTaxonomyItemList(taxonomyItemsPerGroup[i], belopprad)
+          ) {
+            result[i].push(belopprad);
+            break;
+          }
+        }
+
+        return result;
+      },
+      Array.from(Array(groups.length), () => []),
+    );
+  });
+}
+
 export function usePrepopulateSection(args: Args) {
   return {
     prepopulateSection: () => prepopulateSection(args),
+    groupPrepopulatedSection,
   };
 }

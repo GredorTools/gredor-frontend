@@ -64,7 +64,7 @@ export function calculateValuesIntoBelopprad(
   }
 }
 
-export function isBeloppradHasValidMonetaryValue(
+export function hasBeloppradMonetaryValue(
   taxonomyManager: TaxonomyManager,
   belopprad: BeloppradMonetary,
   arsredovisning: Arsredovisning,
@@ -77,7 +77,8 @@ export function isBeloppradHasValidMonetaryValue(
   }
 
   return (
-    (isBeloppValidMonetaryValue(belopprad.beloppNuvarandeAr) ||
+    !!belopprad.not ||
+    ((isBeloppValidMonetaryValue(belopprad.beloppNuvarandeAr) ||
       belopprad.beloppTidigareAr
         .slice(
           0,
@@ -87,6 +88,6 @@ export function isBeloppradHasValidMonetaryValue(
           ),
         )
         .some((belopp) => isBeloppValidMonetaryValue(belopp))) &&
-    !isSumBeloppradEmpty(taxonomyManager, belopprad, section)
+      !isSumBeloppradEmpty(taxonomyManager, belopprad, section))
   );
 }

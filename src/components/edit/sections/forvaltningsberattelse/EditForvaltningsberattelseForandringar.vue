@@ -9,6 +9,7 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import {
   createBelopprad,
+  createBeloppradInList,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
@@ -51,6 +52,19 @@ const forandringarTable = computed(() =>
     belopprader.value,
   ),
 );
+
+const overgangK2AbstractItem = props.taxonomyManager.getItemByName(
+  "se-gen-base:ForandringIngaendeEgetKapitalOvergangK2Abstract",
+);
+
+// Hjälpfunktioner
+function addBelopprad(taxonomyItem: TaxonomyItem) {
+  createBeloppradInList(
+    props.taxonomyManager,
+    arsredovisning.value.forvaltningsberattelse,
+    taxonomyItem,
+  );
+}
 </script>
 
 <template>
@@ -104,6 +118,22 @@ const forandringarTable = computed(() =>
       </tr>
     </tbody>
   </table>
+
+  <!--
+  Vi vill inte ha med "Specifikation av förändringar i ingående eget kapital vid övergång till K2",
+  det är extremt osannolikt att någon kommer ha nytta av den numera så det skräpar bara ner.
+  -->
+  <EditItemSelector
+    :taxonomy-items="[
+      groupTaxonomyItemFull,
+      ...groupTaxonomyItemFull.childrenFlat.filter(
+        (child) =>
+          child.xmlName !== overgangK2AbstractItem.xmlName &&
+          !overgangK2AbstractItem.childrenFlat.includes(child),
+      ),
+    ]"
+    @add-belopprad="addBelopprad"
+  />
 </template>
 
 <style lang="scss" scoped>

@@ -4,18 +4,15 @@
  * Visar en tabell med nyckeltal för nuvarande och tidigare räkenskapsår.
  */
 
-import {
-  createBelopprad,
-  deleteBelopprad,
-  isBeloppradInTaxonomyItemList,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
+import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
 
-defineProps<{
+const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
   taxonomyManager: TaxonomyManager;
 
@@ -27,6 +24,18 @@ defineProps<{
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
+
+// Förpopulera rader
+const maxNumPreviousYears = 3;
+
+const { prepopulateSection } = usePrepopulateSection({
+  taxonomyManager: props.taxonomyManager,
+  availableTaxonomyItems: props.groupTaxonomyItem,
+  arsredovisning: arsredovisning,
+  sectionName: "forvaltningsberattelse",
+  maxNumPreviousYears,
+});
+const belopprader = prepopulateSection();
 </script>
 
 <template>
@@ -60,36 +69,17 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
             )
           }}
         </th>
-        <th scope="col"><!-- Ta bort-knapp --></th>
       </tr>
     </thead>
     <tbody>
       <EditBelopprad
-        v-for="[index, belopprad] in [
-          ...arsredovisning.forvaltningsberattelse.entries(),
-        ].filter(([, b]) =>
-          isBeloppradInTaxonomyItemList(
-            [groupTaxonomyItem, ...groupTaxonomyItem.childrenFlat],
-            b,
-          ),
-        )"
+        v-for="(belopprad, index) in belopprader"
         :key="belopprad.taxonomyItemName"
-        v-model:belopprad="arsredovisning.forvaltningsberattelse[index]"
-        v-model:belopprader="arsredovisning.forvaltningsberattelse"
-        :comparable-num-previous-years="
-          Math.min(arsredovisning.verksamhetsarTidigare.length, 3)
-        "
+        v-model:belopprad="belopprader[index]"
+        v-model:belopprader="belopprader"
+        :comparable-num-previous-years="Math.min(maxNumPreviousYears, 3)"
         :string-minimum-level="1"
         :taxonomy-manager="taxonomyManager"
-        allow-delete
-        @delete="
-          () =>
-            deleteBelopprad(
-              taxonomyManager,
-              belopprad,
-              arsredovisning.forvaltningsberattelse,
-            )
-        "
       />
     </tbody>
   </table>

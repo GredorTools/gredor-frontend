@@ -9,3 +9,7 @@ export function isBeloppradString(
 ): belopprad is BeloppradString {
   return belopprad.type === "xbrli:stringItemType";
 }
+
+export function hasBeloppradStringValue(belopprad: BeloppradString): boolean {
+  return !!belopprad.text;
+}

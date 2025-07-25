@@ -6,18 +6,13 @@
 
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
-import {
-  type Belopprad,
-  createBelopprad,
-  isBeloppradInTaxonomyItemList,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import {
   getTaxonomyManager,
   TaxonomyRootName,
 } from "@/util/TaxonomyManager.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
-import { computed } from "vue";
 
 const maxNumPreviousYears = 1;
 
@@ -34,15 +29,15 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
 });
 
 // Förpopulera rader
-const { prepopulateSection } = usePrepopulateSection({
+const { prepopulateSection, groupPrepopulatedSection } = usePrepopulateSection({
   taxonomyManager,
   availableTaxonomyItems,
   arsredovisning: arsredovisning,
   sectionName: "balansrakning",
   maxNumPreviousYears,
 });
-const belopprader = prepopulateSection();
 
+const belopprader = prepopulateSection();
 const groups = [
   [
     ...availableTaxonomyItems.children[0].children[0].childrenFlat,
@@ -53,74 +48,77 @@ const groups = [
     availableTaxonomyItems.children[0].children[3],
   ],
 ];
-
-const groupedBelopprader = computed(() =>
-  belopprader.value.reduce(
-    (result: Belopprad[][], belopprad: Belopprad) => {
-      let groupIndex = -1;
-
-      for (let i = 0; i < groups.length; i++) {
-        if (isBeloppradInTaxonomyItemList(groups[i], belopprad)) {
-          groupIndex = i;
-          break;
-        }
-      }
-
-      if (groupIndex > -1) {
-        result[groupIndex].push(belopprad);
-      }
-
-      return result;
-    },
-    [[], []],
-  ),
-);
+const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
 </script>
 
 <template>
-  <template v-for="(group, groupIndex) in groups" :key="groupIndex">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">
-            <BaseEditBeloppradTitle
-              v-if="group[0].parent"
-              :belopprad="createBelopprad(group[0].parent)"
-              :taxonomy-manager="taxonomyManager"
-            />
-          </th>
-          <th class="not-container" scope="col">Not</th>
-          <th class="value-container" scope="col">
-            {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
-          </th>
-          <th
-            v-if="arsredovisning.verksamhetsarTidigare.length > 0"
-            class="value-container"
-            scope="col"
-          >
-            {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
-          </th>
-          <th scope="col"><!-- Ta bort-knapp --></th>
-        </tr>
-      </thead>
-      <tbody>
-        <EditBelopprad
-          v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
-          :key="belopprad.taxonomyItemName"
-          v-model:belopprad="groupedBelopprader[groupIndex][index]"
-          v-model:belopprader="groupedBelopprader[groupIndex]"
-          :comparable-num-previous-years="
-            Math.min(
-              arsredovisning.verksamhetsarTidigare.length,
-              maxNumPreviousYears,
-            )
-          "
-          :taxonomy-manager="taxonomyManager"
-          comparable-allow-not
-        />
-      </tbody>
-    </table>
-  </template>
+  <div class="accordion">
+    <div
+      v-for="(group, groupIndex) in groups"
+      :key="groupIndex"
+      class="accordion-item"
+    >
+      <div class="accordion-header">
+        <button
+          :aria-controls="`balansrakning-accordion${groupIndex}`"
+          :data-bs-target="`#balansrakning-accordion${groupIndex}`"
+          aria-expanded="true"
+          class="accordion-button collapsed"
+          data-bs-toggle="collapse"
+          type="button"
+        >
+          {{ group[0].parent?.additionalData.displayLabel }}
+        </button>
+      </div>
+      <div
+        :id="`balansrakning-accordion${groupIndex}`"
+        class="accordion-collapse collapse"
+      >
+        <div class="accordion-body">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">
+                  <BaseEditBeloppradTitle
+                    v-if="group[0].parent"
+                    :belopprad="createBelopprad(group[0].parent)"
+                    :taxonomy-manager="taxonomyManager"
+                  />
+                </th>
+                <th class="not-container" scope="col">Not</th>
+                <th class="value-container" scope="col">
+                  {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
+                </th>
+                <th
+                  v-if="arsredovisning.verksamhetsarTidigare.length > 0"
+                  class="value-container"
+                  scope="col"
+                >
+                  {{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <EditBelopprad
+                v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
+                :key="belopprad.taxonomyItemName"
+                v-model:belopprad="groupedBelopprader[groupIndex][index]"
+                v-model:belopprader="groupedBelopprader[groupIndex]"
+                :comparable-num-previous-years="
+                  Math.min(
+                    arsredovisning.verksamhetsarTidigare.length,
+                    maxNumPreviousYears,
+                  )
+                "
+                :taxonomy-manager="taxonomyManager"
+                comparable-allow-not
+              />
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>
