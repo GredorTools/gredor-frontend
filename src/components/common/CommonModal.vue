@@ -72,5 +72,6 @@ onMounted(() => {
   display: flex;
   max-height: 75vh;
   overflow-y: auto;
+  padding-bottom: 2rem;
 }
 </style>
