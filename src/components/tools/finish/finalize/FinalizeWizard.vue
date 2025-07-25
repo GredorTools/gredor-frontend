@@ -11,7 +11,7 @@
 import { ref } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import CommonValidateReport from "@/components/tools/finish/common/steps/CommonValidateReport.vue";
-import CommonSignAgreement from "@/components/tools/finish/common/steps/CommonSignAgreement.vue";
+import CommonBolagsverketAgreement from "@/components/tools/finish/common/steps/CommonBolagsverketAgreement.vue";
 import FinalizeSignPdf from "@/components/tools/finish/finalize/steps/FinalizeSignPdf.vue";
 import FinalizeRequestInformation from "@/components/tools/finish/finalize/steps/FinalizeRequestInformation.vue";
 import FinalizeDownloadFiles from "@/components/tools/finish/finalize/steps/FinalizeDownloadFiles.vue";
@@ -38,7 +38,7 @@ const ixbrl = ref<string | undefined>();
 const currentStep = ref<
   | "signPdf"
   | "requestInformation"
-  | "signAgreement"
+  | "bolagsverketAgreement"
   | "validateReport"
   | "downloadFiles"
 >("signPdf");
@@ -68,11 +68,11 @@ const numSteps = 5;
       :num-steps="numSteps"
       class="limit-width"
       @go-to-previous-step="currentStep = 'signPdf'"
-      @go-to-next-step="currentStep = 'signAgreement'"
+      @go-to-next-step="currentStep = 'bolagsverketAgreement'"
     />
-    <CommonSignAgreement
+    <CommonBolagsverketAgreement
       v-if="
-        currentStep === 'signAgreement' &&
+        currentStep === 'bolagsverketAgreement' &&
         arsredovisning != null &&
         signedPdf != null
       "
@@ -99,7 +99,7 @@ const numSteps = 5;
       :signed-pdf="signedPdf"
       :signer-pnr="signerPnr"
       class="limit-width"
-      @go-to-previous-step="currentStep = 'signAgreement'"
+      @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
       @go-to-next-step="currentStep = 'downloadFiles'"
     />
     <FinalizeDownloadFiles
