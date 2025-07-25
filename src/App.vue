@@ -296,7 +296,7 @@ main {
   gap: 2rem;
 
   #editor {
-    overflow-y: auto;
+    overflow-y: scroll;
 
     border: 1px solid #566f41;
     border-radius: 0.5rem;

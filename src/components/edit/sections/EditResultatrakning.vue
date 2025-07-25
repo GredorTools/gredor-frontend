@@ -55,7 +55,6 @@ const belopprader = prepopulateSection();
           {{ arsredovisning.verksamhetsarTidigare[0].startdatum }}<br />
           –{{ arsredovisning.verksamhetsarTidigare[0].slutdatum }}
         </th>
-        <th scope="col"><!-- Ta bort-knapp --></th>
       </tr>
     </thead>
     <tbody>

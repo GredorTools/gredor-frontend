@@ -9,6 +9,7 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import {
   createBelopprad,
+  createBeloppradInList,
   deleteBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
@@ -51,6 +52,19 @@ const forandringarTable = computed(() =>
     belopprader.value,
   ),
 );
+
+const overgangK2AbstractItem = props.taxonomyManager.getItemByName(
+  "se-gen-base:ForandringIngaendeEgetKapitalOvergangK2Abstract",
+);
+
+// Hjälpfunktioner
+function addBelopprad(taxonomyItem: TaxonomyItem) {
+  createBeloppradInList(
+    props.taxonomyManager,
+    arsredovisning.value.forvaltningsberattelse,
+    taxonomyItem,
+  );
+}
 </script>
 
 <template>
@@ -58,17 +72,9 @@ const forandringarTable = computed(() =>
     <thead>
       <tr>
         <th scope="col">
-          <BaseEditBeloppradTitle
-            :belopprad="createBelopprad(groupTaxonomyItem)"
-            :taxonomy-manager="taxonomyManager"
-          />
+          <BaseEditBeloppradTitle :belopprad="createBelopprad(groupTaxonomyItem)" :taxonomy-manager="taxonomyManager" />
         </th>
-        <th
-          v-for="columnName in forandringarTable.columnNames"
-          :key="columnName"
-          class="value-container"
-          scope="col"
-        >
+        <th v-for="columnName in forandringarTable.columnNames" :key="columnName" class="value-container" scope="col">
           {{ columnName }}
         </th>
       </tr>
@@ -78,32 +84,35 @@ const forandringarTable = computed(() =>
         <td>
           {{ forandringarTable.rowNames[rowIndex] }}
         </td>
-        <td
-          v-for="(cell, columnIndex) in row"
-          :key="columnIndex"
-          class="value-container"
-        >
+        <td v-for="(cell, columnIndex) in row" :key="columnIndex" class="value-container">
           <div v-if="cell != null" class="value-contents">
-            <input
-              v-model.trim="cell.belopprad.beloppNuvarandeAr"
-              class="form-control"
-              type="text"
-            />
-            <BaseEditBeloppradDeleteButton
-              @delete="
-                () =>
-                  deleteBelopprad(
-                    taxonomyManager,
-                    cell.belopprad,
-                    arsredovisning.forvaltningsberattelse,
-                  )
-              "
-            />
+            <input v-model.trim="cell.belopprad.beloppNuvarandeAr" class="form-control" type="text" />
+            <BaseEditBeloppradDeleteButton @delete="
+              () =>
+                deleteBelopprad(
+                  taxonomyManager,
+                  cell.belopprad,
+                  arsredovisning.forvaltningsberattelse,
+                )
+            " />
           </div>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!--
+  Vi vill inte ha med "Specifikation av förändringar i ingående eget kapital vid övergång till K2",
+  det är extremt osannolikt att någon kommer ha nytta av den numera så det skräpar bara ner.
+  -->
+  <EditItemSelector :taxonomy-items="[
+    groupTaxonomyItemFull,
+    ...groupTaxonomyItemFull.childrenFlat.filter(
+      (child) =>
+        child.xmlName !== overgangK2AbstractItem.xmlName &&
+        !overgangK2AbstractItem.childrenFlat.includes(child),
+    ),
+  ]" @add-belopprad="addBelopprad" />
 </template>
 
 <style lang="scss" scoped>

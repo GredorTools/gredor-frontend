@@ -129,5 +129,6 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
 export function usePrepopulateSection(args: Args) {
   return {
     prepopulateSection: () => prepopulateSection(args),
+    // TODO: groupPrepopulatedSection: (propoulatedBelopprader: Belopprad[], groups: TaxonomyItem[]) => prepopulateSection
   };
 }

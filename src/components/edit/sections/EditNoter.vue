@@ -40,69 +40,59 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
 </script>
 
 <template>
-  <template
-    v-for="(group, groupIndex) in [
+  <div class="accordion">
+    <div class="accordion-item" v-for="(group, groupIndex) in [
       availableTaxonomyItems.children[0].children[0],
       ...availableTaxonomyItems.children[0].children
         .slice(1)
         .flatMap((c) => c.children),
-    ]"
-    :key="groupIndex"
-  >
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">{{ group.additionalData.displayLabel }}</th>
-          <component
-            :is="
-              getValueColumnHeaderCell(
-                group,
-                arsredovisning.verksamhetsarNuvarande,
-              )
-            "
-          />
-          <component
-            :is="
-              getValueColumnHeaderCell(
-                group,
-                arsredovisning.verksamhetsarTidigare[0],
-              )
-            "
-            v-if="arsredovisning.verksamhetsarTidigare.length > 0"
-          />
-          <th scope="col"><!-- Ta bort-knapp --></th>
-        </tr>
-      </thead>
-      <tbody>
-        <EditBelopprad
-          v-for="[index, belopprad] in [
-            ...arsredovisning.noter.entries(),
-          ].filter(([, b]) =>
-            isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
-          )"
-          :key="belopprad.taxonomyItemName"
-          v-model:belopprad="arsredovisning.noter[index]"
-          v-model:belopprader="arsredovisning.noter"
-          :comparable-num-previous-years="
-            Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
-          "
-          :string-minimum-level="1"
-          :taxonomy-manager="taxonomyManager"
-          allow-delete
-          string-multiline
-          @delete="
-            () =>
-              deleteBelopprad(taxonomyManager, belopprad, arsredovisning.noter)
-          "
-        />
-      </tbody>
-    </table>
+    ]" :key="groupIndex">
+      <div class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          :data-bs-target="`#noter-accordion${groupIndex}`" aria-expanded="true"
+          :aria-controls="`noter-accordion${groupIndex}`">
+          {{ group.additionalData.displayLabel }}
+        </button>
+      </div>
+      <div :id="`noter-accordion${groupIndex}`" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">{{ group.additionalData.displayLabel }}</th>
+                <component :is="getValueColumnHeaderCell(
+                  group,
+                  arsredovisning.verksamhetsarNuvarande,
+                )
+                  " />
+                <component :is="getValueColumnHeaderCell(
+                  group,
+                  arsredovisning.verksamhetsarTidigare[0],
+                )
+                  " v-if="arsredovisning.verksamhetsarTidigare.length > 0" />
+                <th scope="col"><!-- Ta bort-knapp --></th>
+              </tr>
+            </thead>
+            <tbody>
+              <EditBelopprad v-for="[index, belopprad] in [
+                ...arsredovisning.noter.entries(),
+              ].filter(([, b]) =>
+                isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
+              )" :key="belopprad.taxonomyItemName" v-model:belopprad="arsredovisning.noter[index]"
+                v-model:belopprader="arsredovisning.noter" :comparable-num-previous-years="Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+                  " :string-minimum-level="1" :taxonomy-manager="taxonomyManager" allow-delete string-multiline
+                @delete="
+                  () =>
+                    deleteBelopprad(taxonomyManager, belopprad, arsredovisning.noter)
+                " />
+            </tbody>
+          </table>
 
-    <EditItemSelector
-      :taxonomy-items="[group, ...group.childrenFlat]"
-      @add-belopprad="addBelopprad"
-    />
-  </template>
+          <EditItemSelector :taxonomy-items="[group, ...group.childrenFlat]" @add-belopprad="addBelopprad" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>
