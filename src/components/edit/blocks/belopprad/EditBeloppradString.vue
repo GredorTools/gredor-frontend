@@ -114,8 +114,14 @@ const trClasses = computed(() => [
 <style lang="scss" scoped>
 @import "@/assets/extendables.scss";
 
-.full-width td > * {
-  width: 100%;
+.full-width td {
+  & > * {
+    width: 100%;
+  }
+
+  textarea {
+    margin-bottom: 1rem;
+  }
 }
 
 textarea {
