@@ -15,6 +15,7 @@ import {
 } from "@/model/arsredovisning/Belopprad.ts";
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 import { getNonFractionScale, getUnitRef } from "@/util/renderUtils.ts";
+import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
@@ -97,6 +98,7 @@ function getContextRef(belopprad: Belopprad) {
               :name="cell.taxonomyItem.xmlName"
               :scale="getNonFractionScale(cell.taxonomyItem)"
               :sign="
+                isBeloppradMonetary(cell.belopprad) &&
                 cell.belopprad.beloppNuvarandeAr.startsWith('-')
                   ? '-'
                   : undefined

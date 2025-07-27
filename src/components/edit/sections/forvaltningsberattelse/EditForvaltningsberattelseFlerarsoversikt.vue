@@ -35,6 +35,7 @@ const { prepopulateSection } = usePrepopulateSection({
   sectionName: "forvaltningsberattelse",
   maxNumPreviousYears,
 });
+
 const belopprader = prepopulateSection();
 </script>
 

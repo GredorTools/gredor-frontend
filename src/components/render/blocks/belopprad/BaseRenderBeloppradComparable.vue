@@ -14,6 +14,7 @@ import {
   getUnitRef,
   isPercentageTaxonomyItem,
 } from "@/util/renderUtils.ts";
+import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 export interface RenderBeloppradComparablePropsBase<
   T extends BaseBeloppradComparable,
@@ -92,7 +93,12 @@ const renderLevel = computed(
           :contextRef="contextRefPrefix + '_nuvarande'"
           :name="taxonomyItem.xmlName"
           :scale="getNonFractionScale(taxonomyItem)"
-          :sign="belopprad.beloppNuvarandeAr.startsWith('-') ? '-' : undefined"
+          :sign="
+            isBeloppradMonetary(belopprad) &&
+            belopprad.beloppNuvarandeAr.startsWith('-')
+              ? '-'
+              : undefined
+          "
           :unitRef="getUnitRef(taxonomyItem)"
           decimals="INF"
           format="ixt:numspacecomma"
@@ -124,7 +130,10 @@ const renderLevel = computed(
           :name="taxonomyItem.xmlName"
           :scale="getNonFractionScale(taxonomyItem)"
           :sign="
-            belopprad.beloppTidigareAr[i - 1]?.startsWith('-') ? '-' : undefined
+            isBeloppradMonetary(belopprad) &&
+            belopprad.beloppTidigareAr[i - 1]?.startsWith('-')
+              ? '-'
+              : undefined
           "
           :unitRef="getUnitRef(taxonomyItem)"
           decimals="INF"
