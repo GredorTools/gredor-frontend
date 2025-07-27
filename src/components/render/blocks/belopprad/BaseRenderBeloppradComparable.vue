@@ -56,6 +56,23 @@ const taxonomyItem = computed(() => {
 const renderLevel = computed(
   () => props.renderAsLevel ?? taxonomyItem.value.level,
 );
+
+// Hjälpfunktioner
+function shouldShowSign(belopp: string) {
+  if (props.showBalanceSign) {
+    if (taxonomyItem.value.properties.balance === "debit") {
+      return (
+        belopp.trim().length > 0 &&
+        belopp.trim() !== "0" &&
+        !belopp.startsWith("-")
+      );
+    } else if (taxonomyItem.value.properties.balance === "credit") {
+      return belopp.startsWith("-");
+    }
+  } else {
+    return belopp.startsWith("-");
+  }
+}
 </script>
 
 <template>
@@ -78,16 +95,7 @@ const renderLevel = computed(
     </td>
     <td class="value-container">
       <template v-if="belopprad.beloppNuvarandeAr.length > 0">
-        <span
-          v-if="
-            (showBalanceSign &&
-              taxonomyItem.properties.balance === 'debit' &&
-              belopprad.beloppNuvarandeAr.trim().length > 0 &&
-              belopprad.beloppNuvarandeAr.trim() !== '0') ||
-            belopprad.beloppNuvarandeAr.startsWith('-')
-          "
-          >&minus;</span
-        >
+        <span v-if="shouldShowSign(belopprad.beloppNuvarandeAr)">&minus;</span>
         <!-- @delete-whitespace -->
         <ix:nonFraction
           :contextRef="contextRefPrefix + '_nuvarande'"
@@ -114,14 +122,7 @@ const renderLevel = computed(
     </td>
     <td v-for="i in numPreviousYears" :key="i" class="value-container">
       <template v-if="belopprad.beloppTidigareAr[i - 1]?.length > 0">
-        <span
-          v-if="
-            (showBalanceSign &&
-              taxonomyItem.properties.balance === 'debit' &&
-              belopprad.beloppTidigareAr[i - 1].trim().length > 0 &&
-              belopprad.beloppTidigareAr[i - 1].trim() !== '0') ||
-            belopprad.beloppTidigareAr[i - 1].startsWith('-')
-          "
+        <span v-if="shouldShowSign(belopprad.beloppTidigareAr[i - 1])"
           >&minus;</span
         >
         <!-- @delete-whitespace -->
