@@ -87,7 +87,7 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
             :taxonomy-manager="taxonomyManager"
           />
           <table v-else>
-            <thead>
+            <thead v-if="groupedBelopprader[groupIndex].length > 1">
               <tr>
                 <th scope="col">
                   <BaseEditBeloppradTitle
