@@ -11,10 +11,8 @@ import {
   UNIT_REF_REDOVISNINGSVALUTA,
   UNIT_REF_SHARES,
 } from "@/util/renderUtils.ts";
-import {
-  getTaxonomyManager,
-  TaxonomyRootName,
-} from "@/util/TaxonomyManager.ts";
+import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 defineProps<{
   /** Årsredovisningen som innehåller information för iXBRL-huvudet. */

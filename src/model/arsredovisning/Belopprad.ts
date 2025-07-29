@@ -1,9 +1,4 @@
-import {
-  type LabelType,
-  type TaxonomyItem,
-  type TaxonomyItemType,
-  TaxonomyManager,
-} from "@/util/TaxonomyManager.ts";
+import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { type Reactive, reactive } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
@@ -18,6 +13,16 @@ import {
   hasBeloppradStringValue,
   isBeloppradString,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+import {
+  hasBeloppradTupleValue,
+  isBeloppradTuple,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import {
+  isTaxonomyItemTuple,
+  type LabelType,
+  type TaxonomyItem,
+  type TaxonomyItemType,
+} from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
   taxonomyItemName: string;
@@ -63,8 +68,11 @@ export function createBelopprad<T extends TaxonomyItemType>(
       );
 
     default:
-      if (taxonomyItem.properties.type.endsWith("@anonymousType")) {
-        return baseBeloppradData;
+      if (isTaxonomyItemTuple(taxonomyItem)) {
+        return {
+          ...baseBeloppradData,
+          instanser: [],
+        } as Belopprad<T>;
       }
 
       throw new Error(
@@ -357,6 +365,8 @@ export function hasBeloppradValue(
     );
   } else if (isBeloppradString(belopprad)) {
     return hasBeloppradStringValue(belopprad);
+  } else if (isBeloppradTuple(belopprad)) {
+    return hasBeloppradTupleValue(belopprad);
   } else {
     throw new Error("Unknown belopprad type");
   }

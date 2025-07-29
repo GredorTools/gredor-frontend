@@ -6,18 +6,14 @@
 
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
+import { createBeloppradInList } from "@/model/arsredovisning/Belopprad.ts";
+import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
+import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
 import {
-  createBeloppradInList,
-  deleteBelopprad,
-  isBeloppradInTaxonomyItemList,
-} from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getTaxonomyManager,
   type TaxonomyItem,
   TaxonomyRootName,
-} from "@/util/TaxonomyManager.ts";
-import EditItemSelector from "@/components/edit/blocks/EditItemSelector.vue";
-import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
+} from "@/model/taxonomy/TaxonomyItem.ts";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
@@ -37,17 +33,29 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     taxonomyItem,
   );
 }
+
+const { prepopulateSection, groupPrepopulatedSection } = usePrepopulateSection({
+  taxonomyManager,
+  availableTaxonomyItems,
+  arsredovisning: arsredovisning,
+  sectionName: "noter",
+  maxNumPreviousYears: 1,
+});
+
+const belopprader = prepopulateSection();
+const groups = [
+  availableTaxonomyItems.children[0].children[0],
+  ...availableTaxonomyItems.children[0].children
+    .slice(1)
+    .flatMap((c) => c.children),
+];
+const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
 </script>
 
 <template>
   <div class="accordion">
     <div
-      v-for="(group, groupIndex) in [
-        availableTaxonomyItems.children[0].children[0],
-        ...availableTaxonomyItems.children[0].children
-          .slice(1)
-          .flatMap((c) => c.children),
-      ]"
+      v-for="(group, groupIndex) in groups"
       :key="groupIndex"
       class="accordion-item"
     >
@@ -89,45 +97,23 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
                   "
                   v-if="arsredovisning.verksamhetsarTidigare.length > 0"
                 />
-                <th scope="col"><!-- Ta bort-knapp --></th>
               </tr>
             </thead>
             <tbody>
               <EditBelopprad
-                v-for="[index, belopprad] in [
-                  ...arsredovisning.noter.entries(),
-                ].filter(([, b]) =>
-                  isBeloppradInTaxonomyItemList(
-                    [group, ...group.childrenFlat],
-                    b,
-                  ),
-                )"
+                v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
                 :key="belopprad.taxonomyItemName"
-                v-model:belopprad="arsredovisning.noter[index]"
-                v-model:belopprader="arsredovisning.noter"
+                v-model:belopprad="groupedBelopprader[groupIndex][index]"
+                v-model:belopprader="groupedBelopprader[groupIndex]"
                 :comparable-num-previous-years="
                   Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
                 "
                 :string-minimum-level="1"
                 :taxonomy-manager="taxonomyManager"
-                allow-delete
                 string-multiline
-                @delete="
-                  () =>
-                    deleteBelopprad(
-                      taxonomyManager,
-                      belopprad,
-                      arsredovisning.noter,
-                    )
-                "
               />
             </tbody>
           </table>
-
-          <EditItemSelector
-            :taxonomy-items="[group, ...group.childrenFlat]"
-            @add-belopprad="addBelopprad"
-          />
         </div>
       </div>
     </div>

@@ -6,11 +6,12 @@
 
 import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
-import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */

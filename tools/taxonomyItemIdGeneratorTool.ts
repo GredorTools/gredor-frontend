@@ -6,13 +6,13 @@
  */
 
 import fs from "fs";
-import {
-  getTaxonomyManager,
-  LabelType,
-  TaxonomyRootName,
-} from "../src/util/TaxonomyManager";
+import { getTaxonomyManager } from "../src/util/TaxonomyManager";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import {
+  LabelType,
+  TaxonomyRootName,
+} from "../src/model/taxonomy/TaxonomyItem";
 
 const argv = await yargs(hideBin(process.argv))
   .option("outputFile", {
@@ -53,7 +53,7 @@ let output = `
  * REDIGERA INTE MANUELLT!
  */
 
-import type { LabelType, TaxonomyRootName } from "@/util/TaxonomyManager.ts";
+import type { LabelType, TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 type Implements<T, U extends T> = U;
 

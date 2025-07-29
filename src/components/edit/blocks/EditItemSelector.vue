@@ -5,7 +5,8 @@
 
 import { computed, markRaw, ref } from "vue";
 import VueSelect, { type Option } from "vue3-select-component";
-import { type TaxonomyItem } from "@/util/TaxonomyManager.ts";
+
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const props = defineProps<{
   /** Lista över taxonomiobjekt som kan väljas. */

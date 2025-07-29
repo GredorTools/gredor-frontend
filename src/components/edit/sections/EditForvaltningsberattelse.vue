@@ -7,14 +7,12 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getTaxonomyManager,
-  TaxonomyRootName,
-} from "@/util/TaxonomyManager.ts";
+import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import EditForvaltningsberattelseFlerarsoversikt from "@/components/edit/sections/forvaltningsberattelse/EditForvaltningsberattelseFlerarsoversikt.vue";
 import EditForvaltningsberattelseForandringar from "@/components/edit/sections/forvaltningsberattelse/EditForvaltningsberattelseForandringar.vue";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(

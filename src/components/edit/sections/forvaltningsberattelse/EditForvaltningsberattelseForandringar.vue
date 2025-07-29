@@ -4,7 +4,7 @@
  * Visar en tabell med kolumner för olika typer av eget kapital och rader för olika förändringar.
  */
 
-import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import {
@@ -16,6 +16,7 @@ import {
 import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i förändringar i eget kapital. */

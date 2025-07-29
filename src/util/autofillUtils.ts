@@ -1,8 +1,9 @@
-import { getTaxonomyManager, TaxonomyRootName } from "@/util/TaxonomyManager.ts";
+import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getOrCreateBeloppradInList, getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import Decimal from "decimal.js";
 import type { Arsredovisning, Verksamhetsar } from "@/model/arsredovisning/Arsredovisning.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 /**
  * Fyller automatiskt i soliditet i flerårsöversikten för de senaste två

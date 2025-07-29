@@ -6,11 +6,9 @@
 
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
-import {
-  getTaxonomyManager,
-  TaxonomyRootName,
-} from "@/util/TaxonomyManager.ts";
+import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const maxNumPreviousYears = 1;
 

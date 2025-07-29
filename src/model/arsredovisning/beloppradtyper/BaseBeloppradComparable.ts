@@ -1,6 +1,6 @@
-import type { TaxonomyItemType } from "@/util/TaxonomyManager.ts";
 import { type Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { TaxonomyItemType } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface BaseBeloppradComparable<
   T extends TaxonomyItemType = TaxonomyItemType,

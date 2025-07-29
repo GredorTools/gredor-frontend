@@ -1,6 +1,6 @@
-import type { TaxonomyItem } from "@/util/TaxonomyManager.ts";
 import type { Verksamhetsar } from "@/model/arsredovisning/Arsredovisning.ts";
 import { h, type VNode } from "vue";
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 /**
  * Genererar en VNode för verksamhetsår som visas i tabellhuvudet, för en grupp

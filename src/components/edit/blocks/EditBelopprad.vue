@@ -17,6 +17,8 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import EditBeloppradNonmonetaryComparable from "@/components/edit/blocks/belopprad/EditBeloppradNonmonetaryComparable.vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { computed } from "vue";
+import EditBeloppradTuple from "@/components/edit/blocks/belopprad/EditBeloppradTuple.vue";
+import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -98,6 +100,11 @@ const taxonomyItem = computed(() => {
       :num-previous-years="comparableNumPreviousYears || 0"
       :taxonomy-manager="taxonomyManager"
       @delete="emit('delete')"
+    />
+    <EditBeloppradTuple
+      v-else-if="isBeloppradTuple(belopprad)"
+      :belopprad="belopprad"
+      :taxonomy-manager="taxonomyManager"
     />
   </template>
 </template>

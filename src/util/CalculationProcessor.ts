@@ -1,4 +1,4 @@
-import type { TaxonomyRootName } from "@/util/TaxonomyManager.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface CalculationNode {
   concept: {
@@ -78,7 +78,7 @@ export class CalculationProcessor {
     if (!Array.isArray(conceptNames)) {
       conceptNames = [conceptNames];
     }
-    
+
     const sumNode = this.nodes.get(sumConceptName);
     for (const sumNodeChild of sumNode?.childrenFlat ?? []) {
       if (conceptNames.includes(sumNodeChild.concept.name)) {

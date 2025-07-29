@@ -1,4 +1,4 @@
-import type { TaxonomyItem } from "@/util/TaxonomyManager.ts";
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export type UnitRef =
   | "redovisningsvaluta"

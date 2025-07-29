@@ -6,7 +6,7 @@
  * REDIGERA INTE MANUELLT!
  */
 
-import type { LabelType, TaxonomyRootName } from "@/util/TaxonomyManager.ts";
+import type { LabelType, TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 type Implements<T, U extends T> = U;
 

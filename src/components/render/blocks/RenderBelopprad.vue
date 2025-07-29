@@ -17,6 +17,8 @@ import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import RenderBeloppradNonmonetaryComparable from "@/components/render/blocks/belopprad/RenderBeloppradNonmonetaryComparable.vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import RenderBeloppradTuple from "@/components/render/blocks/belopprad/RenderBeloppradTuple.vue";
+import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -91,6 +93,11 @@ const contextRefPrefix = computed(() => {
     :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
     :render-as-level="renderAsLevel"
+    :taxonomy-manager="taxonomyManager"
+  />
+  <RenderBeloppradTuple
+    v-else-if="isBeloppradTuple(belopprad)"
+    :belopprad="belopprad"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

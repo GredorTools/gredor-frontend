@@ -8,8 +8,13 @@ import {
   isBeloppradInTaxonomyItemList
 } from "@/model/arsredovisning/Belopprad.ts";
 import { computed, reactive, type Ref, ref, watch } from "vue";
-import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning, BeloppradSectionName } from "@/model/arsredovisning/Arsredovisning.ts";
+import {
+  hasParentTaxonomyItemMatching,
+  isTaxonomyItemTuple,
+  type TaxonomyItem
+} from "@/model/taxonomy/TaxonomyItem.ts";
 
 /**
  * Argument som krävs för att generera en iXBRL-årsredovisning.
@@ -63,6 +68,18 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
   const section: Belopprad[] = arsredovisning.value[sectionName];
 
   for (const taxonomyItem of availableTaxonomyItems.childrenFlat) {
+    if (
+      !isTaxonomyItemTuple(availableTaxonomyItems) &&
+      hasParentTaxonomyItemMatching(taxonomyItem, (parent) =>
+        isTaxonomyItemTuple(parent),
+      )
+    ) {
+      // Belopprader i tuples hanteras separat - de ska inte förpopuleras
+      // eftersom det kan finnas flera likadana belopprader (med samma
+      // taxonomyItemName osv) i olika tuple-instanser
+      continue;
+    }
+
     // Kontrollera om en belopprad redan finns för det aktuella taxonomiobjektet
     let belopprad = section.find((b) =>
       isBeloppradCorrespondsToTaxonomyItem(b, taxonomyItem),
@@ -73,7 +90,9 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
       belopprad = reactive(createBelopprad(taxonomyItem));
     }
 
-    // Skapa en watcher som triggas när man ändrar beloppraden
+    // Skapa en watcher som triggas när man ändrar beloppraden, för att
+    // automatiskt lägga till eller ta bort den från årsredovisningen när man
+    // fyller i ett värde respektive tar bort det
     watch(belopprad, (newBelopprad: Belopprad) => {
       if (
         hasBeloppradValue(

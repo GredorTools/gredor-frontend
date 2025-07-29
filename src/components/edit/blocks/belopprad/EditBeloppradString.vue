@@ -99,8 +99,12 @@ const trClasses = computed(() => [
         :taxonomy-manager="taxonomyManager"
       />
     </td>
-    <td v-if="!isAbstract" :colspan="comparableNumPreviousYears + 1">
-      <input v-model="belopprad.text" type="text" />
+    <td
+      v-if="!isAbstract"
+      :colspan="comparableNumPreviousYears + 1"
+      class="value-container text-left"
+    >
+      <input v-model="belopprad.text" class="form-control" type="text" />
     </td>
     <td v-if="allowDelete">
       <BaseEditBeloppradDeleteButton

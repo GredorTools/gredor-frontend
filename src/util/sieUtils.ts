@@ -1,9 +1,5 @@
 import Decimal from "decimal.js";
-import {
-  getTaxonomyManager,
-  TaxonomyManager,
-  TaxonomyRootName,
-} from "@/util/TaxonomyManager.ts";
+import { getTaxonomyManager, TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { TaxonomyItemId } from "@/data/taxonomy/k2/2021-10-31/taxonomyItemIds";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
@@ -18,6 +14,7 @@ import {
   autofillPersonalkostnaderNot,
   autofillSoliditet,
 } from "@/util/autofillUtils.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface SieMapping {
   basAccounts: { start: number; end: number }[];

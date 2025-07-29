@@ -189,11 +189,16 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     }
 
     &.value-container {
-      text-align: right;
-
       input {
         min-width: 120px;
+      }
+
+      &:not(.text-left) {
         text-align: right;
+
+        input {
+          text-align: right;
+        }
       }
     }
 

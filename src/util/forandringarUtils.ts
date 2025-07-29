@@ -2,13 +2,14 @@ import {
   type BeloppradMonetary,
   isBeloppradMonetary
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import { type TaxonomyItem, TaxonomyManager } from "@/util/TaxonomyManager.ts";
+import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import {
   type Belopprad,
   getTaxonomyItemForBelopprad,
   isBeloppradCorrespondsToTaxonomyItem,
   isTaxonomyItemInBeloppradList
 } from "@/model/arsredovisning/Belopprad.ts";
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 /**
  * Representerar en cell i tabellen för förändringar i eget kapital.

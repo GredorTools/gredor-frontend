@@ -3,7 +3,7 @@
  * En baskomponent för att rendera vissa rubriker.
  */
 
-import { type TaxonomyItem } from "@/util/TaxonomyManager.ts";
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 
 defineProps<{
   /** Taxonomiobjektet som ska användas för rubriken. */

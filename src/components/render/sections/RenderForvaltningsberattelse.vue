@@ -6,14 +6,12 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
-import {
-  getTaxonomyManager,
-  TaxonomyRootName,
-} from "@/util/TaxonomyManager.ts";
+import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import RenderForvaltningsberattelseFlerarsoversikt from "@/components/render/sections/forvaltningsberattelse/RenderForvaltningsberattelseFlerarsoversikt.vue";
 import RenderForvaltningsberattelseForandringar from "@/components/render/sections/forvaltningsberattelse/RenderForvaltningsberattelseForandringar.vue";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import { computed } from "vue";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.FORVALTNINGSBERATTELSE,
