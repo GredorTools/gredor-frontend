@@ -3,7 +3,10 @@
  * En komponent för att rendera belopprader som har strängar som datatyp.
  */
 
-import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+import {
+  type BeloppradString,
+  hasBeloppradStringValue,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
@@ -37,7 +40,10 @@ const renderLevel = computed(
 
 <template>
   <tr
-    v-if="showHeader || belopprad.text"
+    v-if="
+      taxonomyItem.properties.abstract === 'true' ||
+      hasBeloppradStringValue(belopprad)
+    "
     :class="{
       abstract: taxonomyItem.properties.abstract === 'true',
       [`level-${renderLevel}`]: true,
