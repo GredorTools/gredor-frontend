@@ -34,6 +34,7 @@ const tupleTaxonomyItem = computed(() =>
             :belopprad="instansBelopprad"
             :comparable-num-previous-years="0"
             :taxonomy-manager="taxonomyManager"
+            string-show-header
           />
         </tbody>
       </table>
