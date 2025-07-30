@@ -54,7 +54,7 @@ function showSendWizard() {
 </script>
 
 <template>
-  <div class="finalize-tools d-flex justify-content-end gap-2">
+  <div class="d-flex justify-content-end gap-2">
     <button class="btn btn-outline-primary" @click="exportArsredovisning()">
       Exportera iXBRL-fil (test)
     </button>
@@ -74,9 +74,4 @@ function showSendWizard() {
   <SendWizard ref="sendWizard" />
 </template>
 
-<style lang="scss" scoped>
-.finalize-tools {
-  /* Matcha pappret ovan */
-  width: 210mm;
-}
-</style>
+<style lang="scss" scoped></style>

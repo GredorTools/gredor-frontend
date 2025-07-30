@@ -107,28 +107,6 @@ h3 {
 }
 
 table {
-  width: 100%;
   margin-bottom: 1rem;
-
-  th,
-  &:deep(td) {
-    border-style: hidden;
-    text-align: left;
-    padding: 0.25rem 0;
-
-    &:first-child {
-      width: 99%;
-    }
-
-    &:not(:first-child) {
-      padding-left: 1rem;
-      white-space: nowrap;
-    }
-
-    &.value-container {
-      text-align: right;
-      min-width: 100px;
-    }
-  }
 }
 </style>
