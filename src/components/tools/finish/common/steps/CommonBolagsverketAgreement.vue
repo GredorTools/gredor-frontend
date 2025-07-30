@@ -14,6 +14,7 @@ import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -80,9 +81,9 @@ onMounted(() => {
 
 <template>
   <div>
-    <h4>
+    <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Information från Bolagsverket
-    </h4>
+    </CommonModalSubtitle>
 
     <div v-if="loading">Laddar…</div>
 

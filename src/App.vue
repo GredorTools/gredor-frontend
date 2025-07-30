@@ -311,7 +311,7 @@ main {
     /* För skuggan */
     padding: 0 0.5rem 0.5rem 0;
 
-    @media screen and (max-width: 1599px) {
+    @media screen and (max-width: 1600px) {
       width: calc(210mm * 0.76);
       scale: 0.75;
       transform-origin: top left;

@@ -18,6 +18,7 @@ import { onBeforeUnmount, onMounted, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -61,14 +62,16 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="d-flex flex-col preview-container">
-    <h4>
+    <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Förhandsgranska
       årsredovisningen
-    </h4>
+    </CommonModalSubtitle>
+
     <p>
       Observera att det är Bolagsverket som skapar det slutgiltiga dokumentet,
       och att det eventuellt kan se lite annorlunda ut.
     </p>
+
     <div v-if="arsredovisning" class="preview">
       <RenderMain
         ref="renderMain"
@@ -76,6 +79,7 @@ onBeforeUnmount(() => {
         :show-faststallelseintyg="includeFaststallelseintyg"
       />
     </div>
+    
     <CommonWizardButtons
       :next-button-disabled="!ixbrl"
       :next-button-text="ixbrl ? 'Nästa' : 'Vänta – arbetar i bakgrunden…'"

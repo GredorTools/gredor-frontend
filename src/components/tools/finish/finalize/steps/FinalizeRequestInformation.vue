@@ -8,6 +8,7 @@ import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 defineProps<CommonStepProps>();
 
@@ -24,7 +25,9 @@ const personnummerRegex = /^\d{12}$/;
 
 <template>
   <div>
-    <h4>Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter</h4>
+    <CommonModalSubtitle>
+      Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter
+    </CommonModalSubtitle>
 
     <div>
       <p>

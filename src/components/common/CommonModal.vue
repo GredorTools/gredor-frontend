@@ -70,8 +70,13 @@ onMounted(() => {
 
 .modal-body {
   display: flex;
+  max-width: 98vw;
   max-height: 75vh;
   overflow-y: auto;
   padding-bottom: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
 }
 </style>

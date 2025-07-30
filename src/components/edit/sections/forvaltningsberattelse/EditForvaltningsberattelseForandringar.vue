@@ -7,16 +7,9 @@
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
-import {
-  createBelopprad,
-  createBeloppradInList,
-  deleteBelopprad,
-  isBeloppradInTaxonomyItemList,
-} from "@/model/arsredovisning/Belopprad.ts";
-import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
-import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i förändringar i eget kapital. */
@@ -36,15 +29,15 @@ const groupTaxonomyItemFull = computed(() =>
     "se-gen-base:ForandringEgetKapitalAbstract",
   ),
 );
+const { prepopulateSection } = usePrepopulateSection({
+  taxonomyManager: props.taxonomyManager,
+  availableTaxonomyItems: props.groupTaxonomyItem,
+  arsredovisning: arsredovisning,
+  sectionName: "forvaltningsberattelse",
+  maxNumPreviousYears: 0,
+});
 
-const belopprader = computed(() =>
-  arsredovisning.value.forvaltningsberattelse.filter((belopprad) =>
-    isBeloppradInTaxonomyItemList(
-      groupTaxonomyItemFull.value.childrenFlat,
-      belopprad,
-    ),
-  ),
-);
+const belopprader = prepopulateSection();
 
 const forandringarTable = computed(() =>
   getForandringarAsTable(
@@ -53,31 +46,13 @@ const forandringarTable = computed(() =>
     belopprader.value,
   ),
 );
-
-const overgangK2AbstractItem = props.taxonomyManager.getItemByName(
-  "se-gen-base:ForandringIngaendeEgetKapitalOvergangK2Abstract",
-);
-
-// Hjälpfunktioner
-function addBelopprad(taxonomyItem: TaxonomyItem) {
-  createBeloppradInList(
-    props.taxonomyManager,
-    arsredovisning.value.forvaltningsberattelse,
-    taxonomyItem,
-  );
-}
 </script>
 
 <template>
-  <table>
+  <table class="edit-forandringar-table">
     <thead>
       <tr>
-        <th scope="col">
-          <BaseEditBeloppradTitle
-            :belopprad="createBelopprad(groupTaxonomyItem)"
-            :taxonomy-manager="taxonomyManager"
-          />
-        </th>
+        <th></th>
         <th
           v-for="columnName in forandringarTable.columnNames"
           :key="columnName"
@@ -91,11 +66,14 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
     <tbody>
       <tr v-for="(row, rowIndex) in forandringarTable.table" :key="rowIndex">
         <td>
-          {{ forandringarTable.rowNames[rowIndex] }}
+          <div class="row-label">
+            {{ forandringarTable.rowNames[rowIndex] }}
+          </div>
         </td>
         <td
           v-for="(cell, columnIndex) in row"
           :key="columnIndex"
+          :class="{ 'empty-container': cell == null }"
           class="value-container"
         >
           <div v-if="cell != null" class="value-contents">
@@ -104,55 +82,92 @@ function addBelopprad(taxonomyItem: TaxonomyItem) {
               class="form-control"
               type="text"
             />
-            <BaseEditBeloppradDeleteButton
-              @delete="
-                () =>
-                  deleteBelopprad(
-                    taxonomyManager,
-                    cell.belopprad,
-                    arsredovisning.forvaltningsberattelse,
-                  )
-              "
-            />
           </div>
         </td>
       </tr>
     </tbody>
   </table>
-
-  <!--
-  Vi vill inte ha med "Specifikation av förändringar i ingående eget kapital vid övergång till K2",
-  det är extremt osannolikt att någon kommer ha nytta av den numera så det skräpar bara ner.
-  -->
-  <EditItemSelector
-    :taxonomy-items="[
-      groupTaxonomyItemFull,
-      ...groupTaxonomyItemFull.childrenFlat.filter(
-        (child) =>
-          child.xmlName !== overgangK2AbstractItem.xmlName &&
-          !overgangK2AbstractItem.childrenFlat.includes(child),
-      ),
-    ]"
-    @add-belopprad="addBelopprad"
-  />
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/extendables.scss";
 
-.value-contents {
-  display: flex;
+@mixin auto-font-sizes {
+  @media (max-width: 1500px) {
+    font-size: 0.7rem;
+  }
 
-  input {
-    flex: 1;
-    margin-right: 0.25rem;
-    min-width: 100px !important;
+  @media (min-width: 1500px) and (max-width: 1700px) {
+    font-size: 0.8rem;
+  }
 
-    &.form-control {
-      @extend %text-input;
+  @media (min-width: 1700px) and (max-width: 1900px) {
+    font-size: 0.9rem;
+  }
+}
 
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
+table.edit-forandringar-table {
+  width: min-content;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead {
+    position: sticky;
+    top: -1rem;
+    background: white;
+  }
+
+  th,
+  td {
+    @include auto-font-sizes;
+
+    border: 1px solid lightgray;
+
+    &:not(:last-child) {
+      border-right: none;
+    }
+  }
+
+  tr:not(:last-child) {
+    td {
+      border-bottom: none;
+    }
+  }
+
+  th {
+    padding-left: 1rem;
+    border-bottom-width: 4px;
+  }
+
+  td {
+    .row-label {
+      width: max-content;
+    }
+
+    &.value-container {
+      &.empty-container {
+        background: lightgray;
+      }
+
+      .value-contents input {
+        width: 100%;
+
+        &.form-control {
+          @extend %text-input;
+          @include auto-font-sizes;
+
+          @media (max-width: 1500px) {
+            min-width: 80px;
+          }
+
+          @media (min-width: 1500px) and (max-width: 1700px) {
+            min-width: 100px;
+          }
+
+          padding: 0.25rem 0.5rem;
+        }
+      }
     }
   }
 }

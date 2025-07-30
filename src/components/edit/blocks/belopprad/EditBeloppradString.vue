@@ -59,7 +59,7 @@ const trClasses = computed(() => [
 <template>
   <template v-if="multiline && !isAbstract">
     <tr :class="trClasses">
-      <td :colspan="comparableNumPreviousYears + 2">
+      <td :colspan="comparableNumPreviousYears + (allowDelete ? 2 : 1)">
         <BaseEditBeloppradTitle
           :belopprad="belopprad"
           :taxonomy-manager="taxonomyManager"

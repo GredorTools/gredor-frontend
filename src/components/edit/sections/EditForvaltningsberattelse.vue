@@ -13,6 +13,10 @@ import EditForvaltningsberattelseForandringar from "@/components/edit/sections/f
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
+import CommonModal from "@/components/common/CommonModal.vue";
+import { useTemplateRef } from "vue";
+import type { ComponentExposed } from "vue-component-type-helpers";
+import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -25,6 +29,10 @@ const availableTaxonomyItems = taxonomyManager.getRoot();
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
+
+// Modal för förändringar i eget kapital
+const forandringarModal =
+  useTemplateRef<ComponentExposed<typeof CommonModal>>("forandringarModal");
 
 // Förpopulera rader
 const { prepopulateSection, groupPrepopulatedSection } = usePrepopulateSection({
@@ -74,16 +82,14 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
             "
             :taxonomy-manager="taxonomyManager"
           />
-          <EditForvaltningsberattelseForandringar
+          <template
             v-else-if="group.xmlName === 'se-gen-base:ForandringEgetKapital'"
-            :arsredovisning="arsredovisning"
-            :group-taxonomy-item="
-              availableTaxonomyItems.childrenFlat.find(
-                (item) => item.xmlName === 'se-gen-base:ForandringEgetKapital',
-              )!
-            "
-            :taxonomy-manager="taxonomyManager"
-          />
+          >
+            <!-- Vi har denna som en modal pga att den blir för bred annars -->
+            <button class="btn btn-primary" @click="forandringarModal?.show()">
+              Visa tabell
+            </button>
+          </template>
           <table v-else>
             <thead v-if="groupedBelopprader[groupIndex].length > 1">
               <tr>
@@ -112,6 +118,27 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
       </div>
     </div>
   </div>
+
+  <CommonModal
+    id="edit-forvaltningsberattelse-forandringar-modal"
+    ref="forandringarModal"
+    title="Förändringar i eget kapital"
+  >
+    <EditForvaltningsberattelseForandringar
+      :arsredovisning="arsredovisning"
+      :group-taxonomy-item="
+        availableTaxonomyItems.childrenFlat.find(
+          (item) => item.xmlName === 'se-gen-base:ForandringEgetKapital',
+        )!
+      "
+      :taxonomy-manager="taxonomyManager"
+    />
+    <CommonWizardButtons
+      next-button-text="Klar"
+      previous-button-hidden
+      @go-to-next-step="forandringarModal?.hide()"
+    />
+  </CommonModal>
 </template>
 
 <style lang="scss" scoped></style>

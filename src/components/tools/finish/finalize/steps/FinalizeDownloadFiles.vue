@@ -16,6 +16,7 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import type { DataContainer } from "@/model/DataContainer.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
 import { ref } from "vue";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -47,9 +48,9 @@ function exportFile() {
 
 <template>
   <div>
-    <h4>
+    <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda ner .gredorfardig-fil
-    </h4>
+    </CommonModalSubtitle>
 
     <div>
       <p>Bla bla. Du kommer behöva den senare...</p>

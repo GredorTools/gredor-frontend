@@ -147,8 +147,9 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
       </p>
 
       <p>
-        Tänk på att kontrollera i efterhand att fälten blev korrekt ifyllda, och
-        att själv fylla i de uppgifter som återstår (bland annat noter).
+        Tänk på att kontrollera efteråt att fälten blev korrekt ifyllda, och att
+        själv fylla i de uppgifter som återstår – oftast delar av
+        förvaltningsberättelsen och noterna.
       </p>
 
       <CommonFileInput

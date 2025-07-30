@@ -12,6 +12,7 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { ref } from "vue";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 defineProps<CommonStepProps>();
 
@@ -51,7 +52,9 @@ async function handleSignedPdfFile(file: File) {
 <template>
   <div>
     <div class="d-flex flex-column gap-3">
-      <h4>Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp filer</h4>
+      <CommonModalSubtitle>
+        Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp filer
+      </CommonModalSubtitle>
 
       <CommonFileInput
         :allowed-file-extensions="['.gredorfardig']"

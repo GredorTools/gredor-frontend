@@ -12,6 +12,7 @@ import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 defineProps<CommonStepProps>();
 
@@ -40,9 +41,9 @@ const isValidFaststallelseintyg = computed(() => {
 
 <template>
   <div>
-    <h4>
+    <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Lägg till fastställelseintyg
-    </h4>
+    </CommonModalSubtitle>
     <div v-if="arsredovisning">
       <div>
         <EditFaststallelseintyg :arsredovisning="arsredovisning" />

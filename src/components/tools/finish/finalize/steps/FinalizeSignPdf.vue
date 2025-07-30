@@ -16,6 +16,7 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import RenderMain from "@/components/render/RenderMain.vue";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
+import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -94,9 +95,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="d-flex flex-column gap-3">
-    <h4>
+    <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Signera årsredovisningen
-    </h4>
+    </CommonModalSubtitle>
 
     <div v-if="arsredovisning" hidden>
       <RenderMain
