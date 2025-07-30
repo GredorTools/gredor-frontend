@@ -105,7 +105,7 @@ export async function mapSieFileIntoArsredovisning(
               .add(
                 valueToAdd.mul(
                   taxonomyItem.properties.balance === "credit" &&
-                    basAccount !== "8999"
+                    basAccount !== "8999" // Specialare för årets resultat
                     ? -1
                     : 1,
                 ),
@@ -113,14 +113,22 @@ export async function mapSieFileIntoArsredovisning(
               .toString();
           }
 
-          belopprad.beloppNuvarandeAr = getNewValue(
-            belopprad.beloppNuvarandeAr,
-            value.nuvarandeAr,
-          );
-          belopprad.beloppTidigareAr[0] = getNewValue(
-            belopprad.beloppTidigareAr[0],
-            value.foregaendeAr,
-          );
+          if (mapping.taxonomyItemId.labelType === "periodStartLabel") {
+            // Balans vid räkenskapets ingång
+            belopprad.beloppNuvarandeAr = getNewValue(
+              belopprad.beloppNuvarandeAr,
+              value.foregaendeAr,
+            );
+          } else {
+            belopprad.beloppNuvarandeAr = getNewValue(
+              belopprad.beloppNuvarandeAr,
+              value.nuvarandeAr,
+            );
+            belopprad.beloppTidigareAr[0] = getNewValue(
+              belopprad.beloppTidigareAr[0],
+              value.foregaendeAr,
+            );
+          }
         }
       }
     }

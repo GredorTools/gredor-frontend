@@ -28,15 +28,187 @@ export const SIE_MAPPINGS: SieMapping[] = [
       labelType: null,
     },
   },
-  // TODO: Förvaltningsberättelse: förändringar i eget kapital
+  // Förvaltningsberättelse: förändringar i eget kapital (endast belopp vid årets ingång/utgång)
   {
-    basAccounts: [{ start: 3000, end: 8499 }],
+    basAccounts: [{ start: 2081, end: 2081 }],
     taxonomyItemId: {
       rootName:
         "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
-      name: "se-gen-base:ResultatEfterFinansiellaPoster",
-      parentName: "se-gen-base:Flerarsoversikt",
-      labelType: null,
+      name: "se-gen-base:Aktiekapital",
+      parentName: "se-gen-base:ForandringEgetKapitalAktiekapitalAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2082, end: 2082 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:EjRegistreratAktiekapital",
+      parentName:
+        "se-gen-base:ForandringEgetKapitalEjRegistreratAktiekapitalAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2087, end: 2087 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:OverkursfondBunden",
+      parentName: "se-gen-base:ForandringEgetKapitalBundenOverkursfondAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2085, end: 2085 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Uppskrivningsfond",
+      parentName: "se-gen-base:ForandringEgetKapitalUppskrivningsfondAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2086, end: 2086 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Reservfond",
+      parentName: "se-gen-base:ForandringEgetKapitalReservfondAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2097, end: 2097 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Overkursfond",
+      parentName: "se-gen-base:ForandringEgetKapitalOverkursfondAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2091, end: 2091 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:BalanseratResultat",
+      parentName: "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2099, end: 2099 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:AretsResultatEgetKapital",
+      parentName: "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2000, end: 2099 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:ForandringEgetKapitalTotalt",
+      parentName: "se-gen-base:ForandringEgetKapitalTotaltAbstract",
+      labelType: "periodStartLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2081, end: 2081 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Aktiekapital",
+      parentName: "se-gen-base:ForandringEgetKapitalAktiekapitalAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2082, end: 2082 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:EjRegistreratAktiekapital",
+      parentName:
+        "se-gen-base:ForandringEgetKapitalEjRegistreratAktiekapitalAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2087, end: 2087 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:OverkursfondBunden",
+      parentName: "se-gen-base:ForandringEgetKapitalBundenOverkursfondAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2085, end: 2085 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Uppskrivningsfond",
+      parentName: "se-gen-base:ForandringEgetKapitalUppskrivningsfondAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2086, end: 2086 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Reservfond",
+      parentName: "se-gen-base:ForandringEgetKapitalReservfondAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2097, end: 2097 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:Overkursfond",
+      parentName: "se-gen-base:ForandringEgetKapitalOverkursfondAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2091, end: 2091 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:BalanseratResultat",
+      parentName: "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2099, end: 2099 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:AretsResultatEgetKapital",
+      parentName: "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
+      labelType: "periodEndLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2000, end: 2099 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:ForandringEgetKapitalTotalt",
+      parentName: "se-gen-base:ForandringEgetKapitalTotaltAbstract",
+      labelType: "periodEndLabel",
     },
   },
   // Förvaltningsberättelse: resultatdisposition
@@ -78,6 +250,16 @@ export const SIE_MAPPINGS: SieMapping[] = [
       name: "se-gen-base:FrittEgetKapital",
       parentName: "se-gen-base:Resultatdisposition",
       labelType: "terseLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 2090, end: 2099 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:ForslagDisposition",
+      parentName: "se-gen-base:Resultatdisposition",
+      labelType: "totalLabel",
     },
   },
   // Resultaträkning
