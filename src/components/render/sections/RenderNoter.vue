@@ -94,6 +94,11 @@ const items = computed(() => {
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
+          :string-show-header="
+            getTaxonomyItemForBelopprad(taxonomyManager, belopprad)
+              .additionalData.displayLabel !==
+            headerTaxonomyItem.additionalData.displayLabel
+          "
           :taxonomy-manager="taxonomyManager"
         />
       </tbody>

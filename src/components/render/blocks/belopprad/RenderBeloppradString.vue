@@ -41,7 +41,7 @@ const renderLevel = computed(
 <template>
   <tr
     v-if="
-      taxonomyItem.properties.abstract === 'true' ||
+      (showHeader && taxonomyItem.properties.abstract === 'true') ||
       hasBeloppradStringValue(belopprad)
     "
     :class="{
