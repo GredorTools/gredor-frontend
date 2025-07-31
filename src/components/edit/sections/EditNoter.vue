@@ -6,7 +6,10 @@
 
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
-import { createBeloppradInList } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  createBelopprad,
+  createBeloppradInList,
+} from "@/model/arsredovisning/Belopprad.ts";
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
@@ -14,6 +17,7 @@ import {
   type TaxonomyItem,
   TaxonomyRootName,
 } from "@/model/taxonomy/TaxonomyItem.ts";
+import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
@@ -42,78 +46,90 @@ const { prepopulateSection, groupPrepopulatedSection } = usePrepopulateSection({
   maxNumPreviousYears: 1,
 });
 
+const groupsOfGroups = availableTaxonomyItems.children[0].children;
+
 const belopprader = prepopulateSection();
-const groups = [
-  availableTaxonomyItems.children[0].children[0],
-  ...availableTaxonomyItems.children[0].children
-    .slice(1)
-    .flatMap((c) => c.children),
-];
+const groups = availableTaxonomyItems.children[0].children.flatMap(
+  (c) => c.children,
+);
 const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
 </script>
 
 <template>
-  <div class="accordion">
-    <div
-      v-for="(group, groupIndex) in groups"
-      :key="groupIndex"
-      class="accordion-item"
-    >
-      <div class="accordion-header">
-        <button
-          :aria-controls="`noter-accordion${groupIndex}`"
-          :data-bs-target="`#noter-accordion${groupIndex}`"
-          aria-expanded="true"
-          class="accordion-button collapsed"
-          data-bs-toggle="collapse"
-          type="button"
-        >
-          {{ group.additionalData.displayLabel }}
-        </button>
+  <div class="d-flex flex-col gap-4">
+    <div v-for="groupOfGroups in groupsOfGroups" :key="groupOfGroups.xmlName">
+      <div class="mb-2">
+        <BaseEditBeloppradTitle
+          :belopprad="createBelopprad(groupOfGroups)"
+          :taxonomy-manager="taxonomyManager"
+        />
       </div>
-      <div
-        :id="`noter-accordion${groupIndex}`"
-        class="accordion-collapse collapse"
-      >
-        <div class="accordion-body">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">{{ group.additionalData.displayLabel }}</th>
-                <component
-                  :is="
-                    getValueColumnHeaderCell(
-                      group,
-                      arsredovisning.verksamhetsarNuvarande,
-                    )
-                  "
-                />
-                <component
-                  :is="
-                    getValueColumnHeaderCell(
-                      group,
-                      arsredovisning.verksamhetsarTidigare[0],
-                    )
-                  "
-                  v-if="arsredovisning.verksamhetsarTidigare.length > 0"
-                />
-              </tr>
-            </thead>
-            <tbody>
-              <EditBelopprad
-                v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
-                :key="belopprad.taxonomyItemName"
-                v-model:belopprad="groupedBelopprader[groupIndex][index]"
-                v-model:belopprader="groupedBelopprader[groupIndex]"
-                :comparable-num-previous-years="
-                  Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
-                "
-                :string-minimum-level="1"
-                :taxonomy-manager="taxonomyManager"
-                string-multiline
-              />
-            </tbody>
-          </table>
+
+      <div class="accordion">
+        <div
+          v-for="[groupIndex, group] in [...groups.entries()].filter(([, g]) =>
+            groupOfGroups.children.includes(g),
+          )"
+          :key="group.xmlName"
+          class="accordion-item"
+        >
+          <div class="accordion-header">
+            <button
+              :aria-controls="`noter-accordion-${group.xmlName}`"
+              :data-bs-target="`#noter-accordion-${group.xmlName}`"
+              aria-expanded="true"
+              class="accordion-button collapsed"
+              data-bs-toggle="collapse"
+              type="button"
+            >
+              {{ group.additionalData.displayLabel }}
+            </button>
+          </div>
+          <div
+            :id="`noter-accordion-${group.xmlName}`"
+            class="accordion-collapse collapse"
+          >
+            <div class="accordion-body">
+              <table>
+                <thead v-if="groupedBelopprader[groupIndex].length > 1">
+                  <tr>
+                    <th scope="col">{{ group.additionalData.displayLabel }}</th>
+                    <component
+                      :is="
+                        getValueColumnHeaderCell(
+                          group,
+                          arsredovisning.verksamhetsarNuvarande,
+                        )
+                      "
+                    />
+                    <component
+                      :is="
+                        getValueColumnHeaderCell(
+                          group,
+                          arsredovisning.verksamhetsarTidigare[0],
+                        )
+                      "
+                      v-if="arsredovisning.verksamhetsarTidigare.length > 0"
+                    />
+                  </tr>
+                </thead>
+                <tbody>
+                  <EditBelopprad
+                    v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
+                    :key="belopprad.taxonomyItemName"
+                    v-model:belopprad="groupedBelopprader[groupIndex][index]"
+                    v-model:belopprader="groupedBelopprader[groupIndex]"
+                    :comparable-num-previous-years="
+                      Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+                    "
+                    :string-minimum-level="1"
+                    :taxonomy-manager="taxonomyManager"
+                    string-multiline
+                  />
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

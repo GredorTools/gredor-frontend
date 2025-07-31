@@ -19,6 +19,9 @@ export interface EditBeloppradComparablePropsBase {
   /** Huruvida borttag ska tillåtas. */
   allowDelete: boolean;
 
+  /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
+  small: boolean;
+
   /** Antal tidigare räkenskapsår som ska visas för jämförelse. */
   numPreviousYears: number;
 
@@ -90,6 +93,7 @@ function onBeforeValueInput(event: InputEvent) {
       <input
         v-if="taxonomyItem.properties.abstract !== 'true'"
         v-model.trim="belopprad.not"
+        :class="{ 'form-control-sm': small }"
         class="form-control"
         maxlength="2"
         type="text"
@@ -106,6 +110,7 @@ function onBeforeValueInput(event: InputEvent) {
         <input
           v-if="taxonomyItem.properties.abstract !== 'true'"
           v-model.trim="belopprad.beloppNuvarandeAr"
+          :class="{ 'form-control-sm': small }"
           :disabled="isSummarad"
           class="form-control"
           type="text"
@@ -124,6 +129,7 @@ function onBeforeValueInput(event: InputEvent) {
         <input
           v-if="taxonomyItem.properties.abstract !== 'true'"
           v-model.trim="belopprad.beloppTidigareAr[i - 1]"
+          :class="{ 'form-control-sm': small }"
           :disabled="isSummarad"
           class="form-control"
           type="text"

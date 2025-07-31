@@ -27,6 +27,9 @@ const props = defineProps<{
   /** Huruvida borttag ska tillåtas. */
   allowDelete?: boolean;
 
+  /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
+  small?: boolean;
+
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan jämföra mellan år. */
   comparableNumPreviousYears?: number;
 
@@ -78,6 +81,7 @@ const taxonomyItem = computed(() => {
       :belopprad="belopprad"
       :comparable-num-previous-years="comparableNumPreviousYears || 0"
       :multiline="stringMultiline || false"
+      :small="small || false"
       :taxonomy-manager="taxonomyManager"
       @delete="emit('delete')"
     />

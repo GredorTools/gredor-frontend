@@ -23,6 +23,9 @@ const props = defineProps<{
   /** Huruvida borttag ska tillåtas. */
   allowDelete: boolean;
 
+  /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
+  small: boolean;
+
   /** Huruvida radbrytningar ska vara tillåtna. */
   multiline: boolean;
 
@@ -104,7 +107,12 @@ const trClasses = computed(() => [
       :colspan="comparableNumPreviousYears + 1"
       class="value-container text-left"
     >
-      <input v-model="belopprad.text" class="form-control" type="text" />
+      <input
+        v-model="belopprad.text"
+        :class="{ 'form-control-sm': small }"
+        class="form-control"
+        type="text"
+      />
     </td>
     <td v-if="allowDelete">
       <BaseEditBeloppradDeleteButton

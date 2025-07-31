@@ -85,6 +85,7 @@ watch(
     :is-summarad="taxonomyItem.additionalData.isCalculatedItem"
     :num-previous-years="numPreviousYears"
     :show-balance-sign="showBalanceSign"
+    :small="small"
     :taxonomy-manager="taxonomyManager"
     @delete="emit('delete')"
   />

@@ -53,13 +53,13 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
   <div class="accordion">
     <div
       v-for="(group, groupIndex) in groups"
-      :key="groupIndex"
+      :key="group[0].xmlName"
       class="accordion-item"
     >
       <div class="accordion-header">
         <button
-          :aria-controls="`balansrakning-accordion${groupIndex}`"
-          :data-bs-target="`#balansrakning-accordion${groupIndex}`"
+          :aria-controls="`balansrakning-accordion-${group[0].xmlName}`"
+          :data-bs-target="`#balansrakning-accordion-${group[0].xmlName}`"
           aria-expanded="true"
           class="accordion-button collapsed"
           data-bs-toggle="collapse"
@@ -69,7 +69,7 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
         </button>
       </div>
       <div
-        :id="`balansrakning-accordion${groupIndex}`"
+        :id="`balansrakning-accordion-${group[0].xmlName}`"
         class="accordion-collapse collapse"
       >
         <div class="accordion-body">

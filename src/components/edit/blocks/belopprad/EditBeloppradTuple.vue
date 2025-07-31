@@ -54,34 +54,54 @@ function deleteInstance(index: number) {
     :key="instans.uuid"
   >
     <td colspan="3">
-      <table class="edit-tuple-instance">
-        <tbody>
-          <EditBelopprad
-            v-for="(
-              instansBelopprad, instansBeloppradIndex
-            ) in instans.belopprader"
-            :key="instansBelopprad.taxonomyItemName"
-            v-model:belopprad="instans.belopprader[instansBeloppradIndex]"
-            v-model:belopprader="instans.belopprader"
-            :comparable-num-previous-years="0"
-            :taxonomy-manager="taxonomyManager"
-          />
-        </tbody>
-      </table>
-    </td>
-    <td>
-      <BaseEditBeloppradDeleteButton @delete="deleteInstance(instansIndex)" />
+      <div
+        :class="{ last: instansIndex === belopprad.instanser.length - 1 }"
+        class="edit-tuple-instance-container"
+      >
+        <table class="edit-tuple-instance">
+          <tbody>
+            <EditBelopprad
+              v-for="(
+                instansBelopprad, instansBeloppradIndex
+              ) in instans.belopprader"
+              :key="instansBelopprad.taxonomyItemName"
+              v-model:belopprad="instans.belopprader[instansBeloppradIndex]"
+              v-model:belopprader="instans.belopprader"
+              :comparable-num-previous-years="0"
+              :taxonomy-manager="taxonomyManager"
+              small
+            />
+          </tbody>
+        </table>
+        <BaseEditBeloppradDeleteButton
+          class="edit-tuple-instance-delete"
+          @delete="deleteInstance(instansIndex)"
+        />
+      </div>
     </td>
   </tr>
 </template>
 
 <style lang="scss" scoped>
-table.edit-tuple-instance {
-  margin-top: 0 !important;
+.edit-tuple-instance-container {
+  display: flex;
   margin-left: 2rem;
+  margin-bottom: 0.5rem;
 
-  :deep(td.value-container input) {
-    min-width: 200px !important;
+  &.last {
+    margin-bottom: 1.5rem;
+  }
+
+  table.edit-tuple-instance {
+    margin: 0;
+
+    :deep(td.value-container input) {
+      min-width: 200px !important;
+    }
+  }
+
+  .edit-tuple-instance-delete {
+    margin: 0.25rem 0;
   }
 }
 </style>
