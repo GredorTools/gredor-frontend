@@ -46,47 +46,76 @@ const forandringarTable = computed(() =>
     belopprader.value,
   ),
 );
+
+// Vanligt förekommande celler - vi markerar dessa för att göra dem enklare att
+// hitta i tabellen.
+const commonTaxonomyItemNames = [
+  "se-gen-base:Aktiekapital",
+  "se-gen-base:BalanseratResultat",
+  "se-gen-base:AretsResultatEgetKapital",
+  "se-gen-base:ForandringEgetKapitalBalanseratResultatUtdelning",
+  "se-gen-base:ForandringEgetKapitalAretsResultatUtdelning",
+  "se-gen-base:ForandringEgetKapitalTotaltUtdelning",
+  "se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning",
+  "se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning",
+  "se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning",
+  "se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat",
+  "se-gen-base:ForandringEgetKapitalTotaltAretsResultat",
+  "se-gen-base:ForandringEgetKapitalTotalt",
+];
 </script>
 
 <template>
-  <table class="edit-forandringar-table">
-    <thead>
-      <tr>
-        <th></th>
-        <th
-          v-for="columnName in forandringarTable.columnNames"
-          :key="columnName"
-          class="value-container"
-          scope="col"
-        >
-          {{ columnName }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(row, rowIndex) in forandringarTable.table" :key="rowIndex">
-        <td>
-          <div class="row-label">
-            {{ forandringarTable.rowNames[rowIndex] }}
-          </div>
-        </td>
-        <td
-          v-for="(cell, columnIndex) in row"
-          :key="columnIndex"
-          :class="{ 'empty-container': cell == null }"
-          class="value-container"
-        >
-          <div v-if="cell != null" class="value-contents">
-            <input
-              v-model.trim="cell.belopprad.beloppNuvarandeAr"
-              class="form-control"
-              type="text"
-            />
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="d-flex flex-col">
+    <span class="text-center">
+      Du kan behöva skrolla i tabellen. De vanligaste cellerna är
+      <strong class="common-hint">blåmarkerade</strong>.
+    </span>
+
+    <table class="edit-forandringar-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th
+            v-for="columnName in forandringarTable.columnNames"
+            :key="columnName"
+            class="value-container"
+            scope="col"
+          >
+            {{ columnName }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(row, rowIndex) in forandringarTable.table" :key="rowIndex">
+          <td>
+            <div class="row-label">
+              {{ forandringarTable.rowNames[rowIndex] }}
+            </div>
+          </td>
+          <td
+            v-for="(cell, columnIndex) in row"
+            :key="columnIndex"
+            :class="{
+              'empty-container': cell == null,
+              'common-container':
+                cell != null &&
+                commonTaxonomyItemNames.includes(cell.taxonomyItem.xmlName),
+            }"
+            class="value-container"
+          >
+            <div v-if="cell != null" class="value-contents">
+              <input
+                v-model.trim="cell.belopprad.beloppNuvarandeAr"
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -106,6 +135,10 @@ const forandringarTable = computed(() =>
   }
 }
 
+.common-hint {
+  color: #7070ff;
+}
+
 table.edit-forandringar-table {
   width: min-content;
 
@@ -122,7 +155,7 @@ table.edit-forandringar-table {
   td {
     @include auto-font-sizes;
 
-    border: 1px solid lightgray;
+    border: 1px solid #c4c4c4;
 
     &:not(:last-child) {
       border-right: none;
@@ -147,7 +180,15 @@ table.edit-forandringar-table {
 
     &.value-container {
       &.empty-container {
-        background: lightgray;
+        background: #d9d9d9;
+      }
+
+      &.common-container {
+        background: #e0e0ff;
+
+        .value-contents input {
+          background: #f6f6ff;
+        }
       }
 
       .value-contents input {
