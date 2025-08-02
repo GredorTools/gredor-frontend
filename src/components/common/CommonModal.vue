@@ -40,7 +40,10 @@ let modal: Modal | undefined;
 onMounted(() => {
   const element = modalRef.value;
   if (element) {
-    modal = new Modal(element);
+    modal = new Modal(element, {
+      backdrop: "static",
+      keyboard: false,
+    });
   }
 });
 </script>
@@ -51,6 +54,12 @@ onMounted(() => {
       <div class="modal-content">
         <div class="modal-header">
           <h3 class="modal-title">{{ title }}</h3>
+          <button
+            aria-label="Close"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            type="button"
+          ></button>
         </div>
         <div v-if="modalHasBeenShown" class="modal-body">
           <slot />
