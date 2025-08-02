@@ -7,8 +7,11 @@ h2, h3, h4 {
 }
 
 body {
-  min-width: 1280px;
-  min-height: 100vh;
+  @media screen {
+    min-width: 1280px;
+    min-height: 100vh;
+  }
+
   font-family: Inter,
   -apple-system,
   BlinkMacSystemFont,
