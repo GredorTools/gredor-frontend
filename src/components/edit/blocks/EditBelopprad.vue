@@ -93,6 +93,7 @@ const taxonomyItem = computed(() => {
       :belopprader="belopprader"
       :num-previous-years="comparableNumPreviousYears || 0"
       :show-balance-sign="monetaryShowBalanceSign || false"
+      :small="small || false"
       :taxonomy-manager="taxonomyManager"
       @delete="emit('delete')"
     />
@@ -102,6 +103,7 @@ const taxonomyItem = computed(() => {
       :allow-not="comparableAllowNot || false"
       :belopprad="belopprad"
       :num-previous-years="comparableNumPreviousYears || 0"
+      :small="small || false"
       :taxonomy-manager="taxonomyManager"
       @delete="emit('delete')"
     />
