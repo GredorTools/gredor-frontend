@@ -83,15 +83,19 @@ defineModel<Arsredovisning>("arsredovisning", {
 
   <div class="form-section">
     <div class="form-group">
-      <label for="startdatumNuvarande"
-        >Startdatum nuvarande räkenskapsår:</label
-      >
+      <label for="startdatumNuvarande">
+        Startdatum nuvarande räkenskapsår:
+      </label>
       <input
         id="startdatumNuvarande"
         v-model.trim="arsredovisning.verksamhetsarNuvarande.startdatum"
         class="input-field"
+        min="2024-07-01"
         type="date"
       />
+      <div class="note">
+        (OBS: Gredor stödjer ej räkenskapsår som börjar tidigare än 2024-07-01.)
+      </div>
     </div>
     <div class="form-group">
       <label for="slutdatumNuvarande">Slutdatum nuvarande räkenskapsår:</label>
@@ -195,5 +199,11 @@ h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #444;
+}
+
+.note {
+  font-size: 0.85rem;
+  color: #333;
+  margin-top: 0.25rem;
 }
 </style>
