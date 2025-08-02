@@ -7,7 +7,7 @@ import { computed, onMounted, provide, ref, useTemplateRef } from "vue";
 import { Modal } from "bootstrap";
 
 const props = defineProps<{
-  /** Unikt ID för fönstret. */
+  /** Unikt ID (över hela applikationen) för fönstret. */
   id: string;
 
   /** Fönstrets rubrik. */

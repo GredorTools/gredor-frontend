@@ -18,6 +18,8 @@ import {
   TaxonomyRootName,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
+import CommonAccordion from "@/components/common/CommonAccordion.vue";
+import CommonAccordionItem from "@/components/common/CommonAccordionItem.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
@@ -65,73 +67,55 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
         />
       </div>
 
-      <div class="accordion">
-        <div
+      <CommonAccordion>
+        <CommonAccordionItem
           v-for="[groupIndex, group] in [...groups.entries()].filter(([, g]) =>
             groupOfGroups.children.includes(g),
           )"
+          :id="`noter-accordion-${group.xmlName}`"
           :key="group.xmlName"
-          class="accordion-item"
+          :title="group.additionalData.displayLabel"
         >
-          <div class="accordion-header">
-            <button
-              :aria-controls="`noter-accordion-${group.xmlName}`"
-              :data-bs-target="`#noter-accordion-${group.xmlName}`"
-              aria-expanded="true"
-              class="accordion-button collapsed"
-              data-bs-toggle="collapse"
-              type="button"
-            >
-              {{ group.additionalData.displayLabel }}
-            </button>
-          </div>
-          <div
-            :id="`noter-accordion-${group.xmlName}`"
-            class="accordion-collapse collapse"
-          >
-            <div class="accordion-body">
-              <table>
-                <thead v-if="groupedBelopprader[groupIndex].length > 1">
-                  <tr>
-                    <th scope="col">{{ group.additionalData.displayLabel }}</th>
-                    <component
-                      :is="
-                        getValueColumnHeaderCell(
-                          group,
-                          arsredovisning.verksamhetsarNuvarande,
-                        )
-                      "
-                    />
-                    <component
-                      :is="
-                        getValueColumnHeaderCell(
-                          group,
-                          arsredovisning.verksamhetsarTidigare[0],
-                        )
-                      "
-                      v-if="arsredovisning.verksamhetsarTidigare.length > 0"
-                    />
-                  </tr>
-                </thead>
-                <tbody>
-                  <EditBelopprad
-                    v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
-                    :key="belopprad.taxonomyItemName"
-                    v-model:belopprad="groupedBelopprader[groupIndex][index]"
-                    v-model:belopprader="groupedBelopprader[groupIndex]"
-                    :comparable-num-previous-years="
-                      Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
-                    "
-                    :string-minimum-level="1"
-                    :taxonomy-manager="taxonomyManager"
-                    string-multiline
-                  />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+          <table>
+            <thead v-if="groupedBelopprader[groupIndex].length > 1">
+              <tr>
+                <th scope="col">{{ group.additionalData.displayLabel }}</th>
+                <component
+                  :is="
+                    getValueColumnHeaderCell(
+                      group,
+                      arsredovisning.verksamhetsarNuvarande,
+                    )
+                  "
+                />
+                <component
+                  :is="
+                    getValueColumnHeaderCell(
+                      group,
+                      arsredovisning.verksamhetsarTidigare[0],
+                    )
+                  "
+                  v-if="arsredovisning.verksamhetsarTidigare.length > 0"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <EditBelopprad
+                v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
+                :key="belopprad.taxonomyItemName"
+                v-model:belopprad="groupedBelopprader[groupIndex][index]"
+                v-model:belopprader="groupedBelopprader[groupIndex]"
+                :comparable-num-previous-years="
+                  Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+                "
+                :string-minimum-level="1"
+                :taxonomy-manager="taxonomyManager"
+                string-multiline
+              />
+            </tbody>
+          </table>
+        </CommonAccordionItem>
+      </CommonAccordion>
     </div>
   </div>
 </template>

@@ -17,6 +17,8 @@ import CommonModal from "@/components/common/CommonModal.vue";
 import { useTemplateRef } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
+import CommonAccordion from "@/components/common/CommonAccordion.vue";
+import CommonAccordionItem from "@/components/common/CommonAccordionItem.vue";
 
 // TaxonomyManager och rader
 const taxonomyManager = await getTaxonomyManager(
@@ -49,75 +51,57 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
 </script>
 
 <template>
-  <div class="accordion">
-    <div
+  <CommonAccordion>
+    <CommonAccordionItem
       v-for="(group, groupIndex) in groups"
+      :id="`forvaltningsberattelse-accordion-${group.xmlName}`"
       :key="group.xmlName"
-      class="accordion-item"
+      :title="group.additionalData.displayLabel"
     >
-      <div class="accordion-header">
-        <button
-          :aria-controls="`forvaltningsberattelse-accordion-${group.xmlName}`"
-          :data-bs-target="`#forvaltningsberattelse-accordion-${group.xmlName}`"
-          aria-expanded="true"
-          class="accordion-button collapsed"
-          data-bs-toggle="collapse"
-          type="button"
-        >
-          {{ group.additionalData.displayLabel }}
-        </button>
-      </div>
-      <div
-        :id="`forvaltningsberattelse-accordion-${group.xmlName}`"
-        class="accordion-collapse collapse"
+      <EditForvaltningsberattelseFlerarsoversikt
+        v-if="group.xmlName === 'se-gen-base:Flerarsoversikt'"
+        :arsredovisning="arsredovisning"
+        :group-taxonomy-item="
+          availableTaxonomyItems.childrenFlat.find(
+            (item) => item.xmlName === 'se-gen-base:Flerarsoversikt',
+          )!
+        "
+        :taxonomy-manager="taxonomyManager"
+      />
+      <template
+        v-else-if="group.xmlName === 'se-gen-base:ForandringEgetKapital'"
       >
-        <div class="accordion-body">
-          <EditForvaltningsberattelseFlerarsoversikt
-            v-if="group.xmlName === 'se-gen-base:Flerarsoversikt'"
-            :arsredovisning="arsredovisning"
-            :group-taxonomy-item="
-              availableTaxonomyItems.childrenFlat.find(
-                (item) => item.xmlName === 'se-gen-base:Flerarsoversikt',
-              )!
-            "
-            :taxonomy-manager="taxonomyManager"
-          />
-          <template
-            v-else-if="group.xmlName === 'se-gen-base:ForandringEgetKapital'"
-          >
-            <!-- Vi har denna som en modal pga att den blir för bred annars -->
-            <button class="btn btn-primary" @click="forandringarModal?.show()">
-              Visa tabell
-            </button>
-          </template>
-          <table v-else>
-            <thead v-if="groupedBelopprader[groupIndex].length > 1">
-              <tr>
-                <th scope="col">
-                  <BaseEditBeloppradTitle
-                    :belopprad="createBelopprad(group)"
-                    :taxonomy-manager="taxonomyManager"
-                  />
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <EditBelopprad
-                v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
-                :key="belopprad.taxonomyItemName"
-                v-model:belopprad="groupedBelopprader[groupIndex][index]"
-                v-model:belopprader="groupedBelopprader[groupIndex]"
-                :comparable-num-previous-years="0"
-                :string-minimum-level="1"
+        <!-- Vi har denna som en modal pga att den blir för bred annars -->
+        <button class="btn btn-primary" @click="forandringarModal?.show()">
+          Visa tabell
+        </button>
+      </template>
+      <table v-else>
+        <thead v-if="groupedBelopprader[groupIndex].length > 1">
+          <tr>
+            <th scope="col">
+              <BaseEditBeloppradTitle
+                :belopprad="createBelopprad(group)"
                 :taxonomy-manager="taxonomyManager"
-                string-multiline
               />
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <EditBelopprad
+            v-for="(belopprad, index) in groupedBelopprader[groupIndex]"
+            :key="belopprad.taxonomyItemName"
+            v-model:belopprad="groupedBelopprader[groupIndex][index]"
+            v-model:belopprader="groupedBelopprader[groupIndex]"
+            :comparable-num-previous-years="0"
+            :string-minimum-level="1"
+            :taxonomy-manager="taxonomyManager"
+            string-multiline
+          />
+        </tbody>
+      </table>
+    </CommonAccordionItem>
+  </CommonAccordion>
 
   <CommonModal
     id="edit-forvaltningsberattelse-forandringar-modal"
