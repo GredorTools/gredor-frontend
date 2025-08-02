@@ -25,6 +25,9 @@ export interface RenderBeloppradComparablePropsBase<
   /** Beloppraden med jämförbara värden som ska redigeras. */
   belopprad: T;
 
+  /** Eventuella ytterligare attribut för iXBRL-elementet. */
+  additionalIxbrlAttrs: Record<string, string>;
+
   /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
    * nivå, även om den inte är en belopprad av den nivån. */
   renderAsLevel?: number;
@@ -110,6 +113,7 @@ function shouldShowSign(belopp: string) {
           :unitRef="getUnitRef(taxonomyItem)"
           decimals="INF"
           format="ixt:numspacecomma"
+          v-bind="additionalIxbrlAttrs"
         >
           {{
             formatNumber(belopprad.beloppNuvarandeAr, {
@@ -139,6 +143,7 @@ function shouldShowSign(belopp: string) {
           :unitRef="getUnitRef(taxonomyItem)"
           decimals="INF"
           format="ixt:numspacecomma"
+          v-bind="additionalIxbrlAttrs"
         >
           {{
             formatNumber(belopprad.beloppTidigareAr[i - 1], {

@@ -1,10 +1,16 @@
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
+type TupleID = `tuple-${string}-${string}-${string}-${string}-${string}`;
+
 export interface BeloppradTuple extends Belopprad {
   instanser: {
-    uuid: `${string}-${string}-${string}-${string}-${string}`;
+    id: TupleID;
     belopprader: Belopprad[];
   }[];
+}
+
+export function generateTupleID(): TupleID {
+  return `tuple-${self.crypto.randomUUID()}`;
 }
 
 export function isBeloppradTuple(

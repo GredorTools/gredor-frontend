@@ -14,6 +14,7 @@ defineProps<RenderBeloppradComparablePropsBase<BaseBeloppradComparable>>();
 
 <template>
   <BaseRenderBeloppradComparable
+    :additional-ixbrl-attrs="additionalIxbrlAttrs"
     :allow-not="allowNot"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"

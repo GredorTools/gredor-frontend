@@ -18,6 +18,9 @@ const props = defineProps<{
   /** Beloppraden med strängvärdet som ska renderas. */
   belopprad: BeloppradString;
 
+  /** Eventuella ytterligare attribut för iXBRL-elementet. */
+  additionalIxbrlAttrs: Record<string, string>;
+
   /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
    * nivå, även om den inte är en belopprad av den nivån. */
   renderAsLevel?: number;
@@ -27,6 +30,9 @@ const props = defineProps<{
 
   /** Huruvida rubriken ska visas. */
   showHeader: boolean;
+
+  /** Huruvida beloppraden ska renderas som "rå" text, utan p-taggar. */
+  raw: boolean;
 }>();
 
 const taxonomyItem = computed(() =>
@@ -58,11 +64,16 @@ const renderLevel = computed(
         v-if="belopprad.text"
         :contextRef="contextRefPrefix + '_nuvarande'"
         :name="taxonomyItem.xmlName"
+        v-bind="additionalIxbrlAttrs"
       >
+        <template v-if="raw">
+          {{ belopprad.text }}
+        </template>
         <p
           v-for="(line, index) in belopprad.text
             .split(/\r?\n/)
             .filter((l) => l.trim().length > 0)"
+          v-else
           :key="index"
         >
           {{ line }}

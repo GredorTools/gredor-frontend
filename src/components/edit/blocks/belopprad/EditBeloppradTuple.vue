@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { type BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import {
+  type BeloppradTuple,
+  generateTupleID,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import { computed } from "vue";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
 import {
@@ -26,7 +29,7 @@ const tupleTaxonomyItem = computed(() =>
 // Hjälpfunktioner
 function createInstance() {
   belopprad.value.instanser.push({
-    uuid: self.crypto.randomUUID(),
+    id: generateTupleID(),
     belopprader: tupleTaxonomyItem.value.childrenFlat.map((child) =>
       createBelopprad(child),
     ),
@@ -49,10 +52,7 @@ function deleteInstance(index: number) {
       </button>
     </td>
   </tr>
-  <tr
-    v-for="(instans, instansIndex) in belopprad.instanser"
-    :key="instans.uuid"
-  >
+  <tr v-for="(instans, instansIndex) in belopprad.instanser" :key="instans.id">
     <td colspan="3">
       <div
         :class="{ last: instansIndex === belopprad.instanser.length - 1 }"

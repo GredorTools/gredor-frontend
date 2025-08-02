@@ -27,6 +27,9 @@ const props = defineProps<{
   /** Beloppraden som ska renderas. */
   belopprad: Belopprad;
 
+  /** Eventuella ytterligare attribut för iXBRL-elementet. */
+  additionalIxbrlAttrs?: Record<string, string>;
+
   /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
    * nivå, även om den inte är en belopprad av den nivån. */
   renderAsLevel?: number;
@@ -36,7 +39,7 @@ const props = defineProps<{
   comparableNumPreviousYears?: number;
 
   /** Huruvida notfält ska visas för belopprader där man kan jämföra mellan år.
-   * */
+   **/
   comparableAllowNot?: boolean;
 
   /** Huruvida beloppraden ska tvångsvisas som en summarad, för belopprader där
@@ -46,8 +49,11 @@ const props = defineProps<{
   /** Huruvida balanstecken ska visas för monetära belopprader. */
   monetaryShowBalanceSign?: boolean;
 
-  /** Huruvida rubriker för strängrader ska visas. */
+  /** Huruvida rubriker för strängbelopprader ska visas. */
   stringShowHeader?: boolean;
+
+  /** Huruvida strängbelopprader ska renderas som "rå" text, utan p-taggar. */
+  stringRaw?: boolean;
 }>();
 
 const contextRefPrefix = computed(() => {
@@ -68,14 +74,17 @@ const contextRefPrefix = computed(() => {
 <template>
   <RenderBeloppradString
     v-if="isBeloppradString(belopprad)"
+    :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :raw="stringRaw || false"
     :render-as-level="renderAsLevel"
     :show-header="stringShowHeader || false"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradMonetary
     v-else-if="isBeloppradMonetary(belopprad)"
+    :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
@@ -87,6 +96,7 @@ const contextRefPrefix = computed(() => {
   />
   <RenderBeloppradNonmonetaryComparable
     v-else-if="isBeloppradComparable(belopprad)"
+    :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"

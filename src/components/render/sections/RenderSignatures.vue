@@ -51,7 +51,7 @@ defineProps<{
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UnderskriftHandlingTilltalsnamn"
-          order="1.0"
+          order="1"
           >{{ underskrift.tilltalsnamn }}
         </ix:nonNumeric>
         {{ " " }}
@@ -59,7 +59,7 @@ defineProps<{
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UnderskriftHandlingEfternamn"
-          order="2.0"
+          order="2"
           >{{ underskrift.efternamn }}
         </ix:nonNumeric>
         <br />
@@ -68,7 +68,7 @@ defineProps<{
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UnderskriftHandlingRoll"
-          order="3.0"
+          order="3"
           >{{ underskrift.roll }}
         </ix:nonNumeric>
         <br />
@@ -76,7 +76,7 @@ defineProps<{
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
           contextRef="period_nuvarande"
           name="se-gen-base:UndertecknandeDatum"
-          order="4.0"
+          order="4"
           >{{ underskrift.datum }}
         </ix:nonNumeric>
       </div>
