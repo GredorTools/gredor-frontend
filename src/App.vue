@@ -109,14 +109,14 @@ const tourSteps: OnboardingTourStep[] = [
     @end-tour="endTour"
   />
 
-  <main class="d-flex flex-column">
+  <main aria-label="Gredor årsredovisningsverktyg" class="d-flex flex-column">
     <header class="d-flex flex-row justify-content-between">
       <h1>
         <img
           alt="Gredor – gratis årsredovisning"
           src="/src/assets/img/logo.svg"
         />
-        <span v-if="environmentName" class="environment">{{
+        <span v-if="environmentName" aria-label="Miljö" class="environment">{{
           environmentName
         }}</span>
       </h1>
@@ -124,7 +124,8 @@ const tourSteps: OnboardingTourStep[] = [
       <button
         id="tour-btn"
         ref="tour-btn"
-        class="btn btn-success"
+        aria-label="Starta rundtur genom applikationen"
+        class="btn btn-primary"
         data-bs-offset="[0, 12]"
         data-bs-placement="left"
         data-bs-title="Första gången här? Ta rundturen!"
@@ -136,12 +137,12 @@ const tourSteps: OnboardingTourStep[] = [
       </button>
     </header>
 
-    <div class="d-flex flex overflow-hidden gap-4">
-      <div id="editor">
+    <div aria-label="Huvudinnehåll" class="d-flex flex overflow-hidden gap-4">
+      <div id="editor" aria-label="Redigeringsvy">
         <EditMain v-model="arsredovisning" />
       </div>
 
-      <div id="renderer">
+      <div id="renderer" aria-label="Förhandsgranskningsvy">
         <RenderMain
           :arsredovisning="arsredovisning"
           :show-faststallelseintyg="false"
@@ -150,18 +151,22 @@ const tourSteps: OnboardingTourStep[] = [
     </div>
 
     <div class="d-flex justify-content-between">
-      <div class="help-hint d-flex align-items-center">
+      <div
+        aria-label="Hjälpinformation"
+        class="help-hint d-flex align-items-center"
+        role="note"
+      >
         <strong>⬇️ Mer information om Gredor finns nedan! ⬇️</strong>
       </div>
 
-      <div id="tools">
+      <div id="tools" aria-label="Verktyg för färdigställande">
         <ToolsFinish :arsredovisning="arsredovisning" />
       </div>
     </div>
   </main>
   <div class="aside-container">
-    <hr />
-    <aside id="documentation">
+    <hr aria-hidden="true" />
+    <aside id="documentation" aria-label="Om Gredor">
       <div></div>
       <div class="text-center">
         <h2>Om Gredor</h2>
@@ -281,6 +286,8 @@ const tourSteps: OnboardingTourStep[] = [
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 main,
 aside {
   max-width: calc(1152px + 210mm);
@@ -289,27 +296,24 @@ aside {
 main {
   margin: 0 auto;
   font-weight: normal;
-
   height: 100vh;
   max-height: 100vh;
-  padding: 2rem;
-  gap: 2rem;
+  padding: $spacing-xl;
+  gap: $spacing-xl;
 
   #editor {
     overflow-y: scroll;
-
-    border: 1px solid #566f41;
-    border-radius: 0.5rem;
-    background-color: #fdfff8;
-    padding: 1rem;
+    border: 2px solid $primary-color;
+    border-radius: $border-radius-lg;
+    background-color: $background-light;
+    padding: $spacing-md;
     justify-self: end;
-
     width: 100%;
+    box-shadow: $shadow-sm;
   }
 
   #renderer {
-    /* För skuggan */
-    padding: 0 0.5rem 0.5rem 0;
+    padding: 0 $spacing-sm $spacing-sm 0;
 
     @media screen and (max-width: 1600px) {
       width: calc(210mm * 0.76);
@@ -319,37 +323,52 @@ main {
   }
 
   .help-hint {
-    border: 1px solid #8a5555;
-    background-color: #f8e7e7;
-    padding: 0 1rem;
+    border: 1px solid $secondary-color;
+    background-color: rgba($secondary-color, 0.1);
+    padding: $spacing-xs $spacing-md;
+    border-radius: $border-radius;
+    box-shadow: $shadow-sm;
+
+    strong {
+      color: $secondary-color;
+    }
   }
 }
 
 .aside-container {
-  background-color: #e5e5e5;
+  background-color: $background-dark;
+  padding-top: $spacing-md;
 }
 
 #documentation {
   margin: 0 auto;
   font-weight: normal;
-
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 2rem 6rem 4rem 6rem;
-  gap: 2rem;
+  padding: $spacing-xl calc($spacing-xl * 3) calc($spacing-xl * 2)
+    calc($spacing-xl * 3);
+  gap: $spacing-xl;
 }
 
 header {
   grid-column: 1 / span 2;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($primary-color, 0.2);
 
   h1 {
     margin-bottom: 0;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 52px;
+    }
 
     .environment {
       position: relative;
       left: 16px;
       top: -3px;
-      color: #566f41;
+      color: $secondary-color;
       font-weight: 600;
       font-style: italic;
       font-size: 18pt;

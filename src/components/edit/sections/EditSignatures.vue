@@ -26,12 +26,12 @@ function removeUnderskrift(index: number) {
 </script>
 
 <template>
-  <div class="form-group">
-    <label for="underskriftOrt">Ort för underskrift:</label>
+  <div class="mb-3">
+    <label class="form-label" for="underskriftOrt">Ort för underskrift:</label>
     <input
       id="underskriftOrt"
       v-model.trim="arsredovisning.redovisningsinformation.underskriftOrt"
-      class="input-field"
+      class="form-control"
       type="text"
     />
   </div>
@@ -39,103 +39,61 @@ function removeUnderskrift(index: number) {
     v-for="(underskrift, index) in arsredovisning.redovisningsinformation
       .underskrifter"
     :key="index"
-    class="form-section"
+    class="card mb-4 p-4"
   >
-    <div class="form-group">
-      <label :for="'tilltalsnamn' + index">Tilltalsnamn:</label>
+    <div class="mb-3">
+      <label :for="'tilltalsnamn' + index" class="form-label"
+        >Tilltalsnamn:</label
+      >
       <input
         :id="'tilltalsnamn' + index"
         v-model.trim="underskrift.tilltalsnamn"
-        class="input-field"
+        class="form-control"
         type="text"
       />
     </div>
-    <div class="form-group">
-      <label :for="'efternamn' + index">Efternamn:</label>
+    <div class="mb-3">
+      <label :for="'efternamn' + index" class="form-label">Efternamn:</label>
       <input
         :id="'efternamn' + index"
         v-model.trim="underskrift.efternamn"
-        class="input-field"
+        class="form-control"
         type="text"
       />
     </div>
-    <div class="form-group">
-      <label :for="'roll' + index">Befattning (valfritt):</label>
+    <div class="mb-3">
+      <label :for="'roll' + index" class="form-label"
+        >Befattning (valfritt):</label
+      >
       <input
         :id="'roll' + index"
         v-model.trim="underskrift.roll"
-        class="input-field"
+        class="form-control"
         type="text"
       />
     </div>
-    <div class="form-group">
-      <label :for="'datum' + index">Undertecknandedatum:</label>
+    <div class="mb-3">
+      <label :for="'datum' + index" class="form-label"
+        >Undertecknandedatum:</label
+      >
       <input
         :id="'datum' + index"
         v-model.trim="underskrift.datum"
-        class="input-field"
+        class="form-control"
         type="date"
       />
     </div>
-    <button type="button" @click="removeUnderskrift(index)">
+    <button
+      class="btn btn-danger mt-2"
+      type="button"
+      @click="removeUnderskrift(index)"
+    >
       Ta bort person
     </button>
   </div>
-  <button type="button" @click="addUnderskrift">Lägg till person</button>
+  <button class="btn btn-primary" type="button" @click="addUnderskrift">
+    Lägg till person
+  </button>
 </template>
 
-<style lang="scss" scoped>
-@import "@/assets/extendables.scss";
-
-.form-section {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.5rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.input-field {
-  @extend %text-input;
-
-  padding: 0.7rem;
-}
-
-button {
-  margin-top: 1rem;
-  padding: 0.7rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
-  }
-}
-</style>
+<style lang="scss" scoped></style>

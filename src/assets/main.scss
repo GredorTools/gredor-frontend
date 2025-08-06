@@ -1,23 +1,134 @@
-@import "./base.scss";
+@import "@/assets/_variables.scss";
+@import "@/assets/base.scss";
 @import "$fonts/ebgaramond/EBGaramond.css";
 @import "$fonts/freesans/FreeSans.css";
+
+// Överskuggning av Bootstrap-variabler
+$primary: $primary-color;
+$secondary: $secondary-color;
+$success: $success-color;
+$info: $info-color;
+$warning: $warning-color;
+$danger: $danger-color;
+$light: $background-light;
+$dark: $dark;
+
+$body-bg: $background-medium;
+$body-color: $dark;
+
+$border-color: $border-color-normal;
+$border-radius: $border-radius;
+$border-radius-sm: $border-radius-sm;
+$border-radius-lg: $border-radius-lg;
+
+$font-family-base: $font-family-base;
+$font-family-serif: $font-family-serif;
+$font-family-sans-serif: $font-family-sans;
+
+$font-size-base: $font-size-base;
 
 $tooltip-max-width: 320px;
 $tooltip-padding-x: 0.75rem;
 $tooltip-padding-y: 0.5rem;
-$border-color: #bbb;
+
+// Importera Bootstrap
 @import "bootstrap/scss/bootstrap.scss";
 
-body {
-  margin: 0;
+// Knappar
+.btn {
+  font-weight: 500;
+  transition: $transition-base;
+  box-shadow: $shadow-sm;
 
-  @media screen {
-    background-color: #f6f6f6;
+  &:hover {
+    box-shadow: $shadow;
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+
+  // För tillgänglighet
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
+  }
+
+  &:focus:not(:focus-visible) {
+    box-shadow: $shadow-sm;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
   }
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+.btn-primary {
+  background-color: $primary-color;
+  border-color: $primary-color;
+
+  &:hover, &:focus {
+    background-color: $primary-color-light;
+    border-color: $primary-color-light;
+  }
+
+  &:active {
+    background-color: $primary-color-dark !important;
+    border-color: $primary-color-dark !important;
+  }
+}
+
+.btn-outline-primary {
+  color: $primary-color;
+  border-color: $primary-color;
+
+  &:hover, &:focus {
+    background-color: $primary-color;
+    border-color: $primary-color;
+  }
+}
+
+// Länkar
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: $transition-base;
+
+  &:hover {
+    color: $primary-color-light;
+    text-decoration: underline;
+    background-color: transparent;
+  }
+}
+
+// Formulär
+.form-control, .form-select {
+  border: 1px solid $border-color-dark;
+  border-radius: $border-radius-sm;
+  background-color: $background-input;
+  transition: $transition-base;
+
+  &:focus {
+    background-color: $background-input;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+
+  &:disabled {
+    background-color: $background-dark;
+  }
+}
+
+// Kort
+.card {
+  border-color: $border-color;
+  box-shadow: $shadow-sm;
+  transition: $transition-base;
+
+  .card-header {
+    background-color: rgba($primary-color, 0.3);
+    border-bottom-color: $border-color;
   }
 }

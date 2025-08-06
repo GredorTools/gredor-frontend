@@ -67,8 +67,9 @@ const isValidFaststallelseintyg = computed(() => {
 
 <style lang="scss" scoped>
 @import "@/assets/render.scss";
+@import "@/assets/_variables.scss";
 
 .preview {
-  padding: 0.5rem;
+  padding: $spacing-sm;
 }
 </style>

@@ -149,21 +149,55 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .nav {
-  margin-top: 2rem;
+  margin-top: $spacing-xl;
+  border-bottom: 1px solid $border-color-normal;
+}
+
+.nav-tabs {
+  .nav-item {
+    margin-bottom: -1px;
+
+    .nav-link {
+      color: $medium;
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+      font-weight: 500;
+      transition: $transition-base;
+
+      &:hover {
+        color: $primary-color;
+        background-color: rgba($primary-color, 0.2);
+      }
+
+      &.active {
+        color: $primary-color;
+        background-color: $background-light;
+        border-color: $border-color-normal $border-color-normal
+          $background-light;
+      }
+    }
+  }
 }
 
 .editor {
-  margin-top: 1rem;
+  padding: $spacing-lg $spacing-md;
+  background-color: $background-light;
+  border: 1px solid $border-color-normal;
+  border-top: none;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
 }
 
 :deep(table) {
   width: 100%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: $spacing-md;
+  margin-bottom: $spacing-md;
 
   &:not(:first-of-type) {
-    margin-top: 3rem;
+    margin-top: $spacing-xxl;
   }
 
   th {
@@ -174,7 +208,7 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
   td {
     border-style: hidden;
     text-align: left;
-    padding: 0.25rem 0.5rem;
+    padding: $spacing-xs $spacing-sm;
 
     &:first-child {
       width: 99%;
@@ -189,7 +223,8 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     }
 
     &.value-container {
-      input {
+      input,
+      select {
         min-width: 120px;
       }
 
@@ -202,7 +237,8 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
       }
     }
 
-    input {
+    input,
+    select {
       width: 100%;
     }
   }

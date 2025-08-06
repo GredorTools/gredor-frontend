@@ -23,7 +23,7 @@ defineModel<Arsredovisning>("arsredovisning", {
       <select
         id="resultatdispositionBeslut"
         v-model="arsredovisning.faststallelseintyg.resultatdispositionBeslut"
-        class="input-field"
+        class="form-select"
       >
         <option
           v-for="resultatdispositionBeslut in RESULTATDISPOSITION_BESLUT"
@@ -39,7 +39,7 @@ defineModel<Arsredovisning>("arsredovisning", {
       <input
         id="datum"
         v-model.trim="arsredovisning.faststallelseintyg.datumArsstamma"
-        class="input-field"
+        class="form-control"
         type="date"
       />
     </div>
@@ -53,7 +53,7 @@ defineModel<Arsredovisning>("arsredovisning", {
           v-model.trim="
             arsredovisning.faststallelseintyg.underskrift.tilltalsnamn
           "
-          class="input-field"
+          class="form-control"
           type="text"
         />
       </div>
@@ -62,7 +62,7 @@ defineModel<Arsredovisning>("arsredovisning", {
         <input
           id="efternamn"
           v-model.trim="arsredovisning.faststallelseintyg.underskrift.efternamn"
-          class="input-field"
+          class="form-control"
           type="text"
         />
       </div>
@@ -71,7 +71,7 @@ defineModel<Arsredovisning>("arsredovisning", {
         <select
           id="roll"
           v-model="arsredovisning.faststallelseintyg.underskrift.roll"
-          class="input-field"
+          class="form-select"
         >
           <option
             v-for="roll in FASTSTALLELSEINTYG_UNDERSKRIFT_ROLLER"
@@ -87,11 +87,11 @@ defineModel<Arsredovisning>("arsredovisning", {
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/extendables.scss";
+@import "@/assets/_variables.scss";
 
 .form-section {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
+  margin: $spacing-lg 0;
+  padding: $spacing-lg;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
@@ -101,7 +101,7 @@ defineModel<Arsredovisning>("arsredovisning", {
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: $spacing-lg;
 
   &:last-child {
     margin-bottom: 0;
@@ -110,19 +110,18 @@ defineModel<Arsredovisning>("arsredovisning", {
 
 label {
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: $spacing-sm;
   color: #333;
 }
 
-.input-field {
-  @extend %text-input;
-
+.form-control,
+.form-select {
   padding: 0.7rem;
 }
 
 h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: $font-size-xl;
+  margin-bottom: $spacing-md;
   color: #444;
 }
 </style>

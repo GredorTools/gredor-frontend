@@ -62,20 +62,14 @@ const trClasses = computed(() => [
 <template>
   <template v-if="multiline && !isAbstract">
     <tr :class="trClasses">
-      <td :colspan="comparableNumPreviousYears + (allowDelete ? 2 : 1)">
+      <td :colspan="comparableNumPreviousYears + 2">
         <BaseEditBeloppradTitle
           :belopprad="belopprad"
           :taxonomy-manager="taxonomyManager"
         />
       </td>
-      <td>
-        <button
-          v-if="allowDelete"
-          class="btn btn-danger"
-          @click="emit('delete')"
-        >
-          X
-        </button>
+      <td v-if="allowDelete">
+        <button class="btn btn-danger" @click="emit('delete')">X</button>
       </td>
     </tr>
     <tr :class="trClasses">
@@ -124,7 +118,7 @@ const trClasses = computed(() => [
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/extendables.scss";
+@import "@/assets/_variables.scss";
 
 .full-width td {
   & > * {
@@ -132,13 +126,11 @@ const trClasses = computed(() => [
   }
 
   textarea {
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-md;
   }
 }
 
 textarea {
-  @extend %text-input;
-
   min-height: 6rem;
   resize: vertical;
 }

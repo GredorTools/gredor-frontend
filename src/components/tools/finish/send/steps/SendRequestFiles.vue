@@ -80,16 +80,18 @@ async function handleSignedPdfFile(file: File) {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .drop-zone {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: $spacing-sm;
 
   height: 10rem;
   border: 2px dashed #646464;
-  border-radius: 0.5rem;
+  border-radius: $border-radius-lg;
 
   &.hover {
     background-color: #cfd8c7;

@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
         :show-faststallelseintyg="includeFaststallelseintyg"
       />
     </div>
-    
+
     <CommonWizardButtons
       :next-button-disabled="!ixbrl"
       :next-button-text="ixbrl ? 'Nästa' : 'Vänta – arbetar i bakgrunden…'"
@@ -91,17 +91,19 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .preview-container {
   width: min-content;
 }
 
 p {
-  margin: 1rem 0;
+  margin: $spacing-md 0;
 }
 
 .preview {
   overflow: scroll;
   flex: 1;
-  padding: 0.5rem;
+  padding: $spacing-sm;
 }
 </style>

@@ -83,9 +83,11 @@ const minimumTaxonomyItemLevel = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .selector-container {
   display: flex;
-  padding: 0 0.5rem;
+  padding: 0 $spacing-sm;
 }
 
 .custom-select {
@@ -106,15 +108,15 @@ const minimumTaxonomyItemLevel = computed(() => {
 }
 
 .custom-select-menu {
-  background: red;
+  background: $danger-color;
 }
 
 .custom-select-indicators-container {
-  background: green;
+  background: $success-color;
 }
 
 button {
-  margin-left: 1rem;
+  margin-left: $spacing-md;
   white-space: nowrap;
 }
 </style>

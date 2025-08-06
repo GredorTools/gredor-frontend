@@ -172,12 +172,14 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .limit-width {
   width: var(--bs-modal-width);
 }
 
 h5:not(:first-of-type) {
-  margin-top: 2.5rem;
+  margin-top: $spacing-xxl;
 }
 
 input {

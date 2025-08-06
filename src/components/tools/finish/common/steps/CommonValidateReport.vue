@@ -147,7 +147,9 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 h5 {
-  margin-top: 1.5rem;
+  margin-top: $spacing-lg;
 }
 </style>

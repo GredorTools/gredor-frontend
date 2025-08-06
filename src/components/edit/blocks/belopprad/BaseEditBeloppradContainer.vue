@@ -36,4 +36,14 @@ const taxonomyItem = computed(() => {
   </tr>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
+tr {
+  transition: $transition-base;
+
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+  }
+}
+</style>

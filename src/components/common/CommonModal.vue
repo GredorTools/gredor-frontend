@@ -71,10 +71,16 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .modal-dialog {
   min-width: var(--bs-modal-width);
   width: fit-content;
   max-width: unset;
+}
+
+.modal-header {
+  background-color: var(--bs-primary-bg-subtle);
 }
 
 .modal-body {
@@ -82,10 +88,10 @@ onMounted(() => {
   max-width: 98vw;
   max-height: 75vh;
   overflow-y: auto;
-  padding-bottom: 2rem;
+  padding-bottom: $spacing-xl;
 }
 
 h3 {
-  font-size: 1.5rem;
+  font-size: $font-size-xl;
 }
 </style>

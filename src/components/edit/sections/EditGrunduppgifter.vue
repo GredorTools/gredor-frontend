@@ -16,22 +16,24 @@ defineModel<Arsredovisning>("arsredovisning", {
 </script>
 
 <template>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="foretagsnamn">Företagsnamn:</label>
+  <div class="card mb-4 p-4">
+    <div class="mb-3">
+      <label class="form-label" for="foretagsnamn">Företagsnamn:</label>
       <input
         id="foretagsnamn"
         v-model.trim="arsredovisning.foretagsinformation.foretagsnamn"
-        class="input-field"
+        class="form-control"
         type="text"
       />
     </div>
-    <div class="form-group">
-      <label for="organisationsnummer">Organisationsnummer:</label>
+    <div class="mb-3">
+      <label class="form-label" for="organisationsnummer"
+        >Organisationsnummer:</label
+      >
       <input
         id="organisationsnummer"
         v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
-        class="input-field"
+        class="form-control"
         type="text"
         @input="
           arsredovisning.foretagsinformation.organisationsnummer =
@@ -43,13 +45,13 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-group">
-      <label for="forfattare">Författare:</label>
+  <div class="card mb-4 p-4">
+    <div class="mb-3">
+      <label class="form-label" for="forfattare">Författare:</label>
       <select
         id="forfattare"
         v-model="arsredovisning.redovisningsinformation.forfattare"
-        class="input-field"
+        class="form-select"
       >
         <option
           v-for="forfattare in FORFATTARE_TYPER"
@@ -62,13 +64,13 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-group">
-      <label for="valutakod">Redovisningsvaluta:</label>
+  <div class="card mb-4 p-4">
+    <div class="mb-3">
+      <label class="form-label" for="valutakod">Redovisningsvaluta:</label>
       <select
         id="valutakod"
         v-model="arsredovisning.redovisningsinformation.redovisningsvaluta"
-        class="input-field"
+        class="form-select"
       >
         <option
           v-for="redovisningsvaluta in REDOVISNINGSVALUTOR"
@@ -81,79 +83,84 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-group">
-      <label for="startdatumNuvarande">
+  <div class="card mb-4 p-4">
+    <div class="mb-3">
+      <label class="form-label" for="startdatumNuvarande">
         Startdatum nuvarande räkenskapsår:
       </label>
       <input
         id="startdatumNuvarande"
         v-model.trim="arsredovisning.verksamhetsarNuvarande.startdatum"
-        class="input-field"
+        class="form-control"
         min="2024-07-01"
         type="date"
       />
-      <div class="note">
+      <div class="form-text text-muted">
         (OBS: Gredor stödjer ej räkenskapsår som börjar tidigare än 2024-07-01.)
       </div>
     </div>
-    <div class="form-group">
-      <label for="slutdatumNuvarande">Slutdatum nuvarande räkenskapsår:</label>
+    <div class="mb-3">
+      <label class="form-label" for="slutdatumNuvarande"
+        >Slutdatum nuvarande räkenskapsår:</label
+      >
       <input
         id="slutdatumNuvarande"
         v-model.trim="arsredovisning.verksamhetsarNuvarande.slutdatum"
-        class="input-field"
+        class="form-control"
         type="date"
       />
     </div>
   </div>
 
-  <div v-for="i in 3" :key="i" class="form-section">
-    <label :for="'verksamhetsarTidigareAktivt' + i"
-      >Verksamheten fanns {{ i }} år före nuvarande räkenskapsår:
-    </label>
-    <input
-      :id="'verksamhetsarTidigareAktivt' + i"
-      :checked="arsredovisning.verksamhetsarTidigare[i - 1] != null"
-      :disabled="arsredovisning.verksamhetsarTidigare.length > i"
-      type="checkbox"
-      @change="
-        (event: Event) => {
-          if (event.target) {
-            if ((<HTMLInputElement>event.target).checked) {
-              while (arsredovisning.verksamhetsarTidigare.length < i) {
-                arsredovisning.verksamhetsarTidigare.push({
-                  startdatum: '2000-01-01',
-                  slutdatum: '2000-12-31',
-                });
+  <div v-for="i in 3" :key="i" class="card mb-4 p-4">
+    <div class="form-check mb-3">
+      <input
+        :id="'verksamhetsarTidigareAktivt' + i"
+        :checked="arsredovisning.verksamhetsarTidigare[i - 1] != null"
+        :disabled="arsredovisning.verksamhetsarTidigare.length > i"
+        class="form-check-input"
+        type="checkbox"
+        @change="
+          (event: Event) => {
+            if (event.target) {
+              if ((<HTMLInputElement>event.target).checked) {
+                while (arsredovisning.verksamhetsarTidigare.length < i) {
+                  arsredovisning.verksamhetsarTidigare.push({
+                    startdatum: '2000-01-01',
+                    slutdatum: '2000-12-31',
+                  });
+                }
+              } else {
+                arsredovisning.verksamhetsarTidigare.splice(i - 1, 1);
               }
-            } else {
-              arsredovisning.verksamhetsarTidigare.splice(i - 1, 1);
             }
           }
-        }
-      "
-    />
+        "
+      />
+      <label :for="'verksamhetsarTidigareAktivt' + i" class="form-check-label">
+        Verksamheten fanns {{ i }} år före nuvarande räkenskapsår
+      </label>
+    </div>
     <template v-if="arsredovisning.verksamhetsarTidigare.length > i - 1">
-      <div class="form-group">
-        <label for="startdatumTidigare"
+      <div class="mb-3">
+        <label class="form-label" for="startdatumTidigare"
           >Startdatum tidigare räkenskapsår, {{ i }} år sedan:</label
         >
         <input
           id="startdatumTidigare"
           v-model.trim="arsredovisning.verksamhetsarTidigare[i - 1].startdatum"
-          class="input-field"
+          class="form-control"
           type="date"
         />
       </div>
-      <div class="form-group">
-        <label for="slutdatumTidigare"
+      <div class="mb-3">
+        <label class="form-label" for="slutdatumTidigare"
           >Slutdatum tidigare räkenskapsår, {{ i }} år sedan:</label
         >
         <input
           id="slutdatumTidigare"
           v-model.trim="arsredovisning.verksamhetsarTidigare[i - 1].slutdatum"
-          class="input-field"
+          class="form-control"
           type="date"
         />
       </div>
@@ -161,49 +168,4 @@ defineModel<Arsredovisning>("arsredovisning", {
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import "@/assets/extendables.scss";
-
-.form-section {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.5rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.input-field {
-  @extend %text-input;
-
-  padding: 0.7rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #444;
-}
-
-.note {
-  font-size: 0.85rem;
-  color: #333;
-  margin-top: 0.25rem;
-}
-</style>
+<style lang="scss" scoped></style>

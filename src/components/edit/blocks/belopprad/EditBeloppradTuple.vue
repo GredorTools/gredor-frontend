@@ -83,13 +83,15 @@ function deleteInstance(index: number) {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .edit-tuple-instance-container {
   display: flex;
-  margin-left: 2rem;
-  margin-bottom: 0.5rem;
+  margin-left: $spacing-xl;
+  margin-bottom: $spacing-sm;
 
   &.last {
-    margin-bottom: 1.5rem;
+    margin-bottom: $spacing-lg;
   }
 
   table.edit-tuple-instance {
@@ -101,7 +103,7 @@ function deleteInstance(index: number) {
   }
 
   .edit-tuple-instance-delete {
-    margin: 0.25rem 0;
+    margin: $spacing-xs 0;
   }
 }
 </style>

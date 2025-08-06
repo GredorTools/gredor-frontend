@@ -11,7 +11,9 @@
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 h4 {
-  font-size: 1.25rem;
+  font-size: $font-size-lg;
 }
 </style>

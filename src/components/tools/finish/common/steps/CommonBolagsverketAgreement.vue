@@ -124,10 +124,12 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 .checkbox-container {
   border: 1px solid #c0c0c0;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+  border-radius: $border-radius-lg;
+  padding: $spacing-sm;
   display: inline-block;
 }
 </style>

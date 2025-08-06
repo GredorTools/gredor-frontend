@@ -37,7 +37,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <span
+  <div
     :class="{
       abstract: taxonomyItem.properties.abstract === 'true',
       'string-item': taxonomyItem.properties.type === 'xbrli:stringItemType',
@@ -46,8 +46,12 @@ onMounted(() => {
         taxonomyItem.additionalData.isCalculatedItem,
       [`level-${taxonomyItem.level}`]: true,
     }"
-    >{{ taxonomyItem.additionalData.displayLabel }}
-    <span v-if="isPercentageTaxonomyItem(taxonomyItem)">[%]</span>
+    class="title-root"
+  >
+    {{ taxonomyItem.additionalData.displayLabel }}
+    <span v-if="isPercentageTaxonomyItem(taxonomyItem)" class="unit-indicator"
+      >[%]</span
+    >
     <span
       v-if="!!taxonomyItem.properties.documentation"
       ref="title-span"
@@ -56,50 +60,93 @@ onMounted(() => {
       data-bs-placement="bottom"
       data-bs-toggle="tooltip"
     >
-      ℹ️
+      <span class="info-circle">i</span>
     </span>
-  </span>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
+.title-root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-xs;
+}
+
 .abstract.level-1,
 .string-item.level-1 {
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: $font-size-lg;
+  color: $dark;
 }
 
 .abstract.level-2 {
   font-weight: 600;
   text-decoration: underline;
+  color: mix($dark, $medium, 70%);
 }
 
 .abstract.level-3 {
   font-weight: 500;
+  color: $medium;
 }
 
 .abstract.level-4 {
   font-weight: 400;
   text-decoration: underline;
+  color: $medium;
 }
 
 .summa.level-1 {
   font-weight: 600;
   font-style: italic;
+  color: $dark;
 }
 
 .summa.level-2 {
   font-weight: 600;
+  color: mix($dark, $medium, 70%);
 }
 
 .summa.level-3 {
   font-weight: 500;
+  color: $medium;
+}
+
+.unit-indicator {
+  font-size: $font-size-sm;
+  color: $medium;
+  margin-left: $spacing-xs;
 }
 
 .info-icon {
   font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  margin-left: $spacing-xs;
 
   &:hover {
     cursor: help;
+  }
+
+  .info-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: $info-color;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+
+    &:hover {
+      background-color: darken($info-color, 15%);
+    }
   }
 }
 </style>

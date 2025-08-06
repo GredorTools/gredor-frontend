@@ -152,12 +152,10 @@ function onBeforeValueInput(event: InputEvent) {
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/extendables.scss";
+@import "@/assets/_variables.scss";
 
 input.form-control {
-  @extend %text-input;
-
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-left: $spacing-sm;
+  padding-right: $spacing-sm;
 }
 </style>

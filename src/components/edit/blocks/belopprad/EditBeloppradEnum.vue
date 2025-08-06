@@ -32,7 +32,11 @@ const belopprad = defineModel<BeloppradEnum>("belopprad", {
     @delete="emit('delete')"
   >
     <template #input-current-year="{ taxonomyItem }">
-      <select v-model="belopprad.beloppNuvarandeAr">
+      <select
+        v-model="belopprad.beloppNuvarandeAr"
+        :class="{ 'form-select-sm': small }"
+        class="form-select"
+      >
         <option
           v-for="choice in taxonomyItem.childrenFlat"
           :key="choice.xmlName"
@@ -44,7 +48,11 @@ const belopprad = defineModel<BeloppradEnum>("belopprad", {
     </template>
 
     <template #input-previous-year="{ previousYearIndex, taxonomyItem }">
-      <select v-model="belopprad.beloppTidigareAr[previousYearIndex]">
+      <select
+        v-model="belopprad.beloppTidigareAr[previousYearIndex]"
+        :class="{ 'form-select-sm': small }"
+        class="form-select"
+      >
         <option
           v-for="choice in taxonomyItem.childrenFlat"
           :key="choice.xmlName"

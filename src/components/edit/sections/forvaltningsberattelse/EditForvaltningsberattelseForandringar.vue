@@ -119,7 +119,7 @@ const commonTaxonomyItemNames = [
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/extendables.scss";
+@import "@/assets/_variables.scss";
 
 @mixin auto-font-sizes {
   @media (max-width: 1500px) {
@@ -147,7 +147,7 @@ table.edit-forandringar-table {
 
   thead {
     position: sticky;
-    top: -1rem;
+    top: -$spacing-md;
     background: white;
   }
 
@@ -169,7 +169,7 @@ table.edit-forandringar-table {
   }
 
   th {
-    padding-left: 1rem;
+    padding-left: $spacing-md;
     border-bottom-width: 4px;
   }
 
@@ -195,7 +195,6 @@ table.edit-forandringar-table {
         width: 100%;
 
         &.form-control {
-          @extend %text-input;
           @include auto-font-sizes;
 
           @media (max-width: 1500px) {
@@ -206,7 +205,7 @@ table.edit-forandringar-table {
             min-width: 100px;
           }
 
-          padding: 0.25rem 0.5rem;
+          padding: $spacing-xs $spacing-sm;
         }
       }
     }
