@@ -43,7 +43,7 @@ tr {
   transition: $transition-base;
 
   &:hover {
-    background-color: rgba($primary-color, 0.05);
+    background-color: rgba($primary-color, 0.1);
   }
 }
 </style>
