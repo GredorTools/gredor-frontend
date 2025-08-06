@@ -14,11 +14,13 @@ import {
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import EditBeloppradNonmonetaryComparable from "@/components/edit/blocks/belopprad/EditBeloppradNonmonetaryComparable.vue";
+import EditBeloppradOtherComparable from "@/components/edit/blocks/belopprad/EditBeloppradOtherComparable.vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { computed } from "vue";
 import EditBeloppradTuple from "@/components/edit/blocks/belopprad/EditBeloppradTuple.vue";
 import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import EditBeloppradEnum from "@/components/edit/blocks/belopprad/EditBeloppradEnum.vue";
+import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -97,7 +99,17 @@ const taxonomyItem = computed(() => {
       :taxonomy-manager="taxonomyManager"
       @delete="emit('delete')"
     />
-    <EditBeloppradNonmonetaryComparable
+    <EditBeloppradEnum
+      v-else-if="isBeloppradEnum(belopprad)"
+      :allow-delete="allowDelete || false"
+      :allow-not="comparableAllowNot || false"
+      :belopprad="belopprad"
+      :num-previous-years="comparableNumPreviousYears || 0"
+      :small="small || false"
+      :taxonomy-manager="taxonomyManager"
+      @delete="emit('delete')"
+    />
+    <EditBeloppradOtherComparable
       v-else-if="isBeloppradComparable(belopprad)"
       :allow-delete="allowDelete || false"
       :allow-not="comparableAllowNot || false"

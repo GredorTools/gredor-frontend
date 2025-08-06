@@ -15,10 +15,12 @@ import {
 } from "@/model/arsredovisning/Belopprad.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import RenderBeloppradNonmonetaryComparable from "@/components/render/blocks/belopprad/RenderBeloppradNonmonetaryComparable.vue";
+import RenderBeloppradOtherComparable from "@/components/render/blocks/belopprad/RenderBeloppradOtherComparable.vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import RenderBeloppradTuple from "@/components/render/blocks/belopprad/RenderBeloppradTuple.vue";
 import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import RenderBeloppradEnum from "@/components/render/blocks/belopprad/RenderBeloppradEnum.vue";
+import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -94,7 +96,18 @@ const contextRefPrefix = computed(() => {
     :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
-  <RenderBeloppradNonmonetaryComparable
+  <RenderBeloppradEnum
+    v-else-if="isBeloppradEnum(belopprad)"
+    :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
+    :allow-not="comparableAllowNot || false"
+    :belopprad="belopprad"
+    :context-ref-prefix="contextRefPrefix"
+    :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :num-previous-years="comparableNumPreviousYears || 0"
+    :render-as-level="renderAsLevel"
+    :taxonomy-manager="taxonomyManager"
+  />
+  <RenderBeloppradOtherComparable
     v-else-if="isBeloppradComparable(belopprad)"
     :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
     :allow-not="comparableAllowNot || false"

@@ -98,59 +98,69 @@ function shouldShowSign(belopp: string) {
     </td>
     <td class="value-container">
       <template v-if="belopprad.beloppNuvarandeAr.length > 0">
-        <span v-if="shouldShowSign(belopprad.beloppNuvarandeAr)">&minus;</span>
-        <!-- @delete-whitespace -->
-        <ix:nonFraction
-          :contextRef="contextRefPrefix + '_nuvarande'"
-          :name="taxonomyItem.xmlName"
-          :scale="getNonFractionScale(taxonomyItem)"
-          :sign="
-            isBeloppradMonetary(belopprad) &&
-            belopprad.beloppNuvarandeAr.startsWith('-')
-              ? '-'
-              : undefined
-          "
-          :unitRef="getUnitRef(taxonomyItem)"
-          decimals="INF"
-          format="ixt:numspacecomma"
-          v-bind="additionalIxbrlAttrs"
-        >
-          {{
-            formatNumber(belopprad.beloppNuvarandeAr, {
-              removeSign: true,
-            })
-          }}
-        </ix:nonFraction>
+        <slot :taxonomy-item="taxonomyItem" name="output-current-year">
+          <span v-if="shouldShowSign(belopprad.beloppNuvarandeAr)"
+            >&minus;</span
+          >
+          <!-- @delete-whitespace -->
+          <ix:nonFraction
+            :contextRef="contextRefPrefix + '_nuvarande'"
+            :name="taxonomyItem.xmlName"
+            :scale="getNonFractionScale(taxonomyItem)"
+            :sign="
+              isBeloppradMonetary(belopprad) &&
+              belopprad.beloppNuvarandeAr.startsWith('-')
+                ? '-'
+                : undefined
+            "
+            :unitRef="getUnitRef(taxonomyItem)"
+            decimals="INF"
+            format="ixt:numspacecomma"
+            v-bind="additionalIxbrlAttrs"
+          >
+            {{
+              formatNumber(belopprad.beloppNuvarandeAr, {
+                removeSign: true,
+              })
+            }}
+          </ix:nonFraction>
+        </slot>
       </template>
       <template v-else>&ndash;</template>
     </td>
     <td v-for="i in numPreviousYears" :key="i" class="value-container">
       <template v-if="belopprad.beloppTidigareAr[i - 1]?.length > 0">
-        <span v-if="shouldShowSign(belopprad.beloppTidigareAr[i - 1])"
-          >&minus;</span
+        <slot
+          :previous-year-index="i - 1"
+          :taxonomy-item="taxonomyItem"
+          name="output-previous-year"
         >
-        <!-- @delete-whitespace -->
-        <ix:nonFraction
-          :contextRef="contextRefPrefix + '_tidigare' + i"
-          :name="taxonomyItem.xmlName"
-          :scale="getNonFractionScale(taxonomyItem)"
-          :sign="
-            isBeloppradMonetary(belopprad) &&
-            belopprad.beloppTidigareAr[i - 1]?.startsWith('-')
-              ? '-'
-              : undefined
-          "
-          :unitRef="getUnitRef(taxonomyItem)"
-          decimals="INF"
-          format="ixt:numspacecomma"
-          v-bind="additionalIxbrlAttrs"
-        >
-          {{
-            formatNumber(belopprad.beloppTidigareAr[i - 1], {
-              removeSign: true,
-            })
-          }}
-        </ix:nonFraction>
+          <span v-if="shouldShowSign(belopprad.beloppTidigareAr[i - 1])"
+            >&minus;</span
+          >
+          <!-- @delete-whitespace -->
+          <ix:nonFraction
+            :contextRef="contextRefPrefix + '_tidigare' + i"
+            :name="taxonomyItem.xmlName"
+            :scale="getNonFractionScale(taxonomyItem)"
+            :sign="
+              isBeloppradMonetary(belopprad) &&
+              belopprad.beloppTidigareAr[i - 1]?.startsWith('-')
+                ? '-'
+                : undefined
+            "
+            :unitRef="getUnitRef(taxonomyItem)"
+            decimals="INF"
+            format="ixt:numspacecomma"
+            v-bind="additionalIxbrlAttrs"
+          >
+            {{
+              formatNumber(belopprad.beloppTidigareAr[i - 1], {
+                removeSign: true,
+              })
+            }}
+          </ix:nonFraction>
+        </slot>
       </template>
       <template v-else>&ndash;</template>
     </td>

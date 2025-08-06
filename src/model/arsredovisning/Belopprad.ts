@@ -48,7 +48,8 @@ export function createBelopprad<T extends TaxonomyItemType>(
     case "xbrli:monetaryItemType":
     case "xbrli:decimalItemType":
     case "xbrli:pureItemType":
-    case "xbrli:sharesItemType": {
+    case "xbrli:sharesItemType":
+    case "enum:enumerationItemType":
       const defaultValue = taxonomyItem.additionalData.isCalculatedItem
         ? "0"
         : "";
@@ -57,15 +58,6 @@ export function createBelopprad<T extends TaxonomyItemType>(
         beloppNuvarandeAr: defaultValue,
         beloppTidigareAr: [defaultValue, defaultValue, defaultValue],
       } as Belopprad<T>;
-    }
-
-    // TODO
-    case "enum:enumerationItemType":
-    case "nonnum:domainItemType":
-      alert("Ännu ej implementerat");
-      throw new Error(
-        `Unsupported taxonomy item data type: ${taxonomyItem.properties.type}`,
-      );
 
     default:
       if (isTaxonomyItemTuple(taxonomyItem)) {

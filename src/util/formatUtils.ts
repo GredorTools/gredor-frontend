@@ -1,3 +1,5 @@
+import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+
 /**
  * Formaterar en numerisk sträng genom att lägga till mellanslag som
  * tusentalsseparatorer.
@@ -59,4 +61,17 @@ export function tryFormatOrgnr(orgnr: string) {
     return orgnr.substring(0, 6) + "-" + orgnr.substring(6);
   }
   return orgnr;
+}
+
+/**
+ * Hämtar visningsetiketten för ett värde som kommer från en vallista.
+ * Tar bort eventuellt efterföljande "Värde" från etiketten om det finns.
+ *
+ * @param taxonomyItem - Taxonomiobjektet för värdet från vallistan.
+ * @return Den bearbetade visningsetiketten om tillgänglig, annars undefined.
+ */
+export function formatEnumValueDisplayLabel(
+  taxonomyItem: TaxonomyItem,
+): string | undefined {
+  return taxonomyItem.additionalData.displayLabel?.replace(/ \(Värde\)$/g, "");
 }

@@ -30,9 +30,9 @@ const tupleTaxonomyItem = computed(() =>
 function createInstance() {
   belopprad.value.instanser.push({
     id: generateTupleID(),
-    belopprader: tupleTaxonomyItem.value.childrenFlat.map((child) =>
-      createBelopprad(child),
-    ),
+    belopprader: tupleTaxonomyItem.value.childrenFlat
+      .filter((child) => child.properties.type !== "nonnum:domainItemType") // Hanteras av enum-rader själva
+      .map((child) => createBelopprad(child)),
   });
 }
 

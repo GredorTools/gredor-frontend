@@ -101,40 +101,48 @@ function onBeforeValueInput(event: InputEvent) {
     </td>
     <td class="value-container">
       <div class="d-flex align-items-center">
-        <template v-if="showBalanceSign">
-          <span v-if="taxonomyItem.properties.balance === 'debit'"
-            >&minus;</span
-          >
-          <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
-        </template>
-        <input
-          v-if="taxonomyItem.properties.abstract !== 'true'"
-          v-model.trim="belopprad.beloppNuvarandeAr"
-          :class="{ 'form-control-sm': small }"
-          :disabled="isSummarad"
-          class="form-control"
-          type="text"
-          @beforeinput="(event) => onBeforeValueInput(event as InputEvent)"
-        />
+        <slot :taxonomy-item="taxonomyItem" name="input-current-year">
+          <template v-if="showBalanceSign">
+            <span v-if="taxonomyItem.properties.balance === 'debit'"
+              >&minus;</span
+            >
+            <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
+          </template>
+          <input
+            v-if="taxonomyItem.properties.abstract !== 'true'"
+            v-model.trim="belopprad.beloppNuvarandeAr"
+            :class="{ 'form-control-sm': small }"
+            :disabled="isSummarad"
+            class="form-control"
+            type="text"
+            @beforeinput="(event) => onBeforeValueInput(event as InputEvent)"
+          />
+        </slot>
       </div>
     </td>
     <td v-for="i in numPreviousYears" :key="i" class="value-container">
       <div class="d-flex align-items-center">
-        <template v-if="showBalanceSign">
-          <span v-if="taxonomyItem.properties.balance === 'debit'"
-            >&minus;</span
-          >
-          <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
-        </template>
-        <input
-          v-if="taxonomyItem.properties.abstract !== 'true'"
-          v-model.trim="belopprad.beloppTidigareAr[i - 1]"
-          :class="{ 'form-control-sm': small }"
-          :disabled="isSummarad"
-          class="form-control"
-          type="text"
-          @beforeinput="(event) => onBeforeValueInput(event as InputEvent)"
-        />
+        <slot
+          :previous-year-index="i - 1"
+          :taxonomy-item="taxonomyItem"
+          name="input-previous-year"
+        >
+          <template v-if="showBalanceSign">
+            <span v-if="taxonomyItem.properties.balance === 'debit'"
+              >&minus;</span
+            >
+            <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
+          </template>
+          <input
+            v-if="taxonomyItem.properties.abstract !== 'true'"
+            v-model.trim="belopprad.beloppTidigareAr[i - 1]"
+            :class="{ 'form-control-sm': small }"
+            :disabled="isSummarad"
+            class="form-control"
+            type="text"
+            @beforeinput="(event) => onBeforeValueInput(event as InputEvent)"
+          />
+        </slot>
       </div>
     </td>
     <td v-if="allowDelete">

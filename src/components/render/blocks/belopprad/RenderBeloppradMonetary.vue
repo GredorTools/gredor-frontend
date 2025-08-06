@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 /**
- * En komponent för att redigera belopprader som har monetära värden som datatyp.
+ * En komponent för att rendera belopprader som har monetära värden som datatyp.
  * Visar balanstecken vid behov.
  */
 

@@ -4,7 +4,8 @@ export type UnitRef =
   | "redovisningsvaluta"
   | "pure"
   | "shares"
-  | `decimal-${string}`;
+  | `decimal-${string}`
+  | undefined;
 
 export const UNIT_REF_REDOVISNINGSVALUTA: UnitRef = "redovisningsvaluta";
 export const UNIT_REF_PURE: UnitRef = "pure";
@@ -30,18 +31,9 @@ export function getUnitRef(taxonomyItem: TaxonomyItem): UnitRef {
     case "xbrli:decimalItemType":
       return `decimal-${taxonomyItem.properties.name}`;
 
-    // TODO
-    case "enum:enumerationItemType":
-    case "nonnum:domainItemType":
-      alert("Ännu ej implementerat");
-      throw new Error(
-        `Unsupported taxonomy item data type: ${taxonomyItem.properties.type}`,
-      );
-
     case "xbrli:stringItemType":
-      throw new Error(
-        `Taxonomy item data type cannot have unitRef: ${taxonomyItem.properties.type}`,
-      );
+    case "enum:enumerationItemType":
+      return undefined;
 
     default:
       throw new Error(
