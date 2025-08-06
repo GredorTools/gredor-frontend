@@ -31,32 +31,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Typografi
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: $spacing-md;
-  font-weight: 600;
-  line-height: 1.2;
-  color: $dark;
-}
-
-h1 {
-  font-size: $font-size-xxl;
-}
-
-h2 {
-  font-size: $font-size-xl;
-}
-
-h3 {
-  font-size: $font-size-lg;
-}
-
-h4 {
-  font-size: $font-size-base;
-  font-weight: 700;
-}
-
 // För tillgänglighet
 :focus {
   outline: 2px solid rgba($primary-color, 0.5);
