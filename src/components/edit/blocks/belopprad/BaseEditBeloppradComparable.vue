@@ -22,6 +22,10 @@ export interface EditBeloppradComparablePropsBase {
   /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
   small: boolean;
 
+  /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
+   * även om den egentligen inte är en belopprad av den nivån. */
+  displayAsLevel?: number;
+
   /** Antal tidigare räkenskapsår som ska visas för jämförelse. */
   numPreviousYears: number;
 
@@ -86,6 +90,7 @@ function onBeforeValueInput(event: InputEvent) {
     <td>
       <BaseEditBeloppradTitle
         :belopprad="belopprad"
+        :display-as-level="displayAsLevel"
         :taxonomy-manager="taxonomyManager"
       />
     </td>

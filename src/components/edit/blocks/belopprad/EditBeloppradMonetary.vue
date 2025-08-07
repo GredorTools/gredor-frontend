@@ -82,6 +82,7 @@ watch(
     :allow-not="allowNot"
     :allowed-value-regex="/^-?\d*$/"
     :belopprad="belopprad"
+    :display-as-level="displayAsLevel"
     :is-summarad="taxonomyItem.additionalData.isCalculatedItem"
     :num-previous-years="numPreviousYears"
     :show-balance-sign="showBalanceSign"

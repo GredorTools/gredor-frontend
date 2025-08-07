@@ -19,7 +19,7 @@ defineProps<{
   arsredovisning: Arsredovisning;
 }>();
 
-function getRenderAsLevelForBelopprad(
+function getDisplayAsLevelForBelopprad(
   belopprad: Belopprad,
 ): number | undefined {
   if (belopprad.type === "xbrli:stringItemType") {
@@ -77,7 +77,7 @@ function getRenderAsLevelForBelopprad(
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
-          :render-as-level="getRenderAsLevelForBelopprad(belopprad)"
+          :display-as-level="getDisplayAsLevelForBelopprad(belopprad)"
           :taxonomy-manager="taxonomyManager"
           comparable-allow-not
           monetary-show-balance-sign

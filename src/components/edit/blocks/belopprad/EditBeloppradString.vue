@@ -9,6 +9,7 @@ import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditB
 import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import BaseEditBeloppradContainer from "@/components/edit/blocks/belopprad/BaseEditBeloppradContainer.vue";
 
 defineOptions({
   inheritAttrs: false,
@@ -25,6 +26,10 @@ const props = defineProps<{
 
   /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
   small: boolean;
+
+  /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
+   * även om den egentligen inte är en belopprad av den nivån. */
+  displayAsLevel?: number;
 
   /** Huruvida radbrytningar ska vara tillåtna. */
   multiline: boolean;
@@ -61,38 +66,50 @@ const trClasses = computed(() => [
 
 <template>
   <template v-if="multiline && !isAbstract">
-    <tr :class="trClasses">
+    <BaseEditBeloppradContainer
+      :belopprad="belopprad"
+      :class="trClasses"
+      :taxonomy-manager="taxonomyManager"
+      disable-hover-effect
+    >
       <td :colspan="comparableNumPreviousYears + 2">
         <BaseEditBeloppradTitle
           :belopprad="belopprad"
+          :display-as-level="displayAsLevel"
           :taxonomy-manager="taxonomyManager"
         />
       </td>
       <td v-if="allowDelete">
         <button class="btn btn-danger" @click="emit('delete')">X</button>
       </td>
-    </tr>
-    <tr :class="trClasses">
+    </BaseEditBeloppradContainer>
+    <BaseEditBeloppradContainer
+      :belopprad="belopprad"
+      :class="trClasses"
+      :taxonomy-manager="taxonomyManager"
+      disable-hover-effect
+    >
       <td
-        v-if="!isAbstract"
         :class="{
           'gredor-tooltip': !!taxonomyItem.properties.documentation,
         }"
         :colspan="comparableNumPreviousYears + 3"
       >
-        <textarea
-          v-if="multiline"
-          v-model="belopprad.text"
-          class="form-control"
-        ></textarea>
+        <textarea v-model="belopprad.text" class="form-control"></textarea>
       </td>
-    </tr>
+    </BaseEditBeloppradContainer>
   </template>
 
-  <tr v-else :class="trClasses">
+  <BaseEditBeloppradContainer
+    v-else
+    :belopprad="belopprad"
+    :class="trClasses"
+    :taxonomy-manager="taxonomyManager"
+  >
     <td>
       <BaseEditBeloppradTitle
         :belopprad="belopprad"
+        :display-as-level="displayAsLevel"
         :taxonomy-manager="taxonomyManager"
       />
     </td>
@@ -114,7 +131,7 @@ const trClasses = computed(() => [
         @delete="emit('delete')"
       />
     </td>
-  </tr>
+  </BaseEditBeloppradContainer>
 </template>
 
 <style lang="scss" scoped>

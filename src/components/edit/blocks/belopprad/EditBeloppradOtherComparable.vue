@@ -25,6 +25,7 @@ const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
     :allow-delete="allowDelete"
     :allow-not="allowNot"
     :belopprad="belopprad"
+    :display-as-level="displayAsLevel"
     :num-previous-years="numPreviousYears"
     :small="small"
     :taxonomy-manager="taxonomyManager"

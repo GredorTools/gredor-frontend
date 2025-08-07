@@ -11,6 +11,7 @@ import { usePrepopulateSection } from "@/components/edit/composables/usePrepopul
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 import CommonAccordion from "@/components/common/CommonAccordion.vue";
 import CommonAccordionItem from "@/components/common/CommonAccordionItem.vue";
+import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 const maxNumPreviousYears = 1;
 
@@ -35,6 +36,24 @@ const { prepopulateSection } = usePrepopulateSection({
   maxNumPreviousYears,
 });
 const belopprader = prepopulateSection();
+
+// Hjälpfunktioner
+function getDisplayAsLevelForBelopprad(
+  belopprad: Belopprad,
+): number | undefined {
+  if (
+    [
+      "se-gen-base:FinansiellaPoster",
+      "se-gen-base:Bokslutsdispositioner",
+    ].includes(belopprad.taxonomyItemName)
+  ) {
+    // Dessa summarader ska renderas som nivå 2-belopprader för att se bra ut
+    // (de ska se ut som summaraderna för rörelseintäker och röreleskostnader)
+    return 2;
+  }
+
+  return undefined; // Låt EditBelopprad bestämma baserat på egentliga nivån
+}
 </script>
 
 <template>
@@ -71,6 +90,7 @@ const belopprader = prepopulateSection();
                 maxNumPreviousYears,
               )
             "
+            :display-as-level="getDisplayAsLevelForBelopprad(belopprad)"
             :taxonomy-manager="taxonomyManager"
             comparable-allow-not
             monetary-show-balance-sign

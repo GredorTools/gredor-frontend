@@ -23,9 +23,9 @@ defineProps<
     :allow-not="allowNot"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-level="displayAsLevel"
     :display-as-total-item="displayAsTotalItem"
     :num-previous-years="1"
-    :render-as-level="renderAsLevel"
     :show-balance-sign="showBalanceSign"
     :taxonomy-manager="taxonomyManager"
   />

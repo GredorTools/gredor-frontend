@@ -32,6 +32,10 @@ const props = defineProps<{
   /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
   small?: boolean;
 
+  /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
+   * även om den egentligen inte är en belopprad av den nivån. */
+  displayAsLevel?: number;
+
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan jämföra mellan år. */
   comparableNumPreviousYears?: number;
 
@@ -82,6 +86,7 @@ const taxonomyItem = computed(() => {
       :allow-delete="allowDelete || false"
       :belopprad="belopprad"
       :comparable-num-previous-years="comparableNumPreviousYears || 0"
+      :display-as-level="displayAsLevel"
       :multiline="stringMultiline || false"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"
@@ -93,6 +98,7 @@ const taxonomyItem = computed(() => {
       :allow-not="comparableAllowNot || false"
       :belopprad="belopprad"
       :belopprader="belopprader"
+      :display-as-level="displayAsLevel"
       :num-previous-years="comparableNumPreviousYears || 0"
       :show-balance-sign="monetaryShowBalanceSign || false"
       :small="small || false"
@@ -104,6 +110,7 @@ const taxonomyItem = computed(() => {
       :allow-delete="allowDelete || false"
       :allow-not="comparableAllowNot || false"
       :belopprad="belopprad"
+      :display-as-level="displayAsLevel"
       :num-previous-years="comparableNumPreviousYears || 0"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"
@@ -114,6 +121,7 @@ const taxonomyItem = computed(() => {
       :allow-delete="allowDelete || false"
       :allow-not="comparableAllowNot || false"
       :belopprad="belopprad"
+      :display-as-level="displayAsLevel"
       :num-previous-years="comparableNumPreviousYears || 0"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"

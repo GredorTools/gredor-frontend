@@ -337,7 +337,6 @@ main {
 
 .aside-container {
   background-color: $background-dark;
-  padding-top: $spacing-md;
 }
 
 #documentation {
@@ -345,8 +344,7 @@ main {
   font-weight: normal;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: $spacing-xl calc($spacing-xl * 3) calc($spacing-xl * 2)
-    calc($spacing-xl * 3);
+  padding: calc($spacing-xl * 2) calc($spacing-xl * 3);
   gap: $spacing-xl;
 }
 

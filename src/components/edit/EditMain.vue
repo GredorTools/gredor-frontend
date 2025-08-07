@@ -242,5 +242,34 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
       width: 100%;
     }
   }
+
+  // Avstånd mellan belopprader
+  tr.abstract.level-1:not(:first-child) td {
+    padding-top: $spacing-xxl;
+  }
+
+  tr.abstract.level-2 td {
+    padding-top: $spacing-xl;
+  }
+
+  tr.abstract.level-3 td {
+    padding-top: $spacing-lg;
+  }
+
+  tr.abstract.level-4 td {
+    padding-top: $spacing-md;
+  }
+
+  tr.abstract.level-1 + tr.abstract.level-2 td {
+    padding-top: $spacing-md;
+  }
+
+  tr.abstract.level-2 + tr.abstract.level-3 td {
+    padding-top: $spacing-sm;
+  }
+
+  tr.abstract.level-3 + tr.abstract.level-4 td {
+    padding-top: $spacing-xs;
+  }
 }
 </style>

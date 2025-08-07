@@ -28,9 +28,9 @@ export interface RenderBeloppradComparablePropsBase<
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs: Record<string, string>;
 
-  /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
-   * nivå, även om den inte är en belopprad av den nivån. */
-  renderAsLevel?: number;
+  /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
+   * även om den egentligen inte är en belopprad av den nivån. */
+  displayAsLevel?: number;
 
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
@@ -56,8 +56,8 @@ const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
 });
 
-const renderLevel = computed(
-  () => props.renderAsLevel ?? taxonomyItem.value.level,
+const displayLevel = computed(
+  () => props.displayAsLevel ?? taxonomyItem.value.level,
 );
 
 // Hjälpfunktioner
@@ -85,7 +85,7 @@ function shouldShowSign(belopp: string) {
         taxonomyItem.additionalData.labelType === 'totalLabel' ||
         taxonomyItem.additionalData.isCalculatedItem,
       ['summa-forced']: displayAsTotalItem,
-      [`level-${renderLevel}`]: true,
+      [`level-${displayLevel}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >

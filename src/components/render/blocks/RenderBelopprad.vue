@@ -32,9 +32,9 @@ const props = defineProps<{
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs?: Record<string, string>;
 
-  /** Möjliggör att få beloppraden att renderas som en belopprad av en viss
-   * nivå, även om den inte är en belopprad av den nivån. */
-  renderAsLevel?: number;
+  /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
+   * även om den egentligen inte är en belopprad av den nivån. */
+  displayAsLevel?: number;
 
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan
    * jämföra mellan år. */
@@ -79,8 +79,8 @@ const contextRefPrefix = computed(() => {
     :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-level="displayAsLevel"
     :raw="stringRaw || false"
-    :render-as-level="renderAsLevel"
     :show-header="stringShowHeader || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -90,9 +90,9 @@ const contextRefPrefix = computed(() => {
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
-    :render-as-level="renderAsLevel"
     :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -102,9 +102,9 @@ const contextRefPrefix = computed(() => {
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
-    :render-as-level="renderAsLevel"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradOtherComparable
@@ -113,9 +113,9 @@ const contextRefPrefix = computed(() => {
     :allow-not="comparableAllowNot || false"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
     :num-previous-years="comparableNumPreviousYears || 0"
-    :render-as-level="renderAsLevel"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradTuple

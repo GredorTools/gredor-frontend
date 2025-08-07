@@ -16,6 +16,10 @@ import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 const props = defineProps<{
   /** TaxonomyManager för att hämta information om beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
+   * även om den egentligen inte är en belopprad av den nivån. */
+  displayAsLevel?: number;
 }>();
 
 /** Beloppraden vars rubrik ska visas. */
@@ -26,6 +30,10 @@ const belopprad = defineModel<Belopprad>("belopprad", {
 const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
 });
+
+const displayLevel = computed(
+  () => props.displayAsLevel ?? taxonomyItem.value.level,
+);
 
 const titleSpan = useTemplateRef("title-span");
 onMounted(() => {
@@ -44,7 +52,7 @@ onMounted(() => {
       summa:
         taxonomyItem.additionalData.labelType === 'totalLabel' ||
         taxonomyItem.additionalData.isCalculatedItem,
-      [`level-${taxonomyItem.level}`]: true,
+      [`level-${displayLevel}`]: true,
     }"
     class="title-root"
   >
@@ -85,12 +93,12 @@ onMounted(() => {
 .abstract.level-2 {
   font-weight: 600;
   text-decoration: underline;
-  color: mix($dark, $medium, 70%);
+  color: mix($dark, $medium, 80%);
 }
 
 .abstract.level-3 {
   font-weight: 500;
-  color: $medium;
+  color: mix($dark, $medium, 60%);
 }
 
 .abstract.level-4 {
@@ -107,12 +115,12 @@ onMounted(() => {
 
 .summa.level-2 {
   font-weight: 600;
-  color: mix($dark, $medium, 70%);
+  color: $dark;
 }
 
 .summa.level-3 {
   font-weight: 500;
-  color: $medium;
+  color: mix($dark, $medium, 80%);
 }
 
 .unit-indicator {

@@ -4,7 +4,7 @@
  */
 
 import BaseRenderBeloppradComparable, {
-  type RenderBeloppradComparablePropsBase
+  type RenderBeloppradComparablePropsBase,
 } from "@/components/render/blocks/belopprad/BaseRenderBeloppradComparable.vue";
 import type { BeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 
@@ -19,9 +19,9 @@ defineProps<RenderBeloppradComparablePropsBase<BeloppradEnum>>();
     :allow-not="allowNot"
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
+    :display-as-level="displayAsLevel"
     :display-as-total-item="displayAsTotalItem"
     :num-previous-years="1"
-    :render-as-level="renderAsLevel"
     :taxonomy-manager="taxonomyManager"
   >
     <template #output-current-year="{ taxonomyItem }">

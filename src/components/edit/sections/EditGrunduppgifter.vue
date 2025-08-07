@@ -34,6 +34,7 @@ defineModel<Arsredovisning>("arsredovisning", {
         id="organisationsnummer"
         v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
         class="form-control"
+        maxlength="11"
         type="text"
         @input="
           arsredovisning.foretagsinformation.organisationsnummer =
