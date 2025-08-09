@@ -67,4 +67,11 @@ export function isPercentageTaxonomyItem(taxonomyItem: TaxonomyItem): boolean {
   return PERCENTAGE_TAXONOMY_ITEMS.includes(taxonomyItem.xmlName);
 }
 
-const PERCENTAGE_TAXONOMY_ITEMS = ["se-gen-base:Soliditet"];
+const PERCENTAGE_TAXONOMY_ITEMS = [
+  "se-gen-base:Soliditet",
+  "se-gen-base:Rorelsemarginal",
+  "se-gen-base:AvkastningTotaltKapital",
+  "se-gen-base:AvkastningSysselsattKapital",
+  "se-gen-base:AvkastningEgetKapital",
+  "se-gen-base:Kassalikviditet",
+];
