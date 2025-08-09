@@ -36,10 +36,9 @@
 
     @media screen {
       /* Visa linje i Gredor-GUI:t men inte i utskrifter */
-      background-image: linear-gradient(to bottom, grey 1px, transparent 1px);
-      margin: 0 -3rem;
+      border-bottom: 1px solid #a0a0a0;
+      margin: 0 -3.25rem;
       background-size: 210mm 297mm;
-      padding-top: 1px; /* För att linjen ska synas */
     }
   }
 
