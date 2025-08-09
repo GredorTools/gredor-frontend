@@ -1,4 +1,5 @@
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
 
 export type UnitRef =
   | "redovisningsvaluta"
@@ -43,18 +44,51 @@ export function getUnitRef(taxonomyItem: TaxonomyItem): UnitRef {
 }
 
 /**
- * Returnerar skalan för ix:nonFraction-värden för ett taxonomiobjekt.
+ * Returnerar scale-värdet för ix:nonFraction-element.
  *
- * @param taxonomyItem - Taxonomiobjektet vars skala ska fastställas.
- * @param defaultScale - Standardskalan som används om det inte finns en
- * specifik skala för det angivna taxonomiobjektet.
- * @returns Skalans värde som en sträng.
+ * @param taxonomyItem - Taxonomiobjektet vars scale-värde ska fastställas.
+ * @param displayFormat - Vilket format taxonomiobjektet ska visas i.
  */
 export function getNonFractionScale(
   taxonomyItem: TaxonomyItem,
-  defaultScale: string = "0",
+  displayFormat: Format,
 ): string {
-  return isPercentageTaxonomyItem(taxonomyItem) ? "-2" : defaultScale;
+  if (isPercentageTaxonomyItem(taxonomyItem)) {
+    return "-2";
+  } else {
+    switch (displayFormat) {
+      case Format.NORMAL:
+        return "0";
+      case Format.TUSENTAL:
+        return "3";
+      default:
+        throw new Error("Unknown format");
+    }
+  }
+}
+
+/**
+ * Returnerar decimals-värdet för ix:nonFraction-element.
+ *
+ * @param taxonomyItem - Taxonomiobjektet vars decimals-värde ska fastställas.
+ * @param displayFormat - Vilket format taxonomiobjektet ska visas i.
+ */
+export function getNonFractionDecimals(
+  taxonomyItem: TaxonomyItem,
+  displayFormat: Format,
+): string {
+  if (isPercentageTaxonomyItem(taxonomyItem)) {
+    return "INF";
+  } else {
+    switch (displayFormat) {
+      case Format.NORMAL:
+        return "INF";
+      case Format.TUSENTAL:
+        return "-3";
+      default:
+        throw new Error("Unknown format");
+    }
+  }
 }
 
 /**

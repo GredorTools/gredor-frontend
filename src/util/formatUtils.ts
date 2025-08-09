@@ -1,20 +1,40 @@
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
+import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 
 /**
  * Formaterar en numerisk sträng genom att lägga till mellanslag som
  * tusentalsseparatorer.
  *
  * @param numberAsString - Strängrepresentation av ett tal som ska formateras.
- * @param options - Huruvida eventuella tecken (plus/minus) ska tas bort
+ * @param taxonomyItem - Taxonomiobjektet vars värde representeras i talet.
+ * @param displayFormat - Vilket format talet ska visas i.
+ * @param options - Huruvida eventuella tecken (plus/minus) ska tas bort.
  * @returns Den formaterade numeriska strängen med mellanslag som
  * tusentalsseparator.
  */
 export function formatNumber(
   numberAsString: string,
+  taxonomyItem: TaxonomyItem,
+  displayFormat: Format,
   options?: {
     removeSign: boolean;
   },
 ): string {
+  if (!isPercentageTaxonomyItem(taxonomyItem)) {
+    switch (displayFormat) {
+      case Format.NORMAL:
+        break;
+      case Format.TUSENTAL:
+        numberAsString = Math.round(
+          parseInt(numberAsString.trim(), 10) / 1000,
+        ).toString();
+        break;
+      default:
+        throw new Error("Unknown format");
+    }
+  }
+
   let result = numberAsString
     .trim()
     .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");

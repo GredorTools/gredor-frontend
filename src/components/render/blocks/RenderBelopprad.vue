@@ -21,6 +21,7 @@ import RenderBeloppradTuple from "@/components/render/blocks/belopprad/RenderBel
 import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import RenderBeloppradEnum from "@/components/render/blocks/belopprad/RenderBeloppradEnum.vue";
 import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -35,6 +36,9 @@ const props = defineProps<{
   /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
    * även om den egentligen inte är en belopprad av den nivån. */
   displayAsLevel?: number;
+
+  /** Vilket format beloppraden ska visas i. */
+  displayFormat?: Format;
 
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan
    * jämföra mellan år. */
@@ -92,6 +96,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :display-format="displayFormat || Format.NORMAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
@@ -104,6 +109,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :display-format="displayFormat || Format.NORMAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
@@ -115,6 +121,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :display-format="displayFormat || Format.NORMAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />

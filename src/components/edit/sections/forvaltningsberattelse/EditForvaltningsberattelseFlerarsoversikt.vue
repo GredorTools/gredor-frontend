@@ -12,6 +12,7 @@ import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
@@ -79,12 +80,58 @@ const belopprader = prepopulateSection();
         :key="belopprad.taxonomyItemName"
         v-model:belopprad="belopprader[index]"
         v-model:belopprader="belopprader"
-        :comparable-num-previous-years="Math.min(maxNumPreviousYears, 3)"
+        :comparable-num-previous-years="
+          Math.min(
+            arsredovisning.verksamhetsarTidigare.length,
+            maxNumPreviousYears,
+          )
+        "
         :string-minimum-level="1"
         :taxonomy-manager="taxonomyManager"
       />
     </tbody>
   </table>
+
+  <hr />
+
+  <div class="format-radios">
+    <div class="form-check">
+      <input
+        id="flerarsoversiktFormatRadioNormal"
+        v-model="arsredovisning.installningar.flerarsoversiktFormat"
+        :value="Format.NORMAL"
+        class="form-check-input"
+        name="flerarsoversiktFormatRadio"
+        type="radio"
+      />
+      <label class="form-check-label" for="flerarsoversiktFormatRadioNormal">
+        Visa värden som de har matats in
+      </label>
+    </div>
+    <div class="form-check">
+      <input
+        id="flerarsoversiktFormatRadioTusental"
+        v-model="arsredovisning.installningar.flerarsoversiktFormat"
+        :value="Format.TUSENTAL"
+        class="form-check-input"
+        name="flerarsoversiktFormatRadio"
+        type="radio"
+      />
+      <label class="form-check-label" for="flerarsoversiktFormatRadioTusental">
+        Visa värden som tusental
+      </label>
+    </div>
+  </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
+.format-radios {
+  margin: $spacing-lg 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+</style>

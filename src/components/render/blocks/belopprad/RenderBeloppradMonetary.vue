@@ -25,6 +25,7 @@ defineProps<
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="displayAsTotalItem"
+    :display-format="displayFormat"
     :num-previous-years="1"
     :show-balance-sign="showBalanceSign"
     :taxonomy-manager="taxonomyManager"

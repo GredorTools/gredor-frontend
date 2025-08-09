@@ -10,11 +10,13 @@ import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import {
+  getNonFractionDecimals,
   getNonFractionScale,
   getUnitRef,
   isPercentageTaxonomyItem,
 } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
 
 export interface RenderBeloppradComparablePropsBase<
   T extends BaseBeloppradComparable,
@@ -31,6 +33,9 @@ export interface RenderBeloppradComparablePropsBase<
   /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
    * även om den egentligen inte är en belopprad av den nivån. */
   displayAsLevel?: number;
+
+  /** Vilket format beloppraden ska visas i. */
+  displayFormat: Format;
 
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
@@ -92,6 +97,12 @@ function shouldShowSign(belopp: string) {
     <td class="rubrik">
       {{ taxonomyItem.additionalData.displayLabel }}
       <span v-if="isPercentageTaxonomyItem(taxonomyItem)">[%]</span>
+      <template v-else-if="displayFormat === Format.TUSENTAL">
+        <span v-if="isBeloppradMonetary(belopprad)" class="unit-indicator">
+          [tkr]
+        </span>
+        <span v-else class="unit-indicator">[tusental]</span>
+      </template>
     </td>
     <td v-if="allowNot" class="not-container">
       {{ belopprad.not }}
@@ -105,8 +116,9 @@ function shouldShowSign(belopp: string) {
           <!-- @delete-whitespace -->
           <ix:nonFraction
             :contextRef="contextRefPrefix + '_nuvarande'"
+            :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
             :name="taxonomyItem.xmlName"
-            :scale="getNonFractionScale(taxonomyItem)"
+            :scale="getNonFractionScale(taxonomyItem, displayFormat)"
             :sign="
               isBeloppradMonetary(belopprad) &&
               belopprad.beloppNuvarandeAr.startsWith('-')
@@ -114,14 +126,18 @@ function shouldShowSign(belopp: string) {
                 : undefined
             "
             :unitRef="getUnitRef(taxonomyItem)"
-            decimals="INF"
             format="ixt:numspacecomma"
             v-bind="additionalIxbrlAttrs"
           >
             {{
-              formatNumber(belopprad.beloppNuvarandeAr, {
-                removeSign: true,
-              })
+              formatNumber(
+                belopprad.beloppNuvarandeAr,
+                taxonomyItem,
+                displayFormat,
+                {
+                  removeSign: true,
+                },
+              )
             }}
           </ix:nonFraction>
         </slot>
@@ -141,8 +157,9 @@ function shouldShowSign(belopp: string) {
           <!-- @delete-whitespace -->
           <ix:nonFraction
             :contextRef="contextRefPrefix + '_tidigare' + i"
+            :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
             :name="taxonomyItem.xmlName"
-            :scale="getNonFractionScale(taxonomyItem)"
+            :scale="getNonFractionScale(taxonomyItem, displayFormat)"
             :sign="
               isBeloppradMonetary(belopprad) &&
               belopprad.beloppTidigareAr[i - 1]?.startsWith('-')
@@ -150,14 +167,18 @@ function shouldShowSign(belopp: string) {
                 : undefined
             "
             :unitRef="getUnitRef(taxonomyItem)"
-            decimals="INF"
             format="ixt:numspacecomma"
             v-bind="additionalIxbrlAttrs"
           >
             {{
-              formatNumber(belopprad.beloppTidigareAr[i - 1], {
-                removeSign: true,
-              })
+              formatNumber(
+                belopprad.beloppTidigareAr[i - 1],
+                taxonomyItem,
+                displayFormat,
+                {
+                  removeSign: true,
+                },
+              )
             }}
           </ix:nonFraction>
         </slot>

@@ -1,9 +1,11 @@
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
 
 export interface Arsredovisning {
   metadata: Metadata;
   foretagsinformation: Foretagsinformation;
   redovisningsinformation: Redovisningsinformation;
+  installningar: Installningar;
   faststallelseintyg: Faststallelseintyg;
   verksamhetsarNuvarande: Verksamhetsar;
   verksamhetsarTidigare: Verksamhetsar[];
@@ -28,6 +30,10 @@ export interface Redovisningsinformation {
   redovisningsvaluta: Redovisningsvaluta;
   underskrifter: Underskrift[];
   underskriftOrt: string;
+}
+
+export interface Installningar {
+  flerarsoversiktFormat: Format;
 }
 
 export interface Forfattare {

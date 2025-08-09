@@ -14,8 +14,13 @@ import {
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
-import { getNonFractionScale, getUnitRef } from "@/util/renderUtils.ts";
+import {
+  getNonFractionDecimals,
+  getNonFractionScale,
+  getUnitRef,
+} from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import { Format } from "@/model/arsredovisning/Format.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
@@ -95,8 +100,11 @@ function getContextRef(belopprad: Belopprad) {
             <!-- @delete-whitespace -->
             <ix:nonFraction
               :contextRef="getContextRef(cell.belopprad)"
+              :decimals="
+                getNonFractionDecimals(cell.taxonomyItem, Format.NORMAL)
+              "
               :name="cell.taxonomyItem.xmlName"
-              :scale="getNonFractionScale(cell.taxonomyItem)"
+              :scale="getNonFractionScale(cell.taxonomyItem, Format.NORMAL)"
               :sign="
                 isBeloppradMonetary(cell.belopprad) &&
                 cell.belopprad.beloppNuvarandeAr.startsWith('-')
@@ -104,13 +112,17 @@ function getContextRef(belopprad: Belopprad) {
                   : undefined
               "
               :unitRef="getUnitRef(cell.taxonomyItem)"
-              decimals="INF"
               format="ixt:numspacecomma"
             >
               {{
-                formatNumber(cell.belopprad.beloppNuvarandeAr, {
-                  removeSign: true,
-                })
+                formatNumber(
+                  cell.belopprad.beloppNuvarandeAr,
+                  cell.taxonomyItem,
+                  Format.NORMAL,
+                  {
+                    removeSign: true,
+                  },
+                )
               }}
             </ix:nonFraction>
           </template>
