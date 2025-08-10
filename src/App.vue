@@ -9,17 +9,29 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
-import {
-  type OnboardingTourStep,
-  VueOnboardingTour,
-} from "vue-onboarding-tour";
+import { type OnboardingTourStep, VueOnboardingTour } from "vue-onboarding-tour";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { Tooltip } from "bootstrap";
 import { useGredorStorage } from "@/util/storageUtils.ts";
-
-const arsredovisning = ref(exampleArsredovisning);
+import { watchDeep } from "@vueuse/core";
 
 const environmentName = getConfigValue("VITE_ENV_NAME");
+
+const autosaveLocalStorageKey = "autosave_arsredovisning";
+
+const arsredovisning = ref(
+  localStorage.getItem(autosaveLocalStorageKey)
+    ? JSON.parse(<string>localStorage.getItem(autosaveLocalStorageKey))
+    : exampleArsredovisning,
+);
+
+// Autospara datat som redigeras
+watchDeep(arsredovisning, (newArsredovisning) => {
+  localStorage.setItem(
+    autosaveLocalStorageKey,
+    JSON.stringify(newArsredovisning),
+  );
+});
 
 // Tooltip för rundtur - visas automatiskt när sidan laddas första gången
 const tourBtn = useTemplateRef("tour-btn");
