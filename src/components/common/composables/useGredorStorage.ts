@@ -1,7 +1,7 @@
 import { ref, type Ref } from "vue";
 import { useStorage, watchDeep } from "@vueuse/core";
 
-type Store = "AppTourTooltipHasBeenDisplayed" | "AutosaveArsredovisning";
+type Store = "AppTourTooltipHasBeenDisplayed" | "AppAutosaveArsredovisning";
 
 function useHighPerformanceStorage<T>(store: Store, defaultValue: T): Ref<T> {
   // Detta tillvägagångssätt verkar ge bättre prestanda med stora objekt

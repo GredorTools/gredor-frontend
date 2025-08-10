@@ -18,7 +18,7 @@ import { tourSteps } from "@/tourSteps.ts";
 const environmentName = getConfigValue("VITE_ENV_NAME");
 
 const arsredovisning = useGredorStorage(
-  "AutosaveArsredovisning",
+  "AppAutosaveArsredovisning",
   exampleArsredovisning,
   { highPerformance: true },
 );
