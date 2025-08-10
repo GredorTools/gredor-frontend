@@ -1,7 +1,7 @@
 import { useStorage } from "@vueuse/core";
 import type { Ref } from "vue";
 
-type Store = "AppTourTooltipHasBeenDisplayed";
+type Store = "AppTourTooltipHasBeenDisplayed" | "AutosaveArsredovisning";
 
 /**
  * Hämtar ett fält från LocalStorage, som en Vue-ref.

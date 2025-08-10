@@ -15,26 +15,14 @@ import {
 } from "vue-onboarding-tour";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { Tooltip } from "bootstrap";
-import { useGredorStorage } from "@/util/storageUtils.ts";
-import { watchDeep } from "@vueuse/core";
+import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
 
 const environmentName = getConfigValue("VITE_ENV_NAME");
 
-const autosaveLocalStorageKey = "autosave_arsredovisning";
-
-const arsredovisning = ref(
-  localStorage.getItem(autosaveLocalStorageKey)
-    ? JSON.parse(<string>localStorage.getItem(autosaveLocalStorageKey))
-    : exampleArsredovisning,
+const arsredovisning = useGredorStorage(
+  "AutosaveArsredovisning",
+  exampleArsredovisning,
 );
-
-// Autospara datat som redigeras
-watchDeep(arsredovisning, (newArsredovisning) => {
-  localStorage.setItem(
-    autosaveLocalStorageKey,
-    JSON.stringify(newArsredovisning),
-  );
-});
 
 // Tooltip för rundtur - visas automatiskt när sidan laddas första gången
 const tourBtn = useTemplateRef("tour-btn");
