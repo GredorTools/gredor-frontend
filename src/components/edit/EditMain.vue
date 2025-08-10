@@ -92,11 +92,27 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 <template>
   <div class="d-flex justify-content-between">
     <div class="d-flex gap-2">
-      <button class="btn btn-primary" @click="showNewArsredovisningModal">
+      <button
+        id="newArsredovisningBtn"
+        class="btn btn-primary"
+        @click="showNewArsredovisningModal"
+      >
         Ny årsredovisning…
       </button>
-      <button class="btn btn-primary" @click="importFile">Öppna…</button>
-      <button class="btn btn-primary" @click="exportFile">Spara som…</button>
+      <button
+        id="openArsredovisningBtn"
+        class="btn btn-primary"
+        @click="importFile"
+      >
+        Öppna…
+      </button>
+      <button
+        id="saveArsredovisningBtn"
+        class="btn btn-primary"
+        @click="exportFile"
+      >
+        Spara som…
+      </button>
     </div>
     <button class="btn btn-primary" @click="importSIE">
       Importera SIE-fil…

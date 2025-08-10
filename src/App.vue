@@ -9,10 +9,7 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
-import {
-  type OnboardingTourStep,
-  VueOnboardingTour,
-} from "vue-onboarding-tour";
+import { type OnboardingTourStep, VueOnboardingTour } from "vue-onboarding-tour";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { Tooltip } from "bootstrap";
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
@@ -79,6 +76,36 @@ const tourSteps: OnboardingTourStep[] = [
       "Och på höger sida av skärmen har du en förhandsgranskning som visar" +
       " hur årsredovisningen kommer att se ut. Den uppdateras live när du" +
       " redigerar årsredovisningen.",
+  },
+  {
+    target: "#newArsredovisningBtn",
+    title: "Börja på din årsredovisning",
+    description:
+      "<p>" +
+      "Första gången du öppnar Gredor visas en exempel-årsredovisning. När du" +
+      " är redo att börja på din egna årsredovisning bör du klicka på knappen" +
+      ' "Ny årsredovisning" för att göra det.' +
+      "</p>" +
+      "<p>" +
+      "Gredor kommer då automatiskt hämta vissa uppgifter från Bolagsverket," +
+      " och du kommer även att ha möjlighet att importera en SIE-fil från ditt" +
+      " bokföringsprogram om du vill." +
+      "</p>",
+  },
+  {
+    target: "#saveArsredovisningBtn",
+    title: "Öppna och spara",
+    description:
+      "<p>" +
+      "I Gredor sparas årsredovisningen automatiskt till din webbläsare, men" +
+      " du bör även spara den till din enhet manuellt med jämna mellanrum" +
+      " ifall din webbläsare skulle rensa datat." +
+      "</p>" +
+      "<p>" +
+      "Du kan även använda" +
+      ' knapparna "Öppna" och "Spara som" till att dela årsredovisningar med' +
+      " andra personer." +
+      "</p>",
   },
   {
     target: "#tools",
