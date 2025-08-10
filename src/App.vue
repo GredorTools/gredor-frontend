@@ -22,6 +22,7 @@ const environmentName = getConfigValue("VITE_ENV_NAME");
 const arsredovisning = useGredorStorage(
   "AutosaveArsredovisning",
   exampleArsredovisning,
+  { highPerformance: true },
 );
 
 // Tooltip för rundtur - visas automatiskt när sidan laddas första gången
