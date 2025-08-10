@@ -21,7 +21,8 @@ import RenderBeloppradTuple from "@/components/render/blocks/belopprad/RenderBel
 import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import RenderBeloppradEnum from "@/components/render/blocks/belopprad/RenderBeloppradEnum.vue";
 import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -29,6 +30,9 @@ const props = defineProps<{
 
   /** Beloppraden som ska renderas. */
   belopprad: Belopprad;
+
+  /** Årsredovisningens redovisningsvaluta. */
+  redovisningsvaluta: Redovisningsvaluta;
 
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs?: Record<string, string>;
@@ -38,7 +42,7 @@ const props = defineProps<{
   displayAsLevel?: number;
 
   /** Vilket format beloppraden ska visas i. */
-  displayFormat?: Format;
+  displayFormat?: BeloppFormat;
 
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan
    * jämföra mellan år. */
@@ -96,8 +100,9 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
-    :display-format="displayFormat || Format.NORMAL"
+    :display-format="displayFormat || BeloppFormat.NORMAL"
     :num-previous-years="comparableNumPreviousYears || 0"
+    :redovisningsvaluta="redovisningsvaluta"
     :show-balance-sign="monetaryShowBalanceSign || false"
     :taxonomy-manager="taxonomyManager"
   />
@@ -109,7 +114,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
-    :display-format="displayFormat || Format.NORMAL"
+    :display-format="displayFormat || BeloppFormat.NORMAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
@@ -121,13 +126,14 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
-    :display-format="displayFormat || Format.NORMAL"
+    :display-format="displayFormat || BeloppFormat.NORMAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradTuple
     v-else-if="isBeloppradTuple(belopprad)"
     :belopprad="belopprad"
+    :redovisningsvaluta="redovisningsvaluta"
     :taxonomy-manager="taxonomyManager"
   />
 </template>

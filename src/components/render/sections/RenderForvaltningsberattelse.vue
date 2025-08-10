@@ -66,6 +66,9 @@ const mappedGroups = computed(() => {
             :key="belopprad.taxonomyItemName"
             :belopprad="belopprad"
             :comparable-num-previous-years="0"
+            :redovisningsvaluta="
+              arsredovisning.redovisningsinformation.redovisningsvaluta
+            "
             :taxonomy-manager="taxonomyManager"
             string-show-header
           />

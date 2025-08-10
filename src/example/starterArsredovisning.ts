@@ -2,7 +2,7 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { RedovisningsvalutaSEK } from "@/data/redovisningsvalutor.ts";
 import { ForfattareStyrelsen } from "@/data/forfattare.ts";
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 export const starterArsredovisning: Arsredovisning = {
   metadata: {
@@ -27,7 +27,7 @@ export const starterArsredovisning: Arsredovisning = {
     underskriftOrt: "",
   },
   installningar: {
-    flerarsoversiktFormat: Format.TUSENTAL,
+    flerarsoversiktBeloppFormat: BeloppFormat.TUSENTAL,
   },
   faststallelseintyg: {
     datumArsstamma: "",

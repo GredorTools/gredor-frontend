@@ -1,5 +1,6 @@
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export type UnitRef =
   | "redovisningsvaluta"
@@ -51,15 +52,15 @@ export function getUnitRef(taxonomyItem: TaxonomyItem): UnitRef {
  */
 export function getNonFractionScale(
   taxonomyItem: TaxonomyItem,
-  displayFormat: Format,
+  displayFormat: BeloppFormat,
 ): string {
   if (isPercentageTaxonomyItem(taxonomyItem)) {
     return "-2";
   } else {
     switch (displayFormat) {
-      case Format.NORMAL:
+      case BeloppFormat.NORMAL:
         return "0";
-      case Format.TUSENTAL:
+      case BeloppFormat.TUSENTAL:
         return "3";
       default:
         throw new Error("Unknown format");
@@ -75,15 +76,15 @@ export function getNonFractionScale(
  */
 export function getNonFractionDecimals(
   taxonomyItem: TaxonomyItem,
-  displayFormat: Format,
+  displayFormat: BeloppFormat,
 ): string {
   if (isPercentageTaxonomyItem(taxonomyItem)) {
     return "INF";
   } else {
     switch (displayFormat) {
-      case Format.NORMAL:
+      case BeloppFormat.NORMAL:
         return "INF";
-      case Format.TUSENTAL:
+      case BeloppFormat.TUSENTAL:
         return "-3";
       default:
         throw new Error("Unknown format");
@@ -99,6 +100,16 @@ export function getNonFractionDecimals(
  */
 export function isPercentageTaxonomyItem(taxonomyItem: TaxonomyItem): boolean {
   return PERCENTAGE_TAXONOMY_ITEMS.includes(taxonomyItem.xmlName);
+}
+
+/**
+ * Avgör om en belopprad representerar ett procenttal.
+ *
+ * @param belopprad - Beloppraden som ska kontrolleras.
+ * @returns Sant om beloppraden är ett procenttal, annars falskt.
+ */
+export function isPercentageBelopprad(belopprad: Belopprad): boolean {
+  return PERCENTAGE_TAXONOMY_ITEMS.includes(belopprad.taxonomyItemName);
 }
 
 const PERCENTAGE_TAXONOMY_ITEMS = [

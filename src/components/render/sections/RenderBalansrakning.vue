@@ -46,6 +46,9 @@ defineProps<{
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
+          :redovisningsvaluta="
+            arsredovisning.redovisningsinformation.redovisningsvaluta
+          "
           :taxonomy-manager="taxonomyManager"
           comparable-allow-not
           string-show-header

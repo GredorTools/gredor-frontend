@@ -72,7 +72,12 @@ defineProps<{
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 3)
           "
-          :display-format="arsredovisning.installningar.flerarsoversiktFormat"
+          :display-format="
+            arsredovisning.installningar.flerarsoversiktBeloppFormat
+          "
+          :redovisningsvaluta="
+            arsredovisning.redovisningsinformation.redovisningsvaluta
+          "
           :taxonomy-manager="taxonomyManager"
         />
       </tbody>

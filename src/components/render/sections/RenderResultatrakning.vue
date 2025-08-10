@@ -78,6 +78,9 @@ function getDisplayAsLevelForBelopprad(
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
           "
           :display-as-level="getDisplayAsLevelForBelopprad(belopprad)"
+          :redovisningsvaluta="
+            arsredovisning.redovisningsinformation.redovisningsvaluta
+          "
           :taxonomy-manager="taxonomyManager"
           comparable-allow-not
           monetary-show-balance-sign

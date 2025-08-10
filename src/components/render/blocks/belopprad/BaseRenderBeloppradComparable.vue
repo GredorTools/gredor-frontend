@@ -9,14 +9,9 @@ import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getNonFractionDecimals,
-  getNonFractionScale,
-  getUnitRef,
-  isPercentageTaxonomyItem,
-} from "@/util/renderUtils.ts";
+import { getNonFractionDecimals, getNonFractionScale, getUnitRef } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 export interface RenderBeloppradComparablePropsBase<
   T extends BaseBeloppradComparable,
@@ -35,7 +30,7 @@ export interface RenderBeloppradComparablePropsBase<
   displayAsLevel?: number;
 
   /** Vilket format beloppraden ska visas i. */
-  displayFormat: Format;
+  displayFormat: BeloppFormat;
 
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
@@ -51,6 +46,9 @@ const props = defineProps<
   RenderBeloppradComparablePropsBase<BaseBeloppradComparable> & {
     /** Antal tidigare räkenskapsår som ska visas. */
     numPreviousYears: number;
+
+    /** Enhet för värdet. */
+    unit?: string;
 
     /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
     showBalanceSign?: boolean;
@@ -96,13 +94,7 @@ function shouldShowSign(belopp: string) {
   >
     <td class="rubrik">
       {{ taxonomyItem.additionalData.displayLabel }}
-      <span v-if="isPercentageTaxonomyItem(taxonomyItem)">[%]</span>
-      <template v-else-if="displayFormat === Format.TUSENTAL">
-        <span v-if="isBeloppradMonetary(belopprad)" class="unit-indicator">
-          [tkr]
-        </span>
-        <span v-else class="unit-indicator">[tusental]</span>
-      </template>
+      <span v-if="unit">[{{ unit }}]</span>
     </td>
     <td v-if="allowNot" class="not-container">
       {{ belopprad.not }}

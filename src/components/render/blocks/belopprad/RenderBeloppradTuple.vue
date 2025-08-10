@@ -4,6 +4,7 @@ import { computed } from "vue";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -11,6 +12,9 @@ const props = defineProps<{
 
   /** Beloppraden med tuple-värdet som ska renderas. */
   belopprad: BeloppradTuple;
+
+  /** Årsredovisningens redovisningsvaluta. */
+  redovisningsvaluta: Redovisningsvaluta;
 }>();
 
 const tupleTaxonomyItem = computed(() =>
@@ -40,6 +44,7 @@ const tupleTaxonomyItem = computed(() =>
             }"
             :belopprad="instansBelopprad"
             :comparable-num-previous-years="0"
+            :redovisningsvaluta="redovisningsvaluta"
             :taxonomy-manager="taxonomyManager"
             string-raw
             string-show-header

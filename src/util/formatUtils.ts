@@ -1,5 +1,5 @@
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 
 /**
@@ -16,16 +16,16 @@ import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 export function formatNumber(
   numberAsString: string,
   taxonomyItem: TaxonomyItem,
-  displayFormat: Format,
+  displayFormat: BeloppFormat,
   options?: {
     removeSign: boolean;
   },
 ): string {
   if (!isPercentageTaxonomyItem(taxonomyItem)) {
     switch (displayFormat) {
-      case Format.NORMAL:
+      case BeloppFormat.NORMAL:
         break;
-      case Format.TUSENTAL:
+      case BeloppFormat.TUSENTAL:
         numberAsString = Math.round(
           parseInt(numberAsString.trim(), 10) / 1000,
         ).toString();

@@ -20,7 +20,7 @@ import {
   getUnitRef,
 } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
@@ -101,10 +101,12 @@ function getContextRef(belopprad: Belopprad) {
             <ix:nonFraction
               :contextRef="getContextRef(cell.belopprad)"
               :decimals="
-                getNonFractionDecimals(cell.taxonomyItem, Format.NORMAL)
+                getNonFractionDecimals(cell.taxonomyItem, BeloppFormat.NORMAL)
               "
               :name="cell.taxonomyItem.xmlName"
-              :scale="getNonFractionScale(cell.taxonomyItem, Format.NORMAL)"
+              :scale="
+                getNonFractionScale(cell.taxonomyItem, BeloppFormat.NORMAL)
+              "
               :sign="
                 isBeloppradMonetary(cell.belopprad) &&
                 cell.belopprad.beloppNuvarandeAr.startsWith('-')
@@ -118,7 +120,7 @@ function getContextRef(belopprad: Belopprad) {
                 formatNumber(
                   cell.belopprad.beloppNuvarandeAr,
                   cell.taxonomyItem,
-                  Format.NORMAL,
+                  BeloppFormat.NORMAL,
                   {
                     removeSign: true,
                   },

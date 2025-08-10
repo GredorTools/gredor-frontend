@@ -1,5 +1,5 @@
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 export interface Arsredovisning {
   metadata: Metadata;
@@ -33,7 +33,7 @@ export interface Redovisningsinformation {
 }
 
 export interface Installningar {
-  flerarsoversiktFormat: Format;
+  flerarsoversiktBeloppFormat: BeloppFormat;
 }
 
 export interface Forfattare {
@@ -42,8 +42,10 @@ export interface Forfattare {
 }
 
 export interface Redovisningsvaluta {
-  kod: string;
-  namn: string;
+  kod: string; // Exempel: "SEK"
+  namn: string; // Exempel: "kronor"
+  namnKort: string; // Exempel: "kr"
+  namnKortTusental: string; // Exempel: "tkr"
   xbrlId: string; // Exempel: "se-mem-base:ValutaSvenskaKronorMember"
 }
 

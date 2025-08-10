@@ -8,10 +8,7 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { computed } from "vue";
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
-import {
-  getTaxonomyItemForBelopprad,
-  isBeloppradInTaxonomyItemList,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { getTaxonomyItemForBelopprad, isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
@@ -93,6 +90,9 @@ const items = computed(() => {
           :belopprad="belopprad"
           :comparable-num-previous-years="
             Math.min(arsredovisning.verksamhetsarTidigare.length, 1)
+          "
+          :redovisningsvaluta="
+            arsredovisning.redovisningsinformation.redovisningsvaluta
           "
           :string-show-header="
             getTaxonomyItemForBelopprad(taxonomyManager, belopprad)

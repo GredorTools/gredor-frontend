@@ -12,7 +12,7 @@ import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
-import { Format } from "@/model/arsredovisning/Format.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
@@ -98,27 +98,29 @@ const belopprader = prepopulateSection();
     <div class="form-check">
       <input
         id="flerarsoversiktFormatRadioNormal"
-        v-model="arsredovisning.installningar.flerarsoversiktFormat"
-        :value="Format.NORMAL"
+        v-model="arsredovisning.installningar.flerarsoversiktBeloppFormat"
+        :value="BeloppFormat.NORMAL"
         class="form-check-input"
         name="flerarsoversiktFormatRadio"
         type="radio"
       />
       <label class="form-check-label" for="flerarsoversiktFormatRadioNormal">
-        Visa värden som de har matats in
+        Visa belopp i hela
+        {{ arsredovisning.redovisningsinformation.redovisningsvaluta.namn }}
       </label>
     </div>
     <div class="form-check">
       <input
         id="flerarsoversiktFormatRadioTusental"
-        v-model="arsredovisning.installningar.flerarsoversiktFormat"
-        :value="Format.TUSENTAL"
+        v-model="arsredovisning.installningar.flerarsoversiktBeloppFormat"
+        :value="BeloppFormat.TUSENTAL"
         class="form-check-input"
         name="flerarsoversiktFormatRadio"
         type="radio"
       />
       <label class="form-check-label" for="flerarsoversiktFormatRadioTusental">
-        Visa värden som tusental
+        Visa belopp i tusentals
+        {{ arsredovisning.redovisningsinformation.redovisningsvaluta.namn }}
       </label>
     </div>
   </div>

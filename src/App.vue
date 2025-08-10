@@ -9,7 +9,10 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
-import { type OnboardingTourStep, VueOnboardingTour } from "vue-onboarding-tour";
+import {
+  type OnboardingTourStep,
+  VueOnboardingTour,
+} from "vue-onboarding-tour";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { Tooltip } from "bootstrap";
 import { useGredorStorage } from "@/util/storageUtils.ts";
