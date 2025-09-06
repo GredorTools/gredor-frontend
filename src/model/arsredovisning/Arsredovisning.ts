@@ -29,7 +29,8 @@ export interface Redovisningsinformation {
   forfattare: Forfattare;
   redovisningsvaluta: Redovisningsvaluta;
   underskrifter: Underskrift[];
-  underskriftOrt: string;
+  faststallandeOrt: string;
+  faststallandeDatum: string; // Exempel: "2025-01-23"
 }
 
 export interface Installningar {

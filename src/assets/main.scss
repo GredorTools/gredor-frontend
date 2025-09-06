@@ -4,6 +4,13 @@
 @import "$fonts/freesans/FreeSans.css";
 
 // Överskuggning av Bootstrap-variabler
+$grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 1600px,
+        lg: 1840px,
+);
+
 $primary: $primary-color;
 $secondary: $secondary-color;
 $success: $success-color;

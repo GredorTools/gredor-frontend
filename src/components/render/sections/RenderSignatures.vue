@@ -21,13 +21,13 @@ defineProps<{
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningOrt"
-        >{{ arsredovisning.redovisningsinformation.underskriftOrt }}
+        >{{ arsredovisning.redovisningsinformation.faststallandeOrt }}
       </ix:nonNumeric>
       {{ " " }}
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningDatum"
-        >{{ new Date().toISOString().split("T")[0] }}
+        >{{ arsredovisning.redovisningsinformation.faststallandeDatum }}
       </ix:nonNumeric>
     </p>
     <ix:tuple

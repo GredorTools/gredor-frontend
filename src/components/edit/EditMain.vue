@@ -6,11 +6,7 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditResultatrakning from "@/components/edit/sections/EditResultatrakning.vue";
-import {
-  parseGredorFile,
-  requestOpenFile,
-  requestSaveFile,
-} from "@/util/fileUtils.ts";
+import { parseGredorFile, requestOpenFile, requestSaveFile } from "@/util/fileUtils.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/sections/EditBalansrakning.vue";
 import { nextTick, type Ref, ref } from "vue";
@@ -77,14 +73,14 @@ type Mode =
   | "resultatrakning"
   | "balansrakning"
   | "noter"
-  | "signaturer";
+  | "faststallande";
 const availableModes: { [mode in Mode]: string } = {
   grunduppgifter: "Grunduppgifter",
   forvaltningsberattelse: "Förvaltningsberättelse",
   resultatrakning: "Resultaträkning",
   balansrakning: "Balansräkning",
   noter: "Noter",
-  signaturer: "Signaturer",
+  faststallande: "Fastställande",
 };
 const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
@@ -152,7 +148,7 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     <Suspense v-if="currentMode === 'noter'">
       <EditNoter v-model:arsredovisning="arsredovisning" />
     </Suspense>
-    <Suspense v-if="currentMode === 'signaturer'">
+    <Suspense v-if="currentMode === 'faststallande'">
       <EditSignatures v-model:arsredovisning="arsredovisning" />
     </Suspense>
   </div>
