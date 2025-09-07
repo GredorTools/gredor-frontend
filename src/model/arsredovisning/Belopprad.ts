@@ -3,19 +3,25 @@ import { type Reactive, reactive } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
   hasBeloppradMonetaryValue,
-  isBeloppradMonetary
+  isBeloppradMonetary,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import {
   hasBeloppradComparableValue,
-  isBeloppradComparable
+  isBeloppradComparable,
 } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
-import { hasBeloppradStringValue, isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
-import { hasBeloppradTupleValue, isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import {
+  hasBeloppradStringValue,
+  isBeloppradString,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+import {
+  hasBeloppradTupleValue,
+  isBeloppradTuple,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import {
   isTaxonomyItemTuple,
   type LabelType,
   type TaxonomyItem,
-  type TaxonomyItemType
+  type TaxonomyItemType,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
