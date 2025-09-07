@@ -27,7 +27,7 @@ defineProps<{
         v-if="
           new Date(arsredovisning.verksamhetsarNuvarande.slutdatum) <
             new Date('2021-12-31') ||
-          new Date(arsredovisning.verksamhetsarNuvarande.startdatum) >
+          new Date(arsredovisning.verksamhetsarNuvarande.startdatum) >=
             new Date('2024-07-01')
         "
       >
