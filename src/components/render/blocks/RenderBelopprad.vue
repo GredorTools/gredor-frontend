@@ -23,6 +23,7 @@ import RenderBeloppradEnum from "@/components/render/blocks/belopprad/RenderBelo
 import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
+import { getContextRefPrefix } from "@/util/renderUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -66,19 +67,11 @@ const props = defineProps<{
   stringRaw?: boolean;
 }>();
 
-const contextRefPrefix = computed(() => {
-  switch (
-    getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad)
-      .properties.periodType
-  ) {
-    case "duration":
-      return "period";
-    case "instant":
-      return "balans";
-    default:
-      throw new Error("Unknown periodType");
-  }
-});
+const contextRefPrefix = computed(() =>
+  getContextRefPrefix(
+    getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad),
+  ),
+);
 </script>
 
 <template>

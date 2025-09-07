@@ -3,6 +3,7 @@ import {
   createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
+  getTaxonomyItemForBelopprad,
   hasBeloppradValue,
   isBeloppradCorrespondsToTaxonomyItem,
   isBeloppradInTaxonomyItemList
@@ -112,9 +113,16 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
           belopprad,
           "all",
         );
-      } else {
-        // Om beloppraden inte innehåller värden tar vi bort den från den
-        // faktiska årsredovisningen
+      } else if (
+        !section.some((item) =>
+          isBeloppradCorrespondsToTaxonomyItem(
+            belopprad,
+            getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
+          ),
+        )
+      ) {
+        // Om beloppraden inte innehåller värden, och den inte har några barn,
+        // tar vi bort den från den faktiska årsredovisningen
         deleteBelopprad(taxonomyManager, newBelopprad, section);
       }
     });

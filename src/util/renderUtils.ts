@@ -1,6 +1,6 @@
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
-import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { type Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export type UnitRef =
   | "redovisningsvaluta"
@@ -89,6 +89,27 @@ export function getNonFractionDecimals(
       default:
         throw new Error("Unknown format");
     }
+  }
+}
+
+/**
+ * Hämtar prefix för contextRef baserat på periodtypen för det angivna
+ * taxonomiobjektet.
+ *
+ * @param taxonomyItem - Taxonomiobjektet vars prefix för contextRef ska
+ * bestämmas.
+ * @returns Prefix för contextRef som motsvarar taxonomiobjektets periodtyp.
+ */
+export function getContextRefPrefix(
+  taxonomyItem: TaxonomyItem,
+): "period" | "balans" {
+  switch (taxonomyItem.properties.periodType) {
+    case "duration":
+      return "period";
+    case "instant":
+      return "balans";
+    default:
+      throw new Error("Unknown periodType");
   }
 }
 

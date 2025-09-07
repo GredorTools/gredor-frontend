@@ -230,9 +230,6 @@ export function deleteBelopprad(
       // Ta bort abstrakta föräldrar rekursivt om de inte har några kvarvarande barn
       deleteBeloppradAbstractParents(taxonomyManager, belopprad, from);
 
-      // Ta bort barnen rekursivt
-      deleteBeloppradChildren(taxonomyManager, belopprad, from);
-
       // Ta bort summarader som inte har några värden som bygger upp summan
       deleteBeloppradEmptySums(taxonomyManager, belopprad, from);
 
@@ -273,31 +270,6 @@ function deleteBeloppradAbstractParents(
         deleteBeloppradAbstractParents(taxonomyManager, beloppradParent, from);
       }
     }
-  }
-}
-
-function deleteBeloppradChildren(
-  taxonomyManager: TaxonomyManager,
-  belopprad: Belopprad,
-  from: Belopprad[],
-): void {
-  // Hitta barn till den aktuella beloppraden
-  const children = from.filter((item) =>
-    isBeloppradCorrespondsToTaxonomyItem(
-      belopprad,
-      getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
-    ),
-  );
-
-  for (const child of children) {
-    // Ta bort barnet från listan
-    const index = from.indexOf(child);
-    if (index !== -1) {
-      from.splice(index, 1);
-    }
-
-    // Ta bort barnets barn rekursivt
-    deleteBeloppradChildren(taxonomyManager, child, from);
   }
 }
 

@@ -42,17 +42,21 @@ const taxonomyItem = computed(() =>
 const displayLevel = computed(
   () => props.displayAsLevel ?? taxonomyItem.value.level,
 );
+
+const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
 </script>
 
 <template>
   <tr
     v-if="
       (showHeader && taxonomyItem.properties.abstract === 'true') ||
+      (taxonomyItem.children.length > 0 && showHeader) ||
       hasBeloppradStringValue(belopprad)
     "
     :class="{
       abstract: taxonomyItem.properties.abstract === 'true',
       [`level-${displayLevel}`]: true,
+      'empty-value': isEmptyValue,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
@@ -66,9 +70,9 @@ const displayLevel = computed(
         :name="taxonomyItem.xmlName"
         v-bind="additionalIxbrlAttrs"
       >
-        <template v-if="raw">
+        <span v-if="raw">
           {{ belopprad.text }}
-        </template>
+        </span>
         <p
           v-for="(line, index) in belopprad.text
             .split(/\r?\n/)
@@ -95,7 +99,7 @@ const displayLevel = computed(
 }
 
 .level-2:not(.abstract) {
-  &:not(:last-of-type) td {
+  &:not(:last-of-type):not(.empty-value) td {
     padding-bottom: 1.25rem;
   }
 }
@@ -113,9 +117,14 @@ const displayLevel = computed(
   font-weight: 500;
 }
 
-tr:not(.abstract) .header {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+tr:not(.abstract) {
+  .header {
+    font-weight: 600;
+  }
+
+  &:not(.empty-value) .header {
+    margin-bottom: 0.5rem;
+  }
 }
 
 p {

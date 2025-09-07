@@ -29,6 +29,8 @@ const items = computed(() => {
 });
 
 function shouldHideTaxonomyItem(taxonomyItemName: string) {
+  // Dölj rubriker "förändringar av [anskaffningsvärden/avskrivningar]",
+  // de syns normalt inte i årsredovsiningar.
   return (
     taxonomyItemName.endsWith("ForandringAnskaffningsvardenAbstract") ||
     taxonomyItemName.endsWith("ForandringAvskrivningarAbstract")
@@ -122,5 +124,13 @@ h3 {
 
 table {
   margin-bottom: 1rem;
+
+  :deep(.level-2 .header) {
+    text-decoration: underline;
+  }
+
+  :deep(.level-3 .header) {
+    font-weight: 500;
+  }
 }
 </style>
