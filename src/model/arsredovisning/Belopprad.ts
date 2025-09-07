@@ -3,25 +3,19 @@ import { type Reactive, reactive } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
   hasBeloppradMonetaryValue,
-  isBeloppradMonetary,
+  isBeloppradMonetary
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import {
   hasBeloppradComparableValue,
-  isBeloppradComparable,
+  isBeloppradComparable
 } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
-import {
-  hasBeloppradStringValue,
-  isBeloppradString,
-} from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
-import {
-  hasBeloppradTupleValue,
-  isBeloppradTuple,
-} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import { hasBeloppradStringValue, isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+import { hasBeloppradTupleValue, isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import {
   isTaxonomyItemTuple,
   type LabelType,
   type TaxonomyItem,
-  type TaxonomyItemType,
+  type TaxonomyItemType
 } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface Belopprad<T extends TaxonomyItemType = TaxonomyItemType> {
@@ -49,7 +43,7 @@ export function createBelopprad<T extends TaxonomyItemType>(
     case "xbrli:decimalItemType":
     case "xbrli:pureItemType":
     case "xbrli:sharesItemType":
-    case "enum:enumerationItemType":
+    case "enum:enumerationItemType": {
       const defaultValue = taxonomyItem.additionalData.isCalculatedItem
         ? "0"
         : "";
@@ -58,6 +52,7 @@ export function createBelopprad<T extends TaxonomyItemType>(
         beloppNuvarandeAr: defaultValue,
         beloppTidigareAr: [defaultValue, defaultValue, defaultValue],
       } as Belopprad<T>;
+    }
 
     default:
       if (isTaxonomyItemTuple(taxonomyItem)) {
@@ -78,6 +73,7 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
   list: Belopprad[],
   taxonomyItem: TaxonomyItem<T>,
   belopprad: Reactive<Belopprad<T>> | null = null,
+  sectionPool: Reactive<Belopprad<T>>[] | null = null,
   excludedSumRows: string[] | "all" = [],
   sort: boolean = true,
 ): Belopprad<T> | undefined {
@@ -93,11 +89,20 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
 
   if (taxonomyItem.parent != null && taxonomyItem.parent.level > 0) {
     // Lägg till föräldrar rekursivt
+    let parentBelopprad: Belopprad | null = null;
+    if (sectionPool != null) {
+      parentBelopprad =
+        sectionPool.find((b) =>
+          isBeloppradCorrespondsToTaxonomyItem(b, taxonomyItem.parent),
+        ) || null;
+    }
+
     createBeloppradInList(
       taxonomyManager,
       list,
       taxonomyItem.parent,
-      null,
+      parentBelopprad,
+      sectionPool,
       excludedSumRows,
       false,
     );
@@ -119,6 +124,7 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
             list,
             possibleSumTaxonomyItem,
             null,
+            sectionPool,
             excludedSumRows,
             false,
           );
@@ -207,7 +213,13 @@ export function deleteBelopprad(
   taxonomyManager: TaxonomyManager,
   beloppradToDelete: Belopprad,
   from: Belopprad[],
+  arsredovisning: Arsredovisning | null = null,
+  maxNumPreviousYears: number | null = null,
 ) {
+  // arsredovisning och maxNumPreviousYears används endast från
+  // usePrepopulateSection för att ta reda på vilka föräldrar som har värden och
+  // därmed inte ska tas bort
+
   const taxonomyItemToDelete = getTaxonomyItemForBelopprad(
     taxonomyManager,
     beloppradToDelete,
@@ -228,7 +240,13 @@ export function deleteBelopprad(
       from.splice(i, 1);
 
       // Ta bort abstrakta föräldrar rekursivt om de inte har några kvarvarande barn
-      deleteBeloppradAbstractParents(taxonomyManager, belopprad, from);
+      deleteBeloppradAbstractParents(
+        taxonomyManager,
+        belopprad,
+        from,
+        arsredovisning,
+        maxNumPreviousYears,
+      );
 
       // Ta bort summarader som inte har några värden som bygger upp summan
       deleteBeloppradEmptySums(taxonomyManager, belopprad, from);
@@ -243,7 +261,13 @@ function deleteBeloppradAbstractParents(
   taxonomyManager: TaxonomyManager,
   belopprad: Belopprad,
   from: Belopprad[],
+  arsredovisning: Arsredovisning | null = null,
+  maxNumPreviousYears: number | null = null,
 ) {
+  // arsredovisning och maxNumPreviousYears används endast från
+  // usePrepopulateSection för att ta reda på vilka föräldrar som har värden och
+  // därmed inte ska tas bort
+
   const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, belopprad);
   if (taxonomyItem.parent) {
     // Hitta föräldern i listan baserat på förälderns ID
@@ -252,22 +276,40 @@ function deleteBeloppradAbstractParents(
     );
 
     if (beloppradParent) {
-      // Kontrollera om föräldern har några kvarvarande barn
-      const parentHasChildren = from.some((item) =>
-        isBeloppradCorrespondsToTaxonomyItem(
+      let shouldDeleteParent = false;
+      if (arsredovisning !== null && maxNumPreviousYears !== null) {
+        shouldDeleteParent = !hasBeloppradValue(
+          taxonomyManager,
           beloppradParent,
-          getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
-        ),
-      );
-      if (!parentHasChildren) {
-        // Om föräldern inte har några barn kvar, ta bort föräldern
+          arsredovisning,
+          from,
+          maxNumPreviousYears,
+        );
+      } else {
+        // Kontrollera om föräldern har några kvarvarande barn
+        shouldDeleteParent = !from.some((item) =>
+          isBeloppradCorrespondsToTaxonomyItem(
+            beloppradParent,
+            getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
+          ),
+        );
+      }
+
+      if (shouldDeleteParent) {
+        // Om föräldern inte har några värden eller barn kvar, ta bort föräldern
         const index = from.indexOf(beloppradParent);
         if (index !== -1) {
           from.splice(index, 1);
         }
 
         // Kontrollera nästa nivå av föräldrar rekursivt
-        deleteBeloppradAbstractParents(taxonomyManager, beloppradParent, from);
+        deleteBeloppradAbstractParents(
+          taxonomyManager,
+          beloppradParent,
+          from,
+          arsredovisning,
+          maxNumPreviousYears,
+        );
       }
     }
   }
@@ -313,6 +355,18 @@ export function hasBeloppradValue(
   section: Belopprad[],
   maxNumPreviousYears: number,
 ): boolean {
+  if (
+    section.some((item) =>
+      isBeloppradCorrespondsToTaxonomyItem(
+        belopprad,
+        getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
+      ),
+    )
+  ) {
+    // Beloppraden har barn
+    return true;
+  }
+
   if (isBeloppradMonetary(belopprad)) {
     return hasBeloppradMonetaryValue(
       taxonomyManager,

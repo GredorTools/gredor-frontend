@@ -3,12 +3,11 @@ import {
   createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
-  getTaxonomyItemForBelopprad,
   hasBeloppradValue,
   isBeloppradCorrespondsToTaxonomyItem,
   isBeloppradInTaxonomyItemList
 } from "@/model/arsredovisning/Belopprad.ts";
-import { computed, reactive, type Ref, ref, watch } from "vue";
+import { computed, type Reactive, reactive, type Ref, ref, watch } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning, BeloppradSectionName } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
@@ -67,6 +66,7 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
   } = args;
 
   const section: Belopprad[] = arsredovisning.value[sectionName];
+  const sectionPool: Reactive<Belopprad>[] = [];
 
   for (const taxonomyItem of availableTaxonomyItems.childrenFlat) {
     if (
@@ -89,6 +89,7 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
     // Om ingen belopprad finns, skapa en ny reaktiv belopprad
     if (!belopprad) {
       belopprad = reactive(createBelopprad(taxonomyItem));
+      sectionPool.push(belopprad);
     }
 
     // Skapa en watcher som triggas när man ändrar beloppraden, för att
@@ -104,26 +105,26 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
           maxNumPreviousYears,
         )
       ) {
-        // Om beloppraden innehåller värden, lägg till den i den faktiska
-        // årsredovisningen
+        // Om beloppraden innehåller värden eller barn, lägg till den i den
+        // faktiska årsredovisningen
         createBeloppradInList(
           taxonomyManager,
           section,
           taxonomyItem,
-          belopprad,
+          newBelopprad,
+          sectionPool,
           "all",
         );
-      } else if (
-        !section.some((item) =>
-          isBeloppradCorrespondsToTaxonomyItem(
-            belopprad,
-            getTaxonomyItemForBelopprad(taxonomyManager, item).parent,
-          ),
-        )
-      ) {
+      } else {
         // Om beloppraden inte innehåller värden, och den inte har några barn,
         // tar vi bort den från den faktiska årsredovisningen
-        deleteBelopprad(taxonomyManager, newBelopprad, section);
+        deleteBelopprad(
+          taxonomyManager,
+          newBelopprad,
+          section,
+          arsredovisning.value,
+          maxNumPreviousYears,
+        );
       }
     });
 

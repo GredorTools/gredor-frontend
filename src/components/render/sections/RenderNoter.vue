@@ -8,7 +8,10 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { computed } from "vue";
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { getTaxonomyItemForBelopprad, isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  getTaxonomyItemForBelopprad,
+  isBeloppradInTaxonomyItemList,
+} from "@/model/arsredovisning/Belopprad.ts";
 import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
