@@ -23,7 +23,7 @@ export function formatNumber(
 ): string {
   if (!isPercentageTaxonomyItem(taxonomyItem)) {
     switch (displayFormat) {
-      case BeloppFormat.NORMAL:
+      case BeloppFormat.HELTAL:
         break;
       case BeloppFormat.TUSENTAL:
         numberAsString = Math.round(

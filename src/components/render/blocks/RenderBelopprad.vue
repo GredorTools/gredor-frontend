@@ -100,7 +100,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
-    :display-format="displayFormat || BeloppFormat.NORMAL"
+    :display-format="displayFormat || BeloppFormat.HELTAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :redovisningsvaluta="redovisningsvaluta"
     :show-balance-sign="monetaryShowBalanceSign || false"
@@ -114,7 +114,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
-    :display-format="displayFormat || BeloppFormat.NORMAL"
+    :display-format="displayFormat || BeloppFormat.HELTAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
@@ -126,7 +126,7 @@ const contextRefPrefix = computed(() => {
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
     :display-as-total-item="comparableDisplayAsTotalItem || false"
-    :display-format="displayFormat || BeloppFormat.NORMAL"
+    :display-format="displayFormat || BeloppFormat.HELTAL"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />

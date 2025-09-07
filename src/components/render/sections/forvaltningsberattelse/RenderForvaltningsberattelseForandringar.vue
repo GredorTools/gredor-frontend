@@ -101,11 +101,11 @@ function getContextRef(belopprad: Belopprad) {
             <ix:nonFraction
               :contextRef="getContextRef(cell.belopprad)"
               :decimals="
-                getNonFractionDecimals(cell.taxonomyItem, BeloppFormat.NORMAL)
+                getNonFractionDecimals(cell.taxonomyItem, BeloppFormat.HELTAL)
               "
               :name="cell.taxonomyItem.xmlName"
               :scale="
-                getNonFractionScale(cell.taxonomyItem, BeloppFormat.NORMAL)
+                getNonFractionScale(cell.taxonomyItem, BeloppFormat.HELTAL)
               "
               :sign="
                 isBeloppradMonetary(cell.belopprad) &&
@@ -120,7 +120,7 @@ function getContextRef(belopprad: Belopprad) {
                 formatNumber(
                   cell.belopprad.beloppNuvarandeAr,
                   cell.taxonomyItem,
-                  BeloppFormat.NORMAL,
+                  BeloppFormat.HELTAL,
                   {
                     removeSign: true,
                   },

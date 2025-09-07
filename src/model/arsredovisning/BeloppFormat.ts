@@ -1,4 +1,4 @@
 export enum BeloppFormat {
-  NORMAL = "normal",
+  HELTAL = "heltal",
   TUSENTAL = "tusental",
 }

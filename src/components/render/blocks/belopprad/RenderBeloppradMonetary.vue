@@ -24,7 +24,7 @@ const props = defineProps<
 
 const unit = computed(() => {
   switch (props.displayFormat) {
-    case BeloppFormat.NORMAL:
+    case BeloppFormat.HELTAL:
       return undefined;
     case BeloppFormat.TUSENTAL:
       return props.redovisningsvaluta.namnKortTusental;

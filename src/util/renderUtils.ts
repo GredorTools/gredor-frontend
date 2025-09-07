@@ -58,7 +58,7 @@ export function getNonFractionScale(
     return "-2";
   } else {
     switch (displayFormat) {
-      case BeloppFormat.NORMAL:
+      case BeloppFormat.HELTAL:
         return "0";
       case BeloppFormat.TUSENTAL:
         return "3";
@@ -82,7 +82,7 @@ export function getNonFractionDecimals(
     return "INF";
   } else {
     switch (displayFormat) {
-      case BeloppFormat.NORMAL:
+      case BeloppFormat.HELTAL:
         return "INF";
       case BeloppFormat.TUSENTAL:
         return "-3";

@@ -99,7 +99,7 @@ const belopprader = prepopulateSection();
       <input
         id="flerarsoversiktFormatRadioNormal"
         v-model="arsredovisning.installningar.flerarsoversiktBeloppFormat"
-        :value="BeloppFormat.NORMAL"
+        :value="BeloppFormat.HELTAL"
         class="form-check-input"
         name="flerarsoversiktFormatRadio"
         type="radio"
