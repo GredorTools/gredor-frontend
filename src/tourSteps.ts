@@ -1,5 +1,11 @@
 import type { OnboardingTourStep } from "vue-onboarding-tour";
 
+function scrollToTopOfEditor() {
+  document
+    .getElementById("editor")
+    ?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+}
+
 export const tourSteps: OnboardingTourStep[] = [
   {
     title: "Välkommen till Gredor!",
@@ -24,6 +30,7 @@ export const tourSteps: OnboardingTourStep[] = [
   {
     target: "#newArsredovisningBtn",
     title: "Börja på din årsredovisning",
+    beforeScript: scrollToTopOfEditor,
     description:
       "<p>" +
       "Första gången du öppnar Gredor visas en exempel-årsredovisning. När du" +
@@ -39,6 +46,7 @@ export const tourSteps: OnboardingTourStep[] = [
   {
     target: "#saveArsredovisningBtn",
     title: "Öppna och spara",
+    beforeScript: scrollToTopOfEditor,
     description:
       "<p>" +
       "I Gredor sparas årsredovisningen automatiskt till din webbläsare, men" +
@@ -54,6 +62,13 @@ export const tourSteps: OnboardingTourStep[] = [
   {
     target: "#tools",
     title: "När du är klar…",
+    beforeScript() {
+      window.scrollTo({
+        left: 0,
+        top: window.innerHeight / 2,
+        behavior: "smooth",
+      });
+    },
     description:
       "När du är klar med din årsredovisning använder du verktygen" +
       " här för att färdigställa och lämna in den till Bolagsverket." +
