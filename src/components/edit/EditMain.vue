@@ -6,14 +6,18 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditResultatrakning from "@/components/edit/sections/EditResultatrakning.vue";
-import { parseGredorFile, requestOpenFile, requestSaveFile } from "@/util/fileUtils.ts";
+import {
+  parseGredorFile,
+  requestOpenFile,
+  requestSaveFile,
+} from "@/util/fileUtils.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/sections/EditBalansrakning.vue";
 import { nextTick, type Ref, ref } from "vue";
 import EditNoter from "@/components/edit/sections/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/sections/EditForvaltningsberattelse.vue";
 import EditGrunduppgifter from "@/components/edit/sections/EditGrunduppgifter.vue";
-import EditSignatures from "@/components/edit/sections/EditSignatures.vue";
+import EditFaststallande from "@/components/edit/sections/EditFaststallande.vue";
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
@@ -149,7 +153,7 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
       <EditNoter v-model:arsredovisning="arsredovisning" />
     </Suspense>
     <Suspense v-if="currentMode === 'faststallande'">
-      <EditSignatures v-model:arsredovisning="arsredovisning" />
+      <EditFaststallande v-model:arsredovisning="arsredovisning" />
     </Suspense>
   </div>
 

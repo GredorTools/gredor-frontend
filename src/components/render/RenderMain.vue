@@ -11,7 +11,7 @@ import RenderIXBRLHeader from "@/components/render/sections/RenderIXBRLHeader.vu
 import RenderForvaltningsberattelse from "@/components/render/sections/RenderForvaltningsberattelse.vue";
 import RenderNoter from "@/components/render/sections/RenderNoter.vue";
 import RenderCover from "@/components/render/sections/RenderCover.vue";
-import RenderSignatures from "@/components/render/sections/RenderSignatures.vue";
+import RenderFaststallande from "@/components/render/sections/RenderFaststallande.vue";
 import { useTemplateRef } from "vue";
 
 defineProps<{
@@ -57,7 +57,7 @@ defineExpose({
           <RenderBalansrakning :arsredovisning="arsredovisning" />
           <div class="page-break"></div>
           <RenderNoter :arsredovisning="arsredovisning" />
-          <RenderSignatures :arsredovisning="arsredovisning" />
+          <RenderFaststallande :arsredovisning="arsredovisning" />
         </div>
       </div>
     </Suspense>
