@@ -27,6 +27,13 @@ const items = computed(() => {
     };
   });
 });
+
+function shouldHideTaxonomyItem(taxonomyItemName: string) {
+  return (
+    taxonomyItemName.endsWith("ForandringAnskaffningsvardenAbstract") ||
+    taxonomyItemName.endsWith("ForandringAvskrivningarAbstract")
+  );
+}
 </script>
 
 <template>
@@ -79,11 +86,13 @@ const items = computed(() => {
       <tbody>
         <RenderBelopprad
           v-for="belopprad in items
-            .filter((i) =>
-              isBeloppradInTaxonomyItemList(
-                [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat],
-                i.belopprad,
-              ),
+            .filter(
+              (i) =>
+                !shouldHideTaxonomyItem(i.belopprad.taxonomyItemName) &&
+                isBeloppradInTaxonomyItemList(
+                  [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat],
+                  i.belopprad,
+                ),
             )
             .map((i) => i.belopprad)"
           :key="belopprad.taxonomyItemName"
