@@ -128,6 +128,10 @@ table.render-tuple-instance {
 
   width: auto !important;
 
+  th {
+    white-space: nowrap; // Förhindra radbrytningar i kolumnrubriker
+  }
+
   th,
   td {
     padding-right: 3rem !important;
