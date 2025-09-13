@@ -17,7 +17,8 @@ const props = defineProps<
     /** Årsredovisningens redovisningsvaluta. */
     redovisningsvaluta: Redovisningsvaluta;
 
-    /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
+    /** Huruvida balanstecken (plus/minus) får visas för beloppraden utifrån det
+     * motsvarande taxonomiobjektets balance-värde. */
     showBalanceSign: boolean;
   }
 >();

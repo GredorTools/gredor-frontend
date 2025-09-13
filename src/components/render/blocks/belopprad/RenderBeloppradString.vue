@@ -10,6 +10,7 @@ import {
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { getContextRef } from "@/util/renderUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -73,7 +74,7 @@ const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
       </div>
       <ix:nonNumeric
         v-if="belopprad.text"
-        :contextRef="contextRefPrefix + '_nuvarande'"
+        :contextRef="getContextRef(taxonomyItem, contextRefPrefix, 0)"
         :name="taxonomyItem.xmlName"
         v-bind="additionalIxbrlAttrs"
       >

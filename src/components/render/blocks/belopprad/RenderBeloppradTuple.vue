@@ -5,7 +5,12 @@ import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
-import { getContextRefPrefix } from "@/util/renderUtils.ts";
+import RenderBeloppradCellString from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellString.vue";
+import RenderBeloppradCellComparable from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellComparable.vue";
+import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import RenderBeloppradCellEnum from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellEnum.vue";
+import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -59,25 +64,55 @@ const tupleTaxonomyItem = computed(() =>
                 instansBelopprad, instansBeloppradIndex
               ) in instans.belopprader"
               :key="instansBelopprad.taxonomyItemName"
+              :class="{ numeric: isBeloppradComparable(instansBelopprad) }"
             >
-              <ix:nonNumeric
+              <RenderBeloppradCellString
                 v-if="
                   isBeloppradString(instansBelopprad) && instansBelopprad.text
                 "
-                :contextRef="
-                  getContextRefPrefix(
-                    getTaxonomyItemForBelopprad(
-                      taxonomyManager,
-                      instansBelopprad,
-                    ),
-                  ) + '_nuvarande'
+                :additional-ixbrl-attrs="{
+                  order: (instansBeloppradIndex + 1).toString(),
+                  tupleRef: instans.id,
+                }"
+                :belopprad="instansBelopprad"
+                :taxonomy-item="
+                  getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
                 "
-                :name="instansBelopprad.taxonomyItemName"
-                :order="(instansBeloppradIndex + 1).toString()"
-                :tupleRef="instans.id"
-              >
-                {{ instansBelopprad.text }}
-              </ix:nonNumeric>
+                :year-index="0"
+              />
+              <RenderBeloppradCellComparable
+                v-if="
+                  isBeloppradComparable(instansBelopprad) &&
+                  instansBelopprad.beloppNuvarandeAr
+                "
+                :additional-ixbrl-attrs="{
+                  order: (instansBeloppradIndex + 1).toString(),
+                  tupleRef: instans.id,
+                }"
+                :belopprad="instansBelopprad"
+                :display-format="BeloppFormat.HELTAL"
+                :show-balance-sign="false"
+                :taxonomy-item="
+                  getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
+                "
+                :year-index="0"
+              />
+              <RenderBeloppradCellEnum
+                v-if="
+                  isBeloppradEnum(instansBelopprad) &&
+                  instansBelopprad.beloppNuvarandeAr
+                "
+                :additional-ixbrl-attrs="{
+                  order: (instansBeloppradIndex + 1).toString(),
+                  tupleRef: instans.id,
+                }"
+                :belopprad="instansBelopprad"
+                :taxonomy-item="
+                  getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
+                "
+                :taxonomy-manager="taxonomyManager"
+                :year-index="0"
+              />
             </td>
           </tr>
         </tbody>
@@ -96,6 +131,10 @@ table.render-tuple-instance {
   th,
   td {
     padding-right: 3rem !important;
+
+    &.numeric {
+      text-align: right;
+    }
   }
 
   th:first-child,

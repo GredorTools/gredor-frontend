@@ -14,7 +14,8 @@ import {
   getNonFractionDecimals,
   getNonFractionScale,
   getSignAttribute,
-  getUnitRef
+  getUnitRef,
+  shouldShowSign,
 } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
@@ -73,23 +74,6 @@ const taxonomyItem = computed(() => {
 const displayLevel = computed(
   () => props.displayAsLevel ?? taxonomyItem.value.level,
 );
-
-// Hjälpfunktioner
-function shouldShowSign(belopp: string) {
-  if (props.showBalanceSign) {
-    if (taxonomyItem.value.properties.balance === "debit") {
-      return (
-        belopp.trim().length > 0 &&
-        belopp.trim() !== "0" &&
-        !belopp.startsWith("-")
-      );
-    } else if (taxonomyItem.value.properties.balance === "credit") {
-      return belopp.startsWith("-");
-    }
-  } else {
-    return belopp.startsWith("-");
-  }
-}
 </script>
 
 <template>
@@ -114,7 +98,8 @@ function shouldShowSign(belopp: string) {
     <td class="value-container">
       <template v-if="belopprad.beloppNuvarandeAr.length > 0">
         <slot :taxonomy-item="taxonomyItem" name="output-current-year">
-          <span v-if="shouldShowSign(belopprad.beloppNuvarandeAr)"
+          <span
+            v-if="shouldShowSign(taxonomyItem, belopprad.beloppNuvarandeAr, 0)"
             >&minus;</span
           >
           <!-- @delete-whitespace -->
@@ -157,7 +142,10 @@ function shouldShowSign(belopp: string) {
           :taxonomy-item="taxonomyItem"
           name="output-previous-year"
         >
-          <span v-if="shouldShowSign(belopprad.beloppTidigareAr[i - 1])"
+          <span
+            v-if="
+              shouldShowSign(taxonomyItem, belopprad.beloppTidigareAr[i - 1], i)
+            "
             >&minus;</span
           >
           <!-- @delete-whitespace -->

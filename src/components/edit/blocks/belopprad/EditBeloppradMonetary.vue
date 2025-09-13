@@ -6,21 +6,19 @@
 
 import {
   type BeloppradMonetary,
-  calculateValuesIntoBelopprad,
+  calculateValuesIntoBelopprad
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { computed, onMounted, watch } from "vue";
-import {
-  type Belopprad,
-  getTaxonomyItemForBelopprad,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { type Belopprad, getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import BaseEditBeloppradComparable, {
   type EditBeloppradComparableEmitsBase,
-  type EditBeloppradComparablePropsBase,
+  type EditBeloppradComparablePropsBase
 } from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
 
 const props = defineProps<
   EditBeloppradComparablePropsBase & {
-    /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
+    /** Huruvida balanstecken (plus/minus) får visas för beloppraden utifrån det
+     * motsvarande taxonomiobjektets balance-värde. */
     showBalanceSign: boolean;
   }
 >();

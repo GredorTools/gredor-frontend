@@ -122,26 +122,26 @@ export function getContextRefPrefix(
  *
  * @param taxonomyItem - Taxonomiobjektet vars contextRef ska bestämmas.
  * @param prefix - Prefix för contextRef, kan hämtas med getContextRefPrefix.
- * @param previousYearIndex - 0 för nuvarande räkenskapsår, 1 för senaste
- * tidigare räkenskapsåret, osv.
+ * @param yearIndex - 0 för nuvarande räkenskapsår, 1 för senaste tidigare
+ * räkenskapsåret, osv.
  * @returns contextRef som motsvarar bl.a. taxonomiobjektets etikett-typ.
  */
 export function getContextRef(
   taxonomyItem: TaxonomyItem,
   prefix: "period" | "balans",
-  previousYearIndex: number = 0,
+  yearIndex: number = 0,
 ): string {
   if (
     prefix === "balans" &&
     taxonomyItem.additionalData.labelType === "periodStartLabel"
   ) {
-    return `${prefix}_tidigare${previousYearIndex + 1}`;
+    return `${prefix}_tidigare${yearIndex + 1}`;
   }
 
-  if (previousYearIndex === 0) {
+  if (yearIndex === 0) {
     return `${prefix}_nuvarande`;
   } else {
-    return `${prefix}_tidigare${previousYearIndex}`;
+    return `${prefix}_tidigare${yearIndex}`;
   }
 }
 
@@ -163,6 +163,38 @@ export function getSignAttribute(
     return isNegativeValue ? "-" : undefined;
   } else {
     return !isNegativeValue ? "-" : undefined;
+  }
+}
+
+/**
+ * Returnerar huruvida balanstecken (plus/minus) ska visas visuellt.
+ *
+ * @param taxonomyItem - Taxonomiobjektet som renderas.
+ * @param belopp - Beloppet.
+ * @param showBalanceSign - Huruvida balanstecken (plus/minus) får visas för
+ * beloppraden utifrån det motsvarande taxonomiobjektets balance-värde.
+ *
+ * @returns Huruvida balanstecken (plus/minus) ska visas visuellt.
+ */
+export function shouldShowSign(
+  taxonomyItem: TaxonomyItem,
+  belopp: string,
+  showBalanceSign: boolean,
+): boolean {
+  if (showBalanceSign) {
+    if (taxonomyItem.properties.balance === "debit") {
+      return (
+        belopp.trim().length > 0 &&
+        belopp.trim() !== "0" &&
+        !belopp.startsWith("-")
+      );
+    } else if (taxonomyItem.properties.balance === "credit") {
+      return belopp.startsWith("-");
+    } else {
+      return false;
+    }
+  } else {
+    return belopp.startsWith("-");
   }
 }
 

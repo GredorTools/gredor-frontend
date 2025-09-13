@@ -9,6 +9,7 @@ import BaseRenderBeloppradComparable, {
 import type { BeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 
 import { formatEnumValueDisplayLabel } from "@/util/formatUtils.ts";
+import { getContextRef } from "@/util/renderUtils.ts";
 
 defineProps<RenderBeloppradComparablePropsBase<BeloppradEnum>>();
 </script>
@@ -29,7 +30,7 @@ defineProps<RenderBeloppradComparablePropsBase<BeloppradEnum>>();
     <template #output-current-year="{ taxonomyItem }">
       <span class="d-none">
         <ix:nonNumeric
-          :contextRef="contextRefPrefix + '_nuvarande'"
+          :contextRef="getContextRef(taxonomyItem, contextRefPrefix, 0)"
           :name="taxonomyItem.xmlName"
           xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
           >{{ belopprad.beloppNuvarandeAr }}
@@ -45,7 +46,9 @@ defineProps<RenderBeloppradComparablePropsBase<BeloppradEnum>>();
     <template #output-previous-year="{ previousYearIndex, taxonomyItem }">
       <span class="d-none">
         <ix:nonNumeric
-          :contextRef="contextRefPrefix + '_tidigare' + previousYearIndex"
+          :contextRef="
+            getContextRef(taxonomyItem, contextRefPrefix, previousYearIndex)
+          "
           :name="taxonomyItem.xmlName"
           xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
           >{{ belopprad.beloppTidigareAr[previousYearIndex] }}

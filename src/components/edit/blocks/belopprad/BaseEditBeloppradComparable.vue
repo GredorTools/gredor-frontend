@@ -46,7 +46,8 @@ const props = defineProps<
     /** Huruvida beloppraden är en summarad som inte kan redigeras direkt. */
     isSummarad?: boolean;
 
-    /** Huruvida balanstecken (plus/minus) ska visas för beloppraden. */
+    /** Huruvida balanstecken (plus/minus) får visas för beloppraden utifrån det
+     * motsvarande taxonomiobjektets balance-värde. */
     showBalanceSign?: boolean;
   }
 >();
