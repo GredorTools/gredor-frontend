@@ -9,7 +9,7 @@ import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { getNonFractionDecimals, getNonFractionScale, getUnitRef } from "@/util/renderUtils.ts";
+import { getNonFractionDecimals, getNonFractionScale, getSignAttribute, getUnitRef } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
@@ -118,9 +118,11 @@ function shouldShowSign(belopp: string) {
             :name="taxonomyItem.xmlName"
             :scale="getNonFractionScale(taxonomyItem, displayFormat)"
             :sign="
-              isBeloppradMonetary(belopprad) &&
-              belopprad.beloppNuvarandeAr.startsWith('-')
-                ? '-'
+              isBeloppradMonetary(belopprad)
+                ? getSignAttribute(
+                    taxonomyItem,
+                    belopprad.beloppNuvarandeAr.startsWith('-'),
+                  )
                 : undefined
             "
             :unitRef="getUnitRef(taxonomyItem)"
@@ -159,9 +161,11 @@ function shouldShowSign(belopp: string) {
             :name="taxonomyItem.xmlName"
             :scale="getNonFractionScale(taxonomyItem, displayFormat)"
             :sign="
-              isBeloppradMonetary(belopprad) &&
-              belopprad.beloppTidigareAr[i - 1]?.startsWith('-')
-                ? '-'
+              isBeloppradMonetary(belopprad)
+                ? getSignAttribute(
+                    taxonomyItem,
+                    belopprad.beloppTidigareAr[i - 1].startsWith('-'),
+                  )
                 : undefined
             "
             :unitRef="getUnitRef(taxonomyItem)"

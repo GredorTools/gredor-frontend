@@ -93,7 +93,7 @@ export function getNonFractionDecimals(
 }
 
 /**
- * Hämtar prefix för contextRef baserat på periodtypen för det angivna
+ * Returnerar prefix för contextRef baserat på periodtypen för det angivna
  * taxonomiobjektet.
  *
  * @param taxonomyItem - Taxonomiobjektet vars prefix för contextRef ska
@@ -110,6 +110,27 @@ export function getContextRefPrefix(
       return "balans";
     default:
       throw new Error("Unknown periodType");
+  }
+}
+
+/**
+ * Returnerar sign-attributet för det givna taxonomiobjektet och beloppvärdet.
+ *
+ * Användningen av sign-attribut är lite lurigt - om taxonomiobjektet är ett
+ * belopp som är en minskning blir användningen av attributet "omvänt".
+ *
+ * @param taxonomyItem - Taxonomiobjektet vars sign-attribut ska bestämmas.
+ * @param isNegativeValue - Huruvida beloppvärdet är negativt.
+ * @return Korrekt sign-attribut för taxonomiobjektet och beloppvärdet.
+ */
+export function getSignAttribute(
+  taxonomyItem: TaxonomyItem,
+  isNegativeValue: boolean,
+): string | undefined {
+  if (!taxonomyItem.properties.label.startsWith("Minskning ")) {
+    return isNegativeValue ? "-" : undefined;
+  } else {
+    return !isNegativeValue ? "-" : undefined;
   }
 }
 

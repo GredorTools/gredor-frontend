@@ -17,6 +17,7 @@ import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/beloppra
 import {
   getNonFractionDecimals,
   getNonFractionScale,
+  getSignAttribute,
   getUnitRef,
 } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
@@ -108,9 +109,11 @@ function getContextRef(belopprad: Belopprad) {
                 getNonFractionScale(cell.taxonomyItem, BeloppFormat.HELTAL)
               "
               :sign="
-                isBeloppradMonetary(cell.belopprad) &&
-                cell.belopprad.beloppNuvarandeAr.startsWith('-')
-                  ? '-'
+                isBeloppradMonetary(cell.belopprad)
+                  ? getSignAttribute(
+                      cell.taxonomyItem,
+                      cell.belopprad.beloppNuvarandeAr.startsWith('-'),
+                    )
                   : undefined
               "
               :unitRef="getUnitRef(cell.taxonomyItem)"
