@@ -9,7 +9,13 @@ import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { getNonFractionDecimals, getNonFractionScale, getSignAttribute, getUnitRef } from "@/util/renderUtils.ts";
+import {
+  getContextRef,
+  getNonFractionDecimals,
+  getNonFractionScale,
+  getSignAttribute,
+  getUnitRef
+} from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
@@ -113,7 +119,7 @@ function shouldShowSign(belopp: string) {
           >
           <!-- @delete-whitespace -->
           <ix:nonFraction
-            :contextRef="contextRefPrefix + '_nuvarande'"
+            :contextRef="getContextRef(taxonomyItem, contextRefPrefix)"
             :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
             :name="taxonomyItem.xmlName"
             :scale="getNonFractionScale(taxonomyItem, displayFormat)"
@@ -156,7 +162,7 @@ function shouldShowSign(belopp: string) {
           >
           <!-- @delete-whitespace -->
           <ix:nonFraction
-            :contextRef="contextRefPrefix + '_tidigare' + i"
+            :contextRef="getContextRef(taxonomyItem, contextRefPrefix, i)"
             :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
             :name="taxonomyItem.xmlName"
             :scale="getNonFractionScale(taxonomyItem, displayFormat)"

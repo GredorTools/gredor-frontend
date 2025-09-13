@@ -114,6 +114,38 @@ export function getContextRefPrefix(
 }
 
 /**
+ * Returnerar lämpligt contextRef baserat på bl.a. etikett-typen för det angivna
+ * taxonomiobjektet.
+ *
+ * Det kan vara lite lurigt eftersom om det är etikett-typ periodStartLabel på
+ * en balansrad ingår det i förra årets context.
+ *
+ * @param taxonomyItem - Taxonomiobjektet vars contextRef ska bestämmas.
+ * @param prefix - Prefix för contextRef, kan hämtas med getContextRefPrefix.
+ * @param previousYearIndex - 0 för nuvarande räkenskapsår, 1 för senaste
+ * tidigare räkenskapsåret, osv.
+ * @returns contextRef som motsvarar bl.a. taxonomiobjektets etikett-typ.
+ */
+export function getContextRef(
+  taxonomyItem: TaxonomyItem,
+  prefix: "period" | "balans",
+  previousYearIndex: number = 0,
+): string {
+  if (
+    prefix === "balans" &&
+    taxonomyItem.additionalData.labelType === "periodStartLabel"
+  ) {
+    return `${prefix}_tidigare${previousYearIndex + 1}`;
+  }
+
+  if (previousYearIndex === 0) {
+    return `${prefix}_nuvarande`;
+  } else {
+    return `${prefix}_tidigare${previousYearIndex}`;
+  }
+}
+
+/**
  * Returnerar sign-attributet för det givna taxonomiobjektet och beloppvärdet.
  *
  * Användningen av sign-attribut är lite lurigt - om taxonomiobjektet är ett

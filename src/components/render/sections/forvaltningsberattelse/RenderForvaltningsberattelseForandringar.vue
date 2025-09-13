@@ -9,12 +9,11 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
 import { formatNumber } from "@/util/formatUtils.ts";
-import {
-  type Belopprad,
-  isBeloppradInTaxonomyItemList,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 import {
+  getContextRef,
+  getContextRefPrefix,
   getNonFractionDecimals,
   getNonFractionScale,
   getSignAttribute,
@@ -53,17 +52,6 @@ const table = computed(() =>
     belopprader.value,
   ),
 );
-
-function getContextRef(belopprad: Belopprad) {
-  switch (belopprad.labelType) {
-    case "periodStartLabel":
-      return "balans_tidigare1";
-    case "periodEndLabel":
-      return "balans_nuvarande";
-    default:
-      return "period_nuvarande";
-  }
-}
 </script>
 
 <template>
@@ -100,7 +88,13 @@ function getContextRef(belopprad: Belopprad) {
             >
             <!-- @delete-whitespace -->
             <ix:nonFraction
-              :contextRef="getContextRef(cell.belopprad)"
+              :contextRef="
+                getContextRef(
+                  cell.taxonomyItem,
+                  getContextRefPrefix(cell.taxonomyItem),
+                  0,
+                )
+              "
               :decimals="
                 getNonFractionDecimals(cell.taxonomyItem, BeloppFormat.HELTAL)
               "
