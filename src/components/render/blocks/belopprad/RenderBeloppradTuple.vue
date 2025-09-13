@@ -75,6 +75,7 @@ const tupleTaxonomyItem = computed(() =>
                   tupleRef: instans.id,
                 }"
                 :belopprad="instansBelopprad"
+                :raw="true"
                 :taxonomy-item="
                   getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
                 "
@@ -91,7 +92,6 @@ const tupleTaxonomyItem = computed(() =>
                 }"
                 :belopprad="instansBelopprad"
                 :display-format="BeloppFormat.HELTAL"
-                :show-balance-sign="false"
                 :taxonomy-item="
                   getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
                 "

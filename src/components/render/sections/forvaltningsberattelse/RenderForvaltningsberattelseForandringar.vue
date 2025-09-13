@@ -8,19 +8,10 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { computed } from "vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
-import { formatNumber } from "@/util/formatUtils.ts";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
-import {
-  getContextRef,
-  getContextRefPrefix,
-  getNonFractionDecimals,
-  getNonFractionScale,
-  getSignAttribute,
-  getUnitRef,
-} from "@/util/renderUtils.ts";
-import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import RenderBeloppradCellComparable from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellComparable.vue";
 
 const props = defineProps<{
   /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
@@ -56,7 +47,7 @@ const table = computed(() =>
 
 <template>
   <!-- TODO: Hantera om tabellen blir för bred... -->
-  <table xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">
+  <table>
     <thead>
       <tr>
         <th scope="col">
@@ -83,47 +74,13 @@ const table = computed(() =>
           class="value-container"
         >
           <template v-if="cell != null">
-            <span v-if="cell.belopprad.beloppNuvarandeAr.startsWith('-')"
-              >&minus;</span
-            >
-            <!-- @delete-whitespace -->
-            <ix:nonFraction
-              :contextRef="
-                getContextRef(
-                  cell.taxonomyItem,
-                  getContextRefPrefix(cell.taxonomyItem),
-                  0,
-                )
-              "
-              :decimals="
-                getNonFractionDecimals(cell.taxonomyItem, BeloppFormat.HELTAL)
-              "
-              :name="cell.taxonomyItem.xmlName"
-              :scale="
-                getNonFractionScale(cell.taxonomyItem, BeloppFormat.HELTAL)
-              "
-              :sign="
-                isBeloppradMonetary(cell.belopprad)
-                  ? getSignAttribute(
-                      cell.taxonomyItem,
-                      cell.belopprad.beloppNuvarandeAr.startsWith('-'),
-                    )
-                  : undefined
-              "
-              :unitRef="getUnitRef(cell.taxonomyItem)"
-              format="ixt:numspacecomma"
-            >
-              {{
-                formatNumber(
-                  cell.belopprad.beloppNuvarandeAr,
-                  cell.taxonomyItem,
-                  BeloppFormat.HELTAL,
-                  {
-                    removeSign: true,
-                  },
-                )
-              }}
-            </ix:nonFraction>
+            <RenderBeloppradCellComparable
+              :additional-ixbrl-attrs="{}"
+              :belopprad="cell.belopprad"
+              :display-format="BeloppFormat.HELTAL"
+              :taxonomy-item="cell.taxonomyItem"
+              :year-index="0"
+            />
           </template>
           <template v-else>&ndash;</template>
         </td>

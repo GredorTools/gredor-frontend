@@ -16,6 +16,9 @@ defineProps<{
 
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs: Record<string, string>;
+
+  /** Huruvida beloppraden ska renderas som "rå" text, utan p-taggar. */
+  raw: boolean;
 }>();
 </script>
 
@@ -28,7 +31,18 @@ defineProps<{
     v-bind="additionalIxbrlAttrs"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
-    {{ belopprad.text }}
+    <span v-if="raw">
+      {{ belopprad.text }}
+    </span>
+    <p
+      v-for="(line, index) in belopprad.text
+        .split(/\r?\n/)
+        .filter((l) => l.trim().length > 0)"
+      v-else
+      :key="index"
+    >
+      {{ line }}
+    </p>
   </ix:nonNumeric>
 </template>
 

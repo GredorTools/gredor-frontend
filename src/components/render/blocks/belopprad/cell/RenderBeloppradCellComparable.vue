@@ -27,7 +27,7 @@ const props = defineProps<{
 
   /** Huruvida balanstecken (plus/minus) får visas för beloppraden utifrån det
    * motsvarande taxonomiobjektets balance-värde. */
-  showBalanceSign: boolean;
+  showBalanceSign?: boolean;
 
   /** 0 för nuvarande räkenskapsår, 1 för senaste tidigare räkenskapsåret, osv.
    * */
@@ -47,7 +47,7 @@ const belopp = computed(() => {
 </script>
 
 <template>
-  <span v-if="shouldShowSign(taxonomyItem, belopp, showBalanceSign)"
+  <span v-if="shouldShowSign(taxonomyItem, belopp, showBalanceSign || false)"
     >&minus;</span
   >
   <!-- @delete-whitespace -->

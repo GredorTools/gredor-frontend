@@ -4,22 +4,13 @@
  * Används som grund för t.ex. monetära och decimala belopprader.
  */
 
-import { formatNumber } from "@/util/formatUtils.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getContextRef,
-  getNonFractionDecimals,
-  getNonFractionScale,
-  getSignAttribute,
-  getUnitRef,
-  shouldShowSign,
-} from "@/util/renderUtils.ts";
-import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
+import RenderBeloppradCellComparable from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellComparable.vue";
 
 export interface RenderBeloppradComparablePropsBase<
   T extends BaseBeloppradComparable,
@@ -86,7 +77,6 @@ const displayLevel = computed(
       ['summa-forced']: displayAsType === RenderBeloppradDisplayAsType.SUM,
       [`level-${displayLevel}`]: true,
     }"
-    xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <td class="rubrik">
       {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
@@ -98,39 +88,14 @@ const displayLevel = computed(
     <td class="value-container">
       <template v-if="belopprad.beloppNuvarandeAr.length > 0">
         <slot :taxonomy-item="taxonomyItem" name="output-current-year">
-          <span
-            v-if="shouldShowSign(taxonomyItem, belopprad.beloppNuvarandeAr, 0)"
-            >&minus;</span
-          >
-          <!-- @delete-whitespace -->
-          <ix:nonFraction
-            :contextRef="getContextRef(taxonomyItem, contextRefPrefix)"
-            :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
-            :name="taxonomyItem.xmlName"
-            :scale="getNonFractionScale(taxonomyItem, displayFormat)"
-            :sign="
-              isBeloppradMonetary(belopprad)
-                ? getSignAttribute(
-                    taxonomyItem,
-                    belopprad.beloppNuvarandeAr.startsWith('-'),
-                  )
-                : undefined
-            "
-            :unitRef="getUnitRef(taxonomyItem)"
-            format="ixt:numspacecomma"
-            v-bind="additionalIxbrlAttrs"
-          >
-            {{
-              formatNumber(
-                belopprad.beloppNuvarandeAr,
-                taxonomyItem,
-                displayFormat,
-                {
-                  removeSign: true,
-                },
-              )
-            }}
-          </ix:nonFraction>
+          <RenderBeloppradCellComparable
+            :additional-ixbrl-attrs="additionalIxbrlAttrs"
+            :belopprad="belopprad"
+            :display-format="displayFormat"
+            :show-balance-sign="showBalanceSign"
+            :taxonomy-item="taxonomyItem"
+            :year-index="0"
+          />
         </slot>
       </template>
       <template v-else>&ndash;</template>
@@ -142,41 +107,14 @@ const displayLevel = computed(
           :taxonomy-item="taxonomyItem"
           name="output-previous-year"
         >
-          <span
-            v-if="
-              shouldShowSign(taxonomyItem, belopprad.beloppTidigareAr[i - 1], i)
-            "
-            >&minus;</span
-          >
-          <!-- @delete-whitespace -->
-          <ix:nonFraction
-            :contextRef="getContextRef(taxonomyItem, contextRefPrefix, i)"
-            :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
-            :name="taxonomyItem.xmlName"
-            :scale="getNonFractionScale(taxonomyItem, displayFormat)"
-            :sign="
-              isBeloppradMonetary(belopprad)
-                ? getSignAttribute(
-                    taxonomyItem,
-                    belopprad.beloppTidigareAr[i - 1].startsWith('-'),
-                  )
-                : undefined
-            "
-            :unitRef="getUnitRef(taxonomyItem)"
-            format="ixt:numspacecomma"
-            v-bind="additionalIxbrlAttrs"
-          >
-            {{
-              formatNumber(
-                belopprad.beloppTidigareAr[i - 1],
-                taxonomyItem,
-                displayFormat,
-                {
-                  removeSign: true,
-                },
-              )
-            }}
-          </ix:nonFraction>
+          <RenderBeloppradCellComparable
+            :additional-ixbrl-attrs="additionalIxbrlAttrs"
+            :belopprad="belopprad"
+            :display-format="displayFormat"
+            :show-balance-sign="showBalanceSign"
+            :taxonomy-item="taxonomyItem"
+            :year-index="i"
+          />
         </slot>
       </template>
       <template v-else>&ndash;</template>

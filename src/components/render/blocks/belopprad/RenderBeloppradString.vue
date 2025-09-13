@@ -5,12 +5,12 @@
 
 import {
   type BeloppradString,
-  hasBeloppradStringValue,
+  hasBeloppradStringValue
 } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { getContextRef } from "@/util/renderUtils.ts";
+import RenderBeloppradCellString from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellString.vue";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -66,31 +66,19 @@ const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
       [`level-${displayLevel}`]: true,
       'empty-value': isEmptyValue,
     }"
-    xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <td colspan="4">
       <div v-if="showHeader" class="header">
         {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
       </div>
-      <ix:nonNumeric
+      <RenderBeloppradCellString
         v-if="belopprad.text"
-        :contextRef="getContextRef(taxonomyItem, contextRefPrefix, 0)"
-        :name="taxonomyItem.xmlName"
-        v-bind="additionalIxbrlAttrs"
-      >
-        <span v-if="raw">
-          {{ belopprad.text }}
-        </span>
-        <p
-          v-for="(line, index) in belopprad.text
-            .split(/\r?\n/)
-            .filter((l) => l.trim().length > 0)"
-          v-else
-          :key="index"
-        >
-          {{ line }}
-        </p>
-      </ix:nonNumeric>
+        :additional-ixbrl-attrs="additionalIxbrlAttrs"
+        :belopprad="belopprad"
+        :raw="raw"
+        :taxonomy-item="taxonomyItem"
+        :year-index="0"
+      />
     </td>
   </tr>
 </template>
