@@ -20,8 +20,9 @@ defineProps<RenderBeloppradComparablePropsBase<BeloppradEnum>>();
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
-    :display-as-total-item="displayAsTotalItem"
+    :display-as-type="displayAsType"
     :display-format="displayFormat"
+    :display-header="displayHeader"
     :num-previous-years="1"
     :taxonomy-manager="taxonomyManager"
   >

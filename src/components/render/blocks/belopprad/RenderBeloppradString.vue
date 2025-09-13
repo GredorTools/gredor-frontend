@@ -25,11 +25,17 @@ const props = defineProps<{
    * även om den egentligen inte är en belopprad av den nivån. */
   displayAsLevel?: number;
 
+  /** Möjliggör att visa en egen rubrik för beloppraden. */
+  displayHeader?: string;
+
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
 
   /** Huruvida rubriken ska visas. */
   showHeader: boolean;
+
+  /** Huruvida rubriken ska visas som en abstrakt radrubrik (om den visas). */
+  showHeaderAsAbstract: boolean;
 
   /** Huruvida beloppraden ska renderas som "rå" text, utan p-taggar. */
   raw: boolean;
@@ -55,6 +61,7 @@ const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
     "
     :class="{
       abstract: taxonomyItem.properties.abstract === 'true',
+      'abstract-header': showHeader && showHeaderAsAbstract,
       [`level-${displayLevel}`]: true,
       'empty-value': isEmptyValue,
     }"
@@ -62,7 +69,7 @@ const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
   >
     <td colspan="4">
       <div v-if="showHeader" class="header">
-        {{ taxonomyItem.additionalData.displayLabel }}
+        {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
       </div>
       <ix:nonNumeric
         v-if="belopprad.text"
@@ -89,6 +96,7 @@ const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
 
 <style lang="scss" scoped>
 .abstract.level-1,
+.abstract-header.level-1 .header,
 .level-1 .header {
   font-weight: 600;
   font-size: 1.15rem;
@@ -104,16 +112,23 @@ const isEmptyValue = computed(() => !props.belopprad?.text?.trim());
   }
 }
 
-.abstract.level-2 {
-  font-weight: 600;
-  text-decoration: underline;
+.level-2 {
+  &.abstract,
+  &.abstract-header .header {
+    font-weight: 600;
+    text-decoration: underline;
+  }
 
-  &:not(:first-of-type) td {
-    padding-top: 1.25rem;
+  &.abstract,
+  &.abstract-header {
+    &:not(:first-of-type) td {
+      padding-top: 1.25rem;
+    }
   }
 }
 
-.abstract.level-3 {
+.abstract.level-3,
+.abstract-header.level-3 .header {
   font-weight: 500;
 }
 

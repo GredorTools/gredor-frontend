@@ -9,9 +9,13 @@ import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import RenderForvaltningsberattelseFlerarsoversikt from "@/components/render/sections/forvaltningsberattelse/RenderForvaltningsberattelseFlerarsoversikt.vue";
 import RenderForvaltningsberattelseForandringar from "@/components/render/sections/forvaltningsberattelse/RenderForvaltningsberattelseForandringar.vue";
-import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  type Belopprad,
+  isBeloppradInTaxonomyItemList,
+} from "@/model/arsredovisning/Belopprad.ts";
 import { computed } from "vue";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
+import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
 
 const taxonomyManager = await getTaxonomyManager(
   TaxonomyRootName.FORVALTNINGSBERATTELSE,
@@ -25,15 +29,72 @@ const props = defineProps<{
 
 const mappedGroups = computed(() => {
   return availableTaxonomyItems.children[0].children.map((group) => {
+    let items = [
+      ...props.arsredovisning.forvaltningsberattelse.entries(),
+    ].filter(([, b]) =>
+      isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
+    );
+
+    if (shouldDisplaySimpleUtdelning.value) {
+      items = items.filter(
+        (item) =>
+          ![
+            "se-gen-base:ForslagDispositionUtdelningSpecificationAbstract",
+            "se-gen-base:ForslagDispositionUtdelningAterbetalningVillkoratAktieagartillskott",
+            "se-gen-base:ForslagDispositionUtdelningAnnanUtdelning",
+          ].includes(item[1].taxonomyItemName),
+      );
+    }
+
     return {
       group,
-      items: [...props.arsredovisning.forvaltningsberattelse.entries()].filter(
-        ([, b]) =>
-          isBeloppradInTaxonomyItemList([group, ...group.childrenFlat], b),
-      ),
+      items,
     };
   });
 });
+
+// Om fältet "Återbetalning av villkorat aktieägartillskott" inte har något
+// värde, visas inte rubriken "Förslag till utdelning" och utdelningen visas
+// då inte heller som en summa av andra fält.
+const shouldDisplaySimpleUtdelning = computed(() => {
+  return !props.arsredovisning.forvaltningsberattelse.some(
+    (item) =>
+      item.taxonomyItemName ===
+      "se-gen-base:ForslagDispositionUtdelningAterbetalningVillkoratAktieagartillskott",
+  );
+});
+
+function getDisplayAsType(belopprad: Belopprad) {
+  if (
+    shouldDisplaySimpleUtdelning.value &&
+    [
+      "se-gen-base:ForslagDispositionUtdelning",
+      "se-gen-base:ForslagDisposition",
+    ].includes(belopprad.taxonomyItemName)
+  ) {
+    return RenderBeloppradDisplayAsType.SIMPLE;
+  }
+
+  return RenderBeloppradDisplayAsType.AUTO;
+}
+
+function getDisplayHeader(belopprad: Belopprad) {
+  if (
+    shouldDisplaySimpleUtdelning.value &&
+    belopprad.taxonomyItemName === "se-gen-base:ForslagDispositionUtdelning"
+  ) {
+    return "Utdelning till ägarna";
+  }
+
+  return undefined;
+}
+
+function getStringShowHeaderAsAbstract(belopprad: Belopprad) {
+  return (
+    belopprad.taxonomyItemName ===
+    "se-gen-base:StyrelsensYttrandeVinstutdelning"
+  );
+}
 </script>
 
 <template>
@@ -65,9 +126,14 @@ const mappedGroups = computed(() => {
             v-for="[, belopprad] in items"
             :key="belopprad.taxonomyItemName"
             :belopprad="belopprad"
+            :comparable-display-as-type="getDisplayAsType(belopprad)"
             :comparable-num-previous-years="0"
+            :display-header="getDisplayHeader(belopprad)"
             :redovisningsvaluta="
               arsredovisning.redovisningsinformation.redovisningsvaluta
+            "
+            :string-show-header-as-abstract="
+              getStringShowHeaderAsAbstract(belopprad)
             "
             :taxonomy-manager="taxonomyManager"
             string-show-header

@@ -16,6 +16,9 @@ const props = defineProps<{
 
   /** Årsredovisningens redovisningsvaluta. */
   redovisningsvaluta: Redovisningsvaluta;
+
+  /** Möjliggör att visa en egen rubrik för beloppraden. */
+  displayHeader?: string;
 }>();
 
 const tupleTaxonomyItem = computed(() =>
@@ -26,7 +29,7 @@ const tupleTaxonomyItem = computed(() =>
 <template>
   <tr>
     <td>
-      {{ tupleTaxonomyItem?.additionalData.displayLabel }}
+      {{ displayHeader || tupleTaxonomyItem?.additionalData.displayLabel }}
     </td>
   </tr>
   <tr v-if="belopprad.instanser.length > 0">

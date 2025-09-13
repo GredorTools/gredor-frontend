@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 /**
- * En baskomponent för att rendera vissa rubriker.
+ * En baskomponent för att rendera rubriker på nivå 1.
  */
 
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
@@ -8,12 +8,15 @@ import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 defineProps<{
   /** Taxonomiobjektet som ska användas för rubriken. */
   taxonomyItem: TaxonomyItem;
+
+  /** Möjliggör att visa en egen rubrik för beloppraden. */
+  displayHeader?: string;
 }>();
 </script>
 
 <template>
   <div class="header">
-    {{ taxonomyItem.additionalData.displayLabel }}
+    {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
   </div>
 </template>
 

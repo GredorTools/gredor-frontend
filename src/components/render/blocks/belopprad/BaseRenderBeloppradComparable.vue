@@ -9,13 +9,10 @@ import { computed } from "vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getNonFractionDecimals,
-  getNonFractionScale,
-  getUnitRef,
-} from "@/util/renderUtils.ts";
+import { getNonFractionDecimals, getNonFractionScale, getUnitRef } from "@/util/renderUtils.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
 
 export interface RenderBeloppradComparablePropsBase<
   T extends BaseBeloppradComparable,
@@ -36,14 +33,18 @@ export interface RenderBeloppradComparablePropsBase<
   /** Vilket format beloppraden ska visas i. */
   displayFormat: BeloppFormat;
 
+  /** Möjliggör att visa en egen rubrik för beloppraden. */
+  displayHeader?: string;
+
   /** Beloppradens kontexttyp. */
   contextRefPrefix: "period" | "balans";
 
   /** Huruvida notfält ska visas för beloppraden. */
   allowNot: boolean;
 
-  /** Huruvida beloppraden ska tvångsvisas som en summarad. */
-  displayAsTotalItem: boolean;
+  /** Hur raden ska visas ("vanlig rad", summarad, eller att det väljs
+   * automatiskt). */
+  displayAsType: RenderBeloppradDisplayAsType;
 }
 
 const props = defineProps<
@@ -89,15 +90,16 @@ function shouldShowSign(belopp: string) {
   <tr
     :class="{
       summa:
-        taxonomyItem.additionalData.labelType === 'totalLabel' ||
-        taxonomyItem.additionalData.isCalculatedItem,
-      ['summa-forced']: displayAsTotalItem,
+        (taxonomyItem.additionalData.labelType === 'totalLabel' ||
+          taxonomyItem.additionalData.isCalculatedItem) &&
+        displayAsType === RenderBeloppradDisplayAsType.AUTO,
+      ['summa-forced']: displayAsType === RenderBeloppradDisplayAsType.SUM,
       [`level-${displayLevel}`]: true,
     }"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
     <td class="rubrik">
-      {{ taxonomyItem.additionalData.displayLabel }}
+      {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
       <span v-if="unit">[{{ unit }}]</span>
     </td>
     <td v-if="allowNot" class="not-container">

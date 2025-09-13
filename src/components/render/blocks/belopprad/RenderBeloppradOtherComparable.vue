@@ -6,7 +6,7 @@
 
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import BaseRenderBeloppradComparable, {
-  type RenderBeloppradComparablePropsBase,
+  type RenderBeloppradComparablePropsBase
 } from "@/components/render/blocks/belopprad/BaseRenderBeloppradComparable.vue";
 import { isPercentageBelopprad } from "@/util/renderUtils.ts";
 
@@ -20,8 +20,9 @@ defineProps<RenderBeloppradComparablePropsBase<BaseBeloppradComparable>>();
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
-    :display-as-total-item="displayAsTotalItem"
+    :display-as-type="displayAsType"
     :display-format="displayFormat"
+    :display-header="displayHeader"
     :num-previous-years="1"
     :taxonomy-manager="taxonomyManager"
     :unit="isPercentageBelopprad(belopprad) ? '%' : undefined"

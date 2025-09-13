@@ -24,6 +24,7 @@ import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/Belopprad
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 import { getContextRefPrefix } from "@/util/renderUtils.ts";
+import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -45,6 +46,9 @@ const props = defineProps<{
   /** Vilket format beloppraden ska visas i. */
   displayFormat?: BeloppFormat;
 
+  /** Möjliggör att visa en egen rubrik för beloppraden. */
+  displayHeader?: string;
+
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan
    * jämföra mellan år. */
   comparableNumPreviousYears?: number;
@@ -53,15 +57,19 @@ const props = defineProps<{
    **/
   comparableAllowNot?: boolean;
 
-  /** Huruvida beloppraden ska tvångsvisas som en summarad, för belopprader där
-   * man kan jämföra mellan år. */
-  comparableDisplayAsTotalItem?: boolean;
+  /** Hur raden ska visas ("vanlig rad", summarad, eller att det väljs
+   * automatiskt), för belopprader där man kan jämföra mellan år. */
+  comparableDisplayAsType?: RenderBeloppradDisplayAsType;
 
   /** Huruvida balanstecken ska visas för monetära belopprader. */
   monetaryShowBalanceSign?: boolean;
 
   /** Huruvida rubriker för strängbelopprader ska visas. */
   stringShowHeader?: boolean;
+
+  /** Huruvida rubriken ska visas som en abstrakt radrubrik (om den visas), för
+   * strängbelopprader. */
+  stringShowHeaderAsAbstract: boolean;
 
   /** Huruvida strängbelopprader ska renderas som "rå" text, utan p-taggar. */
   stringRaw?: boolean;
@@ -81,8 +89,10 @@ const contextRefPrefix = computed(() =>
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
+    :display-header="displayHeader"
     :raw="stringRaw || false"
     :show-header="stringShowHeader || false"
+    :show-header-as-abstract="stringShowHeaderAsAbstract || false"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradMonetary
@@ -92,8 +102,11 @@ const contextRefPrefix = computed(() =>
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
-    :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :display-as-type="
+      comparableDisplayAsType || RenderBeloppradDisplayAsType.AUTO
+    "
     :display-format="displayFormat || BeloppFormat.HELTAL"
+    :display-header="displayHeader"
     :num-previous-years="comparableNumPreviousYears || 0"
     :redovisningsvaluta="redovisningsvaluta"
     :show-balance-sign="monetaryShowBalanceSign || false"
@@ -106,8 +119,11 @@ const contextRefPrefix = computed(() =>
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
-    :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :display-as-type="
+      comparableDisplayAsType || RenderBeloppradDisplayAsType.AUTO
+    "
     :display-format="displayFormat || BeloppFormat.HELTAL"
+    :display-header="displayHeader"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
@@ -118,14 +134,18 @@ const contextRefPrefix = computed(() =>
     :belopprad="belopprad"
     :context-ref-prefix="contextRefPrefix"
     :display-as-level="displayAsLevel"
-    :display-as-total-item="comparableDisplayAsTotalItem || false"
+    :display-as-type="
+      comparableDisplayAsType || RenderBeloppradDisplayAsType.AUTO
+    "
     :display-format="displayFormat || BeloppFormat.HELTAL"
+    :display-header="displayHeader"
     :num-previous-years="comparableNumPreviousYears || 0"
     :taxonomy-manager="taxonomyManager"
   />
   <RenderBeloppradTuple
     v-else-if="isBeloppradTuple(belopprad)"
     :belopprad="belopprad"
+    :display-header="displayHeader"
     :redovisningsvaluta="redovisningsvaluta"
     :taxonomy-manager="taxonomyManager"
   />
