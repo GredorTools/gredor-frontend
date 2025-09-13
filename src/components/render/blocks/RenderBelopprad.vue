@@ -69,7 +69,7 @@ const props = defineProps<{
 
   /** Huruvida rubriken ska visas som en abstrakt radrubrik (om den visas), för
    * strängbelopprader. */
-  stringShowHeaderAsAbstract: boolean;
+  stringShowHeaderAsAbstract?: boolean;
 
   /** Huruvida strängbelopprader ska renderas som "rå" text, utan p-taggar. */
   stringRaw?: boolean;
