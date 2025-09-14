@@ -6,17 +6,11 @@
 
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
-import {
-  createBelopprad,
-  createBeloppradInList,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { createBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
-import {
-  type TaxonomyItem,
-  TaxonomyRootName,
-} from "@/model/taxonomy/TaxonomyItem.ts";
+import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
 import CommonAccordion from "@/components/common/CommonAccordion.vue";
 import CommonAccordionItem from "@/components/common/CommonAccordionItem.vue";
@@ -30,15 +24,6 @@ const availableTaxonomyItems = taxonomyManager.getRoot();
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
-
-// Hjälpfunktioner
-function addBelopprad(taxonomyItem: TaxonomyItem) {
-  createBeloppradInList(
-    taxonomyManager,
-    arsredovisning.value.noter,
-    taxonomyItem,
-  );
-}
 
 const { prepopulateSection, groupPrepopulatedSection } = usePrepopulateSection({
   taxonomyManager,
@@ -110,6 +95,7 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
                 "
                 :string-minimum-level="1"
                 :taxonomy-manager="taxonomyManager"
+                monetary-show-balance-sign
                 string-multiline
               />
             </tbody>

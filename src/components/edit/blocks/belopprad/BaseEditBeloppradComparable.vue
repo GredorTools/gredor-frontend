@@ -109,10 +109,20 @@ function onBeforeValueInput(event: InputEvent) {
       <div class="d-flex align-items-center">
         <slot :taxonomy-item="taxonomyItem" name="input-current-year">
           <template v-if="showBalanceSign">
-            <span v-if="taxonomyItem.properties.balance === 'debit'"
+            <span
+              v-if="
+                (taxonomyItem.properties.balance === 'debit') ^
+                (taxonomyItem.properties.periodType === 'instant')
+              "
               >&minus;</span
             >
-            <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
+            <span
+              v-if="
+                (taxonomyItem.properties.balance === 'credit') ^
+                (taxonomyItem.properties.periodType === 'instant')
+              "
+              >+</span
+            >
           </template>
           <input
             v-if="taxonomyItem.properties.abstract !== 'true'"
@@ -134,10 +144,20 @@ function onBeforeValueInput(event: InputEvent) {
           name="input-previous-year"
         >
           <template v-if="showBalanceSign">
-            <span v-if="taxonomyItem.properties.balance === 'debit'"
+            <span
+              v-if="
+                (taxonomyItem.properties.balance === 'debit') ^
+                (taxonomyItem.properties.periodType === 'instant')
+              "
               >&minus;</span
             >
-            <span v-if="taxonomyItem.properties.balance === 'credit'">+</span>
+            <span
+              v-if="
+                (taxonomyItem.properties.balance === 'credit') ^
+                (taxonomyItem.properties.periodType === 'instant')
+              "
+              >+</span
+            >
           </template>
           <input
             v-if="taxonomyItem.properties.abstract !== 'true'"

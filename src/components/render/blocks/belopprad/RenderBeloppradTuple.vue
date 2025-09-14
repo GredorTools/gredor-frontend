@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { computed } from "vue";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
@@ -25,18 +24,9 @@ const props = defineProps<{
   /** Möjliggör att visa en egen rubrik för beloppraden. */
   displayHeader?: string;
 }>();
-
-const tupleTaxonomyItem = computed(() =>
-  getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad),
-);
 </script>
 
 <template>
-  <tr>
-    <td>
-      {{ displayHeader || tupleTaxonomyItem?.additionalData.displayLabel }}
-    </td>
-  </tr>
   <tr v-if="belopprad.instanser.length > 0">
     <td colspan="3" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">
       <template v-for="instans in belopprad.instanser" :key="instans.id">

@@ -75,6 +75,8 @@ const displayLevel = computed(
           taxonomyItem.additionalData.isCalculatedItem) &&
         displayAsType === RenderBeloppradDisplayAsType.AUTO,
       ['summa-forced']: displayAsType === RenderBeloppradDisplayAsType.SUM,
+      ['period-end']:
+        taxonomyItem.additionalData.labelType === 'periodEndLabel',
       [`level-${displayLevel}`]: true,
     }"
   >
@@ -154,5 +156,9 @@ const displayLevel = computed(
 
 .summa + :deep(.level-3:not(.summa) td) {
   padding-top: 0.75rem;
+}
+
+.period-end td {
+  padding-bottom: 1rem !important;
 }
 </style>

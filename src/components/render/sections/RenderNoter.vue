@@ -32,11 +32,13 @@ const items = computed(() => {
 });
 
 function shouldHideTaxonomyItem(taxonomyItemName: string) {
-  // Dölj rubriker "förändringar av [anskaffningsvärden/avskrivningar]",
-  // de syns normalt inte i årsredovsiningar.
+  // Dölj rubriker "förändringar av [anskaffningsvärden/avskrivningar/
+  // uppskrivningar/nedskrivningar]", de syns normalt inte i årsredovsiningar.
   return (
     taxonomyItemName.endsWith("ForandringAnskaffningsvardenAbstract") ||
-    taxonomyItemName.endsWith("ForandringAvskrivningarAbstract")
+    taxonomyItemName.endsWith("ForandringAvskrivningarAbstract") ||
+    taxonomyItemName.endsWith("ForandringUppskrivningarAbstract") ||
+    taxonomyItemName.endsWith("ForandringNedskrivningarAbstract")
   );
 }
 </script>
@@ -114,6 +116,7 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
             headerTaxonomyItem.additionalData.displayLabel
           "
           :taxonomy-manager="taxonomyManager"
+          monetary-show-balance-sign
         />
       </tbody>
     </table>
@@ -128,12 +131,20 @@ h3 {
 table {
   margin-bottom: 1rem;
 
-  :deep(.level-2 .header) {
-    text-decoration: underline;
+  :deep(.level-2) {
+    .header {
+      text-decoration: underline;
+    }
+
+    td {
+      padding-bottom: 0 !important;
+    }
   }
 
-  :deep(.level-3 .header) {
-    font-weight: 500;
+  :deep(.level-3) {
+    .header {
+      font-weight: 500;
+    }
   }
 }
 </style>

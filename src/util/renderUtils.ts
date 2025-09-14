@@ -152,17 +152,65 @@ export function getContextRef(
  * belopp som är en minskning blir användningen av attributet "omvänt".
  *
  * @param taxonomyItem - Taxonomiobjektet vars sign-attribut ska bestämmas.
- * @param isNegativeValue - Huruvida beloppvärdet är negativt.
- * @return Korrekt sign-attribut för taxonomiobjektet och beloppvärdet.
+ * @param belopp - Beloppet.
+ * @param showBalanceSign - Huruvida balanstecken (plus/minus) får visas för
+ * beloppraden utifrån det motsvarande taxonomiobjektets balance-värde.
+ *
+ * @returns Korrekt sign-attribut för taxonomiobjektet och beloppvärdet.
  */
 export function getSignAttribute(
   taxonomyItem: TaxonomyItem,
-  isNegativeValue: boolean,
+  belopp: string,
+  showBalanceSign: boolean,
 ): string | undefined {
-  if (!taxonomyItem.properties.label.startsWith("Minskning ")) {
+  if (belopp.trim().length < 1 || parseInt(belopp.trim(), 10) === 0) {
+    // Inget sign-attribut för noll
+    return undefined;
+  }
+
+  const isNegativeValue = belopp.startsWith("-");
+
+  // Källa: https://xbrl.taxonomier.se/se/exempel/taggning/exempel-7/taggning-exempel-7-rev20240214.xhtml
+  if (taxonomyItem.properties.balance === "credit") {
+    // Som man förväntar sig
     return isNegativeValue ? "-" : undefined;
-  } else {
+  } else if (taxonomyItem.properties.balance === "debit") {
+    if (!isNegativeValue) {
+      // Om taggningen sker med ett begrepp där balance-attributet är definerade
+      // som debit samt värdet är en debetpost så SKA INTE sign attributet
+      // tillämpas. Detta då ett positivt tal förväntas i instansdokumentet.
+      return undefined;
+    }
+
+    if (
+      shouldShowSign(taxonomyItem, belopp, showBalanceSign) &&
+      !isNegativeValue
+    ) {
+      // Om taggningen sker med ett begrepp där balance-attributet är definerade
+      // som debit samt värdet är en debetpost så SKA INTE sign attributet
+      // tillämpas. Minustecken i xhtml presenationen läggs utanför
+      // iXBRL-taggningen då värdet i instansdokumentet ska vara positivt.
+      return undefined;
+    }
+
     return !isNegativeValue ? "-" : undefined;
+  } else {
+    if (
+      taxonomyItem.properties.label.startsWith("Minskning ") &&
+      !taxonomyItem.properties.label.startsWith("Minskning (ökning) ")
+    ) {
+      // "Vänd" på tecknet
+      return !isNegativeValue ? "-" : undefined;
+    } else if (
+      taxonomyItem.properties.label.startsWith("Minskning (ökning) ") ||
+      taxonomyItem.properties.label.startsWith("Ökning (minskning) ")
+    ) {
+      // I det här fallet blir det som man förväntar sig
+      return isNegativeValue ? "-" : undefined;
+    } else {
+      // Inget tecken
+      return undefined;
+    }
   }
 }
 
@@ -181,21 +229,34 @@ export function shouldShowSign(
   belopp: string,
   showBalanceSign: boolean,
 ): boolean {
+  if (belopp.trim().length < 1 || parseInt(belopp.trim(), 10) === 0) {
+    // Inget tecken för noll
+    return false;
+  }
+
+  let result;
+
   if (showBalanceSign) {
     if (taxonomyItem.properties.balance === "debit") {
-      return (
+      result =
         belopp.trim().length > 0 &&
-        belopp.trim() !== "0" &&
-        !belopp.startsWith("-")
-      );
+        parseInt(belopp.trim(), 10) !== 0 &&
+        !belopp.startsWith("-");
     } else if (taxonomyItem.properties.balance === "credit") {
-      return belopp.startsWith("-");
+      result = belopp.startsWith("-");
     } else {
-      return false;
+      result = belopp.startsWith("-");
+    }
+
+    if (taxonomyItem.properties.periodType === "instant") {
+      // Visas "tvärtom" för balansposter
+      result = !result;
     }
   } else {
-    return belopp.startsWith("-");
+    result = belopp.startsWith("-");
   }
+
+  return result;
 }
 
 /**

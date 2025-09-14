@@ -60,7 +60,7 @@ const belopp = computed(() => {
     :scale="getNonFractionScale(taxonomyItem, displayFormat)"
     :sign="
       isBeloppradMonetary(belopprad)
-        ? getSignAttribute(taxonomyItem, belopp.startsWith('-'))
+        ? getSignAttribute(taxonomyItem, belopp, showBalanceSign)
         : undefined
     "
     :unitRef="getUnitRef(taxonomyItem)"
