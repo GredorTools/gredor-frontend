@@ -11,7 +11,9 @@
 
 import RenderMain from "@/components/render/RenderMain.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, {
+  type CommonWizardButtonsEmits,
+} from "@/components/common/CommonWizardButtons.vue";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
@@ -61,7 +63,9 @@ onBeforeUnmount(() => {
 
 // För test
 function exportArsredovisning() {
-  requestSaveFile(ixbrl.value, "arsredovisning.xhtml", "text/html");
+  if (ixbrl.value) {
+    requestSaveFile(ixbrl.value, "arsredovisning.xhtml", "text/html");
+  }
 }
 </script>
 

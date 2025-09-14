@@ -6,7 +6,7 @@ import {
   getNonFractionScale,
   getSignAttribute,
   getUnitRef,
-  shouldShowSign,
+  shouldShowSign
 } from "@/util/renderUtils.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
@@ -60,7 +60,7 @@ const belopp = computed(() => {
     :scale="getNonFractionScale(taxonomyItem, displayFormat)"
     :sign="
       isBeloppradMonetary(belopprad)
-        ? getSignAttribute(taxonomyItem, belopp, showBalanceSign)
+        ? getSignAttribute(taxonomyItem, belopp, showBalanceSign || false)
         : undefined
     "
     :unitRef="getUnitRef(taxonomyItem)"

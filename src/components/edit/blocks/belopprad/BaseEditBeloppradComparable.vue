@@ -111,14 +111,14 @@ function onBeforeValueInput(event: InputEvent) {
           <template v-if="showBalanceSign">
             <span
               v-if="
-                (taxonomyItem.properties.balance === 'debit') ^
+                (taxonomyItem.properties.balance === 'debit') !==
                 (taxonomyItem.properties.periodType === 'instant')
               "
               >&minus;</span
             >
             <span
               v-if="
-                (taxonomyItem.properties.balance === 'credit') ^
+                (taxonomyItem.properties.balance === 'credit') !==
                 (taxonomyItem.properties.periodType === 'instant')
               "
               >+</span
@@ -146,14 +146,14 @@ function onBeforeValueInput(event: InputEvent) {
           <template v-if="showBalanceSign">
             <span
               v-if="
-                (taxonomyItem.properties.balance === 'debit') ^
+                (taxonomyItem.properties.balance === 'debit') !==
                 (taxonomyItem.properties.periodType === 'instant')
               "
               >&minus;</span
             >
             <span
               v-if="
-                (taxonomyItem.properties.balance === 'credit') ^
+                (taxonomyItem.properties.balance === 'credit') !==
                 (taxonomyItem.properties.periodType === 'instant')
               "
               >+</span
