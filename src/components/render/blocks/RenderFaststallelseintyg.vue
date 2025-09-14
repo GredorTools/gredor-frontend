@@ -116,9 +116,13 @@ defineProps<{
 .faststallelseintyg {
   border: 0.25rem solid black;
   padding: 1rem 2rem;
-}
 
-.signature-header {
-  font-weight: 600;
+  h2 {
+    margin-top: 0.5rem;
+  }
+
+  .signature-header {
+    font-weight: 600;
+  }
 }
 </style>
