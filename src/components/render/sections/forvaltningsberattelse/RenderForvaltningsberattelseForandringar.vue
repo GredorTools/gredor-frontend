@@ -56,7 +56,7 @@ const table = computed(() =>
         <th
           v-for="columnName in table.columnNames"
           :key="columnName"
-          class="value-container"
+          class="value-container column-name"
           scope="col"
         >
           {{ columnName }}
@@ -89,4 +89,8 @@ const table = computed(() =>
   </table>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+th.column-name {
+  white-space: collapse !important;
+}
+</style>
