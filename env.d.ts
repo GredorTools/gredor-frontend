@@ -2,7 +2,10 @@
 
 declare const __APP_VERSION__: string;
 
-type EnvironmentKey = "VITE_ENV_NAME" | "VITE_GREDOR_BACKEND_BASEURL";
+type EnvironmentKey =
+  | "VITE_ENV_NAME"
+  | "VITE_TEST_MODE"
+  | "VITE_GREDOR_BACKEND_BASEURL";
 type EnvironmentConfig = Record<EnvironmentKey, string>;
 
 interface ImportMeta {

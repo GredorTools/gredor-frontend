@@ -11,14 +11,14 @@
 
 import RenderMain from "@/components/render/RenderMain.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import CommonWizardButtons, {
-  type CommonWizardButtonsEmits,
-} from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import { requestSaveFile } from "@/util/fileUtils.ts";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -58,6 +58,11 @@ onBeforeUnmount(() => {
     clearInterval(reportGeneratorIntervalId);
   }
 });
+
+// För test
+function exportArsredovisning() {
+  requestSaveFile(ixbrl.value, "arsredovisning.xhtml", "text/html");
+}
 </script>
 
 <template>
@@ -79,6 +84,15 @@ onBeforeUnmount(() => {
         :show-faststallelseintyg="includeFaststallelseintyg"
       />
     </div>
+
+    <button
+      v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
+      :disabled="!ixbrl"
+      class="btn btn-outline-primary"
+      @click="exportArsredovisning()"
+    >
+      Exportera iXBRL-fil (test)
+    </button>
 
     <CommonWizardButtons
       :next-button-disabled="!ixbrl"

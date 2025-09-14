@@ -11,6 +11,7 @@ import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
@@ -55,7 +56,11 @@ function showSendWizard() {
 
 <template>
   <div class="d-flex justify-content-end gap-2">
-    <button class="btn btn-outline-primary" @click="exportArsredovisning()">
+    <button
+      v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
+      class="btn btn-outline-primary"
+      @click="exportArsredovisning()"
+    >
       Exportera iXBRL-fil (test)
     </button>
     <button class="btn btn-primary" @click="showFinalizeWizard">
