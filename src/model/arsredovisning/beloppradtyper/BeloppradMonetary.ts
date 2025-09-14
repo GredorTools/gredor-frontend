@@ -1,5 +1,6 @@
 import {
   type Belopprad,
+  getTaxonomyItemForBelopprad,
   isSumBeloppradEmpty,
 } from "@/model/arsredovisning/Belopprad.ts";
 import {
@@ -71,9 +72,14 @@ export function hasBeloppradMonetaryValue(
   section: Belopprad[],
   maxNumPreviousYears: number,
 ): boolean {
+  const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, belopprad);
+
   function isBeloppValidMonetaryValue(stringValue: string): boolean {
     const parsedInt = parseInt(stringValue, 10);
-    return !isNaN(parsedInt) && parsedInt !== 0;
+    return (
+      !isNaN(parsedInt) &&
+      (!taxonomyItem.additionalData.isCalculatedItem || parsedInt !== 0)
+    );
   }
 
   return (
@@ -88,6 +94,6 @@ export function hasBeloppradMonetaryValue(
           ),
         )
         .some((belopp) => isBeloppValidMonetaryValue(belopp))) &&
-      !isSumBeloppradEmpty(taxonomyManager, belopprad, section))
+      !isSumBeloppradEmpty(taxonomyManager, belopprad, taxonomyItem, section))
   );
 }

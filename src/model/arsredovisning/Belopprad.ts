@@ -399,12 +399,10 @@ export function hasBeloppradValue(
 export function isSumBeloppradEmpty(
   taxonomyManager: TaxonomyManager,
   sumBelopprad: Belopprad,
+  taxonomyItem: TaxonomyItem,
   section: Belopprad[],
 ): boolean {
-  if (
-    !getTaxonomyItemForBelopprad(taxonomyManager, sumBelopprad).additionalData
-      .isCalculatedItem
-  ) {
+  if (!taxonomyItem.additionalData.isCalculatedItem) {
     return false;
   }
 
