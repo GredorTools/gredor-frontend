@@ -153,15 +153,12 @@ export function getContextRef(
  *
  * @param taxonomyItem - Taxonomiobjektet vars sign-attribut ska bestämmas.
  * @param belopp - Beloppet.
- * @param showBalanceSign - Huruvida balanstecken (plus/minus) får visas för
- * beloppraden utifrån det motsvarande taxonomiobjektets balance-värde.
  *
  * @returns Korrekt sign-attribut för taxonomiobjektet och beloppvärdet.
  */
 export function getSignAttribute(
   taxonomyItem: TaxonomyItem,
   belopp: string,
-  showBalanceSign: boolean,
 ): string | undefined {
   if (belopp.trim().length < 1 || parseInt(belopp.trim(), 10) === 0) {
     // Inget sign-attribut för noll
@@ -171,45 +168,32 @@ export function getSignAttribute(
   const isNegativeValue = belopp.startsWith("-");
 
   // Källa: https://xbrl.taxonomier.se/se/exempel/taggning/exempel-7/taggning-exempel-7-rev20240214.xhtml
-  if (taxonomyItem.properties.balance === "credit") {
+  if (
+    taxonomyItem.properties.balance === "credit" ||
+    taxonomyItem.properties.balance === "debit"
+  ) {
     // Som man förväntar sig
     return isNegativeValue ? "-" : undefined;
-  } else if (taxonomyItem.properties.balance === "debit") {
-    if (!isNegativeValue) {
-      // Om taggningen sker med ett begrepp där balance-attributet är definerade
-      // som debit samt värdet är en debetpost så SKA INTE sign attributet
-      // tillämpas. Detta då ett positivt tal förväntas i instansdokumentet.
-      return undefined;
-    }
-
-    if (
-      shouldShowSign(taxonomyItem, belopp, showBalanceSign) &&
-      !isNegativeValue
-    ) {
-      // Om taggningen sker med ett begrepp där balance-attributet är definerade
-      // som debit samt värdet är en debetpost så SKA INTE sign attributet
-      // tillämpas. Minustecken i xhtml presenationen läggs utanför
-      // iXBRL-taggningen då värdet i instansdokumentet ska vara positivt.
-      return undefined;
-    }
-
-    return !isNegativeValue ? "-" : undefined;
   } else {
+    // Begrepp som saknar debit/credit; standardrubriken vägleder om förväntat värde i instansdokumentet
     if (
-      taxonomyItem.properties.label.startsWith("Minskning ") &&
-      !taxonomyItem.properties.label.startsWith("Minskning (ökning) ")
+      (taxonomyItem.properties.label.startsWith("Minskning ") &&
+        !/^Minskning(?: \(ökning\))? av(?: ackumulerade)? (?:av|ned)skrivningar /i.test(
+          taxonomyItem.properties.label,
+        )) ||
+      /^Ökning(?: \(minskning\))? av(?: ackumulerade)? (?:av|ned)skrivningar /i.test(
+        taxonomyItem.properties.label,
+      ) ||
+      taxonomyItem.properties.label.startsWith("Periodens avskrivningar ") ||
+      taxonomyItem.properties.label.startsWith("Återförda uppskrivningar ") ||
+      taxonomyItem.properties.label.startsWith("Avskrivningar av ") ||
+      taxonomyItem.properties.label.startsWith("Periodens nedskrivningar ")
     ) {
-      // "Vänd" på tecknet
+      // "Vänd" på tecknet pga att det är en minskning, eller för att det är en av-/nedskrivning
       return !isNegativeValue ? "-" : undefined;
-    } else if (
-      taxonomyItem.properties.label.startsWith("Minskning (ökning) ") ||
-      taxonomyItem.properties.label.startsWith("Ökning (minskning) ")
-    ) {
-      // I det här fallet blir det som man förväntar sig
-      return isNegativeValue ? "-" : undefined;
     } else {
-      // Inget tecken
-      return undefined;
+      // I övriga fall blir det mer intuitivt
+      return isNegativeValue ? "-" : undefined;
     }
   }
 }
@@ -248,7 +232,10 @@ export function shouldShowSign(
       result = belopp.startsWith("-");
     }
 
-    if (taxonomyItem.properties.periodType === "instant") {
+    if (
+      taxonomyItem.properties.periodType === "instant" &&
+      taxonomyItem.properties.balance
+    ) {
       // Visas "tvärtom" för balansposter
       result = !result;
     }

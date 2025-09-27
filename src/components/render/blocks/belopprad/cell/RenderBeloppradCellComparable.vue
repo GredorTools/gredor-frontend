@@ -9,7 +9,6 @@ import {
   shouldShowSign
 } from "@/util/renderUtils.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
-import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 import { formatNumber } from "@/util/formatUtils.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
@@ -58,11 +57,7 @@ const belopp = computed(() => {
     :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
     :name="taxonomyItem.xmlName"
     :scale="getNonFractionScale(taxonomyItem, displayFormat)"
-    :sign="
-      isBeloppradMonetary(belopprad)
-        ? getSignAttribute(taxonomyItem, belopp, showBalanceSign || false)
-        : undefined
-    "
+    :sign="getSignAttribute(taxonomyItem, belopp)"
     :unitRef="getUnitRef(taxonomyItem)"
     format="ixt:numspacecomma"
     v-bind="additionalIxbrlAttrs"

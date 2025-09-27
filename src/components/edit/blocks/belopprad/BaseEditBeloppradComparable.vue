@@ -108,7 +108,7 @@ function onBeforeValueInput(event: InputEvent) {
     <td class="value-container">
       <div class="d-flex align-items-center">
         <slot :taxonomy-item="taxonomyItem" name="input-current-year">
-          <template v-if="showBalanceSign">
+          <template v-if="showBalanceSign && taxonomyItem.properties.balance">
             <span
               v-if="
                 (taxonomyItem.properties.balance === 'debit') !==
@@ -143,7 +143,7 @@ function onBeforeValueInput(event: InputEvent) {
           :taxonomy-item="taxonomyItem"
           name="input-previous-year"
         >
-          <template v-if="showBalanceSign">
+          <template v-if="showBalanceSign && taxonomyItem.properties.balance">
             <span
               v-if="
                 (taxonomyItem.properties.balance === 'debit') !==
