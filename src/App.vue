@@ -226,8 +226,8 @@ function endTour() {
             årsredovisning, de filer du laddar upp samt personuppgifter du
             skriver in. Personnummer lagras på Gredors servrar i en vecka för
             att förhindra spam, i övrigt sparas inget där. Däremot sparar
-            Bolagsverket din årsredovisning när du skickar in den dit, annars
-            hade tjänsten varit någorlunda värdelös 😉
+            Bolagsverket din årsredovisning när du laddar upp den hos dem,
+            annars hade tjänsten varit någorlunda värdelös 😉
           </p>
         </div>
       </div>

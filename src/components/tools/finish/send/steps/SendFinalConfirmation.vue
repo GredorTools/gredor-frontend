@@ -22,16 +22,16 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
     </CommonModalSubtitle>
 
     <p>
-      Du är på väg att skicka in årsredovisningen till ditt egna utrymme hos
+      Du är på väg att ladda upp årsredovisningen till ditt egna utrymme hos
       Bolagsverket.
-      <strong>
+      <strong class="text-decoration-underline">
         Observera att årsredovisningen inte är mottagen av Bolagsverket förrän
         du har signerat den i deras e-tjänst.
       </strong>
     </p>
 
     <CommonWizardButtons
-      next-button-text="Skicka in"
+      next-button-text="Ladda upp"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />

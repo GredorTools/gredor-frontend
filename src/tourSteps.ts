@@ -75,7 +75,7 @@ export const tourSteps: OnboardingTourStep[] = [
       "<ul>" +
       "<li>Verktyget <strong>Färdigställ inför årsstämma</strong> låter dig" +
       " färdigställa årsredovisningen inför ditt företags årsstämma.</li>" +
-      "<li>Efter årsstämman använder du verktyget <strong>Skicka in till" +
+      "<li>Efter årsstämman använder du verktyget <strong>Ladda upp till" +
       " Bolagsverket efter årsstämma</strong> för att lämna in årsredovisningen" +
       " till Bolagsverket.</li>" +
       "</ul>",

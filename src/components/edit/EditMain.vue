@@ -17,7 +17,7 @@ import { nextTick, type Ref, ref } from "vue";
 import EditNoter from "@/components/edit/sections/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/sections/EditForvaltningsberattelse.vue";
 import EditGrunduppgifter from "@/components/edit/sections/EditGrunduppgifter.vue";
-import EditFaststallande from "@/components/edit/sections/EditFaststallande.vue";
+import EditUnderskrifter from "@/components/edit/sections/EditUnderskrifter.vue";
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
@@ -77,14 +77,14 @@ type Mode =
   | "resultatrakning"
   | "balansrakning"
   | "noter"
-  | "faststallande";
+  | "underskrifter";
 const availableModes: { [mode in Mode]: string } = {
   grunduppgifter: "Grunduppgifter",
   forvaltningsberattelse: "Förvaltningsberättelse",
   resultatrakning: "Resultaträkning",
   balansrakning: "Balansräkning",
   noter: "Noter",
-  faststallande: "Fastställande",
+  underskrifter: "Underskrifter",
 };
 const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
@@ -152,8 +152,8 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     <Suspense v-if="currentMode === 'noter'">
       <EditNoter v-model:arsredovisning="arsredovisning" />
     </Suspense>
-    <Suspense v-if="currentMode === 'faststallande'">
-      <EditFaststallande v-model:arsredovisning="arsredovisning" />
+    <Suspense v-if="currentMode === 'underskrifter'">
+      <EditUnderskrifter v-model:arsredovisning="arsredovisning" />
     </Suspense>
   </div>
 

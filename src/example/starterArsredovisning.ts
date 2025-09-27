@@ -24,8 +24,8 @@ export const starterArsredovisning: Arsredovisning = {
         datum: new Date().toISOString().split("T")[0],
       },
     ],
-    faststallandeOrt: "",
-    faststallandeDatum: new Date().toISOString().split("T")[0],
+    undertecknandeOrt: "",
+    datering: new Date().toISOString().split("T")[0],
   },
   installningar: {
     flerarsoversiktBeloppFormat: BeloppFormat.TUSENTAL,

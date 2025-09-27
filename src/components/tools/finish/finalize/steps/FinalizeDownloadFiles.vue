@@ -63,7 +63,7 @@ function exportFile() {
     <p>
       När du har laddat ner .gredorfardig-filen ovan och sparat den tillsammans
       med din signerade .pdf-fil är ditt företag redo för årsstämma! Efter
-      årsstämman kan du använda Gredor-funktionen "Skicka in till Bolagsverket
+      årsstämman kan du använda Gredor-funktionen "Ladda upp till Bolagsverket
       efter årsstämma" för att gå vidare med inlämningen.
     </p>
 

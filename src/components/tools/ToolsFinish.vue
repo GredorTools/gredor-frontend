@@ -67,7 +67,7 @@ function showSendWizard() {
       Färdigställ inför årsstämma
     </button>
     <button class="btn btn-primary" @click="showSendWizard">
-      Skicka in till Bolagsverket efter årsstämma
+      Ladda upp till Bolagsverket efter årsstämma
     </button>
   </div>
 

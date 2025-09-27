@@ -4,8 +4,8 @@ export interface Redovisningsinformation {
   forfattare: Forfattare;
   redovisningsvaluta: Redovisningsvaluta;
   underskrifter: Underskrift[];
-  faststallandeOrt: string;
-  faststallandeDatum: string; // Exempel: "2025-01-23"
+  undertecknandeOrt: string;
+  datering: string; // Exempel: "2025-01-23"
 }
 
 export interface Forfattare {

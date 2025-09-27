@@ -119,12 +119,12 @@ onMounted(() => {
           <li>
             <em>Valideringsfel</em>{{ " " }}
             <span class="text-decoration-underline">måste</span> åtgärdas innan
-            du skickar in årsredovisningen
+            du laddar upp årsredovisningen
           </li>
           <li>
             <em>Varningar</em>{{ " " }}
             <span class="text-decoration-underline">bör</span> åtgärdas innan du
-            skickar in årsredovisningen, för att minimera risken för att du får
+            laddar upp årsredovisningen, för att minimera risken för att du får
             ett föreläggande från Bolagsverket
           </li>
           <li><em>Informationsmeddelanden</em> är endast för upplysning</li>

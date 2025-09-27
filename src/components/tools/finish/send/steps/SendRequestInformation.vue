@@ -38,9 +38,9 @@ const personnummerRegex = /^\d{12}$/;
     <div>
       <h5>Personnummer</h5>
       <p>
-        Bekräfta ditt personnummer nedan. Det måste vara samma person som
-        skickar in årsredovisningen till Bolagsverket som har signerat PDF-filen
-        som du laddade upp i föregående steg.
+        Bekräfta ditt personnummer nedan. Det måste vara samma person som laddar
+        upp årsredovisningen till Bolagsverket som har signerat PDF-filen som du
+        laddade upp i föregående steg.
       </p>
       <p>Format: ÅÅÅÅMMDDXXXX (12 siffror utan bindestreck)</p>
       <input
@@ -55,7 +55,7 @@ const personnummerRegex = /^\d{12}$/;
       <h5>E-post för aviseringar</h5>
       <p>
         Fyll i din e-postadress nedan för att få aviseringar från Bolagsverket
-        gällande årsredovisningen som du skickar in.
+        gällande årsredovisningen som du laddar upp.
       </p>
       <input
         v-model.trim="notificationEmail"

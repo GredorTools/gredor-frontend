@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 /**
- * Wizard för att dirigera användaren genom processen att skicka in
+ * Wizard för att dirigera användaren genom processen att ladda upp
  * årsredovisningen till sitt egna utrymme hos Bolagsverket.
  *
  * Komponenten innehåller en modal som stegvis guidar användaren genom
@@ -55,7 +55,7 @@ const numSteps = 9;
   <CommonModal
     id="send-wizard-modal"
     ref="modal"
-    title="Skicka in till Bolagsverket"
+    title="Ladda upp till Bolagsverket"
   >
     <SendRequestFiles
       v-if="currentStep === 'sendRequestFiles'"

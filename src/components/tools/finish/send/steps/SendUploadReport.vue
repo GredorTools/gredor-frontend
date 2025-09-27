@@ -89,14 +89,14 @@ onMounted(() => {
 <template>
   <div>
     <CommonModalSubtitle>
-      Steg {{ currentStepNumber }}/{{ numSteps }}: Skicka in
+      Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp
     </CommonModalSubtitle>
 
-    <div v-if="loading">Skickar – det kan ta några sekunder…</div>
+    <div v-if="loading">Laddar upp – det kan ta några sekunder…</div>
 
     <div v-if="result != null">
       <p>
-        Årsredovisningen är nu inskickad till ditt egna utrymme hos
+        Årsredovisningen är nu uppladdad till ditt egna utrymme hos
         Bolagsverket.
       </p>
 

@@ -34,25 +34,25 @@ function removeUnderskrift(index: number) {
       title="Ort och datum"
     >
       <div class="mb-3">
-        <label class="form-label" for="faststallandeOrt"
+        <label class="form-label" for="undertecknandeOrt"
           >Ort för underskrift:</label
         >
         <input
-          id="faststallandeOrt"
-          v-model.trim="arsredovisning.redovisningsinformation.faststallandeOrt"
+          id="undertecknandeOrt"
+          v-model.trim="
+            arsredovisning.redovisningsinformation.undertecknandeOrt
+          "
           class="form-control"
           type="text"
         />
       </div>
       <div class="mb-3">
-        <label class="form-label" for="faststallandeDatum"
-          >Datum då innehållet i årsredovisningen fastställdes:</label
+        <label class="form-label" for="datering"
+          >Datum då årsredovisningen var färdig för undertecknande:</label
         >
         <input
-          id="faststallandeDatum"
-          v-model.trim="
-            arsredovisning.redovisningsinformation.faststallandeDatum
-          "
+          id="datering"
+          v-model.trim="arsredovisning.redovisningsinformation.datering"
           class="form-control"
           type="date"
         />
@@ -104,9 +104,7 @@ function removeUnderskrift(index: number) {
             />
           </div>
           <div class="mb-3">
-            <label :for="'datum' + index" class="form-label"
-              >Undertecknandedatum:</label
-            >
+            <label :for="'datum' + index" class="form-label">datering:</label>
             <input
               :id="'datum' + index"
               v-model.trim="underskrift.datum"

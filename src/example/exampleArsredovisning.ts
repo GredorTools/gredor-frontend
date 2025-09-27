@@ -30,8 +30,8 @@ export const exampleArsredovisning: Arsredovisning = {
         datum: "2026-03-12",
       },
     ],
-    faststallandeOrt: "Sundsvall",
-    faststallandeDatum: "2026-03-12",
+    undertecknandeOrt: "Sundsvall",
+    datering: "2026-03-12",
   },
   installningar: {
     flerarsoversiktBeloppFormat: BeloppFormat.TUSENTAL,

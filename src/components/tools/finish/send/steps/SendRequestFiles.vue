@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 /**
  * En komponent som låter användaren ladda upp filer som behövs för att kunna
- * skicka in årsredovisningen till Bolagsverket.
+ * ladda upp årsredovisningen till Bolagsverket.
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";

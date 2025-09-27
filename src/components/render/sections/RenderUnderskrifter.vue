@@ -21,7 +21,7 @@ defineProps<{
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningOrt"
-        >{{ arsredovisning.redovisningsinformation.faststallandeOrt }}
+        >{{ arsredovisning.redovisningsinformation.undertecknandeOrt }}
       </ix:nonNumeric>
       <template
         v-if="
@@ -35,7 +35,7 @@ defineProps<{
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-gen-base:UndertecknandeArsredovisningDatum"
-          >{{ arsredovisning.redovisningsinformation.faststallandeDatum }}
+          >{{ arsredovisning.redovisningsinformation.datering }}
         </ix:nonNumeric>
       </template>
     </p>
