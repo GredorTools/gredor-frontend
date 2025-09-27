@@ -53,19 +53,24 @@ defineProps<{
           {{ arsredovisning.faststallelseintyg.resultatdispositionBeslut.text }}
           <!-- @delete-whitespace -->
         </ix:nonNumeric>
-        <ix:nonNumeric
+        <template
           v-if="
             isFaststallseintygRequiresEgenText(
               arsredovisning.faststallelseintyg,
             )
           "
-          contextRef="balans_nuvarande"
-          name="se-bol-base:ArsstammaResultatDispositionBeslutstext"
         >
-          {{
-            arsredovisning.faststallelseintyg.resultatdispositionBeslutEgenText
-          }}
-        </ix:nonNumeric>
+          {{ " " }}
+          <ix:nonNumeric
+            contextRef="balans_nuvarande"
+            name="se-bol-base:ArsstammaResultatDispositionBeslutstext"
+          >
+            {{
+              arsredovisning.faststallelseintyg
+                .resultatdispositionBeslutEgenText
+            }}
+          </ix:nonNumeric>
+        </template>
       </ix:nonNumeric>
     </p>
     <p>
