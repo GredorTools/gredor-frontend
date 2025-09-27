@@ -1,4 +1,4 @@
-import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
 export const RedovisningsvalutaEUR: Redovisningsvaluta = {
   kod: "EUR",

@@ -4,6 +4,7 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import { isFaststallseintygRequiresEgenText } from "@/model/arsredovisning/Faststallelseintyg.ts";
 
 defineProps<{
   /** Årsredovisningen som innehåller fastställelseintyget. */
@@ -51,6 +52,19 @@ defineProps<{
           <!-- @delete-whitespace -->
           {{ arsredovisning.faststallelseintyg.resultatdispositionBeslut.text }}
           <!-- @delete-whitespace -->
+        </ix:nonNumeric>
+        <ix:nonNumeric
+          v-if="
+            isFaststallseintygRequiresEgenText(
+              arsredovisning.faststallelseintyg,
+            )
+          "
+          contextRef="balans_nuvarande"
+          name="se-bol-base:ArsstammaResultatDispositionBeslutstext"
+        >
+          {{
+            arsredovisning.faststallelseintyg.resultatdispositionBeslutEgenText
+          }}
         </ix:nonNumeric>
       </ix:nonNumeric>
     </p>

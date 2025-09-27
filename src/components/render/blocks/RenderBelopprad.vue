@@ -22,9 +22,9 @@ import { isBeloppradTuple } from "@/model/arsredovisning/beloppradtyper/Beloppra
 import RenderBeloppradEnum from "@/components/render/blocks/belopprad/RenderBeloppradEnum.vue";
 import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
-import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 import { getContextRefPrefix } from "@/util/renderUtils.ts";
 import { RenderBeloppradDisplayAsType } from "@/components/render/blocks/belopprad/RenderBeloppradDisplayAsType.ts";
+import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */

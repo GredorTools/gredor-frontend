@@ -9,6 +9,7 @@ import {
   FASTSTALLELSEINTYG_UNDERSKRIFT_ROLLER,
   RESULTATDISPOSITION_BESLUT,
 } from "@/data/faststallelseintyg.ts";
+import { isFaststallseintygRequiresEgenText } from "@/model/arsredovisning/Faststallelseintyg.ts";
 
 /** Årsredovisningen som innehåller fastställelseintyget. */
 defineModel<Arsredovisning>("arsredovisning", {
@@ -33,6 +34,24 @@ defineModel<Arsredovisning>("arsredovisning", {
           {{ resultatdispositionBeslut.text }}
         </option>
       </select>
+    </div>
+    <div
+      v-if="
+        isFaststallseintygRequiresEgenText(arsredovisning.faststallelseintyg)
+      "
+      class="form-group"
+    >
+      <label for="resultatdispositionBeslutEgenText"
+        >Stämmans beslut angående resultatdispositionen:</label
+      >
+      <input
+        id="resultatdispositionBeslutEgenText"
+        v-model.trim="
+          arsredovisning.faststallelseintyg.resultatdispositionBeslutEgenText
+        "
+        class="form-control"
+        type="text"
+      />
     </div>
     <div class="form-group">
       <label for="resultatdispositionBeslut">Datum för årsstämma:</label>

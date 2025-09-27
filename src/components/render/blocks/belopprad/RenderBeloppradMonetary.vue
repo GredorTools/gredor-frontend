@@ -9,8 +9,8 @@ import BaseRenderBeloppradComparable, {
   type RenderBeloppradComparablePropsBase,
 } from "@/components/render/blocks/belopprad/BaseRenderBeloppradComparable.vue";
 import { computed } from "vue";
-import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
 const props = defineProps<
   RenderBeloppradComparablePropsBase<BeloppradMonetary> & {

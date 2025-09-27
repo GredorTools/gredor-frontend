@@ -2,7 +2,6 @@
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
-import type { Redovisningsvaluta } from "@/model/arsredovisning/Arsredovisning.ts";
 import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import RenderBeloppradCellString from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellString.vue";
 import RenderBeloppradCellComparable from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellComparable.vue";
@@ -10,6 +9,7 @@ import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/Bas
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import RenderBeloppradCellEnum from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellEnum.vue";
 import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
+import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */

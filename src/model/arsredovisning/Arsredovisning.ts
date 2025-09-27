@@ -1,5 +1,7 @@
 import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import type { Faststallelseintyg } from "@/model/arsredovisning/Faststallelseintyg.ts";
+import type { Redovisningsinformation } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
 export interface Arsredovisning {
   metadata: Metadata;
@@ -25,47 +27,8 @@ export interface Foretagsinformation {
   organisationsnummer: string;
 }
 
-export interface Redovisningsinformation {
-  forfattare: Forfattare;
-  redovisningsvaluta: Redovisningsvaluta;
-  underskrifter: Underskrift[];
-  faststallandeOrt: string;
-  faststallandeDatum: string; // Exempel: "2025-01-23"
-}
-
 export interface Installningar {
   flerarsoversiktBeloppFormat: BeloppFormat;
-}
-
-export interface Forfattare {
-  namn: string;
-  xbrlId: string; // Exempel: "se-mem-base:FinansiellRapportStyrelsenAvgerArsredovisningMember"
-}
-
-export interface Redovisningsvaluta {
-  kod: string; // Exempel: "SEK"
-  namn: string; // Exempel: "kronor"
-  namnKort: string; // Exempel: "kr"
-  namnKortTusental: string; // Exempel: "tkr"
-  xbrlId: string; // Exempel: "se-mem-base:ValutaSvenskaKronorMember"
-}
-
-export interface Underskrift {
-  tilltalsnamn: string;
-  efternamn: string;
-  roll: string;
-  datum: string; // Exempel: "2025-01-23"
-}
-
-export interface Faststallelseintyg {
-  datumArsstamma: string; // Exempel: "2025-02-18"
-  resultatdispositionBeslut: ResultatdispositionBeslut;
-  underskrift: Underskrift;
-}
-
-export interface ResultatdispositionBeslut {
-  text: string;
-  xbrlId: string;
 }
 
 export interface Verksamhetsar {

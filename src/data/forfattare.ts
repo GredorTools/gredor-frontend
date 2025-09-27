@@ -1,4 +1,4 @@
-import type { Forfattare } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { Forfattare } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
 export const ForfattareStyrelsen: Forfattare = {
   namn: "Styrelsen",

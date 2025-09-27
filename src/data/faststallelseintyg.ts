@@ -1,4 +1,4 @@
-import type { ResultatdispositionBeslut } from "@/model/arsredovisning/Arsredovisning.ts";
+import type { ResultatdispositionBeslut } from "@/model/arsredovisning/Faststallelseintyg.ts";
 
 export const ResultatdispositionBeslutGodkannaVinst: ResultatdispositionBeslut =
   {
