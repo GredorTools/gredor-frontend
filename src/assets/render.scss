@@ -62,6 +62,13 @@
   :deep(table) {
     width: 100%;
 
+    tr {
+      // Fixa problem med oönskade radbrytningar när wkhtmltopdf (renderaren
+      // som Bolagverket användaren) skriver ut tabeller där td:first-child har
+      // width: 99%.
+      page-break-inside: avoid;
+    }
+
     th h2 {
       margin-bottom: 0;
     }

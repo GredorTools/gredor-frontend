@@ -26,7 +26,14 @@ export async function convertVueHTMLToiXBRL(
   let rulesCss = await getCssTextForUsedRules(doc.querySelectorAll("*"));
 
   // Omvandla CSS-attribut som inte är kompatibla med wkhtmltopdf som Bolagsverket använder
-  rulesCss = rulesCss.replace(/break-after: page/g, "page-break-after: always");
+  rulesCss = rulesCss.replace(
+    /([^A-Za-z-])break-after: page/g,
+    "$1page-break-after: always",
+  );
+  rulesCss = rulesCss.replace(
+    /([^A-Za-z-])break-inside: /g,
+    "$1page-break-inside: ",
+  );
 
   // Omvandla attribut som börjar på "data-" eftersom de inte är giltig XHTML/iXBRL
   for (const element of doc.querySelectorAll("*")) {
