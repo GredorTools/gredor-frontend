@@ -4,9 +4,7 @@
  * till backend/Bolagsverket.
  */
 
-import CommonWizardButtons, {
-  type CommonWizardButtonsEmits,
-} from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
@@ -80,16 +78,18 @@ onBeforeUnmount(() => {
     </div>
 
     <div>
-      <h5>E-post för aviseringar</h5>
+      <h5>Bolagsverkets kontroller</h5>
 
       <p>
-        I de följande stegen har Gredor möjlighet att låta Bolagsverket
-        kontrollera din årsredovisning ifall den eventuellt skulle innehålla
-        fel. För att använda funktionen behöver du initierar detta vara behörig
-        att företräda företaget samt kunna identifiera dig med BankID.
+        Gredor har möjlighet att redan nu köra Bolagsverkets automatiska
+        kontroller på din årsredovisning. Kontrollerna är av begränsad
+        omfattning, men de kan vara till hjälp för att upptäcka såväl vanliga
+        som ovanliga fel. För att använda funktionen behöver du som initierar
+        detta vara behörig att företräda företaget samt kunna identifiera dig
+        med BankID.
       </p>
 
-      <p>Vill du låta Bolagsverket kontrollera din årsredovisning?</p>
+      <p>Vill du kontrollera din årsredovisning genom Bolagsverket?</p>
 
       <div class="format-radios">
         <div class="form-check">
