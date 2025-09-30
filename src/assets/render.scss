@@ -16,16 +16,23 @@
   }
 }
 
+// Detta är rotelementet i iXBRL:en som skickas till Bolagsverket
 .arsredovisning-content {
   width: 100%;
   font-family: "EB Garamond", serif;
   padding: 1.25rem;
 
+  @media screen {
+    // För att det ska bli snyggt när årsredovisningen visas i Bolagsverkets
+    // e-tjänst (ej PDF)
+    max-width: calc(210mm - 4rem);
+  }
+
   & > *:not(:first-child) {
     padding-top: 2rem;
 
     @media screen {
-      /* Matcha marginalen från utskrifter */
+      // Matcha marginalen från utskrifter
       padding-top: 3rem;
     }
   }
@@ -35,7 +42,7 @@
     padding-top: 0;
 
     @media screen {
-      /* Visa linje i Gredor-GUI:t men inte i utskrifter */
+      // Visa linje i Gredor-GUI:t men inte i utskrifter
       border-bottom: 1px solid #a0a0a0;
       margin: 0 -3.25rem;
       background-size: 210mm 297mm;

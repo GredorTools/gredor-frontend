@@ -161,25 +161,47 @@ export async function convertVueHTMLToiXBRL(
 async function getCssTextForUsedRules(
   elements: NodeListOf<Element>,
 ): Promise<string> {
-  const rulesUsed = new Set<CSSStyleRule>();
+  const rulesUsed = new Set<CSSRule>();
   const fontFamiliesUsed = new Set<string>();
+
+  function processRule(
+    rule: CSSRule,
+    styleRule: CSSStyleRule,
+    element: Element,
+  ) {
+    if (element.matches && element.matches(styleRule.selectorText)) {
+      rulesUsed.add(rule);
+
+      if (styleRule.style.fontFamily) {
+        const fontFamilies = styleRule.style.fontFamily
+          .split(",")
+          .map((fontFamily) => fontFamily.trim().replace(/"/g, ""));
+        for (const fontFamily of fontFamilies) {
+          fontFamiliesUsed.add(fontFamily);
+        }
+      }
+    }
+  }
 
   for (const sheet of Object.values(document.styleSheets)) {
     for (const rule of Object.values(sheet.cssRules)) {
       for (const element of elements) {
-        if (
-          rule instanceof CSSStyleRule &&
-          element.matches &&
-          element.matches(rule.selectorText)
+        if (rule instanceof CSSStyleRule) {
+          // Alla vanliga style-rules ska behandlas
+          processRule(rule, rule, element);
+        } else if (
+          rule instanceof CSSMediaRule &&
+          Array.from(rule.media).some((media) => media === "screen")
         ) {
-          rulesUsed.add(rule);
-
-          if (rule.style.fontFamily) {
-            const fontFamilies = rule.style.fontFamily
-              .split(",")
-              .map((fontFamily) => fontFamily.trim().replace(/"/g, ""));
-            for (const fontFamily of fontFamilies) {
-              fontFamiliesUsed.add(fontFamily);
+          for (const subrule of rule.cssRules) {
+            if (
+              subrule instanceof CSSStyleRule &&
+              subrule.selectorText != "body"
+            ) {
+              // Alla style-rules i media screen-regler ska behandlas, förutom
+              // de som har "body" som selektor - för att det ska bli snyggt när
+              // årsredovisningen visas i Bolagsverkets e-tjänst (ej PDF)
+              processRule(rule, subrule, element);
             }
           }
         }
