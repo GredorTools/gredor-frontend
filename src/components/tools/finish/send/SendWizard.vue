@@ -22,6 +22,7 @@ import CommonBolagsverketAgreement from "@/components/tools/finish/common/steps/
 import CommonModal from "@/components/common/CommonModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import SendGredorAgreement from "@/components/tools/finish/send/steps/SendGredorAgreement.vue";
+import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
 
 const modal = ref<ComponentExposed<typeof CommonModal>>();
 defineExpose({
@@ -32,13 +33,13 @@ defineExpose({
 });
 
 const arsredovisning = ref<Arsredovisning | undefined>();
-const signedPdf = ref<Uint8Array | undefined>();
-const signerPnr = ref<string>("");
+const personalNumber = ref<string>("");
 const notificationEmail = ref<string>("");
 const ixbrl = ref<string | undefined>();
 
 const currentStep = ref<
   | "sendRequestFiles"
+  | "bankIdLogin"
   | "requestInformation"
   | "bolagsverketAgreement"
   | "addFaststallelseintyg"
@@ -48,7 +49,7 @@ const currentStep = ref<
   | "finalConfirmation"
   | "uploadReport"
 >("sendRequestFiles");
-const numSteps = 9;
+const numSteps = 10;
 </script>
 
 <template>
@@ -60,7 +61,6 @@ const numSteps = 9;
     <SendRequestFiles
       v-if="currentStep === 'sendRequestFiles'"
       v-model:arsredovisning="arsredovisning"
-      v-model:signed-pdf="signedPdf"
       :current-step-number="1"
       :num-steps="numSteps"
       class="limit-width"
@@ -69,24 +69,27 @@ const numSteps = 9;
     <SendRequestInformation
       v-if="currentStep === 'requestInformation'"
       v-model:notification-email="notificationEmail"
-      v-model:signer-pnr="signerPnr"
+      v-model:personal-number="personalNumber"
       :current-step-number="2"
       :num-steps="numSteps"
       class="limit-width"
       @go-to-previous-step="currentStep = 'sendRequestFiles'"
+      @go-to-next-step="currentStep = 'bankIdLogin'"
+    />
+    <CommonBankIdLogin
+      v-if="currentStep === 'bankIdLogin'"
+      :current-step-number="3"
+      :num-steps="numSteps"
+      :personal-number="personalNumber"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'requestInformation'"
       @go-to-next-step="currentStep = 'bolagsverketAgreement'"
     />
     <CommonBolagsverketAgreement
-      v-if="
-        currentStep === 'bolagsverketAgreement' &&
-        arsredovisning != null &&
-        signedPdf != null
-      "
+      v-if="currentStep === 'bolagsverketAgreement' && arsredovisning != null"
       :arsredovisning="arsredovisning"
-      :current-step-number="3"
+      :current-step-number="4"
       :num-steps="numSteps"
-      :signed-pdf="signedPdf"
-      :signer-pnr="signerPnr"
       class="limit-width"
       @go-to-previous-step="currentStep = 'requestInformation'"
       @go-to-next-step="currentStep = 'addFaststallelseintyg'"
@@ -94,7 +97,7 @@ const numSteps = 9;
     <SendAddFaststallelseintyg
       v-if="currentStep === 'addFaststallelseintyg'"
       :arsredovisning="arsredovisning"
-      :current-step-number="4"
+      :current-step-number="5"
       :num-steps="numSteps"
       @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
       @go-to-next-step="currentStep = 'generateReport'"
@@ -103,7 +106,7 @@ const numSteps = 9;
       v-if="currentStep === 'generateReport' && arsredovisning != null"
       v-model:ixbrl="ixbrl"
       :arsredovisning="arsredovisning"
-      :current-step-number="5"
+      :current-step-number="6"
       :include-faststallelseintyg="true"
       :num-steps="numSteps"
       @go-to-previous-step="currentStep = 'addFaststallelseintyg'"
@@ -113,22 +116,19 @@ const numSteps = 9;
       v-if="
         currentStep === 'validateReport' &&
         arsredovisning != null &&
-        signedPdf != null &&
         ixbrl != null
       "
       :arsredovisning="arsredovisning"
-      :current-step-number="6"
+      :current-step-number="7"
       :ixbrl="ixbrl"
       :num-steps="numSteps"
-      :signed-pdf="signedPdf"
-      :signer-pnr="signerPnr"
       class="limit-width"
       @go-to-previous-step="currentStep = 'generateReport'"
       @go-to-next-step="currentStep = 'gredorAgreement'"
     />
     <SendGredorAgreement
       v-if="currentStep === 'gredorAgreement'"
-      :current-step-number="7"
+      :current-step-number="8"
       :num-steps="numSteps"
       class="limit-width"
       @go-to-previous-step="currentStep = 'validateReport'"
@@ -136,7 +136,7 @@ const numSteps = 9;
     />
     <SendFinalConfirmation
       v-if="currentStep === 'finalConfirmation'"
-      :current-step-number="8"
+      :current-step-number="9"
       :num-steps="numSteps"
       class="limit-width"
       @go-to-previous-step="currentStep = 'gredorAgreement'"
@@ -146,16 +146,13 @@ const numSteps = 9;
       v-if="
         currentStep === 'uploadReport' &&
         arsredovisning != null &&
-        signedPdf != null &&
         ixbrl != null
       "
       :arsredovisning="arsredovisning"
-      :current-step-number="9"
+      :current-step-number="10"
       :ixbrl="ixbrl"
       :notification-email="notificationEmail"
       :num-steps="numSteps"
-      :signed-pdf="signedPdf"
-      :signer-pnr="signerPnr"
       class="limit-width"
       @go-to-previous-step="currentStep = 'finalConfirmation'"
       @go-to-next-step="modal?.hide()"

@@ -4,6 +4,148 @@
  */
 
 export interface paths {
+    "/v1/bankid/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CancelRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/bankid/init": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Auth Init */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: {
+                    personalNumber?: string | null;
+                    token?: string | null;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AuthInitRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BankIdStatusResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/bankid/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Auth Status */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AuthStatusRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BankIdStatusResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/information/records/{orgnr}": {
         parameters: {
             query?: never;
@@ -57,7 +199,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: never;
+                cookie?: {
+                    personalNumber?: string | null;
+                };
             };
             requestBody: {
                 content: {
@@ -71,7 +215,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SkapaTokenOK"];
+                        "application/json": components["schemas"]["PreparationResponse"];
                     };
                 };
                 /** @description Bad Request */
@@ -104,7 +248,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: never;
+                cookie?: {
+                    personalNumber?: string | null;
+                };
             };
             requestBody: {
                 content: {
@@ -151,7 +297,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: never;
+                cookie?: {
+                    personalNumber?: string | null;
+                };
             };
             requestBody: {
                 content: {
@@ -187,6 +335,25 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AuthInitRequest: {
+            personalNumber: string;
+        };
+        /** @enum {string} */
+        AuthStatus: "PENDING" | "COMPLETE" | "FAILED";
+        AuthStatusRequest: {
+            orderRef: string;
+        };
+        BankIdStatusResponse: {
+            orderRef?: string | null;
+            autoStartToken?: string | null;
+            status: components["schemas"]["AuthStatus"];
+            statusPendingData?: components["schemas"]["StatusPendingData"] | null;
+            statusCompleteData?: components["schemas"]["StatusCompleteData"] | null;
+            statusFailedData?: components["schemas"]["StatusFailedData"] | null;
+        };
+        CancelRequest: {
+            orderRef: string;
+        };
         Handlingsinfo: {
             typ?: components["schemas"]["TypEnum1"];
             /** Format: int32 */
@@ -222,10 +389,11 @@ export interface components {
         /** Format: date */
         LocalDate: string;
         PreparationRequest: {
-            companyOrgnr: string;
-            signerPnr: string;
-            /** Format: binary */
-            signedPdf: string;
+            foretagOrgnr: string;
+        };
+        PreparationResponse: {
+            avtalstext: string;
+            avtalstextAndrad: components["schemas"]["LocalDate"];
         };
         Rakenskapsperiod: {
             from?: components["schemas"]["LocalDate"];
@@ -239,31 +407,29 @@ export interface components {
         };
         /** @enum {string} */
         RevisorspliktEnum: "ja" | "nej" | "uppgift_saknas";
-        SkapaTokenOK: {
-            token?: components["schemas"]["UUID"];
-            avtalstext?: string;
-            avtalstextAndrad?: components["schemas"]["LocalDate"];
+        StatusCompleteData: {
+            personalNumber: string;
+            token: string;
+        };
+        StatusFailedData: {
+            hintCode?: string | null;
+        };
+        StatusPendingData: {
+            qrCodeImageBase64: string;
+            hintCode?: string | null;
         };
         SubmissionRequest: {
-            companyOrgnr: string;
-            signerPnr: string;
-            /** Format: binary */
-            signedPdf: string;
+            foretagOrgnr: string;
             /** Format: binary */
             ixbrl: string;
-            notificationEmail: string;
+            aviseringEpost: string;
         };
         /** @enum {string} */
         TypEnum: "info" | "warn" | "error";
         /** @enum {string} */
         TypEnum1: "arsredovisning_komplett" | "arsredovisning_kompletteras" | "revisionsberattelse";
-        /** Format: uuid */
-        UUID: string;
         ValidationRequest: {
-            companyOrgnr: string;
-            signerPnr: string;
-            /** Format: binary */
-            signedPdf: string;
+            foretagOrgnr: string;
             /** Format: binary */
             ixbrl: string;
         };

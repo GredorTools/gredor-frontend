@@ -24,16 +24,9 @@ const arsredovisning = defineModel<Arsredovisning | undefined>(
   },
 );
 
-/** Årsredovisningen som en signerad PDF, används av backend för att verifiera
- * behörighet. */
-const signedPdf = defineModel<Uint8Array | undefined>("signedPdf", {
-  required: true,
-});
-
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
 const hasPickedArsredovisningFile = ref<boolean>(false);
-const hasPickedSignedPdfFile = ref<boolean>(false);
 
 async function handleArsredovisningFile(file: File) {
   const json = await file.text();
@@ -41,11 +34,6 @@ async function handleArsredovisningFile(file: File) {
     "arsredovisning_fardig",
   ]).data;
   hasPickedArsredovisningFile.value = true;
-}
-
-async function handleSignedPdfFile(file: File) {
-  signedPdf.value = await file.bytes();
-  hasPickedSignedPdfFile.value = true;
 }
 </script>
 
@@ -60,18 +48,10 @@ async function handleSignedPdfFile(file: File) {
         :allowed-file-extensions="['.gredorfardig']"
         @file-picked="handleArsredovisningFile"
       />
-      <CommonFileInput
-        :allowed-data-types="['application/pdf']"
-        :allowed-file-extensions="['.pdf']"
-        drag-and-drop-text-override="Dra och släpp din signerade .pdf-fil här"
-        @file-picked="handleSignedPdfFile"
-      />
     </div>
 
     <CommonWizardButtons
-      :next-button-disabled="
-        !hasPickedArsredovisningFile || !handleSignedPdfFile
-      "
+      :next-button-disabled="!hasPickedArsredovisningFile"
       previous-button-hidden
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
@@ -79,22 +59,4 @@ async function handleSignedPdfFile(file: File) {
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import "@/assets/_variables.scss";
-
-.drop-zone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-sm;
-
-  height: 10rem;
-  border: 2px dashed #646464;
-  border-radius: $border-radius-lg;
-
-  &.hover {
-    background-color: #cfd8c7;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

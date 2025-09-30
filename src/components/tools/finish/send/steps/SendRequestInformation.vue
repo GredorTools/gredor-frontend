@@ -5,17 +5,14 @@
  */
 
 import isEmail from "validator/es/lib/isEmail";
-import CommonWizardButtons, {
-  type CommonWizardButtonsEmits,
-} from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 defineProps<CommonStepProps>();
 
-/** Användarens personnummer. Måste stämma överens med personnumret i den
- * signerade PDF-årsredovisningsfilen. */
-const signerPnr = defineModel<string>("signerPnr", {
+/** Användarens personnummer. */
+const personalNumber = defineModel<string>("personalNumber", {
   required: true,
 });
 
@@ -38,13 +35,14 @@ const personnummerRegex = /^\d{12}$/;
     <div>
       <h5>Personnummer</h5>
       <p>
-        Bekräfta ditt personnummer nedan. Det måste vara samma person som laddar
-        upp årsredovisningen till Bolagsverket som har signerat PDF-filen som du
-        laddade upp i föregående steg.
+        Fyll i ditt personnummer nedan. I de följande stegen kommer Gredor att
+        låta Bolagsverkets kontrollera din årsredovisning samt ladda upp den
+        till ditt egna utrymme, och du som initierar detta måste vara behörig
+        att företräda företaget samt kunna identifiera dig med BankID.
       </p>
       <p>Format: ÅÅÅÅMMDDXXXX (12 siffror utan bindestreck)</p>
       <input
-        v-model.trim="signerPnr"
+        v-model.trim="personalNumber"
         maxlength="12"
         placeholder="Skriv personnummer här…"
         type="text"
@@ -66,7 +64,7 @@ const personnummerRegex = /^\d{12}$/;
 
     <CommonWizardButtons
       :next-button-disabled="
-        !personnummerRegex.test(signerPnr) || !isEmail(notificationEmail)
+        !personnummerRegex.test(personalNumber) || !isEmail(notificationEmail)
       "
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
@@ -78,10 +76,11 @@ const personnummerRegex = /^\d{12}$/;
 @import "@/assets/_variables.scss";
 
 h5 {
-  margin-top: $spacing-lg;
+  font-size: 1.15rem;
+  margin-top: $spacing-xl;
 }
 
-input {
+input[type="text"] {
   width: 50%;
 }
 </style>

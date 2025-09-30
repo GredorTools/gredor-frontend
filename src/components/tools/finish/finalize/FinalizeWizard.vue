@@ -8,15 +8,15 @@
  * validering och nedladdning av nödvändiga filer.
  */
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import CommonValidateReport from "@/components/tools/finish/common/steps/CommonValidateReport.vue";
 import CommonBolagsverketAgreement from "@/components/tools/finish/common/steps/CommonBolagsverketAgreement.vue";
-import FinalizeSignPdf from "@/components/tools/finish/finalize/steps/FinalizeSignPdf.vue";
 import FinalizeRequestInformation from "@/components/tools/finish/finalize/steps/FinalizeRequestInformation.vue";
 import FinalizeDownloadFiles from "@/components/tools/finish/finalize/steps/FinalizeDownloadFiles.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModal from "@/components/common/CommonModal.vue";
+import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
 
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
@@ -31,18 +31,18 @@ defineExpose({
   },
 });
 
-const signedPdf = ref<Uint8Array | undefined>();
-const signerPnr = ref<string>("");
+const callBolagsverket = ref<boolean | undefined>();
+const personalNumber = ref<string>("");
 const ixbrl = ref<string | undefined>();
+const numSteps = computed(() => (callBolagsverket.value ? 5 : 2));
 
 const currentStep = ref<
-  | "signPdf"
   | "requestInformation"
+  | "bankIdLogin"
   | "bolagsverketAgreement"
   | "validateReport"
   | "downloadFiles"
->("signPdf");
-const numSteps = 5;
+>("requestInformation");
 </script>
 
 <template>
@@ -51,64 +51,63 @@ const numSteps = 5;
     ref="modal"
     title="Färdigställ inför årsstämma"
   >
-    <FinalizeSignPdf
-      v-if="currentStep === 'signPdf' && arsredovisning"
+    <FinalizeRequestInformation
+      v-if="currentStep === 'requestInformation'"
+      v-model:call-bolagsverket="callBolagsverket"
       v-model:ixbrl="ixbrl"
-      v-model:signed-pdf="signedPdf"
+      v-model:personal-number="personalNumber"
       :arsredovisning="arsredovisning"
       :current-step-number="1"
       :num-steps="numSteps"
       class="limit-width"
-      @go-to-next-step="currentStep = 'requestInformation'"
+      @go-to-next-step="
+        currentStep = callBolagsverket ? 'bankIdLogin' : 'downloadFiles'
+      "
     />
-    <FinalizeRequestInformation
-      v-if="currentStep === 'requestInformation'"
-      v-model:signer-pnr="signerPnr"
+    <CommonBankIdLogin
+      v-if="currentStep === 'bankIdLogin'"
       :current-step-number="2"
       :num-steps="numSteps"
+      :personal-number="personalNumber"
+      allow-skip
       class="limit-width"
-      @go-to-previous-step="currentStep = 'signPdf'"
+      @go-to-previous-step="currentStep = 'requestInformation'"
       @go-to-next-step="currentStep = 'bolagsverketAgreement'"
     />
     <CommonBolagsverketAgreement
-      v-if="
-        currentStep === 'bolagsverketAgreement' &&
-        arsredovisning != null &&
-        signedPdf != null
-      "
+      v-if="currentStep === 'bolagsverketAgreement' && arsredovisning != null"
       :arsredovisning="arsredovisning"
       :current-step-number="3"
       :num-steps="numSteps"
-      :signed-pdf="signedPdf"
-      :signer-pnr="signerPnr"
       class="limit-width"
-      @go-to-previous-step="currentStep = 'requestInformation'"
+      @go-to-previous-step="currentStep = 'bankIdLogin'"
       @go-to-next-step="currentStep = 'validateReport'"
     />
     <CommonValidateReport
       v-if="
         currentStep === 'validateReport' &&
         arsredovisning != null &&
-        signedPdf != null &&
         ixbrl != null
       "
       :arsredovisning="arsredovisning"
       :current-step-number="4"
       :ixbrl="ixbrl"
       :num-steps="numSteps"
-      :signed-pdf="signedPdf"
-      :signer-pnr="signerPnr"
       class="limit-width"
+      discard-faststallelseintyg-validations
       @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
       @go-to-next-step="currentStep = 'downloadFiles'"
     />
     <FinalizeDownloadFiles
-      v-if="currentStep === 'downloadFiles'"
+      v-if="currentStep === 'downloadFiles' && ixbrl != null"
       :arsredovisning="arsredovisning"
-      :current-step-number="5"
+      :current-step-number="callBolagsverket ? 5 : 2"
+      :ixbrl="ixbrl"
       :num-steps="numSteps"
       class="limit-width"
-      @go-to-previous-step="currentStep = 'validateReport'"
+      @go-to-previous-step="
+        currentStep = callBolagsverket ? 'validateReport' : 'requestInformation'
+      "
       @go-to-next-step="modal?.hide()"
     />
   </CommonModal>

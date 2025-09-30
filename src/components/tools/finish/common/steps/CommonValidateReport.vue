@@ -9,7 +9,7 @@
  */
 
 import { onMounted, ref } from "vue";
-import { base64encode, bytesToBase64 } from "byte-base64";
+import { base64encode } from "byte-base64";
 import type { components, paths } from "@/openapi/gredor-backend-v1";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import createClient from "openapi-fetch";
@@ -25,16 +25,11 @@ const props = defineProps<
     /** Årsredovisningen som ska skickas in till Bolagsverket. */
     arsredovisning: Arsredovisning;
 
-    /** Årsredovisningen som en signerad PDF, används av backend för att verifiera
-     * behörighet. */
-    signedPdf: Uint8Array;
-
     /** Årsredovisningen i iXBRL-format. */
     ixbrl: string;
 
-    /** Användarens personnummer. Måste stämma överens med personnumret i den
-     * signerade PDF-årsredovisningsfilen. */
-    signerPnr: string;
+    /** Huruvida kontroller för fastställelseintyget ska förkastas. */
+    discardFaststallelseintygValidations?: boolean;
   }
 >();
 
@@ -55,21 +50,27 @@ async function performRequest() {
       error: error, // only present if 4XX or 5XX response
     } = await client.POST("/v1/submission-flow/validate", {
       body: {
-        companyOrgnr:
+        foretagOrgnr:
           props.arsredovisning.foretagsinformation.organisationsnummer.replace(
             "-",
             "",
           ),
-        signerPnr: props.signerPnr,
-        signedPdf: bytesToBase64(props.signedPdf),
         ixbrl: base64encode(props.ixbrl),
       },
+      credentials: "include", // Viktigt för att cookies ska funka
     });
 
     if (error) {
       alert("error");
       alert(error);
     } else if (data) {
+      if (props.discardFaststallelseintygValidations && data.utfall) {
+        data.utfall = data.utfall.filter(
+          (kontroll) =>
+            !kontroll.text ||
+            !kontroll.text.toLowerCase().includes("fastställelseintyg"),
+        );
+      }
       result.value = data;
     }
   } finally {

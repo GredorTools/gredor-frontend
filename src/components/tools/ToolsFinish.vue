@@ -66,7 +66,15 @@ function showSendWizard() {
     <button class="btn btn-primary" @click="showFinalizeWizard">
       Färdigställ inför årsstämma
     </button>
-    <button class="btn btn-primary" @click="showSendWizard">
+    <button
+      class="btn btn-primary d-flex align-items-center gap-2"
+      @click="showSendWizard"
+    >
+      <img
+        alt="Kräver BankID"
+        src="/src/assets/img/BankID_logo_white.svg"
+        style="width: 1.5rem; height: auto"
+      />
       Ladda upp till Bolagsverket efter årsstämma
     </button>
   </div>

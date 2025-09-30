@@ -5,7 +5,6 @@
  */
 
 import { onMounted, ref } from "vue";
-import { bytesToBase64 } from "byte-base64";
 import type { components, paths } from "@/openapi/gredor-backend-v1";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import createClient from "openapi-fetch";
@@ -20,21 +19,13 @@ const props = defineProps<
   CommonStepProps & {
     /** Årsredovisningen som ska skickas in till Bolagsverket. */
     arsredovisning: Arsredovisning;
-
-    /** Årsredovisningen som en signerad PDF, används av backend för att verifiera
-     * behörighet. */
-    signedPdf: Uint8Array;
-
-    /** Användarens personnummer. Måste stämma överens med personnumret i den
-     * signerade PDF-årsredovisningsfilen. */
-    signerPnr: string;
   }
 >();
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
 const loading = ref<boolean>(true);
-const result = ref<components["schemas"]["SkapaTokenOK"] | undefined>();
+const result = ref<components["schemas"]["PreparationResponse"] | undefined>();
 const userAgreed = ref<boolean>(false);
 
 async function performRequest() {
@@ -49,14 +40,13 @@ async function performRequest() {
       error: prepareError, // only present if 4XX or 5XX response
     } = await client.POST("/v1/submission-flow/prepare", {
       body: {
-        companyOrgnr:
+        foretagOrgnr:
           props.arsredovisning.foretagsinformation.organisationsnummer.replace(
             "-",
             "",
           ),
-        signerPnr: props.signerPnr,
-        signedPdf: bytesToBase64(props.signedPdf),
       },
+      credentials: "include", // Viktigt för att cookies ska funka
     });
 
     if (prepareError) {
@@ -91,13 +81,13 @@ onMounted(() => {
       <p
         v-for="(line, index) in result.avtalstext
           .split(/\r?\n/)
-          .filter((l) => l.trim().length > 0)"
+          .filter((l: string) => l.trim().length > 0)"
         :key="index"
       >
         {{ line }}
       </p>
 
-      <div class="d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center pb-4">
         <div class="checkbox-container">
           <div class="form-check">
             <input

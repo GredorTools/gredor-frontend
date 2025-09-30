@@ -2,6 +2,63 @@
 openapi: 3.1.0
 components:
   schemas:
+    AuthInitRequest:
+      type: object
+      required:
+      - personalNumber
+      properties:
+        personalNumber:
+          type: string
+          pattern: "^\\d{12}$"
+    AuthStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETE
+      - FAILED
+    AuthStatusRequest:
+      type: object
+      required:
+      - orderRef
+      properties:
+        orderRef:
+          type: string
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    BankIdStatusResponse:
+      type: object
+      required:
+      - status
+      properties:
+        orderRef:
+          type:
+          - string
+          - "null"
+        autoStartToken:
+          type:
+          - string
+          - "null"
+        status:
+          $ref: "#/components/schemas/AuthStatus"
+        statusPendingData:
+          anyOf:
+          - $ref: "#/components/schemas/StatusPendingData"
+          - type: "null"
+        statusCompleteData:
+          anyOf:
+          - $ref: "#/components/schemas/StatusCompleteData"
+          - type: "null"
+        statusFailedData:
+          anyOf:
+          - $ref: "#/components/schemas/StatusFailedData"
+          - type: "null"
+    CancelRequest:
+      type: object
+      required:
+      - orderRef
+      properties:
+        orderRef:
+          type: string
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
     Handlingsinfo:
       type: object
       properties:
@@ -73,17 +130,21 @@ components:
     PreparationRequest:
       type: object
       required:
-      - companyOrgnr
-      - signerPnr
-      - signedPdf
+      - foretagOrgnr
       properties:
-        companyOrgnr:
+        foretagOrgnr:
           type: string
-        signerPnr:
+          pattern: "^\\d{10}$"
+    PreparationResponse:
+      type: object
+      required:
+      - avtalstext
+      - avtalstextAndrad
+      properties:
+        avtalstext:
           type: string
-        signedPdf:
-          type: string
-          format: binary
+        avtalstextAndrad:
+          $ref: "#/components/schemas/LocalDate"
     Rakenskapsperiod:
       type: object
       properties:
@@ -113,35 +174,48 @@ components:
       - ja
       - nej
       - uppgift_saknas
-    SkapaTokenOK:
+    StatusCompleteData:
+      type: object
+      required:
+      - personalNumber
+      - token
+      properties:
+        personalNumber:
+          type: string
+        token:
+          type: string
+    StatusFailedData:
       type: object
       properties:
-        token:
-          $ref: "#/components/schemas/UUID"
-        avtalstext:
+        hintCode:
+          type:
+          - string
+          - "null"
+    StatusPendingData:
+      type: object
+      required:
+      - qrCodeImageBase64
+      properties:
+        qrCodeImageBase64:
           type: string
-        avtalstextAndrad:
-          $ref: "#/components/schemas/LocalDate"
+        hintCode:
+          type:
+          - string
+          - "null"
     SubmissionRequest:
       type: object
       required:
-      - companyOrgnr
-      - signerPnr
-      - signedPdf
+      - foretagOrgnr
       - ixbrl
-      - notificationEmail
+      - aviseringEpost
       properties:
-        companyOrgnr:
+        foretagOrgnr:
           type: string
-        signerPnr:
-          type: string
-        signedPdf:
-          type: string
-          format: binary
+          pattern: "^\\d{10}$"
         ixbrl:
           type: string
           format: binary
-        notificationEmail:
+        aviseringEpost:
           type: string
     TypEnum:
       type: string
@@ -155,29 +229,88 @@ components:
       - arsredovisning_komplett
       - arsredovisning_kompletteras
       - revisionsberattelse
-    UUID:
-      type: string
-      format: uuid
-      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
     ValidationRequest:
       type: object
       required:
-      - companyOrgnr
-      - signerPnr
-      - signedPdf
+      - foretagOrgnr
       - ixbrl
       properties:
-        companyOrgnr:
+        foretagOrgnr:
           type: string
-        signerPnr:
-          type: string
-        signedPdf:
-          type: string
-          format: binary
+          pattern: "^\\d{10}$"
         ixbrl:
           type: string
           format: binary
 paths:
+  /v1/bankid/cancel:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Cancel
+      tags:
+      - Bank Id Resource
+  /v1/bankid/init:
+    post:
+      parameters:
+      - name: personalNumber
+        in: cookie
+        schema:
+          type:
+          - string
+          - "null"
+      - name: token
+        in: cookie
+        schema:
+          type:
+          - string
+          - "null"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthInitRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BankIdStatusResponse"
+        "400":
+          description: Bad Request
+      summary: Auth Init
+      tags:
+      - Bank Id Resource
+  /v1/bankid/status:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthStatusRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BankIdStatusResponse"
+        "400":
+          description: Bad Request
+      summary: Auth Status
+      tags:
+      - Bank Id Resource
   /v1/information/records/{orgnr}:
     get:
       parameters:
@@ -198,6 +331,13 @@ paths:
       - Information Resource
   /v1/submission-flow/prepare:
     post:
+      parameters:
+      - name: personalNumber
+        in: cookie
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           application/json:
@@ -210,7 +350,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SkapaTokenOK"
+                $ref: "#/components/schemas/PreparationResponse"
         "400":
           description: Bad Request
       summary: Prepare
@@ -218,6 +358,13 @@ paths:
       - Submission Flow Resource
   /v1/submission-flow/submit:
     post:
+      parameters:
+      - name: personalNumber
+        in: cookie
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           application/json:
@@ -238,6 +385,13 @@ paths:
       - Submission Flow Resource
   /v1/submission-flow/validate:
     post:
+      parameters:
+      - name: personalNumber
+        in: cookie
+        schema:
+          type:
+          - string
+          - "null"
       requestBody:
         content:
           application/json:

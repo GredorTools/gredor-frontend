@@ -22,14 +22,18 @@ const props = defineProps<
   CommonStepProps & {
     /** Årsredovisningen som ska skickas in till Bolagsverket. */
     arsredovisning: Arsredovisning;
+
+    /** Årsredovisningen i iXBRL-format. */
+    ixbrl: string;
   }
 >();
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
-const hasDownloaded = ref<boolean>(false);
+const hasDownloadedGredorfardig = ref<boolean>(false);
+const hasDownloadedPdf = ref<boolean>(false);
 
-function exportFile() {
+function exportGredorfardig() {
   const dataContainer: DataContainer<Arsredovisning> = {
     dataType: "arsredovisning_fardig",
     version: 1,
@@ -42,35 +46,86 @@ function exportFile() {
     "application/json",
   );
 
-  hasDownloaded.value = true;
+  hasDownloadedGredorfardig.value = true;
+}
+
+async function exportUnsignedPdf() {
+  if (!props.ixbrl) {
+    return;
+  }
+
+  const printWindow = window.open("", "", "popup,width=800,height=800");
+  if (!printWindow) {
+    return;
+  }
+
+  const htmlToWrite = `${props.ixbrl}
+  <script type="text/javascript">
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        window.close();
+      }, 250);
+    }, 250);
+  <\/script>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(htmlToWrite);
+
+  hasDownloadedPdf.value = true;
 }
 </script>
 
 <template>
   <div>
     <CommonModalSubtitle>
-      Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda ner .gredorfardig-fil
+      Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda ner filer
     </CommonModalSubtitle>
 
-    <div>
-      <p>Bla bla. Du kommer behöva den senare...</p>
+    <div class="file-zone">
+      <div class="download-zone">
+        <button class="btn btn-primary" @click="exportGredorfardig">
+          Ladda ner .gredorfardig-fil
+        </button>
+      </div>
+
+      <p>
+        Du kommer behöva .gredorfardig-filen senare när du laddar upp
+        årsredovisningen till Bolagsverket.
+      </p>
     </div>
 
-    <div class="download-zone">
-      <button class="btn btn-primary" @click="exportFile">Ladda ner</button>
+    <div class="file-zone">
+      <div class="download-zone">
+        <button class="btn btn-primary" @click="exportUnsignedPdf">
+          Skriv ut årsredovisningen
+        </button>
+      </div>
+
+      <p>
+        Efter att du har skrivit ut årsredovisningen är det
+        <strong>mycket viktigt</strong> att du signerar den. Gredors
+        rekommendation är att skriva ut årsredovisningen till en PDF-fil och
+        sedan använda gratistjänten
+        <a href="https://elektronisksignering.se/" target="_blank"
+          >elektronisksignering.se</a
+        >
+        för att signera den digitalt (men du kan också skriva ut den på papper
+        och signera för hand).
+      </p>
     </div>
 
-    <p>
-      När du har laddat ner .gredorfardig-filen ovan och sparat den tillsammans
-      med din signerade .pdf-fil är ditt företag redo för årsstämma! Efter
+    <p class="pb-4">
+      När du har gjort ovanstående är ditt företag redo för årsstämma! Efter
       årsstämman kan du använda Gredor-funktionen "Ladda upp till Bolagsverket
       efter årsstämma" för att gå vidare med inlämningen.
     </p>
 
     <CommonWizardButtons
-      :next-button-disabled="!hasDownloaded"
+      :next-button-disabled="!hasDownloadedGredorfardig || !hasDownloadedPdf"
       :previous-button-hidden="currentStepNumber === 1"
-      next-button-text="Stäng"
+      next-button-text="Klar"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
@@ -78,11 +133,24 @@ function exportFile() {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
+.file-zone {
+  border: 1px solid $border-color-dark;
+  border-radius: var(--bs-border-radius);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
 .download-zone {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  height: 10rem;
+  height: 5rem;
+}
+
+a {
+  font-weight: bold;
 }
 </style>
