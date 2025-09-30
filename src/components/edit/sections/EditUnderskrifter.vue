@@ -35,7 +35,7 @@ function removeUnderskrift(index: number) {
     >
       <div class="mb-3">
         <label class="form-label" for="undertecknandeOrt"
-          >Ort för underskrift:</label
+          >Ort för undertecknande:</label
         >
         <input
           id="undertecknandeOrt"
