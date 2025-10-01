@@ -7,8 +7,8 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
-  define:{
-    "__APP_VERSION__": JSON.stringify(process.env.npm_package_version)
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
   plugins: [
     vue({
@@ -20,6 +20,8 @@ export default defineConfig({
             tag.startsWith("link:") ||
             tag.startsWith("xbrli:") ||
             tag.startsWith("xlink:"),
+          // För att special-markup <!-- @delete-whitespace --> ska fungera
+          comments: true,
         },
       },
     }),

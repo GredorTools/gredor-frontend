@@ -133,7 +133,7 @@ export async function convertVueHTMLToiXBRL(
   );
   xhtml = xmlFormat(xhtml, { collapseContent: true });
 
-  // Ta bort tomrum kring och inklusive <!-- @delete whitespace -->
+  // Ta bort tomrum kring och inklusive <!-- @delete-whitespace -->
   // för att fixa rendrering i XHTML i de aktuella fallen
   xhtml = xhtml.replace(/\s*<!--\s*@delete-whitespace\s?.*?-->\s*/g, "");
 
