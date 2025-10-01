@@ -104,7 +104,9 @@ function removeUnderskrift(index: number) {
             />
           </div>
           <div class="mb-3">
-            <label :for="'datum' + index" class="form-label">datering:</label>
+            <label :for="'datum' + index" class="form-label"
+              >Undertecknandedatum:</label
+            >
             <input
               :id="'datum' + index"
               v-model.trim="underskrift.datum"
