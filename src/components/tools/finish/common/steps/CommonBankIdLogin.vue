@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
       />
 
       <p class="text-center">
-        Skanna QR-koden ovan med BankID-appen på din mobil.
+        Skanna QR-koden ovan med BankID-appen på din mobila enhet.
       </p>
 
       <p class="text-center">
