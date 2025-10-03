@@ -21,6 +21,7 @@ import EditUnderskrifter from "@/components/edit/sections/EditUnderskrifter.vue"
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>({
@@ -114,8 +115,12 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
         Spara som…
       </button>
     </div>
-    <button class="btn btn-primary" @click="importSIE">
-      Importera SIE-fil…
+    <button
+      v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
+      class="btn btn-outline-primary"
+      @click="importSIE"
+    >
+      Importera SIE-fil… (test)
     </button>
   </div>
   <hr />
