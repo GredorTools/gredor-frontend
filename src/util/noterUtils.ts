@@ -18,14 +18,21 @@ export function getValueColumnHeaderCell(
 ): VNode {
   const attrs = { scope: "col", class: "value-container" };
 
-  const firstNonStringItem = groupTaxonomyItem.childrenFlat.find(
-    (child) => child.properties.type !== "xbrli:stringItemType",
+  const firstComparableItem = groupTaxonomyItem.childrenFlat.find(
+    (child) =>
+      [
+        "xbrli:monetaryItemType",
+        "xbrli:decimalItemType",
+        "xbrli:pureItemType",
+        "xbrli:sharesItemType",
+      ].includes(child.properties.type) &&
+      !child.parent!.properties.type.endsWith("Tuple@anonymousType"),
   );
-  if (!firstNonStringItem) {
+  if (!firstComparableItem) {
     // Finns inga icke-sträng-värden, vi ska inte ha någon kolumnrubrik
     return h("th", attrs);
   }
-  switch (firstNonStringItem.properties.periodType) {
+  switch (firstComparableItem.properties.periodType) {
     case "duration":
       // Verksamhetsåret som en period, från startdatumet till slutdatumet
       return h("th", attrs, [
