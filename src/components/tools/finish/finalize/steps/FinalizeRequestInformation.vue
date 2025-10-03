@@ -94,14 +94,14 @@ onBeforeUnmount(() => {
       <div class="format-radios">
         <div class="form-check">
           <input
-            id="callBolagsverketRadioNormal"
+            id="callBolagsverketRadioYes"
             v-model="callBolagsverket"
             :value="true"
             class="form-check-input"
             name="callBolagsverketRadio"
             type="radio"
           />
-          <label class="form-check-label" for="callBolagsverketRadioNormal">
+          <label class="form-check-label" for="callBolagsverketRadioYes">
             Ja, kör Bolagsverkets kontroller <strong>(rekommenderas)</strong>
           </label>
         </div>
