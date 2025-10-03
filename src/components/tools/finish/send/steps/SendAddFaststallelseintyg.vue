@@ -5,7 +5,7 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import EditFaststallelseintyg from "@/components/edit/sections/EditFaststallelseintyg.vue";
+import EditFaststallelseintyg from "@/components/edit/blocks/EditFaststallelseintyg.vue";
 import RenderFaststallelseintyg from "@/components/render/blocks/RenderFaststallelseintyg.vue";
 import { computed } from "vue";
 import CommonWizardButtons, {
