@@ -1,7 +1,8 @@
 /**
- * För att bara tillåta vissa tecken i inmatade värden.
+ * För att bara tillåta vissa tecken i inmatade värden. Ska användas på
+ * beforeInput-event.
  *
- * @param event - InputEvent från inmatningsfältet.
+ * @param event - beforeInput-event från inmatningsfältet.
  * @param allowedValueRegex - Reguljärt uttryck som definierar vilka värden som
  * är tillåtna.
  */
