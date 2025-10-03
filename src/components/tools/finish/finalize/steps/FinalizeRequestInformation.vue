@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
             type="radio"
           />
           <label class="form-check-label" for="callBolagsverketRadioNormal">
-            Ja, kör Bolagsverkets kontroller
+            Ja, kör Bolagsverkets kontroller <strong>(rekommenderas)</strong>
           </label>
         </div>
         <div class="form-check">
