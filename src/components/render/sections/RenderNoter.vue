@@ -129,7 +129,7 @@ h3 {
 }
 
 table {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 
   :deep(.level-2) {
     .header {
