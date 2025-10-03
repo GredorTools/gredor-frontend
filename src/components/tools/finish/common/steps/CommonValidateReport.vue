@@ -151,6 +151,7 @@ onMounted(() => {
 @import "@/assets/_variables.scss";
 
 h5 {
+  font-size: 1.15rem;
   margin-top: $spacing-lg;
 }
 </style>
