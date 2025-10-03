@@ -35,6 +35,7 @@ export const emptyArsredovisning: Arsredovisning = {
       text: "",
       xbrlId: "",
     },
+    resultatdispositionStammans: {},
     underskrift: {
       tilltalsnamn: "",
       efternamn: "",

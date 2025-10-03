@@ -13,7 +13,7 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
-import { isFaststallseintygRequiresEgenText } from "@/model/arsredovisning/Faststallelseintyg.ts";
+import { isFaststallseintygRequiresStammansResultatdisposition } from "@/data/faststallelseintyg.ts";
 
 defineProps<CommonStepProps>();
 
@@ -37,8 +37,12 @@ const isValidFaststallelseintyg = computed(() => {
     faststallelseintyg.underskrift.tilltalsnamn &&
     faststallelseintyg.underskrift.efternamn &&
     faststallelseintyg.underskrift.roll &&
-    (!isFaststallseintygRequiresEgenText(faststallelseintyg) ||
-      faststallelseintyg?.resultatdispositionBeslutEgenText?.trim())
+    (!isFaststallseintygRequiresStammansResultatdisposition(
+      faststallelseintyg,
+    ) ||
+      Object.values(faststallelseintyg.resultatdispositionStammans).some(
+        (value) => value,
+      ))
   );
 });
 </script>

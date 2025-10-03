@@ -11,6 +11,7 @@ import { computed } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
 
 export interface EditBeloppradComparablePropsBase {
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -70,16 +71,7 @@ function onBeforeValueInput(event: InputEvent) {
   }
 
   // För att bara tillåta vissa tecken i värdet
-  if (event.inputType.startsWith("insert")) {
-    const inputElement = event.target as HTMLInputElement;
-    const newValue =
-      inputElement.value.substring(0, inputElement.selectionStart || 0) +
-      (event.data ?? "") +
-      inputElement.value.substring(inputElement.selectionEnd || 0);
-    if (!props.allowedValueRegex.test(newValue.trim())) {
-      event.preventDefault();
-    }
-  }
+  handleEventForInputWithValueWhitelist(event, props.allowedValueRegex);
 }
 </script>
 

@@ -42,6 +42,7 @@ export const exampleArsredovisning: Arsredovisning = {
       text: "",
       xbrlId: "",
     },
+    resultatdispositionStammans: {},
     underskrift: {
       tilltalsnamn: "",
       efternamn: "",

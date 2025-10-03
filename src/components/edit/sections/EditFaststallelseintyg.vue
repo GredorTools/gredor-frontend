@@ -7,9 +7,11 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import {
   FASTSTALLELSEINTYG_UNDERSKRIFT_ROLLER,
+  isFaststallseintygRequiresStammansResultatdisposition,
   RESULTATDISPOSITION_BESLUT,
+  RESULTATDISPOSITION_STAMMANS_DEFINITIONS,
 } from "@/data/faststallelseintyg.ts";
-import { isFaststallseintygRequiresEgenText } from "@/model/arsredovisning/Faststallelseintyg.ts";
+import { handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
 
 /** Årsredovisningen som innehåller fastställelseintyget. */
 defineModel<Arsredovisning>("arsredovisning", {
@@ -37,22 +39,48 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
     <div
       v-if="
-        isFaststallseintygRequiresEgenText(arsredovisning.faststallelseintyg)
+        isFaststallseintygRequiresStammansResultatdisposition(
+          arsredovisning.faststallelseintyg,
+        )
       "
-      class="form-group"
     >
-      <label for="resultatdispositionBeslutEgenText"
-        >Stämmans beslut angående resultatdispositionen:</label
+      <strong class="d-block text-decoration-underline mb-2"
+        >Istället beslöt årsstämman:</strong
       >
-      <input
-        id="resultatdispositionBeslutEgenText"
-        v-model.trim="
-          arsredovisning.faststallelseintyg.resultatdispositionBeslutEgenText
-        "
-        class="form-control"
-        type="text"
-      />
+      <div class="d-grid gap-4" style="grid-template-columns: 1fr 1fr 1fr">
+        <div
+          v-for="definition in RESULTATDISPOSITION_STAMMANS_DEFINITIONS"
+          :key="definition.key"
+          class=""
+        >
+          <label :for="`resultatdispositionBeslutEgen-${definition.key}`">{{
+            definition.textBefore
+          }}</label>
+          <input
+            :id="`resultatdispositionBeslutEgen-${definition.key}`"
+            v-model.trim="
+              arsredovisning.faststallelseintyg.resultatdispositionStammans[
+                definition.key
+              ]
+            "
+            class="form-control"
+            type="text"
+            @beforeinput="
+              (event) =>
+                handleEventForInputWithValueWhitelist(
+                  event as InputEvent,
+                  /^\d*$/,
+                )
+            "
+          />
+          <label :for="`resultatdispositionBeslutEgen-${definition.key}`">{{
+            definition.textAfter
+          }}</label>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="form-section">
     <div class="form-group">
       <label for="resultatdispositionBeslut">Datum för årsstämma:</label>
       <input
@@ -131,6 +159,10 @@ label {
   font-weight: bold;
   margin-bottom: $spacing-sm;
   color: #333;
+}
+
+.d-grid label {
+  margin-bottom: 0;
 }
 
 .form-control,

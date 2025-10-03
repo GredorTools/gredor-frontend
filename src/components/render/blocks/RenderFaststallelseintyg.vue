@@ -4,12 +4,32 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { isFaststallseintygRequiresEgenText } from "@/model/arsredovisning/Faststallelseintyg.ts";
+import RenderFaststallelseintygResultatdispositionStammansPart
+  from "@/components/render/blocks/faststallelseintyg/RenderFaststallelseintygResultatdispositionStammansPart.vue";
+import { computed } from "vue";
+import {
+  isFaststallseintygRequiresStammansResultatdisposition,
+  RESULTATDISPOSITION_STAMMANS_DEFINITIONS
+} from "@/data/faststallelseintyg.ts";
 
-defineProps<{
+const props = defineProps<{
   /** Årsredovisningen som innehåller fastställelseintyget. */
   arsredovisning: Arsredovisning;
 }>();
+
+const allStammansDispositionPartBelopp = computed(() =>
+  RESULTATDISPOSITION_STAMMANS_DEFINITIONS.map(
+    (definition) =>
+      props.arsredovisning.faststallelseintyg.resultatdispositionStammans[
+        definition.key
+      ],
+  ),
+);
+
+const allStammansDispositionPartXmlNames =
+  RESULTATDISPOSITION_STAMMANS_DEFINITIONS.map(
+    (definition) => definition.xbrlId,
+  );
 </script>
 
 <template>
@@ -55,7 +75,7 @@ defineProps<{
         </ix:nonNumeric>
         <template
           v-if="
-            isFaststallseintygRequiresEgenText(
+            isFaststallseintygRequiresStammansResultatdisposition(
               arsredovisning.faststallelseintyg,
             )
           "
@@ -65,10 +85,25 @@ defineProps<{
             contextRef="balans_nuvarande"
             name="se-bol-base:ArsstammaResultatDispositionBeslutstext"
           >
-            {{
-              arsredovisning.faststallelseintyg
-                .resultatdispositionBeslutEgenText
-            }}
+            Istället beslöt årsstämman
+            <RenderFaststallelseintygResultatdispositionStammansPart
+              v-for="definition in RESULTATDISPOSITION_STAMMANS_DEFINITIONS"
+              :key="definition.key"
+              :all-stammans-disposition-part-belopp="
+                allStammansDispositionPartBelopp
+              "
+              :all-stammans-disposition-part-xml-names="
+                allStammansDispositionPartXmlNames
+              "
+              :belopp="
+                arsredovisning.faststallelseintyg.resultatdispositionStammans[
+                  definition.key
+                ]
+              "
+              :text-after="definition.textAfter"
+              :text-before="definition.textBefore"
+              :xbrl-id="definition.xbrlId"
+            />
           </ix:nonNumeric>
         </template>
       </ix:nonNumeric>

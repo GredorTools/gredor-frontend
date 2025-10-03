@@ -15,13 +15,13 @@ import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
  */
 export function formatNumber(
   numberAsString: string,
-  taxonomyItem: TaxonomyItem,
+  taxonomyItem: TaxonomyItem | null,
   displayFormat: BeloppFormat,
   options?: {
     removeSign: boolean;
   },
 ): string {
-  if (!isPercentageTaxonomyItem(taxonomyItem)) {
+  if (taxonomyItem == null || !isPercentageTaxonomyItem(taxonomyItem)) {
     switch (displayFormat) {
       case BeloppFormat.HELTAL:
         break;

@@ -3,7 +3,7 @@ import type { Underskrift } from "@/model/arsredovisning/Underskrift.ts";
 export interface Faststallelseintyg {
   datumArsstamma: string; // Exempel: "2025-02-18"
   resultatdispositionBeslut: ResultatdispositionBeslut;
-  resultatdispositionBeslutEgenText?: string;
+  resultatdispositionStammans: ResultatdispositionStammans;
   underskrift: Underskrift;
 }
 
@@ -12,10 +12,12 @@ export interface ResultatdispositionBeslut {
   xbrlId: string;
 }
 
-export function isFaststallseintygRequiresEgenText(
-  faststallelseintyg: Faststallelseintyg,
-): boolean {
-  return faststallelseintyg.resultatdispositionBeslut.xbrlId.includes(
-    "InteGodkanna",
-  );
+/** Årsstämmans egna resultatdisposition */
+export interface ResultatdispositionStammans {
+  aktieutdelning?: string;
+  balanseringINyRakning?: string;
+  ianspraktagandeAvReservfond?: string;
+  fondemissioner?: string;
+  ianspraktagandeAvUppskrivningsfond?: string;
+  avsattningTillReservfond?: string;
 }
