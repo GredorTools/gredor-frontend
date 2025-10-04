@@ -44,7 +44,7 @@ export const tourSteps: OnboardingTourStep[] = [
       "</p>",
   },
   {
-    target: "#saveArsredovisningBtn",
+    target: "#openAndSaveArsredovisningBtns",
     title: "Öppna och spara",
     beforeScript: scrollToTopOfEditor,
     description:

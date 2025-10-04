@@ -6,71 +6,17 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import EditResultatrakning from "@/components/edit/sections/EditResultatrakning.vue";
-import {
-  parseGredorFile,
-  requestOpenFile,
-  requestSaveFile,
-} from "@/util/fileUtils.ts";
-import type { DataContainer } from "@/model/DataContainer.ts";
 import EditBalansrakning from "@/components/edit/sections/EditBalansrakning.vue";
-import { nextTick, type Ref, ref } from "vue";
+import { type Ref, ref } from "vue";
 import EditNoter from "@/components/edit/sections/EditNoter.vue";
 import EditForvaltningsberattelse from "@/components/edit/sections/EditForvaltningsberattelse.vue";
 import EditGrunduppgifter from "@/components/edit/sections/EditGrunduppgifter.vue";
 import EditUnderskrifter from "@/components/edit/sections/EditUnderskrifter.vue";
-import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
-import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
-import type { ComponentExposed } from "vue-component-type-helpers";
-import { getConfigValue } from "@/util/configUtils.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
-const arsredovisning = defineModel<Arsredovisning>({
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
-
-const newArsredovisningModalRenderId = ref<number>(0);
-const newArsredovisningModal =
-  ref<ComponentExposed<typeof EditNewArsredovisningModal>>();
-
-async function showNewArsredovisningModal() {
-  newArsredovisningModalRenderId.value++; // Så att komponenten nollställs
-  await nextTick(); // Vänta tills den har uppdaterats
-  newArsredovisningModal.value?.show(); // Nu kan vi visa modalen
-}
-
-async function importFile() {
-  const file = await requestOpenFile(".gredorutkast,.gredorfardig");
-  const json = await file?.text();
-  if (json) {
-    arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
-      "arsredovisning_utkast",
-      "arsredovisning_fardig",
-    ]).data;
-  }
-}
-
-function exportFile() {
-  const dataContainer: DataContainer<Arsredovisning> = {
-    dataType: "arsredovisning_utkast",
-    version: 1,
-    data: arsredovisning.value,
-  };
-
-  requestSaveFile(
-    JSON.stringify(dataContainer),
-    `Arsredovisning_${new Date().getTime()}.gredorutkast`,
-    "application/json",
-  );
-}
-
-async function importSIE() {
-  // TODO: Visa meddelande om att saker rensas...
-  const file = await requestOpenFile(".se,.si,.sie");
-  const text = await file?.text();
-  if (text) {
-    await mapSieFileIntoArsredovisning(text, arsredovisning.value);
-  }
-}
 
 type Mode =
   | "grunduppgifter"
@@ -91,40 +37,6 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
 </script>
 
 <template>
-  <div class="d-flex justify-content-between">
-    <div class="d-flex gap-2">
-      <button
-        id="newArsredovisningBtn"
-        class="btn btn-primary"
-        @click="showNewArsredovisningModal"
-      >
-        Ny årsredovisning…
-      </button>
-      <button
-        id="openArsredovisningBtn"
-        class="btn btn-primary"
-        @click="importFile"
-      >
-        Öppna…
-      </button>
-      <button
-        id="saveArsredovisningBtn"
-        class="btn btn-primary"
-        @click="exportFile"
-      >
-        Spara som…
-      </button>
-    </div>
-    <button
-      v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
-      class="btn btn-outline-primary"
-      @click="importSIE"
-    >
-      Importera SIE-fil… (test)
-    </button>
-  </div>
-  <hr />
-
   <ul class="nav nav-tabs">
     <li
       v-for="[mode, modeName] in Object.entries(availableModes)"
@@ -161,19 +73,12 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
       <EditUnderskrifter v-model:arsredovisning="arsredovisning" />
     </Suspense>
   </div>
-
-  <EditNewArsredovisningModal
-    :key="`modal-render-${newArsredovisningModalRenderId}`"
-    ref="newArsredovisningModal"
-    @arsredovisning-created="(value) => (arsredovisning = value)"
-  />
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/_variables.scss";
 
 .nav {
-  margin-top: $spacing-xl;
   border-bottom: 1px solid $border-color-normal;
 }
 
