@@ -56,14 +56,10 @@ const arsredovisning = useGredorStorage(
 <style lang="scss" scoped>
 @import "@/assets/_variables.scss";
 
-main,
-aside {
-  max-width: calc(1152px + 210mm);
-}
-
 main {
   margin: 0 auto;
   font-weight: normal;
+  max-width: $max-page-width;
   height: 100vh;
   max-height: 100vh;
   padding: $spacing-xl;

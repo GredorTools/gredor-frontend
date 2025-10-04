@@ -137,6 +137,7 @@
   margin: 0 auto;
   font-weight: normal;
   display: grid;
+  max-width: $max-page-width;
   grid-template-columns: 1fr 1fr 1fr;
   padding: calc($spacing-xl * 2) calc($spacing-xl * 3);
   gap: $spacing-xl;

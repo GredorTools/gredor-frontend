@@ -185,7 +185,6 @@ async function importSIE() {
 @import "@/assets/_variables.scss";
 
 header {
-  grid-column: 1 / span 2;
   padding-bottom: $spacing-md;
   border-bottom: 1px solid rgba($primary-color, 0.2);
 
