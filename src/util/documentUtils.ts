@@ -184,6 +184,11 @@ async function getCssTextForUsedRules(
   }
 
   for (const sheet of Object.values(document.styleSheets)) {
+    if (!sheet.cssRules) {
+      // Händer ibland med injicerad CSS från webbläsartillägg, t.ex. DarkReader
+      continue;
+    }
+
     for (const rule of Object.values(sheet.cssRules)) {
       for (const element of elements) {
         if (rule instanceof CSSStyleRule) {
