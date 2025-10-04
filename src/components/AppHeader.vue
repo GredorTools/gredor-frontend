@@ -206,6 +206,12 @@ header {
       font-weight: 600;
       font-style: italic;
       font-size: 18pt;
+
+      &:after {
+        content: "";
+        display: inline-block;
+        width: 16px;
+      }
     }
   }
 
