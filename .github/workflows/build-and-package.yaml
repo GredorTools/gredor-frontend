@@ -95,6 +95,14 @@ jobs:
           start: npm run preview
           browser: ${{ matrix.browser == 'chrome' && steps.setup-chrome.outputs.chrome-path || matrix.browser == 'edge' && steps.setup-edge.outputs.edge-path || steps.setup-firefox.outputs.firefox-path }}
 
+      - name: Upload test screenshots on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots_${{ matrix.os }}_${{ matrix.browser }}_${{ matrix.browser-variant }}
+          path: cypress/screenshots
+          if-no-files-found: warn
+
       - name: Upload test videos
         uses: actions/upload-artifact@v4
         if: always()
