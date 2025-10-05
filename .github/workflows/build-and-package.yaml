@@ -48,7 +48,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-        browser: [ chrome-for-testing, edge, firefox ]
+        browser: [ chrome, edge, firefox ]
         browser-variant: [ stable, beta ]
 
     steps:
@@ -62,18 +62,21 @@ jobs:
           path: dist
 
       - name: Setup Chrome
-        if: ${{ matrix.browser == 'chrome-for-testing' }}
+        id: setup-chrome
+        if: ${{ matrix.browser == 'chrome' }}
         uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: ${{ matrix.browser-variant }}
 
       - name: Setup Edge
+        id: setup-edge
         if: ${{ matrix.browser == 'edge' }}
         uses: browser-actions/setup-edge@v1
         with:
           edge-version: ${{ matrix.browser-variant }}
 
       - name: Setup Firefox
+        id: setup-firefox
         if: ${{ matrix.browser == 'firefox' }}
         uses: browser-actions/setup-firefox@v1
         with:
@@ -83,13 +86,13 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: npm run preview
-          browser: ${{ matrix.browser }}
+          browser: ${{ matrix.browser == 'chrome' && steps.setup-chrome.outputs.chrome-path || matrix.browser == 'edge' && steps.setup-edge.outputs.edge-path || steps.setup-firefox.outputs.firefox-path }}
 
       - name: Upload test videos
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cypress-videos
+          name: cypress-videos_${{ strategy.os }}_${{ strategy.browser }}_${{ strategy.browser-variant }}
           path: cypress/videos
           if-no-files-found: warn
 
