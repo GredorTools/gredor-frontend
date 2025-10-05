@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cypress-videos_${{ strategy.os }}_${{ strategy.browser }}_${{ strategy.browser-variant }}
+          name: cypress-videos_${{ matrix.os }}_${{ matrix.browser }}_${{ matrix.browser-variant }}
           path: cypress/videos
           if-no-files-found: warn
 
