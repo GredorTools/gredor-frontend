@@ -937,9 +937,6 @@ it("can create and edit manually", function () {
   cy.wait(1000);
   cy.get(
     '[data-testid="edit-se-gen-base:Aktiekapital-periodStartLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:Aktiekapital-periodStartLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:Aktiekapital-periodStartLabel"]',
@@ -950,9 +947,6 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:Aktiekapital-periodEndLabel"]',
   ).click();
-  cy.get(
-    '[data-testid="edit-se-gen-base:Aktiekapital-periodEndLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:Aktiekapital-periodEndLabel"]',
   ).clear();
@@ -968,9 +962,6 @@ it("can create and edit manually", function () {
   cy.wait(1000);
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodStartLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:BalanseratResultat-periodStartLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodStartLabel"]',
@@ -978,9 +969,6 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodStartLabel"]',
   ).type("75406");
-  cy.get(
-    '[data-testid="edit-se-gen-base:AretsResultatEgetKapital-periodStartLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:AretsResultatEgetKapital-periodStartLabel"]',
   ).click();
@@ -996,9 +984,6 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:AretsResultatEgetKapital-periodStartLabel"]',
   ).type("47322");
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotalt-periodStartLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotalt-periodStartLabel"]',
   ).click();
@@ -1023,9 +1008,6 @@ it("can create and edit manually", function () {
   cy.wait(1000);
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatUtdelning-terseLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatUtdelning-terseLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatUtdelning-terseLabel"]',
@@ -1033,9 +1015,8 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatUtdelning-terseLabel"]',
   ).type("-22500");
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltUtdelning-totalLabel"]',
-  ).scrollIntoView();
+  cy.get("#editor tr:nth-child(11) td:nth-child(10)").click();
+  cy.get("#editor tr:nth-child(11) td:nth-child(10)").click();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltUtdelning-totalLabel"]',
   ).click();
@@ -1053,9 +1034,6 @@ it("can create and edit manually", function () {
   ).type("-22500");
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning-terseLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning-terseLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning-terseLabel"]',
@@ -1071,16 +1049,10 @@ it("can create and edit manually", function () {
   ).type("47322");
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning-terseLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning-terseLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning-terseLabel"]',
   ).clear();
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning-totalLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning-totalLabel"]',
   ).click();
@@ -1095,9 +1067,6 @@ it("can create and edit manually", function () {
   ).type("0");
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat-terseLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat-terseLabel"]',
   ).click();
   cy.get(
     "#edit-forvaltningsberattelse-forandringar-modal-footer-teleport .btn",
@@ -1108,9 +1077,6 @@ it("can create and edit manually", function () {
   cy.wait(1000);
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat-terseLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat-terseLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat-terseLabel"]',
@@ -1118,9 +1084,6 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat-terseLabel"]',
   ).type("48867");
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltAretsResultat-totalLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltAretsResultat-totalLabel"]',
   ).click();
@@ -1138,13 +1101,7 @@ it("can create and edit manually", function () {
   ).type("48867");
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodEndLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:BalanseratResultat-periodEndLabel"]',
   ).click();
-  cy.get(
-    '[data-testid="edit-se-gen-base:AretsResultatEgetKapital-periodEndLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:AretsResultatEgetKapital-periodEndLabel"]',
   ).click();
@@ -1162,9 +1119,6 @@ it("can create and edit manually", function () {
   ).type("48867");
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodEndLabel"]',
-  ).scrollIntoView();
-  cy.get(
-    '[data-testid="edit-se-gen-base:BalanseratResultat-periodEndLabel"]',
   ).click();
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodEndLabel"]',
@@ -1172,9 +1126,6 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:BalanseratResultat-periodEndLabel"]',
   ).type("100228");
-  cy.get(
-    '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotalt-periodEndLabel"]',
-  ).scrollIntoView();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotalt-periodEndLabel"]',
   ).click();

@@ -5,6 +5,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    scrollBehavior: "center",
     experimentalStudio: true,
     video: true,
   },
