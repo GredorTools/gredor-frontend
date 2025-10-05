@@ -50,6 +50,13 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
         browser: [ chrome, edge, firefox ]
         browser-variant: [ stable, beta ]
+        exclude:
+          - os: windows-latest
+            browser: edge
+          - os: macos-latest
+            browser: chrome
+          - os: macos-latest
+            browser: edge
 
     steps:
       - name: Checkout
