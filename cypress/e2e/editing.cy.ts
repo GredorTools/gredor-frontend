@@ -6,7 +6,7 @@ it("can create and edit manually", function () {
   cy.intercept(
     {
       method: "GET",
-      url: "https://api.gredor.se/v1/information/records/5592560287",
+      url: "http://gredor-backend/v1/information/records/5592560287",
     },
     {
       foretagsnamn: "Potatron Tech AB",
