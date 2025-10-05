@@ -18,6 +18,7 @@ defineProps<{
       <button
         :aria-controls="id"
         :data-bs-target="`#${id}`"
+        :data-testid="`accordion-item-${id}`"
         aria-expanded="true"
         class="accordion-button collapsed"
         data-bs-toggle="collapse"

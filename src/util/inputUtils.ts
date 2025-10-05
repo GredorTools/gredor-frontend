@@ -1,3 +1,5 @@
+import type { Belopprad } from "@/model/arsredovisning/Belopprad.ts";
+
 /**
  * För att bara tillåta vissa tecken i inmatade värden. Ska användas på
  * beforeInput-event.
@@ -20,4 +22,23 @@ export function handleEventForInputWithValueWhitelist(
       event.preventDefault();
     }
   }
+}
+
+/**
+ * Returnerar test-id (för Cypress) för den givna beloppraden.
+ *
+ * @param belopprad - Beloppraden som ska vara testbar
+ * @param suffix - Eventuellt suffix för test-id:t
+ *
+ * @returns Test-id som kan sättas i attributet data-testid
+ */
+export function getTestIdForBelopprad(belopprad: Belopprad, suffix?: string) {
+  let result = `edit-${belopprad.taxonomyItemName}`;
+  if (belopprad.labelType) {
+    result += `-${belopprad.labelType}`;
+  }
+  if (suffix) {
+    result += `-${suffix}`;
+  }
+  return result;
 }

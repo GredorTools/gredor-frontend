@@ -11,7 +11,10 @@ import { computed } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
+import {
+  getTestIdForBelopprad,
+  handleEventForInputWithValueWhitelist,
+} from "@/util/inputUtils.ts";
 
 export interface EditBeloppradComparablePropsBase {
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -92,6 +95,7 @@ function onBeforeValueInput(event: InputEvent) {
         v-if="taxonomyItem.properties.abstract !== 'true'"
         v-model.trim="belopprad.not"
         :class="{ 'form-control-sm': small }"
+        :data-testid="`edit-${belopprad.taxonomyItemName}-not`"
         class="form-control"
         maxlength="2"
         type="text"
@@ -120,6 +124,7 @@ function onBeforeValueInput(event: InputEvent) {
             v-if="taxonomyItem.properties.abstract !== 'true'"
             v-model.trim="belopprad.beloppNuvarandeAr"
             :class="{ 'form-control-sm': small }"
+            :data-testid="getTestIdForBelopprad(belopprad, 'current-year')"
             :disabled="isSummarad"
             class="form-control"
             type="text"
@@ -155,6 +160,9 @@ function onBeforeValueInput(event: InputEvent) {
             v-if="taxonomyItem.properties.abstract !== 'true'"
             v-model.trim="belopprad.beloppTidigareAr[i - 1]"
             :class="{ 'form-control-sm': small }"
+            :data-testid="
+              getTestIdForBelopprad(belopprad, `previous-year-${i}`)
+            "
             :disabled="isSummarad"
             class="form-control"
             type="text"

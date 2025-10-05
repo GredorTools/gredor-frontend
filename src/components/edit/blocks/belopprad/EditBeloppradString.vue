@@ -10,6 +10,7 @@ import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/Ba
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import BaseEditBeloppradContainer from "@/components/edit/blocks/belopprad/BaseEditBeloppradContainer.vue";
+import { getTestIdForBelopprad } from "@/util/inputUtils.ts";
 
 defineOptions({
   inheritAttrs: false,
@@ -95,7 +96,11 @@ const trClasses = computed(() => [
         }"
         :colspan="comparableNumPreviousYears + 3"
       >
-        <textarea v-model="belopprad.text" class="form-control"></textarea>
+        <textarea
+          v-model="belopprad.text"
+          :data-testid="getTestIdForBelopprad(belopprad)"
+          class="form-control"
+        ></textarea>
       </td>
     </BaseEditBeloppradContainer>
   </template>
@@ -121,6 +126,7 @@ const trClasses = computed(() => [
       <input
         v-model="belopprad.text"
         :class="{ 'form-control-sm': small }"
+        :data-testid="`edit-${belopprad.taxonomyItemName}`"
         class="form-control"
         type="text"
       />

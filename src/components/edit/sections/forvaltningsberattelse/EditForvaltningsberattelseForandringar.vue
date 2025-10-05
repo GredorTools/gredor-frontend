@@ -10,6 +10,7 @@ import { computed } from "vue";
 import { getForandringarAsTable } from "@/util/forandringarUtils.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 import { usePrepopulateSection } from "@/components/edit/composables/usePrepopulateSection.ts";
+import { getTestIdForBelopprad } from "@/util/inputUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i förändringar i eget kapital. */
@@ -107,6 +108,7 @@ const commonTaxonomyItemNames = [
             <div v-if="cell != null" class="value-contents">
               <input
                 v-model.trim="cell.belopprad.beloppNuvarandeAr"
+                :data-testid="getTestIdForBelopprad(cell.belopprad)"
                 class="form-control"
                 type="text"
               />
