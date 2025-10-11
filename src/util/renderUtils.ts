@@ -48,7 +48,7 @@ export function getUnitRef(taxonomyItem: TaxonomyItem): UnitRef {
  * Returnerar scale-värdet för ix:nonFraction-element.
  *
  * @param taxonomyItem - Taxonomiobjektet vars scale-värde ska fastställas.
- * @param displayFormat - Vilket format taxonomiobjektet ska visas i.
+ * @param displayFormat - Vilket format taxonomiobjektets värde ska visas i.
  */
 export function getNonFractionScale(
   taxonomyItem: TaxonomyItem,
@@ -72,7 +72,7 @@ export function getNonFractionScale(
  * Returnerar decimals-värdet för ix:nonFraction-element.
  *
  * @param taxonomyItem - Taxonomiobjektet vars decimals-värde ska fastställas.
- * @param displayFormat - Vilket format taxonomiobjektet ska visas i.
+ * @param displayFormat - Vilket format taxonomiobjektets värde ska visas i.
  */
 export function getNonFractionDecimals(
   taxonomyItem: TaxonomyItem,
@@ -160,7 +160,9 @@ export function getSignAttribute(
   taxonomyItem: TaxonomyItem,
   belopp: string,
 ): string | undefined {
-  if (belopp.trim().length < 1 || parseInt(belopp.trim(), 10) === 0) {
+  belopp = belopp.trim();
+
+  if (belopp.length < 1 || parseInt(belopp, 10) === 0) {
     // Inget sign-attribut för noll
     return undefined;
   }
@@ -203,6 +205,7 @@ export function getSignAttribute(
  *
  * @param taxonomyItem - Taxonomiobjektet som renderas.
  * @param belopp - Beloppet.
+ * @param displayFormat - Vilket format taxonomiobjektets värde ska visas i.
  * @param showBalanceSign - Huruvida balanstecken (plus/minus) får visas för
  * beloppraden utifrån det motsvarande taxonomiobjektets balance-värde.
  *
@@ -211,21 +214,36 @@ export function getSignAttribute(
 export function shouldShowSign(
   taxonomyItem: TaxonomyItem,
   belopp: string,
+  displayFormat: BeloppFormat,
   showBalanceSign: boolean,
 ): boolean {
-  if (belopp.trim().length < 1 || parseInt(belopp.trim(), 10) === 0) {
+  belopp = belopp.trim();
+
+  if (belopp.length < 1) {
+    // Tomt värde, inget tecken
+    return false;
+  }
+
+  let beloppToDisplay = parseInt(belopp, 10);
+  switch (displayFormat) {
+    case BeloppFormat.HELTAL:
+      break;
+    case BeloppFormat.TUSENTAL:
+      beloppToDisplay = Math.round(beloppToDisplay / 1000);
+      break;
+    default:
+      throw new Error("Unknown format");
+  }
+
+  if (beloppToDisplay === 0) {
     // Inget tecken för noll
     return false;
   }
 
-  let result;
-
+  let result: boolean;
   if (showBalanceSign) {
     if (taxonomyItem.properties.balance === "debit") {
-      result =
-        belopp.trim().length > 0 &&
-        parseInt(belopp.trim(), 10) !== 0 &&
-        !belopp.startsWith("-");
+      result = !belopp.startsWith("-");
     } else if (taxonomyItem.properties.balance === "credit") {
       result = belopp.startsWith("-");
     } else {

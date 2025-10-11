@@ -46,7 +46,15 @@ const belopp = computed(() => {
 </script>
 
 <template>
-  <span v-if="shouldShowSign(taxonomyItem, belopp, showBalanceSign || false)"
+  <span
+    v-if="
+      shouldShowSign(
+        taxonomyItem,
+        belopp,
+        displayFormat,
+        showBalanceSign || false,
+      )
+    "
     >&minus;</span
   >
   <!-- @delete-whitespace -->
