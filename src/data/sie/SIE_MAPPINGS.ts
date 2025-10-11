@@ -91,7 +91,10 @@ export const SIE_MAPPINGS: SieMapping[] = [
     },
   },
   {
-    basAccounts: [{ start: 2091, end: 2091 }],
+    basAccounts: [
+      { start: 2091, end: 2091 },
+      { start: 2093, end: 2093 },
+    ],
     taxonomyItemId: {
       rootName:
         "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
@@ -182,7 +185,10 @@ export const SIE_MAPPINGS: SieMapping[] = [
     },
   },
   {
-    basAccounts: [{ start: 2091, end: 2091 }],
+    basAccounts: [
+      { start: 2091, end: 2091 },
+      { start: 2093, end: 2093 },
+    ],
     taxonomyItemId: {
       rootName:
         "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
@@ -223,7 +229,10 @@ export const SIE_MAPPINGS: SieMapping[] = [
     },
   },
   {
-    basAccounts: [{ start: 2091, end: 2091 }],
+    basAccounts: [
+      { start: 2091, end: 2091 },
+      { start: 2093, end: 2093 },
+    ],
     taxonomyItemId: {
       rootName:
         "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
@@ -1207,7 +1216,10 @@ export const SIE_MAPPINGS: SieMapping[] = [
     },
   },
   {
-    basAccounts: [{ start: 2091, end: 2091 }],
+    basAccounts: [
+      { start: 2091, end: 2091 },
+      { start: 2093, end: 2093 },
+    ],
     taxonomyItemId: {
       rootName:
         "http://www.taxonomier.se/se/fr/gaap/k2/role/form/balansrakning",
