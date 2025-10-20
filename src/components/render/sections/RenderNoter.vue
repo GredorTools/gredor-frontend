@@ -44,7 +44,7 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
 </script>
 
 <template>
-  <div>
+  <div v-if="arsredovisning.noter.length > 0">
     <h2>Noter</h2>
     <table
       v-for="(

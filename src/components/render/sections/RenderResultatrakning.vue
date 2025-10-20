@@ -43,7 +43,7 @@ function getDisplayAsLevelForBelopprad(
 </script>
 
 <template>
-  <div>
+  <div v-if="arsredovisning.resultatrakning.length > 0">
     <table>
       <thead>
         <tr>

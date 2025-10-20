@@ -98,7 +98,7 @@ function getStringShowHeaderAsAbstract(belopprad: Belopprad) {
 </script>
 
 <template>
-  <div>
+  <div v-if="arsredovisning.forvaltningsberattelse.length > 0">
     <h2>Förvaltningsberättelse</h2>
     <div
       v-for="({ group, items }, groupIndex) in mappedGroups"

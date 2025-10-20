@@ -20,7 +20,7 @@ defineProps<{
 </script>
 
 <template>
-  <div>
+  <div v-if="arsredovisning.balansrakning.length > 0">
     <table>
       <thead>
         <tr>
