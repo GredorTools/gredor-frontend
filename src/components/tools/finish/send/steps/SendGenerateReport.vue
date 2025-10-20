@@ -93,6 +93,7 @@ function exportArsredovisning() {
       v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
       :disabled="!ixbrl"
       class="btn btn-outline-primary"
+      data-testid="send-wizard-export-ixbrl"
       @click="exportArsredovisning()"
     >
       Exportera iXBRL-fil (test)

@@ -117,9 +117,9 @@ describe("validate generated XBRL data", () => {
       // Hämta iXBRL från förhandsgranskning i steg 6, konvertera den till XBRL,
       // och jämför med förväntad XBRL. Då blir det ganska enkelt och vi jämför
       // det allra viktigaste.
-      cy.get('button[data-testid="send-wizard-export-ixbrl"]', {
+      cy.get('button[data-testid="send-wizard-export-ixbrl"]').click({
         timeout: 15000,
-      }).click();
+      });
       const downloadsFolder = Cypress.config("downloadsFolder");
       const downloadPath = path.join(downloadsFolder, "arsredovisning.xhtml");
       cy.readFile(downloadPath).then((actualIxbrl: string) => {
