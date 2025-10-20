@@ -48,6 +48,7 @@ onMounted(() => {
         v-if="!previousButtonHidden"
         :disabled="previousButtonDisabled"
         class="btn btn-primary"
+        data-testid="wizard-previous-button"
         @click="emit('goToPreviousStep')"
       >
         {{ previousButtonText || "Tillbaka" }}
@@ -60,6 +61,7 @@ onMounted(() => {
         :disabled="nextButtonDisabled"
         :hidden="nextButtonHidden"
         class="btn btn-primary"
+        data-testid="wizard-next-button"
         @click="emit('goToNextStep')"
       >
         {{ nextButtonText || "Nästa" }}

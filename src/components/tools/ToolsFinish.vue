@@ -68,6 +68,7 @@ function showSendWizard() {
     </button>
     <button
       class="btn btn-primary d-flex align-items-center gap-2"
+      data-testid="show-send-wizard-button"
       @click="showSendWizard"
     >
       <img

@@ -35,3 +35,16 @@
 //     }
 //   }
 // }
+
+declare namespace Cypress {
+  interface Chainable {
+    /**
+     * Custom command to delete Cypress.config('downloadsFolder') folder
+     * @example
+     *  cy.deleteDownloadsFolder()
+     */
+    deleteDownloadsFolder(): Chainable<null>;
+  }
+}
+
+require("cypress-delete-downloads-folder").addCustomCommand();

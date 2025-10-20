@@ -43,6 +43,7 @@ const personnummerRegex = /^\d{12}$/;
       <p>Format: ÅÅÅÅMMDDXXXX (12 siffror utan bindestreck)</p>
       <input
         v-model.trim="personalNumber"
+        data-testid="send-wizard-personalnumber-input"
         maxlength="12"
         placeholder="Skriv personnummer här…"
         type="text"
@@ -57,6 +58,7 @@ const personnummerRegex = /^\d{12}$/;
       </p>
       <input
         v-model.trim="notificationEmail"
+        data-testid="send-wizard-email-input"
         placeholder="Skriv e-postadress här…"
         type="text"
       />

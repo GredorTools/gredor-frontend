@@ -1,11 +1,19 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "sourceMap": true,
     "types": [
-      "cypress"
+      "cypress",
+      "node"
     ]
   },
   "include": [
-    "**/*.*"
+    "**/*.ts"
   ]
 }
