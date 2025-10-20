@@ -25,6 +25,7 @@ jobs:
           source .env.cypress
           echo "VITE_ENV_NAME=$VITE_ENV_NAME" >> ${GITHUB_ENV}
           echo "VITE_GREDOR_BACKEND_BASEURL=$VITE_GREDOR_BACKEND_BASEURL" >> ${GITHUB_ENV}
+          echo "VITE_TEST_MODE=$VITE_TEST_MODE" >> ${GITHUB_ENV}
 
       - name: Build for Cypress
         uses: cypress-io/github-action@v6
