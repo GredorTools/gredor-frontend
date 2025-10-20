@@ -9,7 +9,6 @@ export default defineConfig({
       });
     },
     scrollBehavior: "center",
-    experimentalStudio: true,
     video: true,
   },
 });
