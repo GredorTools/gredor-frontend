@@ -68,6 +68,11 @@ export async function convertVueHTMLToiXBRL(
       // Copy the attributes
       for (let index = oldElement.attributes.length - 1; index >= 0; --index) {
         let attributeName = oldElement.attributes[index].name;
+        if (attributeName.startsWith("xmlns:")) {
+          // Skippa, annars blir det dubbletta xmlns-attribut i taggen, vilket
+          // förstör den genererade iXBRL:en i Chromium-baserade webbläsare
+          continue;
+        }
         for (const fixedAttributeName of attributeNamesToFix) {
           if (attributeName === fixedAttributeName.toLowerCase()) {
             attributeName = fixedAttributeName;
