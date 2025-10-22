@@ -120,7 +120,7 @@ describe("validate generated XBRL data", () => {
       cy.get('button[data-testid="send-wizard-export-ixbrl"]').click({
         timeout: 15000,
       });
-      cy.wait(1000); // Så filen hinner sparas
+      cy.wait(3000); // Så filen hinner sparas
       const downloadsFolder = Cypress.config("downloadsFolder");
       const downloadPath = path.join(downloadsFolder, "arsredovisning.xhtml");
       cy.readFile(downloadPath).then((actualIxbrl: string) => {
