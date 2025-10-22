@@ -19,6 +19,8 @@ describe("validate generated XBRL data", () => {
     it(`should generate correct XBRL data for ${testFileName}.gredorfardig`, () => {
       cy.deleteDownloadsFolder();
 
+      cy.clock(new Date("2025-09-27 12:00:00").getTime(), ["Date"]);
+
       cy.viewport(1280, 680);
 
       cy.visit("http://localhost:4173");
@@ -124,14 +126,6 @@ describe("validate generated XBRL data", () => {
       const downloadsFolder = Cypress.config("downloadsFolder");
       const downloadPath = path.join(downloadsFolder, "arsredovisning.xhtml");
       cy.readFile(downloadPath).then((actualIxbrl: string) => {
-        // Fixa datum för fastställelseintyg - obs, finns pytteliten risk för att
-        // new Date() blir fel datum om man råkar köra testet vid precis "fel"
-        // tidpunkt.
-        actualIxbrl = actualIxbrl.replace(
-          new Date().toISOString().substring(0, 10),
-          "2025-09-27",
-        );
-
         const actualXbrl = convertIxbrlToXbrl(actualIxbrl);
 
         cy.readFile(`cypress/fixtures/expectedoutput/${testFileName}.xml`).then(
