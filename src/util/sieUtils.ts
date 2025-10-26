@@ -9,7 +9,8 @@ import {
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
-import { SIE_MAPPINGS } from "@/data/sie/SIE_MAPPINGS.ts";
+import { sieMappings } from "@/data/taxonomy/k2/2021-10-31/sieMappings.ts";
+import { extraSieMappings } from "@/data/sie/extraSieMappings.ts";
 import {
   autofillPersonalkostnaderNot,
   autofillSoliditet,
@@ -29,8 +30,8 @@ interface SieValue {
 /**
  * Läser innehåller från en SIE-fil och lägger in det som belopprader i det
  * angivna årsredovisningsobjektets resultaträkning och balansräkning samt delar
- * av förvaltningsberättelsen. Eventuella existerande rader i resultaträkningen
- * och balansräkningen tas bort.
+ * av förvaltningsberättelsen och noterna. Eventuella existerande rader i
+ * resultaträkningen och balansräkningen tas bort.
  *
  * @param sieFileText - Innehållet från SIE-filen som ska omvandlas.
  * @param arsredovisning - Årsredovisningsobjektet som ska fyllas med data från
@@ -40,7 +41,6 @@ export async function mapSieFileIntoArsredovisning(
   sieFileText: string,
   arsredovisning: Arsredovisning,
 ) {
-  // TODO: Även för noter
   // TODO: Förändringar i eget kapital
 
   const parseResult = parseSieFile(sieFileText);
@@ -59,7 +59,7 @@ export async function mapSieFileIntoArsredovisning(
     const basAccountAsNumber = parseInt(basAccount, 10);
 
     // Hitta taxonomiobjekt som BAS-kontot matchar
-    for (const mapping of SIE_MAPPINGS) {
+    for (const mapping of [...sieMappings, ...extraSieMappings]) {
       for (const mappingKonto of mapping.basAccounts) {
         if (
           mappingKonto.start <= basAccountAsNumber &&

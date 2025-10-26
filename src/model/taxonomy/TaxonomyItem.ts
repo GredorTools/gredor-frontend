@@ -73,7 +73,7 @@ export interface PresentationConceptMetadata {
 
 export interface PresentationConceptDetails {
   "pref.Label": LabelType;
-  references: string;
+  references?: string;
   type: string;
 }
 
@@ -86,6 +86,7 @@ export interface TaxonomyItem<T extends TaxonomyItemType = TaxonomyItemType> {
     isCalculatedItem?: boolean;
     displayLabel?: string;
     labelType?: LabelType;
+    references?: string[];
   };
   rowNumber: number;
   level: number;

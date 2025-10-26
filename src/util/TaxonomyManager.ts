@@ -160,6 +160,12 @@ export class TaxonomyManager {
       item.additionalData.displayLabel =
         metadata.label || item.properties.label;
       item.additionalData.labelType = details["pref.Label"];
+      if (details.references) {
+        item.additionalData.references = details.references
+          .trim()
+          .replace(/\s\s+/g, " ")
+          .split(", ");
+      }
 
       // Sätt barn
       for (const childGroup of childGroups) {

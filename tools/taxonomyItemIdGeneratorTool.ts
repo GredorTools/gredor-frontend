@@ -9,10 +9,8 @@ import fs from "fs";
 import { getTaxonomyManager } from "../src/util/TaxonomyManager";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import {
-  LabelType,
-  TaxonomyRootName,
-} from "../src/model/taxonomy/TaxonomyItem";
+import { TaxonomyRootName } from "../src/model/taxonomy/TaxonomyItem";
+import { TaxonomyItemIdBase } from "../src/model/taxonomy/TaxonomyItemIdBase";
 
 const argv = await yargs(hideBin(process.argv))
   .option("outputFile", {
@@ -24,14 +22,7 @@ if (!argv.outputFile) {
   throw new Error("outputFile parameter is required");
 }
 
-interface TaxonomyItemId {
-  rootName: TaxonomyRootName;
-  name: string;
-  labelType: LabelType | null;
-  parentName: string | null;
-}
-
-const taxonomyItemIds: TaxonomyItemId[] = [];
+const taxonomyItemIds: TaxonomyItemIdBase[] = [];
 for (const rootName of Object.values(TaxonomyRootName)) {
   const taxonomyManager = await getTaxonomyManager(rootName);
   const root = taxonomyManager.getRoot();
@@ -49,20 +40,16 @@ let output = `
 /**
  * En förteckning med nycklar till alla taxonomiobjekt som finns.
  * 
- * Automatiskt genererad av taxonomyItemGeneratorTool.ts
+ * Automatiskt genererad av taxonomyItemIdGeneratorTool.ts
  * REDIGERA INTE MANUELLT!
  */
 
 import type { LabelType, TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
+import type { TaxonomyItemIdBase } from "@/model/taxonomy/TaxonomyItemIdBase.ts";
 
 type Implements<T, U extends T> = U;
 
-export type TaxonomyItemId = Implements<{
-  rootName: TaxonomyRootName;
-  name: string;
-  labelType: LabelType | null;
-  parentName: string | null;
-}, `;
+export type TaxonomyItemId = Implements<TaxonomyItemIdBase, `;
 for (let i = 0; i < taxonomyItemIds.length; i++) {
   const taxonomyItemId = taxonomyItemIds[i];
   if (i > 0) {

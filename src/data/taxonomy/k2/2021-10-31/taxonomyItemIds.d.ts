@@ -2,20 +2,16 @@
 /**
  * En förteckning med nycklar till alla taxonomiobjekt som finns.
  * 
- * Automatiskt genererad av taxonomyItemGeneratorTool.ts
+ * Automatiskt genererad av taxonomyItemIdGeneratorTool.ts
  * REDIGERA INTE MANUELLT!
  */
 
 import type { LabelType, TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
+import type { TaxonomyItemIdBase } from "@/model/taxonomy/TaxonomyItemIdBase.ts";
 
 type Implements<T, U extends T> = U;
 
-export type TaxonomyItemId = Implements<{
-  rootName: TaxonomyRootName;
-  name: string;
-  labelType: LabelType | null;
-  parentName: string | null;
-}, {"rootName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation","name":"se-cd-base:AllmanInformationAbstract","labelType":null,"parentName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation"} |
+export type TaxonomyItemId = Implements<TaxonomyItemIdBase, {"rootName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation","name":"se-cd-base:AllmanInformationAbstract","labelType":null,"parentName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation"} |
 {"rootName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation","name":"se-cd-base:ForetagetsNamnAbstract","labelType":"terseLabel","parentName":"se-cd-base:AllmanInformationAbstract"} |
 {"rootName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation","name":"se-cd-base:ForetagetsNamn","labelType":"terseLabel","parentName":"se-cd-base:ForetagetsNamnAbstract"} |
 {"rootName":"http://www.taxonomier.se/se/fr/gaap/k2/role/form/allmaninformation","name":"se-cd-base:ForetagetsTidigareNamn","labelType":"terseLabel","parentName":"se-cd-base:ForetagetsNamnAbstract"} |
