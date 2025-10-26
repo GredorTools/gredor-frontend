@@ -57,6 +57,7 @@ export async function mapSieFileIntoArsredovisning(
   // Iterera över varje BAS-kontonummer och dess värden från den parsade filen
   for (const [basAccount, value] of Object.entries(parseResult)) {
     const basAccountAsNumber = parseInt(basAccount, 10);
+    let mappingFound = false;
 
     // Hitta taxonomiobjekt som BAS-kontot matchar
     for (const mapping of [...sieMappings, ...extraSieMappings]) {
@@ -66,6 +67,7 @@ export async function mapSieFileIntoArsredovisning(
           basAccountAsNumber <= mappingKonto.end
         ) {
           // Matchning hittad
+          mappingFound = true;
 
           // Hämta taxonomiobjekt för den aktuella mappningen
           const taxonomyManager = await getTaxonomyManager(
@@ -131,6 +133,10 @@ export async function mapSieFileIntoArsredovisning(
           }
         }
       }
+    }
+
+    if (!mappingFound) {
+      alert(`Varning: Konto ${basAccount} kunde inte mappas.`);
     }
   }
 

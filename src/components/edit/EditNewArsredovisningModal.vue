@@ -41,6 +41,8 @@ const busy = ref<boolean>(false);
 async function handleSieFile(file: File) {
   busy.value = true;
   try {
+    arsredovisning.value = JSON.parse(JSON.stringify(starterArsredovisning)); // Nollställ
+
     const sieFileText = await file.text();
     await mapSieFileIntoArsredovisning(sieFileText, arsredovisning.value);
   } finally {
