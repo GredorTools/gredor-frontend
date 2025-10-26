@@ -49,6 +49,10 @@ const props = defineProps<{
   /** Möjliggör att visa en egen rubrik för beloppraden. */
   displayHeader?: string;
 
+  /** Hur raden ska visas ("vanlig rad", summarad, eller att det väljs
+   * automatiskt), för belopprader där man kan jämföra mellan år. */
+  comparableDisplayAsType?: RenderBeloppradDisplayAsType;
+
   /** Antal tidigare räkenskapsår som ska visas för belopprader där man kan
    * jämföra mellan år. */
   comparableNumPreviousYears?: number;
@@ -56,10 +60,6 @@ const props = defineProps<{
   /** Huruvida notfält ska visas för belopprader där man kan jämföra mellan år.
    **/
   comparableAllowNot?: boolean;
-
-  /** Hur raden ska visas ("vanlig rad", summarad, eller att det väljs
-   * automatiskt), för belopprader där man kan jämföra mellan år. */
-  comparableDisplayAsType?: RenderBeloppradDisplayAsType;
 
   /** Huruvida balanstecken ska visas för monetära belopprader. */
   monetaryShowBalanceSign?: boolean;
@@ -145,6 +145,7 @@ const contextRefPrefix = computed(() =>
   <RenderBeloppradTuple
     v-else-if="isBeloppradTuple(belopprad)"
     :belopprad="belopprad"
+    :comparable-num-previous-years="comparableNumPreviousYears || 0"
     :display-header="displayHeader"
     :redovisningsvaluta="redovisningsvaluta"
     :taxonomy-manager="taxonomyManager"

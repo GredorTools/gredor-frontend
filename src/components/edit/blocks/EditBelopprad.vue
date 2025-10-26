@@ -32,6 +32,9 @@ const props = defineProps<{
   /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
   small?: boolean;
 
+  /** Antal kolumner som beloppradens värde ska vara. */
+  valueColspanOverride?: number;
+
   /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
    * även om den egentligen inte är en belopprad av den nivån. */
   displayAsLevel?: number;
@@ -90,6 +93,7 @@ const taxonomyItem = computed(() => {
       :multiline="stringMultiline || false"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"
+      :value-colspan-override="valueColspanOverride"
       @delete="emit('delete')"
     />
     <EditBeloppradMonetary
@@ -103,6 +107,7 @@ const taxonomyItem = computed(() => {
       :show-balance-sign="monetaryShowBalanceSign || false"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"
+      :value-colspan-override="valueColspanOverride"
       @delete="emit('delete')"
     />
     <EditBeloppradEnum
@@ -114,6 +119,7 @@ const taxonomyItem = computed(() => {
       :num-previous-years="comparableNumPreviousYears || 0"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"
+      :value-colspan-override="valueColspanOverride"
       @delete="emit('delete')"
     />
     <EditBeloppradOtherComparable
@@ -125,11 +131,13 @@ const taxonomyItem = computed(() => {
       :num-previous-years="comparableNumPreviousYears || 0"
       :small="small || false"
       :taxonomy-manager="taxonomyManager"
+      :value-colspan-override="valueColspanOverride"
       @delete="emit('delete')"
     />
     <EditBeloppradTuple
       v-else-if="isBeloppradTuple(belopprad)"
       :belopprad="belopprad"
+      :comparable-num-previous-years="comparableNumPreviousYears || 0"
       :taxonomy-manager="taxonomyManager"
     />
   </template>

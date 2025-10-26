@@ -20,6 +20,9 @@ const props = defineProps<{
    * */
   yearIndex: number;
 
+  /** Möjliggör override av contextRef - används för tuples. */
+  contextRefOverrideYearIndex?: number;
+
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs: Record<string, string>;
 }>();
@@ -40,7 +43,7 @@ const belopp = computed(() => {
         getContextRef(
           taxonomyItem,
           getContextRefPrefix(taxonomyItem),
-          yearIndex,
+          contextRefOverrideYearIndex ?? yearIndex,
         )
       "
       :name="taxonomyItem.xmlName"

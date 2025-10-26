@@ -14,6 +14,9 @@ defineProps<{
    * */
   yearIndex: number;
 
+  /** Möjliggör override av contextRef - används för tuples. */
+  contextRefOverrideYearIndex?: number;
+
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs: Record<string, string>;
 
@@ -25,7 +28,11 @@ defineProps<{
 <template>
   <ix:nonNumeric
     :contextRef="
-      getContextRef(taxonomyItem, getContextRefPrefix(taxonomyItem), yearIndex)
+      getContextRef(
+        taxonomyItem,
+        getContextRefPrefix(taxonomyItem),
+        contextRefOverrideYearIndex ?? yearIndex,
+      )
     "
     :name="belopprad.taxonomyItemName"
     v-bind="additionalIxbrlAttrs"

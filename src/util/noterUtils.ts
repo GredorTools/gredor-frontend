@@ -18,21 +18,7 @@ export function getValueColumnHeaderCell(
 ): VNode {
   const attrs = { scope: "col", class: "value-container" };
 
-  const firstComparableItem = groupTaxonomyItem.childrenFlat.find(
-    (child) =>
-      [
-        "xbrli:monetaryItemType",
-        "xbrli:decimalItemType",
-        "xbrli:pureItemType",
-        "xbrli:sharesItemType",
-      ].includes(child.properties.type) &&
-      !child.parent!.properties.type.endsWith("Tuple@anonymousType"),
-  );
-  if (!firstComparableItem) {
-    // Finns inga icke-sträng-värden, vi ska inte ha någon kolumnrubrik
-    return h("th", attrs);
-  }
-  switch (firstComparableItem.properties.periodType) {
+  switch (getPeriodTypeForGroup(groupTaxonomyItem)) {
     case "duration":
       // Verksamhetsåret som en period, från startdatumet till slutdatumet
       return h("th", attrs, [
@@ -46,6 +32,36 @@ export function getValueColumnHeaderCell(
       return h("th", attrs, [verksamhetsar.slutdatum]);
     case undefined:
       return h("th", attrs, []);
+  }
+}
+
+export function getPeriodTypeForGroup(
+  groupTaxonomyItem: TaxonomyItem,
+): "duration" | "instant" | undefined {
+  const firstComparableItem = groupTaxonomyItem.childrenFlat.find(
+    (child) =>
+      [
+        "xbrli:monetaryItemType",
+        "xbrli:decimalItemType",
+        "xbrli:pureItemType",
+        "xbrli:sharesItemType",
+      ].includes(child.properties.type) &&
+      !child.parent!.properties.type.endsWith("Tuple@anonymousType"),
+  );
+  if (!firstComparableItem) {
+    // Finns inga jämförbara värden - ingen periodtyp
+    return undefined;
+  }
+
+  switch (firstComparableItem.properties.periodType) {
+    case "duration":
+      // Verksamhetsåret som en period, från startdatumet till slutdatumet
+      return firstComparableItem.properties.periodType;
+    case "instant":
+      // Verksamhetsårets balansdag, dvs slutdatum
+      return firstComparableItem.properties.periodType;
+    case undefined:
+      return firstComparableItem.properties.periodType;
     default:
       throw new Error("Unknown periodType");
   }

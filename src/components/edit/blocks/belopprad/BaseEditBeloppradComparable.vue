@@ -11,10 +11,7 @@ import { computed } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import {
-  getTestIdForBelopprad,
-  handleEventForInputWithValueWhitelist,
-} from "@/util/inputUtils.ts";
+import { getTestIdForBelopprad, handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
 
 export interface EditBeloppradComparablePropsBase {
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -25,6 +22,9 @@ export interface EditBeloppradComparablePropsBase {
 
   /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
   small: boolean;
+
+  /** Antal kolumner som beloppradens värde ska vara. */
+  valueColspanOverride?: number;
 
   /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
    * även om den egentligen inte är en belopprad av den nivån. */
@@ -101,7 +101,7 @@ function onBeforeValueInput(event: InputEvent) {
         type="text"
       />
     </td>
-    <td class="value-container">
+    <td :colspan="valueColspanOverride" class="value-container">
       <div class="d-flex align-items-center">
         <slot :taxonomy-item="taxonomyItem" name="input-current-year">
           <template v-if="showBalanceSign && taxonomyItem.properties.balance">
@@ -133,7 +133,12 @@ function onBeforeValueInput(event: InputEvent) {
         </slot>
       </div>
     </td>
-    <td v-for="i in numPreviousYears" :key="i" class="value-container">
+    <td
+      v-for="i in numPreviousYears"
+      :key="i"
+      :colspan="valueColspanOverride"
+      class="value-container"
+    >
       <div class="d-flex align-items-center">
         <slot
           :previous-year-index="i - 1"

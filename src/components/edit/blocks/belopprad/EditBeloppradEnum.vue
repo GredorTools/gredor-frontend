@@ -30,6 +30,7 @@ const belopprad = defineModel<BeloppradEnum>("belopprad", {
     :num-previous-years="numPreviousYears"
     :small="small"
     :taxonomy-manager="taxonomyManager"
+    :value-colspan-override="valueColspanOverride"
     @delete="emit('delete')"
   >
     <template #input-current-year="{ taxonomyItem }">

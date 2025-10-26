@@ -7,7 +7,7 @@
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import BaseEditBeloppradComparable, {
   type EditBeloppradComparableEmitsBase,
-  type EditBeloppradComparablePropsBase,
+  type EditBeloppradComparablePropsBase
 } from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
 
 defineProps<EditBeloppradComparablePropsBase>();
@@ -29,6 +29,7 @@ const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
     :num-previous-years="numPreviousYears"
     :small="small"
     :taxonomy-manager="taxonomyManager"
+    :value-colspan-override="valueColspanOverride"
     @delete="emit('delete')"
   />
 </template>

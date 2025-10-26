@@ -6,7 +6,7 @@ import {
   getNonFractionScale,
   getSignAttribute,
   getUnitRef,
-  shouldShowSign
+  shouldShowSign,
 } from "@/util/renderUtils.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 import { formatNumber } from "@/util/formatUtils.ts";
@@ -31,6 +31,9 @@ const props = defineProps<{
   /** 0 för nuvarande räkenskapsår, 1 för senaste tidigare räkenskapsåret, osv.
    * */
   yearIndex: number;
+
+  /** Möjliggör override av contextRef - används för tuples. */
+  contextRefOverrideYearIndex?: number;
 
   /** Eventuella ytterligare attribut för iXBRL-elementet. */
   additionalIxbrlAttrs: Record<string, string>;
@@ -60,7 +63,11 @@ const belopp = computed(() => {
   <!-- @delete-whitespace -->
   <ix:nonFraction
     :contextRef="
-      getContextRef(taxonomyItem, getContextRefPrefix(taxonomyItem), yearIndex)
+      getContextRef(
+        taxonomyItem,
+        getContextRefPrefix(taxonomyItem),
+        contextRefOverrideYearIndex ?? yearIndex,
+      )
     "
     :decimals="getNonFractionDecimals(taxonomyItem, displayFormat)"
     :name="taxonomyItem.xmlName"

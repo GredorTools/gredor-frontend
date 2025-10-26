@@ -1,20 +1,19 @@
 <script lang="ts" setup>
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import {
-  type BeloppradTuple,
-  generateTupleID,
-} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import { type BeloppradTuple, generateTupleID } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import { computed } from "vue";
 import EditBelopprad from "@/components/edit/blocks/EditBelopprad.vue";
-import {
-  createBelopprad,
-  getTaxonomyItemForBelopprad,
-} from "@/model/arsredovisning/Belopprad.ts";
+import { createBelopprad, getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
+import { comparableTuples } from "@/data/comparableTuples.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
+
+  /** Antal tidigare räkenskapsår som ska visas för jämförelse, för tuples vars
+   * värden kan jämföras mellan år. */
+  comparableNumPreviousYears: number;
 }>();
 
 /** Beloppraden med tuple-värdet som ska redigeras. */
@@ -24,6 +23,10 @@ const belopprad = defineModel<BeloppradTuple>("belopprad", {
 
 const tupleTaxonomyItem = computed(() =>
   getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value),
+);
+
+const isComparableTuple = computed(() =>
+  comparableTuples.includes(belopprad.value.taxonomyItemName),
 );
 
 // Hjälpfunktioner
@@ -46,37 +49,70 @@ function deleteInstance(index: number) {
     <td>
       {{ tupleTaxonomyItem?.additionalData.displayLabel }}
     </td>
-    <td colspan="3">
-      <button class="btn btn-sm btn-primary" @click="createInstance()">
+    <td :colspan="2 + comparableNumPreviousYears">
+      <button
+        class="btn btn-sm btn-primary float-end"
+        @click="createInstance()"
+      >
         Lägg till
       </button>
     </td>
   </tr>
   <tr v-for="(instans, instansIndex) in belopprad.instanser" :key="instans.id">
-    <td colspan="3">
+    <td :colspan="2 + comparableNumPreviousYears">
       <div
         :class="{ last: instansIndex === belopprad.instanser.length - 1 }"
         class="edit-tuple-instance-container"
       >
-        <table class="edit-tuple-instance">
-          <tbody>
-            <EditBelopprad
-              v-for="(
-                instansBelopprad, instansBeloppradIndex
-              ) in instans.belopprader"
-              :key="instansBelopprad.taxonomyItemName"
-              v-model:belopprad="instans.belopprader[instansBeloppradIndex]"
-              v-model:belopprader="instans.belopprader"
-              :comparable-num-previous-years="0"
-              :taxonomy-manager="taxonomyManager"
-              small
-            />
-          </tbody>
-        </table>
-        <BaseEditBeloppradDeleteButton
-          class="edit-tuple-instance-delete"
-          @delete="deleteInstance(instansIndex)"
-        />
+        <div class="edit-tuple-instance-table-container">
+          <table
+            :class="{
+              'simple-tuple': !isComparableTuple,
+              'comparable-tuple': isComparableTuple,
+            }"
+            class="edit-tuple-instance"
+          >
+            <tbody>
+              <EditBelopprad
+                v-for="(
+                  instansBelopprad, instansBeloppradIndex
+                ) in instans.belopprader"
+                :key="instansBelopprad.taxonomyItemName"
+                v-model:belopprad="instans.belopprader[instansBeloppradIndex]"
+                v-model:belopprader="instans.belopprader"
+                :comparable-num-previous-years="
+                  isComparableTuple &&
+                  instansBeloppradIndex === instans.belopprader.length - 1
+                    ? comparableNumPreviousYears
+                    : 0
+                "
+                :taxonomy-manager="taxonomyManager"
+                :value-colspan-override="
+                  isComparableTuple &&
+                  instansBeloppradIndex !== instans.belopprader.length - 1
+                    ? comparableNumPreviousYears + 1
+                    : undefined
+                "
+                small
+              />
+            </tbody>
+          </table>
+          <BaseEditBeloppradDeleteButton
+            v-if="!isComparableTuple"
+            class="edit-tuple-instance-delete"
+            @delete="deleteInstance(instansIndex)"
+          />
+        </div>
+
+        <template v-if="isComparableTuple">
+          <BaseEditBeloppradDeleteButton
+            v-if="isComparableTuple"
+            class="edit-tuple-instance-delete float-end"
+            @delete="deleteInstance(instansIndex)"
+          />
+          <div class="clearfix"></div>
+        </template>
+        <hr />
       </div>
     </td>
   </tr>
@@ -86,24 +122,26 @@ function deleteInstance(index: number) {
 @import "@/assets/_variables.scss";
 
 .edit-tuple-instance-container {
-  display: flex;
-  margin-left: $spacing-xl;
-  margin-bottom: $spacing-sm;
-
   &.last {
     margin-bottom: $spacing-lg;
   }
 
-  table.edit-tuple-instance {
-    margin: 0;
+  .edit-tuple-instance-table-container {
+    display: flex;
+    margin-left: $spacing-xl;
+    margin-bottom: $spacing-sm;
 
-    :deep(td.value-container input) {
-      min-width: 200px !important;
+    table.edit-tuple-instance {
+      margin: 0;
+
+      &.simple-tuple :deep(td.value-container input) {
+        min-width: 200px !important;
+      }
     }
-  }
 
-  .edit-tuple-instance-delete {
-    margin: $spacing-xs 0;
+    .edit-tuple-instance-delete {
+      margin: $spacing-xs 0;
+    }
   }
 }
 </style>

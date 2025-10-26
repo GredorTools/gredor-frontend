@@ -28,6 +28,9 @@ const props = defineProps<{
   /** Huruvida beloppraden ska vara mindre än en typisk belopprad. */
   small: boolean;
 
+  /** Antal kolumner som beloppradens värde ska vara. */
+  valueColspanOverride?: number;
+
   /** Möjliggör att få beloppraden att se ut som en belopprad av en viss nivå,
    * även om den egentligen inte är en belopprad av den nivån. */
   displayAsLevel?: number;
@@ -120,7 +123,7 @@ const trClasses = computed(() => [
     </td>
     <td
       v-if="!isAbstract"
-      :colspan="comparableNumPreviousYears + 1"
+      :colspan="valueColspanOverride ?? comparableNumPreviousYears + 1"
       class="value-container text-left"
     >
       <input
