@@ -14,9 +14,7 @@ import type { components, paths } from "@/openapi/gredor-backend-v1";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import createClient from "openapi-fetch";
 import { getConfigValue } from "@/util/configUtils.ts";
-import CommonWizardButtons, {
-  type CommonWizardButtonsEmits,
-} from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
@@ -64,12 +62,24 @@ async function performRequest() {
       alert("error");
       alert(error);
     } else if (data) {
-      if (props.discardFaststallelseintygValidations && data.utfall) {
-        data.utfall = data.utfall.filter(
-          (kontroll) =>
-            !kontroll.text ||
-            !kontroll.text.toLowerCase().includes("fastställelseintyg"),
-        );
+      if (data.utfall) {
+        if (props.discardFaststallelseintygValidations && data.utfall) {
+          // Filtrera bort varningar kopplade till fastställelseintyget
+          data.utfall = data.utfall.filter(
+            (kontroll) =>
+              kontroll.kod == null ||
+              !["1103", "1164", "1169", "1179"].includes(kontroll.kod),
+          );
+        }
+
+        if (props.arsredovisning.verksamhetsarTidigare.length === 0) {
+          // Filtrera bort varningen "Jämförelsesiffror saknas i
+          // resultaträkningen. De behövs om det inte är företagets första
+          // räkenskapsår."
+          data.utfall = data.utfall.filter(
+            (kontroll) => kontroll.kod !== "3007",
+          );
+        }
       }
       result.value = data;
     }

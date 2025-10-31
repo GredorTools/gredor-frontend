@@ -7,15 +7,30 @@ describe("validate generated XBRL data", () => {
   const cases = [
     {
       testFileName: "TestfilA",
-      godkannaStyrelsensForslag: true,
+      faststallelseIntyg: {
+        godkannaStyrelsensForslag: true,
+        datum: "2025-01-20",
+      },
     },
     {
       testFileName: "TestfilB",
-      godkannaStyrelsensForslag: false,
+      faststallelseIntyg: {
+        godkannaStyrelsensForslag: false,
+        avsattningTillReservfond: "10000",
+        balanseringINyRakning: "71801",
+        datum: "2025-01-20",
+      },
+    },
+    {
+      testFileName: "TestfilC",
+      faststallelseIntyg: {
+        godkannaStyrelsensForslag: true,
+        datum: "2025-04-28",
+      },
     },
   ];
 
-  cases.forEach(({ testFileName, godkannaStyrelsensForslag }) => {
+  cases.forEach(({ testFileName, faststallelseIntyg }) => {
     it(`should generate correct XBRL data for ${testFileName}.gredorfardig`, () => {
       cy.deleteDownloadsFolder();
 
@@ -88,12 +103,12 @@ describe("validate generated XBRL data", () => {
       ).click();
 
       // Steg 5 - fastställelseintyg
-      cy.get("#datum").type("2025-01-20");
+      cy.get("#datum").type(faststallelseIntyg.datum);
       cy.get("#tilltalsnamn").type("Karl");
       cy.get("#efternamn").type("Karlsson");
       cy.get("#roll").select("Styrelseledamot");
 
-      if (godkannaStyrelsensForslag) {
+      if (faststallelseIntyg.godkannaStyrelsensForslag) {
         cy.get("#resultatdispositionBeslut").select(
           "Årsstämman beslöt att godkänna styrelsens förslag till vinstdisposition.",
         );
@@ -101,16 +116,22 @@ describe("validate generated XBRL data", () => {
         cy.get("#resultatdispositionBeslut").select(
           "Årsstämman beslöt att inte godkänna styrelsens förslag till vinstdisposition.",
         );
-        cy.get(
-          "#resultatdispositionBeslutEgen-avsattningTillReservfond",
-        ).click();
-        cy.get("#resultatdispositionBeslutEgen-avsattningTillReservfond").type(
-          "10000",
-        );
-        cy.get("#resultatdispositionBeslutEgen-balanseringINyRakning").click();
-        cy.get("#resultatdispositionBeslutEgen-balanseringINyRakning").type(
-          "71801",
-        );
+        if (faststallelseIntyg.avsattningTillReservfond) {
+          cy.get(
+            "#resultatdispositionBeslutEgen-avsattningTillReservfond",
+          ).click();
+          cy.get(
+            "#resultatdispositionBeslutEgen-avsattningTillReservfond",
+          ).type(faststallelseIntyg.avsattningTillReservfond);
+        }
+        if (faststallelseIntyg.balanseringINyRakning) {
+          cy.get(
+            "#resultatdispositionBeslutEgen-balanseringINyRakning",
+          ).click();
+          cy.get("#resultatdispositionBeslutEgen-balanseringINyRakning").type(
+            faststallelseIntyg.balanseringINyRakning,
+          );
+        }
       }
       cy.get(
         '#send-wizard-modal-footer-teleport button[data-testid="wizard-next-button"]',
