@@ -1,59 +1,54 @@
 ![Gredor frontend](./assets/banner.png)
 
-## Recommended IDE Setup
+Gredor är ett kostnadsfritt webbaserat verktyg för att ta fram årsredovisningar
+och skicka in dem till Bolagsverket i iXBRL-format. Verktyget har stöd för alla
+delar i en vanlig K2-årsredovisning för aktiebolag utan revisor.
 
-When using VS Code remember to install [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) extension.
+Frontenden är Vue-baserad och byggd för att kunna köras i en nginx-container.
+Testning görs med hjälp av Cypress.
 
-## How to debug (VSCode)
+Applikationen är lite speciell på så sätt att frontenden innehåller i princip
+all logik, och backenden används i princip bara för att kommunicera med
+Bolagsverket och BankID. Detta för att utnyttja faktumet att iXBRL kan
+integreras i XHTML och därmed byggas upp i webbläsaren med
+live-förhandsgranskning.
 
-### 1. Start Vite server
 
-*Start development server*
+## Köra Gredor-frontenden lokalt
 
-```sh
-npm start
-```
+### Förberedelser första gången
+
+1. Gör en kopia av `.env.template` i rotmappen; kalla den för `.env.development`
+2. Fyll i värden i `.env.development` (kör du `gredor-backend` med
+   standardinställningar kan du ta `http://localhost:8080` som backend-URL)
+
+### Starta server för live-utveckling
+
+Kör:
 
 ```sh
 npm run start:development
 ```
 
-*Start production server*
 
-```sh
-npm run start:production
-```
+## Bygga Gredor-frontenden
 
-### 2. Start VSCode debugger
-
-Press ```F5``` or use the ```Run and Debug``` menu.
-
-## Environments
-
-The ```.env.template``` file describes what environment variables that are available and/or required.
-
-### ```.env``` loading priorities
-
-
->An env file for a specific mode (e.g. ```.env.production```) will take higher priority than a generic one (e.g. ```.env```)
->
->Vite will always load ```.env``` and ```.env.local``` in addition to the mode-specific ```.end.[mode]``` file. Variables declared in mode-specific files will take precedence over those in generic files, but variables defined only in ```.env``` or ```.env.local``` will still be available in the environment.
->
->In addition, environment variables that already exist when Vite is executed have the highest priority and will not be overwritten by ```.env``` files. For example, when running ```VITE_SOME_KEY=123 vite build```.
->
->```.env``` files are loaded at the start of Vite. Restart the server after making changes.
-
-*In short what does this mean?*
-
-```.env``` will always be used as the base env file.
-If you also use ```.env.development``` or ```.env.production``` Vite will build a combined ```.env``` file where the more specific file will override any values existing in both files.
-
-You can read more about how Vite handles environment variables [here](https://vite.dev/guide/env-and-mode).
-
-
-## Build
+Kör:
 
 ```sh
 npm run build
 ```
 
+
+## Vill du bidra?
+
+Bidrag till projektet uppskattas stort! Dock är det viktigt att tänka på att
+t.ex. nya funktioner och förändringar måste passa bra med Gredor i övrigt. Om du
+vill bidra med något större, öppna gärna en issue och/eller utkasts-PR för att
+få tidig återkoppling på dina tänkta ändringar.
+
+
+## Licens
+
+Gredor distribueras under AGPLv3-licens, med en tilläggsklausul för friare
+sammansättning med annan programvara.
