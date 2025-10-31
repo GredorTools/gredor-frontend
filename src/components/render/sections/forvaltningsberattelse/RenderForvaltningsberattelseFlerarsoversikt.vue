@@ -11,8 +11,9 @@ import { formatDateForFlerarsoversikt } from "@/util/formatUtils.ts";
 import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.ts";
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import { computed } from "vue";
 
-defineProps<{
+const props = defineProps<{
   /** Årsredovisningen som innehåller förvaltningsberättelsen med flerårsöversikt. */
   arsredovisning: Arsredovisning;
 
@@ -22,10 +23,19 @@ defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt i flerårsöversikten. */
   taxonomyManager: TaxonomyManager;
 }>();
+
+const belopprader = computed(() =>
+  props.arsredovisning.forvaltningsberattelse.filter((belopprad) =>
+    isBeloppradInTaxonomyItemList(
+      props.groupTaxonomyItem.childrenFlat,
+      belopprad,
+    ),
+  ),
+);
 </script>
 
 <template>
-  <div>
+  <div v-if="belopprader.length > 0">
     <table>
       <thead>
         <tr>
@@ -59,14 +69,7 @@ defineProps<{
       </thead>
       <tbody>
         <RenderBelopprad
-          v-for="[index, belopprad] in [
-            ...arsredovisning.forvaltningsberattelse.entries(),
-          ].filter(([, b]) =>
-            isBeloppradInTaxonomyItemList(
-              [groupTaxonomyItem, ...groupTaxonomyItem.childrenFlat],
-              b,
-            ),
-          )"
+          v-for="belopprad in belopprader"
           :key="belopprad.taxonomyItemName"
           :belopprad="belopprad"
           :comparable-num-previous-years="

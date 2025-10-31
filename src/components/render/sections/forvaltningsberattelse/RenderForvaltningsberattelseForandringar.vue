@@ -47,7 +47,7 @@ const table = computed(() =>
 
 <template>
   <!-- TODO: Hantera om tabellen blir för bred... -->
-  <table>
+  <table v-if="belopprader.length > 0">
     <thead>
       <tr>
         <th scope="col">
