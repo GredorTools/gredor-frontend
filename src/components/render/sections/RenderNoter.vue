@@ -75,6 +75,7 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
             :is="
               getValueColumnHeaderCell(
                 headerTaxonomyItem,
+                arsredovisning.noter,
                 arsredovisning.verksamhetsarNuvarande,
               )
             "
@@ -83,6 +84,7 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
             :is="
               getValueColumnHeaderCell(
                 headerTaxonomyItem,
+                arsredovisning.noter,
                 arsredovisning.verksamhetsarTidigare[0],
               )
             "

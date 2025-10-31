@@ -8,6 +8,7 @@ import { computed } from "vue";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import RenderBeloppradCell from "@/components/render/blocks/belopprad/cell/RenderBeloppradCell.vue";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import { embeddedComparisonTuples } from "@/data/embeddedComparisonTuples.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -46,6 +47,13 @@ const taxonomyItem = computed(() =>
           />
         </template>
       </template>
+
+      <div
+        v-if="!embeddedComparisonTuples.includes(taxonomyItem.xmlName)"
+        class="rubrik"
+      >
+        {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
+      </div>
 
       <table class="render-tuple-instance">
         <tbody>
@@ -166,7 +174,17 @@ const taxonomyItem = computed(() =>
 </template>
 
 <style lang="scss" scoped>
-td.render-tuple {
-  padding: 0 !important;
+@import "@/assets/variables.scss";
+
+.rubrik {
+  font-style: italic;
+}
+
+.render-tuple-instance {
+  margin-bottom: $spacing-sm;
+
+  td.render-tuple {
+    padding: 0 !important;
+  }
 }
 </style>

@@ -69,6 +69,7 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
                   :is="
                     getValueColumnHeaderCell(
                       group,
+                      arsredovisning.noter,
                       arsredovisning.verksamhetsarNuvarande,
                     )
                   "
@@ -77,6 +78,7 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
                   :is="
                     getValueColumnHeaderCell(
                       group,
+                      arsredovisning.noter,
                       arsredovisning.verksamhetsarTidigare[0],
                     )
                   "

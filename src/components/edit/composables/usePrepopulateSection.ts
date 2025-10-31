@@ -3,8 +3,8 @@ import {
   createBelopprad,
   createBeloppradInList,
   deleteBelopprad,
+  getBeloppradInList,
   hasBeloppradValue,
-  isBeloppradCorrespondsToTaxonomyItem,
   isBeloppradInTaxonomyItemList
 } from "@/model/arsredovisning/Belopprad.ts";
 import { computed, type Reactive, reactive, type Ref, ref, watch } from "vue";
@@ -82,9 +82,7 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
     }
 
     // Kontrollera om en belopprad redan finns för det aktuella taxonomiobjektet
-    let belopprad = section.find((b) =>
-      isBeloppradCorrespondsToTaxonomyItem(b, taxonomyItem),
-    );
+    let belopprad = getBeloppradInList(section, taxonomyItem);
 
     // Om ingen belopprad finns, skapa en ny reaktiv belopprad
     if (!belopprad) {

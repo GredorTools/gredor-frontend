@@ -14,6 +14,7 @@ import {
   isBeloppradString,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import {
+  getDefaultBeloppradTupleFormat,
   hasBeloppradTupleValue,
   isBeloppradTuple,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
@@ -65,6 +66,9 @@ export function createBelopprad<T extends TaxonomyItemType>(
         return {
           ...baseBeloppradData,
           instanser: [],
+          format: getDefaultBeloppradTupleFormat(
+            baseBeloppradData.taxonomyItemName,
+          ),
         } as Belopprad<T>;
       }
 
@@ -98,9 +102,7 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
     let parentBelopprad: Belopprad | null = null;
     if (sectionPool != null) {
       parentBelopprad =
-        sectionPool.find((b) =>
-          isBeloppradCorrespondsToTaxonomyItem(b, taxonomyItem.parent),
-        ) || null;
+        getBeloppradInList(sectionPool, taxonomyItem.parent) || null;
     }
 
     createBeloppradInList(
@@ -151,14 +153,21 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
   return belopprad as Belopprad<T>;
 }
 
+export function getBeloppradInList<T extends TaxonomyItemType>(
+  list: Belopprad[],
+  taxonomyItem: TaxonomyItem<T>,
+): Belopprad<T> | undefined {
+  return list.find((belopprad) =>
+    isBeloppradCorrespondsToTaxonomyItem(belopprad, taxonomyItem),
+  ) as Belopprad<T> | undefined;
+}
+
 export function getOrCreateBeloppradInList<T extends TaxonomyItemType>(
   taxonomyManager: TaxonomyManager,
   list: Belopprad[],
   taxonomyItem: TaxonomyItem<T>,
 ): Belopprad<T> {
-  const existingBelopprad = list.find((belopprad) =>
-    isBeloppradCorrespondsToTaxonomyItem(belopprad, taxonomyItem),
-  );
+  const existingBelopprad = getBeloppradInList(list, taxonomyItem);
   if (existingBelopprad) {
     return existingBelopprad as Belopprad<T>;
   } else {
@@ -277,9 +286,7 @@ function deleteBeloppradAbstractParents(
   const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, belopprad);
   if (taxonomyItem.parent) {
     // Hitta föräldern i listan baserat på förälderns ID
-    const beloppradParent = from.find((item) =>
-      isBeloppradCorrespondsToTaxonomyItem(item, taxonomyItem.parent),
-    );
+    const beloppradParent = getBeloppradInList(from, taxonomyItem.parent);
 
     if (beloppradParent) {
       let shouldDeleteParent = false;

@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import {
+  type BeloppradTuple,
+  BeloppradTupleFormat,
+  getBeloppradTupleFormat,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 import RenderBeloppradTupleSimple from "@/components/render/blocks/belopprad/RenderBeloppradTupleSimple.vue";
 import RenderBeloppradTupleComparison from "@/components/render/blocks/belopprad/RenderBeloppradTupleComparison.vue";
-import { comparableTuples } from "@/data/comparableTuples.ts";
+import { computed } from "vue";
 
-defineProps<{
+const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
   taxonomyManager: TaxonomyManager;
 
@@ -23,21 +27,25 @@ defineProps<{
    * värden kan jämföras mellan år. */
   comparableNumPreviousYears: number;
 }>();
+
+const beloppradTupleFormat = computed(() =>
+  getBeloppradTupleFormat(props.belopprad),
+);
 </script>
 
 <template>
-  <RenderBeloppradTupleComparison
-    v-if="comparableTuples.includes(belopprad.taxonomyItemName)"
+  <RenderBeloppradTupleSimple
+    v-if="beloppradTupleFormat === BeloppradTupleFormat.SIMPLE"
     :belopprad="belopprad"
     :display-header="displayHeader"
-    :num-previous-years="comparableNumPreviousYears"
     :redovisningsvaluta="redovisningsvaluta"
     :taxonomy-manager="taxonomyManager"
   />
-  <RenderBeloppradTupleSimple
-    v-else
+  <RenderBeloppradTupleComparison
+    v-else-if="beloppradTupleFormat === BeloppradTupleFormat.COMPARISON"
     :belopprad="belopprad"
     :display-header="displayHeader"
+    :num-previous-years="comparableNumPreviousYears"
     :redovisningsvaluta="redovisningsvaluta"
     :taxonomy-manager="taxonomyManager"
   />
