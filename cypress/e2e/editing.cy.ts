@@ -6,10 +6,10 @@ it("can create and edit manually", function () {
   cy.intercept(
     {
       method: "GET",
-      url: "http://gredor-backend/v1/information/records/5592560287",
+      url: "http://gredor-backend/v1/information/records/5569999999",
     },
     {
-      foretagsnamn: "Potatron Tech AB",
+      foretagsnamn: "Aktiebolaget Exemplet",
       rakenskapsperioder: [
         {
           from: "2025-01-01",
@@ -32,15 +32,15 @@ it("can create and edit manually", function () {
   cy.wait(1000);
   cy.get('#app [name="organisationsnummer"]').click();
   cy.get('#app [name="organisationsnummer"]').clear();
-  cy.get('#app [name="organisationsnummer"]').type("559256-0287");
+  cy.get('#app [name="organisationsnummer"]').type("556999-9999");
   cy.get("#new-arsredovisning-modal-footer-teleport .btn").click();
 
   cy.get(
     '#arsredovisning-for-export [name="se-cd-base:ForetagetsNamn"]',
-  ).should("have.text", "Potatron Tech AB");
+  ).should("have.text", "Aktiebolaget Exemplet");
   cy.get(
     '#arsredovisning-for-export [name="se-cd-base:Organisationsnummer"]',
-  ).should("have.text", "559256-0287");
+  ).should("have.text", "556999-9999");
   cy.get("#arsredovisning-for-export h1").should(
     "have.text",
     "Årsredovisning för räkenskapsåret 2025",
