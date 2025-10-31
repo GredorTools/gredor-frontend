@@ -104,7 +104,8 @@ $tooltip-padding-y: 0.5rem;
 // Länkar
 a {
   color: $primary-color;
-  text-decoration: none;
+  font-weight: 500;
+  text-decoration: underline;
   transition: $transition-base;
 
   &:hover {

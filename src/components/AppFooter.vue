@@ -19,15 +19,10 @@
         </div>
         <div class="card-body">
           <p>
-            Bacon ipsum dolor amet picanha meatball kielbasa, rump alcatra ball
-            tip biltong t-bone. Pork belly shank turducken porchetta, meatloaf
-            picanha hamburger chicken.
-          </p>
-          <p>
-            Shoulder ham short loin, sirloin drumstick corned beef ham hock
-            alcatra capicola chicken pork frankfurter picanha pork belly.
-            Meatloaf shoulder turducken, tongue venison shankle meatball
-            tenderloin sausage porchetta beef jerky chuck.
+            Gredor är ett kostnadsfritt verktyg som du kan använda för att ta
+            fram årsredovisningar och skicka in dem till Bolagsverket. Verktyget
+            har stöd för alla delar i en vanlig K2-årsredovisning för aktiebolag
+            utan revisor.
           </p>
           <p>
             Gredor är utvecklat av småföretagare för småföretagare. Vår vision
@@ -64,7 +59,7 @@
           </p>
           <p>
             Gredor stöder endast regelverket för årsredovisning i mindre företag
-            (K2), för företag utan revisor.
+            (K2), för aktiebolag utan revisor.
           </p>
         </div>
       </div>
@@ -72,7 +67,23 @@
         <div class="card-header">
           <strong>Sponsorer</strong>
         </div>
-        <div class="card-body">TODO</div>
+        <div class="card-body">
+          <p>
+            Gredor tillhandahålls och sponsras av potatiz (Potatron Tech AB).
+          </p>
+
+          <p>
+            potatiz erbjuder även Tågstationen, en webb- och mobilapplikation
+            för att man som tågresenär enkelt ska kunna ta reda på spår,
+            förseningar och mer om sitt tåg, var man än befinner sig. Låter det
+            intressant?
+            <a href="https://tågstationen.se" target="_blank">Besök hemsidan</a>
+            eller
+            <a href="https://potatiz.com/apps/tagstationen/open"
+              >ladda ner mobilappen</a
+            >.
+          </p>
+        </div>
       </div>
       <div class="card">
         <div class="card-header">
@@ -86,9 +97,11 @@
             <a href="https://github.com/GredorTools" target="_blank">GitHub</a>.
           </p>
           <p>
-            Bidrag till projektet uppskattas stort! Om du vill bidra, öppna
-            gärna en issue och/eller utkasts-PR i GitHub-repot för att få tidig
-            återkoppling på dina tänkta ändringar.
+            Bidrag till projektet uppskattas stort! Dock är det viktigt att
+            tänka på att t.ex. nya funktioner och förändringar måste passa bra
+            med Gredor i övrigt. Om du vill bidra, öppna gärna en issue
+            och/eller utkasts-PR i GitHub-repot för att få tidig återkoppling på
+            dina tänkta ändringar.
           </p>
         </div>
       </div>
@@ -107,8 +120,9 @@
             De uppgifter som skickas över internet är, utöver sådant som skickas
             automatiskt för att kunna ansluta (t.ex. ip-adress), din
             årsredovisning, de filer du laddar upp samt personuppgifter du
-            skriver in. Personnummer lagras på Gredors servrar i en vecka för
-            att förhindra spam, i övrigt sparas inget där. Däremot sparar
+            skriver in. I samband med BankID-identifiering lagras personnummer
+            på Gredors servrar i en vecka för att förhindra spam, i övrigt
+            sparas inget förutom enkla anonymiserade loggar där. Däremot sparar
             Bolagsverket din årsredovisning när du laddar upp den hos dem,
             annars hade tjänsten varit någorlunda värdelös 😉
           </p>
@@ -119,7 +133,27 @@
           <strong>Kontakt</strong>
         </div>
         <div class="card-body">
-          <p>Du kan kontakta oss på...</p>
+          <p>
+            <strong
+              >OBS: Vi är inte redovisningskonsulter och kan inte svara på
+              frågor om t.ex. hur din årsredovisning borde se ut.</strong
+            >
+          </p>
+          <hr />
+          <p>
+            E-post: <a href="mailto:gredor@potatiz.com">gredor@potatiz.com</a>
+          </p>
+          <hr />
+          <p>
+            GitHub:
+            <a href="https://github.com/GredorTools" target="_blank"
+              >GredorTools</a
+            >
+          </p>
+          <hr />
+          <p>
+            Gredor tillhandahålls av Potatron Tech AB (559256-0287, Stockholm).
+          </p>
         </div>
       </div>
     </aside>
