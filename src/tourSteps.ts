@@ -16,8 +16,13 @@ export const tourSteps: OnboardingTourStep[] = [
     target: "#editor",
     title: "Redigera årsredovisningen",
     description:
+      "<p>" +
       "På vänster sida av skärmen har du redigeringsvyn, där du bland annat" +
-      " lägger till fält i årsredovisningen.",
+      " lägger till fält i årsredovisningen." +
+      "</p>" +
+      "<p>" +
+      "Använd flikmenyn för att växla mellan olika delar av årsredovisningen." +
+      "</p>",
   },
   {
     target: "#renderer",
