@@ -53,7 +53,7 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
           return "";
         }
 
-        return Decimal(egetKapital)
+        const calculatedSoliditet = Decimal(egetKapital)
           .plus(
             Decimal("1")
               .minus(Decimal(bolagsskatt))
@@ -61,8 +61,11 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
           )
           .div(Decimal(balansomslutning))
           .mul(100)
-          .round()
-          .toString();
+          .round();
+
+        return !calculatedSoliditet.isNaN()
+          ? calculatedSoliditet.toString()
+          : "";
       }
 
       soliditetBelopprad.beloppNuvarandeAr = soliditet(
