@@ -44,8 +44,8 @@
           </p>
           <p>
             Vi som arbetar med Gredor har begränsad möjlighet att ge support;
-            bland annat kan vi inte svara på frågor om vilka fält du behöver ha
-            med i din årsredovisning. För frågor av sådana slag hänvisar vi till
+            bland annat kan vi inte svara på frågor om vad din årsredovisning
+            borde innehålla. För frågor av sådana slag hänvisar vi till
             <a
               href="https://bolagsverket.se/foretag/aktiebolag/arsredovisningforaktiebolag.759.html#h-Innehallienarsredovisning"
               >Bolagsverkets exempel</a
@@ -74,12 +74,12 @@
 
           <p>
             potatiz erbjuder även Tågstationen, en webb- och mobilapplikation
-            för att man som tågresenär enkelt ska kunna ta reda på spår,
-            förseningar och mer om sitt tåg, var man än befinner sig. Låter det
+            som ger tågresenärer möjlighet att enkelt ta reda på spår,
+            förseningar och mer om sina tåg, var man än befinner sig. Låter det
             intressant?
             <a href="https://tågstationen.se" target="_blank">Besök hemsidan</a>
             eller
-            <a href="https://potatiz.com/apps/tagstationen/open"
+            <a href="https://potatiz.com/apps/tagstationen/open" target="_blank"
               >ladda ner mobilappen</a
             >.
           </p>
@@ -87,7 +87,7 @@
       </div>
       <div class="card">
         <div class="card-header">
-          <strong>Källkod och licens</strong>
+          <strong>Källkod, licens och andra nördigheter</strong>
         </div>
         <div class="card-body">
           <p>
@@ -99,9 +99,9 @@
           <p>
             Bidrag till projektet uppskattas stort! Dock är det viktigt att
             tänka på att t.ex. nya funktioner och förändringar måste passa bra
-            med Gredor i övrigt. Om du vill bidra, öppna gärna en issue
-            och/eller utkasts-PR i GitHub-repot för att få tidig återkoppling på
-            dina tänkta ändringar.
+            med Gredor i övrigt. Om du vill bidra med något större, öppna gärna
+            en issue och/eller utkasts-PR i GitHub-repot för att få tidig
+            återkoppling på dina tänkta ändringar.
           </p>
         </div>
       </div>
@@ -119,12 +119,12 @@
           <p>
             De uppgifter som skickas över internet är, utöver sådant som skickas
             automatiskt för att kunna ansluta (t.ex. ip-adress), din
-            årsredovisning, de filer du laddar upp samt personuppgifter du
-            skriver in. I samband med BankID-identifiering lagras personnummer
-            på Gredors servrar i en vecka för att förhindra spam, i övrigt
-            sparas inget förutom enkla anonymiserade loggar där. Däremot sparar
-            Bolagsverket din årsredovisning när du laddar upp den hos dem,
-            annars hade tjänsten varit någorlunda värdelös 😉
+            årsredovisning samt personuppgifter du skriver in. I samband med
+            BankID-identifiering lagras ditt personnummer på Gredors servrar i
+            en vecka för att förhindra spam, i övrigt sparas inget förutom enkla
+            anonymiserade loggar där. Däremot sparar Bolagsverket din
+            årsredovisning när du laddar upp den hos dem, annars hade tjänsten
+            varit någorlunda värdelös 😉
           </p>
         </div>
       </div>
@@ -136,7 +136,7 @@
           <p>
             <strong
               >OBS: Vi är inte redovisningskonsulter och kan inte svara på
-              frågor om t.ex. hur din årsredovisning borde se ut.</strong
+              frågor om t.ex. vad din årsredovisning borde innehålla.</strong
             >
           </p>
           <hr />
