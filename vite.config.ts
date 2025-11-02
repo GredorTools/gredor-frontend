@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import { fileURLToPath, URL } from "node:url";
 import { resolve } from "path";
 
@@ -5,10 +6,16 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueDevTools from "vite-plugin-vue-devtools";
 
+const appVersion = JSON.stringify(
+  process.env.npm_package_version +
+    "-" +
+    execSync("git rev-parse --short HEAD").toString().trim(),
+);
+
 // https://vite.dev/config/
 export default defineConfig({
   define: {
-    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+    __APP_VERSION__: appVersion,
   },
   plugins: [
     vue({

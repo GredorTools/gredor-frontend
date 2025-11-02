@@ -107,7 +107,7 @@ export async function convertVueHTMLToiXBRL(
   let version = __APP_VERSION__;
   const environmentName = getConfigValue("VITE_ENV_NAME");
   if (environmentName) {
-    version = `${__APP_VERSION__} ${environmentName}`;
+    version += `-${environmentName}`;
   }
 
   // Skapa slutlig HTML
