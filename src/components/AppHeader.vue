@@ -14,7 +14,7 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
 import { Tooltip } from "bootstrap";
 import type VueOnboardingTour from "vue-onboarding-tour";
-import { tourSteps } from "@/tourSteps.ts";
+import { tourSteps } from "@/components/tourSteps.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
