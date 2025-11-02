@@ -7,6 +7,7 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
 import { AVGIVANDE_TYPER } from "@/data/avgivande.ts";
+import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 
 /** Årsredovisningen som innehåller grunduppgifterna. */
 defineModel<Arsredovisning>("arsredovisning", {
