@@ -42,9 +42,9 @@ npm run build
 När frontenden sedan körs måste följande miljövariabler vara satta:
 
 ```
-VITE_ENV_NAME="Miljönamn (Valfri. Fyll inte i för produktion)"
-VITE_TEST_MODE="true eller false beroende på om testmiljö"
-VITE_GREDOR_BACKEND_BASEURL="..."
+VITE_ENV_NAME=<miljönamn (valfri - fyll inte i för produktion)>
+VITE_TEST_MODE=<"true" eller "false" beroende på om testmiljö>
+VITE_GREDOR_BACKEND_BASEURL=<...>
 ```
 
 
