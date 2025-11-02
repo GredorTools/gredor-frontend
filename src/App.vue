@@ -66,14 +66,10 @@ main {
   gap: $spacing-xl;
 
   #editor {
-    overflow-y: scroll;
-    border: 2px solid $primary-color;
-    border-radius: $border-radius-lg;
-    background-color: $background-light;
-    padding: $spacing-md;
+    display: flex;
+    flex-direction: column;
     justify-self: end;
     width: 100%;
-    box-shadow: $shadow-sm;
   }
 
   #renderer {

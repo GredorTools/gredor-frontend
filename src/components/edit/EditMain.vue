@@ -53,68 +53,90 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
     </li>
   </ul>
 
-  <div class="editor">
-    <Suspense v-if="currentMode === 'grunduppgifter'">
-      <EditGrunduppgifter v-model:arsredovisning="arsredovisning" />
-    </Suspense>
-    <Suspense v-if="currentMode === 'forvaltningsberattelse'">
-      <EditForvaltningsberattelse v-model:arsredovisning="arsredovisning" />
-    </Suspense>
-    <Suspense v-if="currentMode === 'resultatrakning'">
-      <EditResultatrakning v-model:arsredovisning="arsredovisning" />
-    </Suspense>
-    <Suspense v-if="currentMode === 'balansrakning'">
-      <EditBalansrakning v-model:arsredovisning="arsredovisning" />
-    </Suspense>
-    <Suspense v-if="currentMode === 'noter'">
-      <EditNoter v-model:arsredovisning="arsredovisning" />
-    </Suspense>
-    <Suspense v-if="currentMode === 'underskrifter'">
-      <EditUnderskrifter v-model:arsredovisning="arsredovisning" />
-    </Suspense>
+  <div
+    :class="{ 'first-nav-active': currentMode === 'grunduppgifter' }"
+    class="editor-container"
+  >
+    <div class="editor">
+      <Suspense v-if="currentMode === 'grunduppgifter'">
+        <EditGrunduppgifter v-model:arsredovisning="arsredovisning" />
+      </Suspense>
+      <Suspense v-if="currentMode === 'forvaltningsberattelse'">
+        <EditForvaltningsberattelse v-model:arsredovisning="arsredovisning" />
+      </Suspense>
+      <Suspense v-if="currentMode === 'resultatrakning'">
+        <EditResultatrakning v-model:arsredovisning="arsredovisning" />
+      </Suspense>
+      <Suspense v-if="currentMode === 'balansrakning'">
+        <EditBalansrakning v-model:arsredovisning="arsredovisning" />
+      </Suspense>
+      <Suspense v-if="currentMode === 'noter'">
+        <EditNoter v-model:arsredovisning="arsredovisning" />
+      </Suspense>
+      <Suspense v-if="currentMode === 'underskrifter'">
+        <EditUnderskrifter v-model:arsredovisning="arsredovisning" />
+      </Suspense>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/_variables.scss";
 
-.nav {
-  border-bottom: 1px solid $border-color-normal;
-}
-
 .nav-tabs {
+  border: none;
+
   .nav-item {
     margin-bottom: -1px;
+    border: none;
 
     .nav-link {
       color: $medium;
+      border-width: 2px;
       border-top-left-radius: $border-radius;
       border-top-right-radius: $border-radius;
       font-weight: 500;
-      transition: $transition-base;
+      isolation: isolate;
+      transition: none;
 
       &:hover {
         color: $primary-color;
         background-color: rgba($primary-color, 0.2);
+        height: calc(100% - 1px);
+      }
+
+      &:focus {
+        outline: none;
       }
 
       &.active {
         color: $primary-color;
         background-color: $background-light;
-        border-color: $border-color-normal $border-color-normal
-          $background-light;
+        border-color: $primary-color $primary-color $background-light;
+        border-bottom: none;
+        height: calc(100% + 1px);
       }
     }
   }
 }
 
-.editor {
-  padding: $spacing-lg $spacing-md;
+.editor-container {
+  height: 100%;
+  overflow-y: scroll;
+  border: 2px solid $primary-color;
+  border-radius: $border-radius-lg;
   background-color: $background-light;
-  border: 1px solid $border-color-normal;
-  border-top: none;
-  border-bottom-left-radius: $border-radius;
-  border-bottom-right-radius: $border-radius;
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+
+  &.first-nav-active {
+    border-top-left-radius: 0;
+  }
+}
+
+.editor {
+  padding: $spacing-md $spacing-sm;
+  background-color: $background-light;
 }
 
 :deep(table) {
