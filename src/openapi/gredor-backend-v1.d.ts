@@ -386,7 +386,10 @@ export interface components {
         };
         /** @enum {string} */
         KravPaRevisionsberattelseEnum: "ja" | "nej" | "uppgift_saknas";
-        /** Format: date */
+        /**
+         * Format: date
+         * @example 2022-03-10
+         */
         LocalDate: string;
         PreparationRequest: {
             foretagOrgnr: string;
