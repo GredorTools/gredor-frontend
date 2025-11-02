@@ -1,14 +1,14 @@
 import type { Underskrift } from "@/model/arsredovisning/Underskrift.ts";
 
 export interface Redovisningsinformation {
-  forfattare: Forfattare;
+  avgivande: Avgivande;
   redovisningsvaluta: Redovisningsvaluta;
   underskrifter: Underskrift[];
   undertecknandeOrt: string;
   datering: string; // Exempel: "2025-01-23"
 }
 
-export interface Forfattare {
+export interface Avgivande {
   namn: string;
   xbrlId: string; // Exempel: "se-mem-base:FinansiellRapportStyrelsenAvgerArsredovisningMember"
 }

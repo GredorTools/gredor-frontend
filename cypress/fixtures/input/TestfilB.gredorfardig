@@ -814,7 +814,7 @@
     "redovisningsinformation": {
       "faststallandeDatum": "2025-01-04",
       "undertecknandeOrt": "Halmstad",
-      "forfattare": {
+      "avgivande": {
         "namn": "Styrelsen och verkställande direktören",
         "xbrlId": "se-mem-base:FinansiellRapportStyrelsenVerkstallandeDirektorenAvgerArsredovisningMember"
       },

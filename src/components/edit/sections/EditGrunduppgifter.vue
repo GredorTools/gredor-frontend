@@ -6,8 +6,7 @@
 
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
-import { FORFATTARE_TYPER } from "@/data/forfattare.ts";
-import { tryFormatOrgnr } from "@/util/formatUtils.ts";
+import { AVGIVANDE_TYPER } from "@/data/avgivande.ts";
 
 /** Årsredovisningen som innehåller grunduppgifterna. */
 defineModel<Arsredovisning>("arsredovisning", {
@@ -48,18 +47,20 @@ defineModel<Arsredovisning>("arsredovisning", {
 
   <div class="card mb-4 p-4">
     <div class="mb-3">
-      <label class="form-label" for="forfattare">Författare:</label>
+      <label class="form-label" for="avgivande"
+        >Vem som avger årsredovisningen:</label
+      >
       <select
-        id="forfattare"
-        v-model="arsredovisning.redovisningsinformation.forfattare"
+        id="avgivande"
+        v-model="arsredovisning.redovisningsinformation.avgivande"
         class="form-select"
       >
         <option
-          v-for="forfattare in FORFATTARE_TYPER"
-          :key="forfattare.xbrlId"
-          :value="forfattare"
+          v-for="avgivande in AVGIVANDE_TYPER"
+          :key="avgivande.xbrlId"
+          :value="avgivande"
         >
-          {{ forfattare.namn }}
+          {{ avgivande.namn }}
         </option>
       </select>
     </div>

@@ -1,23 +1,23 @@
-import type { Forfattare } from "@/model/arsredovisning/Redovisningsinformation.ts";
+import type { Avgivande } from "@/model/arsredovisning/Redovisningsinformation.ts";
 
-export const ForfattareStyrelsen: Forfattare = {
+export const AvgivandeStyrelsen: Avgivande = {
   namn: "Styrelsen",
   xbrlId: "se-mem-base:FinansiellRapportStyrelsenAvgerArsredovisningMember",
 };
 
-export const ForfattareStyrelsenOchVD: Forfattare = {
+export const AvgivandeStyrelsenOchVD: Avgivande = {
   namn: "Styrelsen och verkställande direktören",
   xbrlId:
     "se-mem-base:FinansiellRapportStyrelsenVerkstallandeDirektorenAvgerArsredovisningMember",
 };
 
-export const ForfattareLikvidator: Forfattare = {
+export const AvgivandeLikvidator: Avgivande = {
   namn: "Likvidatorn",
   xbrlId: "se-mem-base:FinansiellRapportLikvidatornAvgerArsredovisningMember",
 };
 
-export const FORFATTARE_TYPER = [
-  ForfattareStyrelsen,
-  ForfattareStyrelsenOchVD,
-  ForfattareLikvidator,
+export const AVGIVANDE_TYPER = [
+  AvgivandeStyrelsen,
+  AvgivandeStyrelsenOchVD,
+  AvgivandeLikvidator,
 ] as const;

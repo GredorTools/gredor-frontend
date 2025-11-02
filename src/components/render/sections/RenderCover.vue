@@ -51,7 +51,7 @@ const rakenskapsarText = computed(() => {
     <h1>Årsredovisning för räkenskapsåret {{ rakenskapsarText }}</h1>
 
     <p>
-      {{ arsredovisning.redovisningsinformation.forfattare.namn }} avger härmed
+      {{ arsredovisning.redovisningsinformation.avgivande.namn }} avger härmed
       följande årsredovisning<br />för räkenskapsåret
       {{ arsredovisning.verksamhetsarNuvarande.startdatum }} –
       {{ arsredovisning.verksamhetsarNuvarande.slutdatum }}.

@@ -1,6 +1,6 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { RedovisningsvalutaSEK } from "@/data/redovisningsvalutor.ts";
-import { ForfattareStyrelsen } from "@/data/forfattare.ts";
+import { AvgivandeStyrelsen } from "@/data/avgivande.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 export const emptyArsredovisning: Arsredovisning = {
@@ -13,7 +13,7 @@ export const emptyArsredovisning: Arsredovisning = {
     organisationsnummer: "",
   },
   redovisningsinformation: {
-    forfattare: ForfattareStyrelsen,
+    avgivande: AvgivandeStyrelsen,
     redovisningsvaluta: RedovisningsvalutaSEK,
     underskrifter: [
       {

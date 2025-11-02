@@ -74,7 +74,7 @@ const allDecimalTaxonomyItems = [
         <ix:nonNumeric
           contextRef="period_nuvarande"
           name="se-gen-base:FinansiellRapportList"
-          >{{ arsredovisning.redovisningsinformation.forfattare.xbrlId }}
+          >{{ arsredovisning.redovisningsinformation.avgivande.xbrlId }}
         </ix:nonNumeric>
         <ix:nonNumeric
           contextRef="period_nuvarande"

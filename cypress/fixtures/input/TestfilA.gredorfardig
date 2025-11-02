@@ -11,7 +11,7 @@
       "organisationsnummer": "556999-9999"
     },
     "redovisningsinformation": {
-      "forfattare": {
+      "avgivande": {
         "namn": "Styrelsen och verkställande direktören",
         "xbrlId": "se-mem-base:FinansiellRapportStyrelsenVerkstallandeDirektorenAvgerArsredovisningMember"
       },
