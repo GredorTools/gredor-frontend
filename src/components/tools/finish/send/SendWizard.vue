@@ -24,6 +24,11 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import SendGredorAgreement from "@/components/tools/finish/send/steps/SendGredorAgreement.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
 
+defineProps<{
+  /** ID för modalinstansen som är unikt över hela applikationen. */
+  instanceId: string;
+}>();
+
 const modal = ref<ComponentExposed<typeof CommonModal>>();
 defineExpose({
   /** Visar det modala fönstret. */
@@ -54,7 +59,7 @@ const numSteps = 10;
 
 <template>
   <CommonModal
-    id="send-wizard-modal"
+    :id="`send-wizard-modal-${instanceId}`"
     ref="modal"
     title="Ladda upp till Bolagsverket"
   >

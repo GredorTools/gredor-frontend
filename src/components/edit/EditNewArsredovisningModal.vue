@@ -19,6 +19,11 @@ import { getConfigValue } from "@/util/configUtils.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 
+defineProps<{
+  /** ID för modalinstansen som är unikt över hela applikationen. */
+  instanceId: string;
+}>();
+
 const emit = defineEmits<{
   /** Triggas när användaren är färdig med flödet. */
   (e: "arsredovisningCreated", arsredovisning: Arsredovisning): void;
@@ -114,7 +119,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
 
 <template>
   <CommonModal
-    id="new-arsredovisning-modal"
+    :id="`new-arsredovisning-modal-${instanceId}`"
     ref="modal"
     title="Ny årsredovisning"
   >

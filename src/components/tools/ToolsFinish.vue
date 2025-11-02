@@ -84,8 +84,9 @@ function showSendWizard() {
     :key="finalizeWizardRenderId"
     ref="finalizeWizard"
     :arsredovisning="arsredovisning"
+    instance-id="ToolsFinish"
   />
-  <SendWizard ref="sendWizard" />
+  <SendWizard ref="sendWizard" instance-id="ToolsFinish" />
 </template>
 
 <style lang="scss" scoped></style>

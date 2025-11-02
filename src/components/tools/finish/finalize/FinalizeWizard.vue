@@ -21,6 +21,9 @@ import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBank
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
   arsredovisning: Arsredovisning;
+
+  /** ID för modalinstansen som är unikt över hela applikationen. */
+  instanceId: string;
 }>();
 
 const modal = ref<ComponentExposed<typeof CommonModal>>();
@@ -47,7 +50,7 @@ const currentStep = ref<
 
 <template>
   <CommonModal
-    id="finalize-wizard-modal"
+    :id="`finalize-wizard-modal-${instanceId}`"
     ref="modal"
     title="Färdigställ inför årsstämma"
   >

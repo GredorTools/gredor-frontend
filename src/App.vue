@@ -3,17 +3,18 @@
  * Huvudkomponenten som sammanför alla delar av applikationen.
  */
 
-import { exampleArsredovisning } from "@/example/exampleArsredovisning.ts";
 import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
+import { emptyArsredovisning } from "@/example/emptyArsredovisning.ts";
 
 const arsredovisning = useGredorStorage(
   "AppAutosaveArsredovisning",
-  exampleArsredovisning,
+  emptyArsredovisning,
   { highPerformance: true },
 );
 </script>
@@ -48,6 +49,8 @@ const arsredovisning = useGredorStorage(
         <ToolsFinish :arsredovisning="arsredovisning" />
       </div>
     </div>
+
+    <AppFirstLaunchScreen v-model:arsredovisning="arsredovisning" />
   </main>
 
   <AppFooter />

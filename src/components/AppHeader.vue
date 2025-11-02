@@ -4,8 +4,12 @@
  */
 
 import { getConfigValue } from "@/util/configUtils.ts";
-import { nextTick, onMounted, ref, useTemplateRef } from "vue";
-import { parseGredorFile, requestOpenFile, requestSaveFile } from "@/util/fileUtils.ts";
+import { nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
+import {
+  parseGredorFile,
+  requestOpenFile,
+  requestSaveFile,
+} from "@/util/fileUtils.ts";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
@@ -23,24 +27,51 @@ const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
 
 const environmentName = getConfigValue("VITE_ENV_NAME");
 
-// Tooltip för rundtur - visas automatiskt när sidan laddas första gången
-const tourBtn = useTemplateRef("tour-btn");
+// Tooltip för rundtur - visas automatiskt när sidan laddas första gången, så
+// fort "Välkommen till Gredor"-rutan är borta
 const tourTooltipHasBeenDisplayed = useGredorStorage(
   "AppTourTooltipHasBeenDisplayed",
   false,
 );
+
+const showFirstLaunchScreen = useGredorStorage(
+  "AppShowFirstLaunchScreen",
+  true,
+);
+
+const tourBtn = useTemplateRef("tour-btn");
+
 if (!tourTooltipHasBeenDisplayed.value) {
   onMounted(() => {
     const element = tourBtn.value;
     if (element) {
       const tooltip = new Tooltip(element);
-      setTimeout(() => {
-        tooltip.show();
+
+      function showAndHideTooltip(showTimeout: number) {
         setTimeout(() => {
-          tooltip.hide();
-          tourTooltipHasBeenDisplayed.value = true;
-        }, 5000);
-      }, 500);
+          tooltip.show();
+          setTimeout(() => {
+            tooltip.hide();
+            tourTooltipHasBeenDisplayed.value = true;
+          }, 5000);
+        }, showTimeout);
+      }
+
+      if (!showFirstLaunchScreen.value) {
+        // "Välkommen till Gredor"-rutan visas inte - visa tooltipen direkt
+        showAndHideTooltip(500);
+      } else {
+        // "Välkommen till Gredor"-rutan är i vägen - vänta tills den försvinner
+        const unwatchShowFirstLaunchScreen = watch(
+          showFirstLaunchScreen,
+          () => {
+            if (!showFirstLaunchScreen.value) {
+              showAndHideTooltip(1000);
+              unwatchShowFirstLaunchScreen();
+            }
+          },
+        );
+      }
     }
   });
 }
@@ -93,8 +124,7 @@ function exportFile() {
   );
 }
 
-async function importSIE() {
-  // TODO: Visa meddelande om att saker rensas...
+async function importSIEForTest() {
   const file = await requestOpenFile(".se,.si,.sie");
   const text = await file?.text();
   if (text) {
@@ -143,7 +173,7 @@ async function importSIE() {
         <button
           v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
           class="btn btn-outline-primary"
-          @click="importSIE"
+          @click="importSIEForTest"
         >
           Importera SIE-fil… (test)
         </button>
@@ -169,6 +199,7 @@ async function importSIE() {
   <EditNewArsredovisningModal
     :key="`modal-render-${newArsredovisningModalRenderId}`"
     ref="newArsredovisningModal"
+    instance-id="AppHeader"
     @arsredovisning-created="(value) => (arsredovisning = value)"
   />
 

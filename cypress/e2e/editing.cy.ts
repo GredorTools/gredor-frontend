@@ -1,7 +1,11 @@
 it("can create and edit manually", function () {
   cy.viewport(1800, 1000);
 
-  cy.visit("http://localhost:4173");
+  cy.visit("http://localhost:4173", {
+    onBeforeLoad(win) {
+      win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+    },
+  });
 
   cy.intercept(
     {
@@ -33,7 +37,7 @@ it("can create and edit manually", function () {
   cy.get('#app [name="organisationsnummer"]').click();
   cy.get('#app [name="organisationsnummer"]').clear();
   cy.get('#app [name="organisationsnummer"]').type("556999-9999");
-  cy.get("#new-arsredovisning-modal-footer-teleport .btn").click();
+  cy.get("#new-arsredovisning-modal-AppHeader-footer-teleport .btn").click();
 
   cy.get(
     '#arsredovisning-for-export [name="se-cd-base:ForetagetsNamn"]',
