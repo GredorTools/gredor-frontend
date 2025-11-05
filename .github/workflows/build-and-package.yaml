@@ -156,6 +156,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
