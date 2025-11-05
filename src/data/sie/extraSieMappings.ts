@@ -30,6 +30,27 @@ export const extraSieMappings: SieMapping[] = [
     },
   },
   {
+    basAccounts: [{ start: 8990, end: 8999 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat",
+      parentName:
+        "se-gen-base:ForandringEgetKapitalIngaendeAretsResultatAbstract",
+      labelType: "terseLabel",
+    },
+  },
+  {
+    basAccounts: [{ start: 8990, end: 8999 }],
+    taxonomyItemId: {
+      rootName:
+        "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+      name: "se-gen-base:ForandringEgetKapitalTotaltAretsResultat",
+      parentName: "se-gen-base:ForandringEgetKapitalIngaendeTotaltAbstract",
+      labelType: "totalLabel",
+    },
+  },
+  {
     basAccounts: [{ start: 2000, end: 2099 }],
     taxonomyItemId: {
       rootName:

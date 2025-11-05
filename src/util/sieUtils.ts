@@ -6,15 +6,12 @@ import {
   type Belopprad,
   deleteBelopprad,
   getOrCreateBeloppradInList,
-  getTaxonomyItemForBelopprad,
+  getTaxonomyItemForBelopprad
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { sieMappings } from "@/data/taxonomy/k2/2021-10-31/sieMappings.ts";
 import { extraSieMappings } from "@/data/sie/extraSieMappings.ts";
-import {
-  autofillPersonalkostnaderNot,
-  autofillSoliditet,
-} from "@/util/autofillUtils.ts";
+import { autofillPersonalkostnaderNot, autofillSoliditet } from "@/util/autofillUtils.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface SieMapping {
@@ -41,8 +38,6 @@ export async function mapSieFileIntoArsredovisning(
   sieFileText: string,
   arsredovisning: Arsredovisning,
 ) {
-  // TODO: Förändringar i eget kapital
-
   const parseResult = parseSieFile(sieFileText);
 
   const beloppraderAdded: Belopprad[] = [];
@@ -107,7 +102,7 @@ export async function mapSieFileIntoArsredovisning(
               .add(
                 valueToAdd.mul(
                   taxonomyItem.properties.balance === "credit" &&
-                    basAccount !== "8999" // Specialare för årets resultat
+                    !basAccount.startsWith("899") // Specialare för årets resultat
                     ? -1
                     : 1,
                 ),
@@ -138,6 +133,21 @@ export async function mapSieFileIntoArsredovisning(
     if (!mappingFound) {
       alert(`Varning: Konto ${basAccount} kunde inte mappas.`);
     }
+  }
+
+  if (
+    !Object.entries(parseResult).some(
+      ([basAccount, value]) =>
+        basAccount.startsWith("899") &&
+        !value.nuvarandeAr.isNaN() &&
+        !value.nuvarandeAr.equals(0),
+    )
+  ) {
+    alert(
+      "Årets resultat hittades inte eller var noll i SIE-filen. Gredor kommer" +
+        " ändå att importera filen, men du bör kontrollera att du inte har" +
+        " missat att slutföra din bokföring.",
+    );
   }
 
   // TODO: Detektera automatiskt om summorna inte stämmer, visa meddelande.
