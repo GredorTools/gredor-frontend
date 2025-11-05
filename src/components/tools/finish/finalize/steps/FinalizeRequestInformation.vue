@@ -21,7 +21,7 @@ const props = defineProps<
 >();
 
 /** Huruvida användaren vill köra Bolagsverkets kontroller. */
-const callBolagsverket = defineModel<boolean | undefined>("callBolagsverket", {
+const callBolagsverket = defineModel<boolean | null>("callBolagsverket", {
   required: true,
 });
 

@@ -23,6 +23,7 @@ import CommonModal from "@/components/common/CommonModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import SendGredorAgreement from "@/components/tools/finish/send/steps/SendGredorAgreement.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
+import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -38,8 +39,8 @@ defineExpose({
 });
 
 const arsredovisning = ref<Arsredovisning | undefined>();
-const personalNumber = ref<string>("");
-const notificationEmail = ref<string>("");
+const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
+const notificationEmail = useGredorStorage<string>("UserNotificationEmail", "");
 const ixbrl = ref<string | undefined>();
 
 const currentStep = ref<
