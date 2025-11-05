@@ -44,6 +44,9 @@ $tooltip-padding-y: 0.5rem;
 // Importera Bootstrap
 @import "bootstrap/scss/bootstrap.scss";
 
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+@import "bootstrap-icons/font/bootstrap-icons";
+
 // Knappar
 .btn {
   font-weight: 500;
@@ -72,6 +75,17 @@ $tooltip-padding-y: 0.5rem;
     outline: 2px solid $primary-color;
     outline-offset: 2px;
     box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
+  }
+}
+
+.btn {
+  &:has(i.bi), &:has(img) {
+    display: flex;
+  }
+
+  i.bi, img {
+    // Knapp-ikoner
+    margin-right: var(--bs-btn-padding-x);
   }
 }
 

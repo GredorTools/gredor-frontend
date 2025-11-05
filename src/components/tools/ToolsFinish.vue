@@ -67,7 +67,7 @@ function showSendWizard() {
       Färdigställ inför årsstämma
     </button>
     <button
-      class="btn btn-primary d-flex align-items-center gap-2"
+      class="btn btn-primary d-flex align-items-center"
       data-testid="show-send-wizard-button"
       @click="showSendWizard"
     >

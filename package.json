@@ -25,6 +25,7 @@
     "@popperjs/core": "^2.11.8",
     "@vueuse/core": "^13.9.0",
     "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
     "byte-base64": "^1.1.0",
     "decimal.js": "^10.6.0",
     "openapi-fetch": "^0.14.1",

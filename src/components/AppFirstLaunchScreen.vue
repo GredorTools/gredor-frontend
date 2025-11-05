@@ -75,7 +75,7 @@ function onArsredovisningCreated(value: Arsredovisning) {
 </script>
 
 <template>
-  <transition name="fade">
+  <transition appear name="fade">
     <div v-if="showFirstLaunchScreen" class="first-launch-container">
       <div class="card text-center d-flex flex-column align-items-center gap-3">
         <h2>Välkommen till Gredor!</h2>
@@ -84,27 +84,27 @@ function onArsredovisningCreated(value: Arsredovisning) {
           och ladda upp dem till Bolagsverket, helt gratis.
         </p>
         <h4>Vad vill du göra?</h4>
-        <div class="d-flex flex-column align-items-center gap-3">
+        <div class="d-flex flex-column gap-3">
           <button
             id="newArsredovisningBtn"
             class="btn btn-primary"
             @click="showNewArsredovisningModal"
           >
-            Börja på en ny årsredovisning
+            <i class="bi bi-file-earmark"></i>Börja på en ny årsredovisning
           </button>
           <button
             id="openArsredovisningBtn"
             class="btn btn-primary"
             @click="importFile"
           >
-            Öppna en sparad årsredovisning
+            <i class="bi bi-folder2-open"></i>Öppna en sparad årsredovisning
           </button>
           <button
             id="openArsredovisningBtn"
             class="btn btn-primary"
             @click="showExampleArsredovisning"
           >
-            Visa en exempel-årsredovisning
+            <i class="bi bi-eye"></i>Visa en exempel-årsredovisning
           </button>
         </div>
         <hr />

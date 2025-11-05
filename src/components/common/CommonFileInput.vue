@@ -72,7 +72,9 @@ function onFilePicked(file: File | null | undefined) {
     >
       Eller tryck här för att välja fil
     </button>
-    <div v-if="filename">Vald fil: {{ filename }} ✅</div>
+    <div v-if="filename">
+      Vald fil: {{ filename }} <i class="bi bi-check-lg"></i>
+    </div>
     <div v-else>&nbsp;</div>
   </div>
 </template>
@@ -93,6 +95,10 @@ function onFilePicked(file: File | null | undefined) {
 
   &.hover {
     background-color: lighten($primary-color, 40%);
+  }
+
+  .bi-check-lg {
+    color: $success-color;
   }
 }
 </style>

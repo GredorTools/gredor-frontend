@@ -42,7 +42,10 @@ const arsredovisning = useGredorStorage(
         class="help-hint d-flex align-items-center"
         role="note"
       >
-        <strong>⬇️ Mer information om Gredor finns nedan! ⬇️</strong>
+        <strong>
+          <i class="bi bi-arrow-down-square-fill"></i>Mer information om Gredor
+          finns nedan!<i class="bi bi-arrow-down-square-fill"></i>
+        </strong>
       </div>
 
       <div id="tools" aria-label="Verktyg för färdigställande">
@@ -88,12 +91,22 @@ main {
   .help-hint {
     border: 1px solid $secondary-color;
     background-color: rgba($secondary-color, 0.1);
-    padding: $spacing-xs $spacing-md;
+    padding: $spacing-xs (3 * $spacing-xs);
     border-radius: $border-radius;
     box-shadow: $shadow-sm;
 
     strong {
       color: $secondary-color;
+    }
+
+    .bi-arrow-down-square-fill {
+      &:first-child {
+        margin-right: (3 * $spacing-xs);
+      }
+
+      &:last-child {
+        margin-left: (3 * $spacing-xs);
+      }
     }
   }
 }
