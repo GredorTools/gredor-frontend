@@ -1,5 +1,8 @@
 FROM node:lts-alpine as build-stage
 
+# Install git
+RUN apk add --no-cache git
+
 # Set working directory
 WORKDIR /app
 
