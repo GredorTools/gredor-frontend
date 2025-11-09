@@ -17,7 +17,7 @@ import FinalizeDownloadFiles from "@/components/tools/finish/finalize/steps/Fina
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
-import { useGredorStorage, WrappedType } from "@/components/common/composables/useGredorStorage.ts";
+import { useGredorStorage, type WrappedType } from "@/components/common/composables/useGredorStorage.ts";
 
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
