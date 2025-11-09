@@ -25,7 +25,9 @@ const props = defineProps<
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
 const loading = ref<boolean>(true);
-const result = ref<components["schemas"]["PreparationResponse"] | undefined>();
+const result = ref<
+  components["schemas"]["BolagsverketPreparationResponse"] | undefined
+>();
 const userAgreed = ref<boolean>(false);
 
 async function performRequest() {
