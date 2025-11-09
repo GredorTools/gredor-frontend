@@ -17,32 +17,6 @@ const sessionStores = [
 
 type Store = (typeof localStores)[number] | (typeof sessionStores)[number];
 
-function useHighPerformanceStorage<T>(
-  store: Store,
-  defaultValue: T,
-  storage: StorageLike,
-): Ref<T> {
-  // Detta tillvägagångssätt verkar ge bättre prestanda med stora objekt
-  // som t.ex. årsredovisningsobjekt.
-
-  const existingLocalStorageItem = localStorage.getItem(store);
-  if (existingLocalStorageItem == null) {
-    storage.setItem(store, JSON.stringify(defaultValue));
-  }
-
-  const localStorageItemRef = ref(
-    existingLocalStorageItem != null
-      ? JSON.parse(existingLocalStorageItem)
-      : defaultValue,
-  );
-
-  watchDeep(localStorageItemRef, (newValue) => {
-    storage.setItem(store, JSON.stringify(newValue));
-  });
-
-  return localStorageItemRef;
-}
-
 /**
  * Hämtar ett fält från webbläsarens lagring, som en Vue-ref. Beroende på vilket
  * fält som anges används antingen localStorage eller sessionStorage.
@@ -50,30 +24,74 @@ function useHighPerformanceStorage<T>(
  * @param store - Nyckeln till fältet som ska hämtas
  * @param defaultValue - Värde som returneras om fältet inte har något sparat
  * värde
- * @param options - Inställningar; just nu finns möjligheten att välja att
- * använda en högprestandalösning istället för den vanliga lösningen
+ * @returns Fältet som en Vue-ref
  */
-export function useGredorStorage<T>(
+export function useGredorStorage<T>(store: Store, defaultValue: T): Ref<T> {
+  return useStorage(store, defaultValue, getStorage(store));
+}
+
+/**
+ * Hämtar ett fält från webbläsarens lagring, som en Vue-ref. Beroende på vilket
+ * fält som anges används antingen localStorage eller sessionStorage. Detta är
+ * en alternativ till useGredorStorage med högre prestanda; inkommande
+ * förändringar synkas endast när sidan får fokus efter att ha varit ur fokus.
+ *
+ * @param store - Nyckeln till fältet som ska hämtas
+ * @param defaultValue - Värde som returneras om fältet inte har något sparat
+ * värde
+ * @returns Fältet som en Vue-ref, samt en funktion för att avaktivera lyssnaren
+ * som synkar inkommande förändringar
+ */
+export function useGredorHighPerformanceStorage<T>(
   store: Store,
   defaultValue: T,
-  options?: {
-    highPerformance?: boolean;
-  },
-): Ref<T> {
-  // Välj storage baserat på vilket fält som anges
-  let storage;
-  if ((localStores as ReadonlyArray<string>).includes(store)) {
-    storage = localStorage;
-  } else if ((sessionStores as ReadonlyArray<string>).includes(store)) {
-    storage = sessionStorage;
-  } else {
-    throw new Error(`Unknown store: ${store}`);
+): { ref: Ref<T>; removeFocusChangeListener: () => void } {
+  // Detta tillvägagångssätt verkar ge bättre prestanda med stora objekt
+  // som t.ex. årsredovisningsobjekt.
+
+  const storage = getStorage(store);
+
+  // Hämta eventuellt sparat värde (eller sätt default) och skapa ref
+  const existingStorageItem = localStorage.getItem(store);
+  if (existingStorageItem == null) {
+    storage.setItem(store, JSON.stringify(defaultValue));
   }
 
-  // Returnerar en Vue-ref
-  if (options?.highPerformance) {
-    return useHighPerformanceStorage(store, defaultValue, storage);
+  const storageItemRef = ref(
+    existingStorageItem != null
+      ? JSON.parse(existingStorageItem)
+      : defaultValue,
+  );
+
+  // Lyssna på förändringar i applikationen och spara dem
+  watchDeep(storageItemRef, (newValue) => {
+    storage.setItem(store, JSON.stringify(newValue));
+  });
+
+  // Ladda in förändringar i storage när sidan får fokus
+  const focusChangeListener = () => {
+    const updatedItem = localStorage.getItem(store);
+    if (updatedItem != null) {
+      storageItemRef.value = JSON.parse(updatedItem);
+    }
+  };
+  document.addEventListener("focus", focusChangeListener);
+  const removeFocusChangeListener = () => {
+    document.removeEventListener("focus", focusChangeListener);
+  };
+
+  // Retunera Vue-ref, samt funktion för att avaktivera lyssnaren för
+  // förändringar i storage
+  return { ref: storageItemRef, removeFocusChangeListener };
+}
+
+function getStorage(store: Store): StorageLike {
+  // Välj mellan localStorage/sessionStorage baserat på vilket fält som anges
+  if ((localStores as ReadonlyArray<string>).includes(store)) {
+    return localStorage;
+  } else if ((sessionStores as ReadonlyArray<string>).includes(store)) {
+    return sessionStorage;
   } else {
-    return useStorage(store, defaultValue, storage);
+    throw new Error(`Unknown store: ${store}`);
   }
 }

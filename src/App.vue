@@ -6,17 +6,24 @@
 import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
-import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
+import { useGredorHighPerformanceStorage } from "@/components/common/composables/useGredorStorage.ts";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
 import { emptyArsredovisning } from "@/example/emptyArsredovisning.ts";
+import { onBeforeUnmount } from "vue";
 
-const arsredovisning = useGredorStorage(
+const {
+  ref: arsredovisning,
+  removeStorageChangeListener: removeArsredovisningStorageChangeListener,
+} = useGredorHighPerformanceStorage(
   "AppAutosaveArsredovisning",
   emptyArsredovisning,
-  { highPerformance: true },
 );
+
+onBeforeUnmount(() => {
+  removeArsredovisningStorageChangeListener();
+});
 </script>
 
 <template>
