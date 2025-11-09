@@ -47,14 +47,10 @@ describe("validate generated XBRL data", () => {
       cy.intercept(
         {
           method: "POST",
-          url: "http://gredor-backend/v1/bankid/init",
+          url: "http://gredor-backend/v1/auth/status",
         },
         {
-          status: "COMPLETE",
-          statusCompleteData: {
-            personalNumber: "191212121212",
-            token: "test-token",
-          },
+          loggedIn: true,
         },
       );
 
