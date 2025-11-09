@@ -97,7 +97,7 @@ const numSteps = 10;
       :current-step-number="4"
       :num-steps="numSteps"
       class="limit-width"
-      @go-to-previous-step="currentStep = 'requestInformation'"
+      @go-to-previous-step="currentStep = 'bankIdLogin'"
       @go-to-next-step="currentStep = 'addFaststallelseintyg'"
     />
     <SendAddFaststallelseintyg

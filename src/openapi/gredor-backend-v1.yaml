@@ -2,7 +2,7 @@
 openapi: 3.1.0
 components:
   schemas:
-    AuthInitRequest:
+    AuthStatusRequest:
       type: object
       required:
       - personalNumber
@@ -10,13 +10,62 @@ components:
         personalNumber:
           type: string
           pattern: "^\\d{12}$"
-    AuthStatus:
+    AuthStatusResponse:
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+    BankIdCancelRequest:
+      type: object
+      required:
+      - orderRef
+      properties:
+        orderRef:
+          type: string
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    BankIdInitRequest:
+      type: object
+      required:
+      - personalNumber
+      properties:
+        personalNumber:
+          type: string
+          pattern: "^\\d{12}$"
+    BankIdStatus:
       type: string
       enum:
       - PENDING
       - COMPLETE
       - FAILED
-    AuthStatusRequest:
+    BankIdStatusCompleteData:
+      type: object
+      required:
+      - personalNumber
+      - token
+      properties:
+        personalNumber:
+          type: string
+        token:
+          type: string
+    BankIdStatusFailedData:
+      type: object
+      properties:
+        hintCode:
+          type:
+          - string
+          - "null"
+    BankIdStatusPendingData:
+      type: object
+      required:
+      - qrCodeImageBase64
+      properties:
+        qrCodeImageBase64:
+          type: string
+        hintCode:
+          type:
+          - string
+          - "null"
+    BankIdStatusRequest:
       type: object
       required:
       - orderRef
@@ -38,27 +87,76 @@ components:
           - string
           - "null"
         status:
-          $ref: "#/components/schemas/AuthStatus"
+          $ref: "#/components/schemas/BankIdStatus"
         statusPendingData:
           anyOf:
-          - $ref: "#/components/schemas/StatusPendingData"
+          - $ref: "#/components/schemas/BankIdStatusPendingData"
           - type: "null"
         statusCompleteData:
           anyOf:
-          - $ref: "#/components/schemas/StatusCompleteData"
+          - $ref: "#/components/schemas/BankIdStatusCompleteData"
           - type: "null"
         statusFailedData:
           anyOf:
-          - $ref: "#/components/schemas/StatusFailedData"
+          - $ref: "#/components/schemas/BankIdStatusFailedData"
           - type: "null"
-    CancelRequest:
+    BolagsverketPreparationRequest:
       type: object
       required:
-      - orderRef
+      - foretagOrgnr
       properties:
-        orderRef:
+        foretagOrgnr:
           type: string
-          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          pattern: "^\\d{10}$"
+    BolagsverketPreparationResponse:
+      type: object
+      required:
+      - avtalstext
+      - avtalstextAndrad
+      properties:
+        avtalstext:
+          type: string
+        avtalstextAndrad:
+          $ref: "#/components/schemas/LocalDate"
+    BolagsverketRecordsResponse:
+      type: object
+      required:
+      - foretagsnamn
+      - rakenskapsperioder
+      properties:
+        foretagsnamn:
+          type: string
+        rakenskapsperioder:
+          type: array
+          items:
+            $ref: "#/components/schemas/Rakenskapsperiod"
+    BolagsverketSubmissionRequest:
+      type: object
+      required:
+      - foretagOrgnr
+      - ixbrl
+      - aviseringEpost
+      properties:
+        foretagOrgnr:
+          type: string
+          pattern: "^\\d{10}$"
+        ixbrl:
+          type: string
+          format: binary
+        aviseringEpost:
+          type: string
+    BolagsverketValidationRequest:
+      type: object
+      required:
+      - foretagOrgnr
+      - ixbrl
+      properties:
+        foretagOrgnr:
+          type: string
+          pattern: "^\\d{10}$"
+        ixbrl:
+          type: string
+          format: binary
     Handlingsinfo:
       type: object
       properties:
@@ -127,24 +225,6 @@ components:
       format: date
       examples:
       - 2022-03-10
-    PreparationRequest:
-      type: object
-      required:
-      - foretagOrgnr
-      properties:
-        foretagOrgnr:
-          type: string
-          pattern: "^\\d{10}$"
-    PreparationResponse:
-      type: object
-      required:
-      - avtalstext
-      - avtalstextAndrad
-      properties:
-        avtalstext:
-          type: string
-        avtalstextAndrad:
-          $ref: "#/components/schemas/LocalDate"
     Rakenskapsperiod:
       type: object
       properties:
@@ -156,67 +236,12 @@ components:
           $ref: "#/components/schemas/KravPaRevisionsberattelseEnum"
         revisorsplikt:
           $ref: "#/components/schemas/RevisorspliktEnum"
-    RecordsResponse:
-      type: object
-      required:
-      - foretagsnamn
-      - rakenskapsperioder
-      properties:
-        foretagsnamn:
-          type: string
-        rakenskapsperioder:
-          type: array
-          items:
-            $ref: "#/components/schemas/Rakenskapsperiod"
     RevisorspliktEnum:
       type: string
       enum:
       - ja
       - nej
       - uppgift_saknas
-    StatusCompleteData:
-      type: object
-      required:
-      - personalNumber
-      - token
-      properties:
-        personalNumber:
-          type: string
-        token:
-          type: string
-    StatusFailedData:
-      type: object
-      properties:
-        hintCode:
-          type:
-          - string
-          - "null"
-    StatusPendingData:
-      type: object
-      required:
-      - qrCodeImageBase64
-      properties:
-        qrCodeImageBase64:
-          type: string
-        hintCode:
-          type:
-          - string
-          - "null"
-    SubmissionRequest:
-      type: object
-      required:
-      - foretagOrgnr
-      - ixbrl
-      - aviseringEpost
-      properties:
-        foretagOrgnr:
-          type: string
-          pattern: "^\\d{10}$"
-        ixbrl:
-          type: string
-          format: binary
-        aviseringEpost:
-          type: string
     TypEnum:
       type: string
       enum:
@@ -229,36 +254,8 @@ components:
       - arsredovisning_komplett
       - arsredovisning_kompletteras
       - revisionsberattelse
-    ValidationRequest:
-      type: object
-      required:
-      - foretagOrgnr
-      - ixbrl
-      properties:
-        foretagOrgnr:
-          type: string
-          pattern: "^\\d{10}$"
-        ixbrl:
-          type: string
-          format: binary
 paths:
-  /v1/bankid/cancel:
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CancelRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-      summary: Cancel
-      tags:
-      - Bank Id Resource
-  /v1/bankid/init:
+  /v1/auth/status:
     post:
       parameters:
       - name: personalNumber
@@ -277,7 +274,43 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AuthInitRequest"
+              $ref: "#/components/schemas/AuthStatusRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthStatusResponse"
+        "400":
+          description: Bad Request
+      summary: Status
+      tags:
+      - Auth Resource
+  /v1/bankid/cancel:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankIdCancelRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Cancel
+      tags:
+      - Bank Id Resource
+  /v1/bankid/init:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankIdInitRequest"
         required: true
       responses:
         "200":
@@ -297,7 +330,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AuthStatusRequest"
+              $ref: "#/components/schemas/BankIdStatusRequest"
         required: true
       responses:
         "200":
@@ -325,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RecordsResponse"
+                $ref: "#/components/schemas/BolagsverketRecordsResponse"
       summary: Records
       tags:
       - Information Resource
@@ -342,7 +375,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PreparationRequest"
+              $ref: "#/components/schemas/BolagsverketPreparationRequest"
         required: true
       responses:
         "200":
@@ -350,7 +383,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PreparationResponse"
+                $ref: "#/components/schemas/BolagsverketPreparationResponse"
         "400":
           description: Bad Request
       summary: Prepare
@@ -369,7 +402,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubmissionRequest"
+              $ref: "#/components/schemas/BolagsverketSubmissionRequest"
         required: true
       responses:
         "200":
@@ -396,7 +429,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ValidationRequest"
+              $ref: "#/components/schemas/BolagsverketValidationRequest"
         required: true
       responses:
         "200":

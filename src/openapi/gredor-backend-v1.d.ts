@@ -4,6 +4,56 @@
  */
 
 export interface paths {
+    "/v1/auth/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Status */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: {
+                    personalNumber?: string | null;
+                    token?: string | null;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AuthStatusRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AuthStatusResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/bankid/cancel": {
         parameters: {
             query?: never;
@@ -23,7 +73,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["CancelRequest"];
+                    "application/json": components["schemas"]["BankIdCancelRequest"];
                 };
             };
             responses: {
@@ -64,14 +114,11 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: {
-                    personalNumber?: string | null;
-                    token?: string | null;
-                };
+                cookie?: never;
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["AuthInitRequest"];
+                    "application/json": components["schemas"]["BankIdInitRequest"];
                 };
             };
             responses: {
@@ -118,7 +165,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["AuthStatusRequest"];
+                    "application/json": components["schemas"]["BankIdStatusRequest"];
                 };
             };
             responses: {
@@ -171,7 +218,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["RecordsResponse"];
+                        "application/json": components["schemas"]["BolagsverketRecordsResponse"];
                     };
                 };
             };
@@ -205,7 +252,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["PreparationRequest"];
+                    "application/json": components["schemas"]["BolagsverketPreparationRequest"];
                 };
             };
             responses: {
@@ -215,7 +262,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["PreparationResponse"];
+                        "application/json": components["schemas"]["BolagsverketPreparationResponse"];
                     };
                 };
                 /** @description Bad Request */
@@ -254,7 +301,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["SubmissionRequest"];
+                    "application/json": components["schemas"]["BolagsverketSubmissionRequest"];
                 };
             };
             responses: {
@@ -303,7 +350,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["ValidationRequest"];
+                    "application/json": components["schemas"]["BolagsverketValidationRequest"];
                 };
             };
             responses: {
@@ -335,24 +382,63 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        AuthInitRequest: {
+        AuthStatusRequest: {
+            personalNumber: string;
+        };
+        AuthStatusResponse: {
+            loggedIn?: boolean;
+        };
+        BankIdCancelRequest: {
+            orderRef: string;
+        };
+        BankIdInitRequest: {
             personalNumber: string;
         };
         /** @enum {string} */
-        AuthStatus: "PENDING" | "COMPLETE" | "FAILED";
-        AuthStatusRequest: {
+        BankIdStatus: "PENDING" | "COMPLETE" | "FAILED";
+        BankIdStatusCompleteData: {
+            personalNumber: string;
+            token: string;
+        };
+        BankIdStatusFailedData: {
+            hintCode?: string | null;
+        };
+        BankIdStatusPendingData: {
+            qrCodeImageBase64: string;
+            hintCode?: string | null;
+        };
+        BankIdStatusRequest: {
             orderRef: string;
         };
         BankIdStatusResponse: {
             orderRef?: string | null;
             autoStartToken?: string | null;
-            status: components["schemas"]["AuthStatus"];
-            statusPendingData?: components["schemas"]["StatusPendingData"] | null;
-            statusCompleteData?: components["schemas"]["StatusCompleteData"] | null;
-            statusFailedData?: components["schemas"]["StatusFailedData"] | null;
+            status: components["schemas"]["BankIdStatus"];
+            statusPendingData?: components["schemas"]["BankIdStatusPendingData"] | null;
+            statusCompleteData?: components["schemas"]["BankIdStatusCompleteData"] | null;
+            statusFailedData?: components["schemas"]["BankIdStatusFailedData"] | null;
         };
-        CancelRequest: {
-            orderRef: string;
+        BolagsverketPreparationRequest: {
+            foretagOrgnr: string;
+        };
+        BolagsverketPreparationResponse: {
+            avtalstext: string;
+            avtalstextAndrad: components["schemas"]["LocalDate"];
+        };
+        BolagsverketRecordsResponse: {
+            foretagsnamn: string;
+            rakenskapsperioder: components["schemas"]["Rakenskapsperiod"][];
+        };
+        BolagsverketSubmissionRequest: {
+            foretagOrgnr: string;
+            /** Format: binary */
+            ixbrl: string;
+            aviseringEpost: string;
+        };
+        BolagsverketValidationRequest: {
+            foretagOrgnr: string;
+            /** Format: binary */
+            ixbrl: string;
         };
         Handlingsinfo: {
             typ?: components["schemas"]["TypEnum1"];
@@ -391,51 +477,18 @@ export interface components {
          * @example 2022-03-10
          */
         LocalDate: string;
-        PreparationRequest: {
-            foretagOrgnr: string;
-        };
-        PreparationResponse: {
-            avtalstext: string;
-            avtalstextAndrad: components["schemas"]["LocalDate"];
-        };
         Rakenskapsperiod: {
             from?: components["schemas"]["LocalDate"];
             tom?: components["schemas"]["LocalDate"];
             kravPaRevisionsberattelse?: components["schemas"]["KravPaRevisionsberattelseEnum"];
             revisorsplikt?: components["schemas"]["RevisorspliktEnum"];
         };
-        RecordsResponse: {
-            foretagsnamn: string;
-            rakenskapsperioder: components["schemas"]["Rakenskapsperiod"][];
-        };
         /** @enum {string} */
         RevisorspliktEnum: "ja" | "nej" | "uppgift_saknas";
-        StatusCompleteData: {
-            personalNumber: string;
-            token: string;
-        };
-        StatusFailedData: {
-            hintCode?: string | null;
-        };
-        StatusPendingData: {
-            qrCodeImageBase64: string;
-            hintCode?: string | null;
-        };
-        SubmissionRequest: {
-            foretagOrgnr: string;
-            /** Format: binary */
-            ixbrl: string;
-            aviseringEpost: string;
-        };
         /** @enum {string} */
         TypEnum: "info" | "warn" | "error";
         /** @enum {string} */
         TypEnum1: "arsredovisning_komplett" | "arsredovisning_kompletteras" | "revisionsberattelse";
-        ValidationRequest: {
-            foretagOrgnr: string;
-            /** Format: binary */
-            ixbrl: string;
-        };
     };
     responses: never;
     parameters: never;
