@@ -44,7 +44,6 @@ let output = `
  * REDIGERA INTE MANUELLT!
  */
 
-import type { LabelType, TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 import type { TaxonomyItemIdBase } from "@/model/taxonomy/TaxonomyItemIdBase.ts";
 
 type Implements<T, U extends T> = U;

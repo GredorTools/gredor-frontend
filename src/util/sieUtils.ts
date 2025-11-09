@@ -6,12 +6,15 @@ import {
   type Belopprad,
   deleteBelopprad,
   getOrCreateBeloppradInList,
-  getTaxonomyItemForBelopprad
+  getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { sieMappings } from "@/data/taxonomy/k2/2021-10-31/sieMappings.ts";
-import { extraSieMappings } from "@/data/sie/extraSieMappings.ts";
-import { autofillPersonalkostnaderNot, autofillSoliditet } from "@/util/autofillUtils.ts";
+import { extraSieMappings } from "@/data/taxonomy/k2/2021-10-31/extraSieMappings.ts";
+import {
+  autofillPersonalkostnaderNot,
+  autofillSoliditet,
+} from "@/util/autofillUtils.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 export interface SieMapping {
