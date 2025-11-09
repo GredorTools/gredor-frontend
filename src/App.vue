@@ -15,7 +15,7 @@ import { onBeforeUnmount } from "vue";
 
 const {
   ref: arsredovisning,
-  removeStorageChangeListener: removeArsredovisningStorageChangeListener,
+  removeFocusChangeListener: removeArsredovisningStorageChangeListener,
 } = useGredorHighPerformanceStorage(
   "AppAutosaveArsredovisning",
   emptyArsredovisning,
