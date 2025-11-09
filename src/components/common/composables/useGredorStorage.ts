@@ -18,6 +18,13 @@ const sessionStores = [
 type Store = (typeof localStores)[number] | (typeof sessionStores)[number];
 
 /**
+ * Typer som bör användas i useGredorStorage och
+ * useGredorHighPerformanceStorage för att wrappa typer som inte serialiseras
+ * och deserialiseras korrekt (t.ex. booleans).
+ */
+export type WrappedType<T> = { wrappedValue: T };
+
+/**
  * Hämtar ett fält från webbläsarens lagring, som en Vue-ref. Beroende på vilket
  * fält som anges används antingen localStorage eller sessionStorage.
  *

@@ -17,7 +17,7 @@ import FinalizeDownloadFiles from "@/components/tools/finish/finalize/steps/Fina
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
-import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
+import { useGredorStorage, WrappedType } from "@/components/common/composables/useGredorStorage.ts";
 
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
@@ -35,13 +35,13 @@ defineExpose({
   },
 });
 
-const callBolagsverket = useGredorStorage<boolean | null>(
+const callBolagsverket = useGredorStorage<WrappedType<boolean | null>>(
   "FinalizeCallBolagsverket",
-  null,
+  { wrappedValue: null },
 );
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
 const ixbrl = ref<string | undefined>();
-const numSteps = computed(() => (callBolagsverket.value ? 5 : 2));
+const numSteps = computed(() => (callBolagsverket.value.wrappedValue ? 5 : 2));
 
 const currentStep = ref<
   | "requestInformation"
@@ -60,7 +60,7 @@ const currentStep = ref<
   >
     <FinalizeRequestInformation
       v-if="currentStep === 'requestInformation'"
-      v-model:call-bolagsverket="callBolagsverket"
+      v-model:call-bolagsverket="callBolagsverket.wrappedValue"
       v-model:ixbrl="ixbrl"
       v-model:personal-number="personalNumber"
       :arsredovisning="arsredovisning"
@@ -68,7 +68,9 @@ const currentStep = ref<
       :num-steps="numSteps"
       class="limit-width"
       @go-to-next-step="
-        currentStep = callBolagsverket ? 'bankIdLogin' : 'downloadFiles'
+        currentStep = callBolagsverket.wrappedValue
+          ? 'bankIdLogin'
+          : 'downloadFiles'
       "
     />
     <CommonBankIdLogin
