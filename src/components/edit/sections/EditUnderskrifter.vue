@@ -28,6 +28,15 @@ function removeUnderskrift(index: number) {
 </script>
 
 <template>
+  <div class="alert alert-primary d-flex gap-2" role="alert">
+    <i class="bi bi-info-circle-fill"></i>
+    Efter att du har färdigställt årsredovisningen kommer du behöva signera den,
+    antingen digitalt eller på papper. Signeringen måste göras de datumen som du
+    har fyllt i nedan, och även fältet "Datum då årsredovisningen var färdig för
+    undertecknande" måste stämma överens med verkligheten. Därför är det ofta
+    bäst att fylla i detta avsnitt allra sist.
+  </div>
+
   <CommonAccordion>
     <CommonAccordionItem
       id="signatures-accordion-general"
