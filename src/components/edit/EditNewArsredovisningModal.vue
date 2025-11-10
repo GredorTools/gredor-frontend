@@ -125,6 +125,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
   <CommonModal
     :id="`new-arsredovisning-modal-${instanceId}`"
     ref="modal"
+    show-close-button
     title="Ny årsredovisning"
   >
     <div class="limit-width">

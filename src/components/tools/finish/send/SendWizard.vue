@@ -62,6 +62,7 @@ const numSteps = 10;
   <CommonModal
     :id="`send-wizard-modal-${instanceId}`"
     ref="modal"
+    show-close-button
     title="Ladda upp till Bolagsverket"
   >
     <SendRequestFiles

@@ -56,6 +56,7 @@ const currentStep = ref<
   <CommonModal
     :id="`finalize-wizard-modal-${instanceId}`"
     ref="modal"
+    show-close-button
     title="Färdigställ inför årsstämma"
   >
     <FinalizeRequestInformation

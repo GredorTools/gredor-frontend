@@ -12,6 +12,10 @@ const props = defineProps<{
 
   /** Fönstrets rubrik. */
   title: string;
+
+  /** Huruvida fönstret ska ha en stäng-knapp (X) uppe till höger
+   * (standardvärde är false). */
+  showCloseButton?: boolean;
 }>();
 
 defineExpose({
@@ -55,6 +59,7 @@ onMounted(() => {
         <div class="modal-header">
           <h3 class="modal-title">{{ title }}</h3>
           <button
+            v-if="showCloseButton"
             aria-label="Close"
             class="btn-close"
             data-bs-dismiss="modal"
