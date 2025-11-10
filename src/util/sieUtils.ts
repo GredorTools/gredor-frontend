@@ -6,16 +6,17 @@ import {
   type Belopprad,
   deleteBelopprad,
   getOrCreateBeloppradInList,
-  getTaxonomyItemForBelopprad,
+  getTaxonomyItemForBelopprad
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { sieMappings } from "@/data/taxonomy/k2/2021-10-31/sieMappings.ts";
 import { extraSieMappings } from "@/data/taxonomy/k2/2021-10-31/extraSieMappings.ts";
-import {
-  autofillPersonalkostnaderNot,
-  autofillSoliditet,
-} from "@/util/autofillUtils.ts";
+import { autofillPersonalkostnaderNot, autofillSoliditet } from "@/util/autofillUtils.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
+import {
+  type BeloppradMonetary,
+  calculateValuesIntoBelopprad
+} from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 export interface SieMapping {
   basAccounts: { start: number; end: number }[];
@@ -169,12 +170,11 @@ export async function mapSieFileIntoArsredovisning(
         .toString();
 
       // Gör om "0" -> "" på icke-summarader, och ta bort tomma belopprader
+      const taxonomyManager = taxonomyManagersForBelopprad.get(belopprad);
       if (
-        taxonomyManagersForBelopprad.get(belopprad) != null &&
-        !getTaxonomyItemForBelopprad(
-          taxonomyManagersForBelopprad.get(belopprad)!,
-          belopprad,
-        ).additionalData.isCalculatedItem
+        taxonomyManager != null &&
+        !getTaxonomyItemForBelopprad(taxonomyManager, belopprad).additionalData
+          .isCalculatedItem
       ) {
         if (belopprad.beloppNuvarandeAr === "0") {
           belopprad.beloppNuvarandeAr = "";
@@ -192,6 +192,67 @@ export async function mapSieFileIntoArsredovisning(
             belopprad,
             beloppradListsForBelopprad.get(belopprad)!,
           );
+        }
+      }
+    }
+  }
+
+  // Kolla om det kan finnas några avrundningsfel i beloppraderna genom att
+  // jämföra beloppen som har räknats fram ovan med summeringar av
+  // CalculationProcessor
+  for (const belopprad of beloppraderAdded) {
+    if (
+      isBeloppradComparable(belopprad) &&
+      beloppradListsForBelopprad.get(belopprad) != null
+    ) {
+      const taxonomyManager = taxonomyManagersForBelopprad.get(belopprad)!;
+      if (taxonomyManager != null) {
+        const taxonomyItem = getTaxonomyItemForBelopprad(
+          taxonomyManager,
+          belopprad,
+        );
+        if (taxonomyItem.additionalData.isCalculatedItem) {
+          // Summera med CalculationProcessor
+          const calculatedBelopprad: BeloppradMonetary = {
+            taxonomyItemName: belopprad.taxonomyItemName,
+            type: "xbrli:monetaryItemType",
+            beloppNuvarandeAr: "",
+            beloppTidigareAr: new Array(belopprad.beloppTidigareAr.length).fill(
+              "",
+            ),
+          };
+          calculateValuesIntoBelopprad(
+            taxonomyManager.calculationProcessor,
+            beloppradListsForBelopprad.get(belopprad)!,
+            calculatedBelopprad,
+          );
+
+          if (
+            // Jämför nuvarande år
+            calculatedBelopprad.beloppNuvarandeAr !==
+              belopprad.beloppNuvarandeAr ||
+            // Jämför tidigare år
+            calculatedBelopprad.beloppTidigareAr.some(
+              (_, i) =>
+                belopprad.beloppTidigareAr[i] !==
+                calculatedBelopprad.beloppTidigareAr[i],
+            )
+          ) {
+            // Sätt till det avrundade värdet så det stämmer överens med hur det
+            // hade blivit med automatisk summering om användaren hade matat in
+            // de övriga fälten utifrån sin bokföring manuellt.
+            belopprad.beloppNuvarandeAr = calculatedBelopprad.beloppNuvarandeAr;
+            belopprad.beloppTidigareAr.forEach((_, i) => {
+              belopprad.beloppTidigareAr[i] =
+                calculatedBelopprad.beloppTidigareAr[i];
+            });
+
+            // TODO: Snyggare/tydligare meddelande
+            alert(
+              `Belopprad "${taxonomyItem.additionalData.displayLabel}" har` +
+                " avrundningsfel. Du kan behöva justera detta manuellt.",
+            );
+          }
         }
       }
     }

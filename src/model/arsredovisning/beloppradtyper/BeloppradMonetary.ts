@@ -32,7 +32,7 @@ export function calculateValuesIntoBelopprad(
         value: isBeloppradMonetary(belopprad)
           ? parseInt(belopprad.beloppNuvarandeAr)
           : 0,
-      } as CalculationConceptValue;
+      };
     },
   );
 
@@ -44,7 +44,7 @@ export function calculateValuesIntoBelopprad(
           value: isBeloppradMonetary(belopprad)
             ? parseInt(belopprad.beloppTidigareAr[i])
             : 0,
-        } as CalculationConceptValue;
+        };
       }),
     );
 
