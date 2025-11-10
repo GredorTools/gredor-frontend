@@ -81,6 +81,7 @@ $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
 .btn {
   &:has(i.bi), &:has(img) {
     display: flex;
+    align-items: center;
   }
 
   i.bi, img {

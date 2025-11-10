@@ -152,7 +152,7 @@ async function importSIEForTest() {
           class="btn btn-primary"
           @click="showNewArsredovisningModal"
         >
-          Ny årsredovisning…
+          <i class="bi bi-file-earmark"></i>Ny årsredovisning…
         </button>
         <div id="openAndSaveArsredovisningBtns" class="d-flex gap-2">
           <button
@@ -160,14 +160,14 @@ async function importSIEForTest() {
             class="btn btn-primary"
             @click="importFile"
           >
-            Öppna…
+            <i class="bi bi-folder2-open"></i>Öppna…
           </button>
           <button
             id="saveArsredovisningBtn"
             class="btn btn-primary"
             @click="exportFile"
           >
-            Spara som…
+            <i class="bi bi-floppy"></i>Spara som…
           </button>
         </div>
         <button
@@ -217,7 +217,7 @@ async function importSIEForTest() {
 
 header {
   padding-bottom: $spacing-md;
-  border-bottom: 1px solid rgba($primary-color, 0.2);
+  border-bottom: 1px solid $border-color-normal;
 
   h1 {
     margin-bottom: 0;
