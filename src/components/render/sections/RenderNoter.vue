@@ -12,7 +12,10 @@ import {
   getTaxonomyItemForBelopprad,
   isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
-import { getValueColumnHeaderCell } from "@/util/noterUtils.ts";
+import {
+  getHeaderBeloppraderForNoter,
+  getValueColumnHeaderCell,
+} from "@/util/noterUtils.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 const taxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
@@ -49,14 +52,7 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
     <table
       v-for="(
         { belopprad: headerBelopprad, taxonomyItem: headerTaxonomyItem }, index
-      ) in items.filter(
-        (i) =>
-          i.taxonomyItem.xmlName ===
-            'se-gen-base:RedovisningsprinciperAbstract' ||
-          (i.taxonomyItem.level === 2 &&
-            i.taxonomyItem.parent?.xmlName !==
-              'se-gen-base:RedovisningsprinciperAbstract'),
-      )"
+      ) in getHeaderBeloppraderForNoter(items)"
       :key="headerBelopprad.taxonomyItemName"
     >
       <thead>

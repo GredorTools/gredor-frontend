@@ -67,7 +67,9 @@ onMounted(() => {
           ></button>
         </div>
         <div v-if="modalHasBeenShown" class="modal-body">
-          <slot />
+          <Suspense>
+            <slot />
+          </Suspense>
         </div>
         <div :id="footerTeleportPointId" class="modal-footer"></div>
       </div>

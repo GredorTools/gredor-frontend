@@ -99,3 +99,16 @@ export function getPeriodTypeForGroup(
       throw new Error("Unknown periodType");
   }
 }
+
+export function getHeaderBeloppraderForNoter(
+  noter: { belopprad: Belopprad; taxonomyItem: TaxonomyItem }[],
+) {
+  return noter.filter(
+    (not) =>
+      not.taxonomyItem.xmlName ===
+        "se-gen-base:RedovisningsprinciperAbstract" ||
+      (not.taxonomyItem.level === 2 &&
+        not.taxonomyItem.parent?.xmlName !==
+          "se-gen-base:RedovisningsprinciperAbstract"),
+  );
+}
