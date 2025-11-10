@@ -77,63 +77,65 @@ function removeUnderskrift(index: number) {
           v-for="(underskrift, index) in arsredovisning.redovisningsinformation
             .underskrifter"
           :key="index"
-          class="card mb-4 p-4 col-12 col-sm-6 col-lg-4"
+          class="mb-2 p-2 col-12 col-sm-6 col-lg-4"
         >
-          <div class="mb-3">
-            <label :for="'tilltalsnamn' + index" class="form-label"
-              >Tilltalsnamn:</label
+          <div class="card p-3">
+            <div class="mb-3">
+              <label :for="'tilltalsnamn' + index" class="form-label"
+                >Tilltalsnamn:</label
+              >
+              <input
+                :id="'tilltalsnamn' + index"
+                v-model.trim="underskrift.tilltalsnamn"
+                class="form-control"
+                type="text"
+              />
+            </div>
+            <div class="mb-3">
+              <label :for="'efternamn' + index" class="form-label"
+                >Efternamn:</label
+              >
+              <input
+                :id="'efternamn' + index"
+                v-model.trim="underskrift.efternamn"
+                class="form-control"
+                type="text"
+              />
+            </div>
+            <div class="mb-3">
+              <label :for="'roll' + index" class="form-label"
+                >Befattning (valfritt):</label
+              >
+              <input
+                :id="'roll' + index"
+                v-model.trim="underskrift.roll"
+                class="form-control"
+                type="text"
+              />
+            </div>
+            <div class="mb-3">
+              <label :for="'datum' + index" class="form-label"
+                >Undertecknandedatum:</label
+              >
+              <input
+                :id="'datum' + index"
+                v-model.trim="underskrift.datum"
+                class="form-control"
+                type="date"
+              />
+            </div>
+            <button
+              class="btn btn-danger mt-2"
+              type="button"
+              @click="removeUnderskrift(index)"
             >
-            <input
-              :id="'tilltalsnamn' + index"
-              v-model.trim="underskrift.tilltalsnamn"
-              class="form-control"
-              type="text"
-            />
+              Ta bort person
+            </button>
           </div>
-          <div class="mb-3">
-            <label :for="'efternamn' + index" class="form-label"
-              >Efternamn:</label
-            >
-            <input
-              :id="'efternamn' + index"
-              v-model.trim="underskrift.efternamn"
-              class="form-control"
-              type="text"
-            />
-          </div>
-          <div class="mb-3">
-            <label :for="'roll' + index" class="form-label"
-              >Befattning (valfritt):</label
-            >
-            <input
-              :id="'roll' + index"
-              v-model.trim="underskrift.roll"
-              class="form-control"
-              type="text"
-            />
-          </div>
-          <div class="mb-3">
-            <label :for="'datum' + index" class="form-label"
-              >Undertecknandedatum:</label
-            >
-            <input
-              :id="'datum' + index"
-              v-model.trim="underskrift.datum"
-              class="form-control"
-              type="date"
-            />
-          </div>
-          <button
-            class="btn btn-danger mt-2"
-            type="button"
-            @click="removeUnderskrift(index)"
-          >
-            Ta bort person
-          </button>
         </div>
 
         <button
-          class="col-12 btn btn-primary"
+          class="col-12 mt-3 btn btn-primary"
           type="button"
           @click="addUnderskrift"
         >
