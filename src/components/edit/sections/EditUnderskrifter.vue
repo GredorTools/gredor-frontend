@@ -37,6 +37,8 @@ function removeUnderskrift(index: number) {
     bäst att fylla i detta avsnitt allra sist.
   </div>
 
+  <hr class="mt-4 mb-4" />
+
   <CommonAccordion>
     <CommonAccordionItem
       id="signatures-accordion-general"
