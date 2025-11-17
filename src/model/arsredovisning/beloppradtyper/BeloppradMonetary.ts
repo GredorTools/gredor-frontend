@@ -30,7 +30,7 @@ export function calculateValuesIntoBelopprad(
       return {
         conceptName: belopprad.taxonomyItemName,
         value: isBeloppradMonetary(belopprad)
-          ? parseInt(belopprad.beloppNuvarandeAr)
+          ? Number.parseInt(belopprad.beloppNuvarandeAr)
           : 0,
       };
     },
@@ -42,7 +42,7 @@ export function calculateValuesIntoBelopprad(
         return {
           conceptName: belopprad.taxonomyItemName,
           value: isBeloppradMonetary(belopprad)
-            ? parseInt(belopprad.beloppTidigareAr[i])
+            ? Number.parseInt(belopprad.beloppTidigareAr[i])
             : 0,
         };
       }),
@@ -75,9 +75,9 @@ export function hasBeloppradMonetaryValue(
   const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, belopprad);
 
   function isBeloppValidMonetaryValue(stringValue: string): boolean {
-    const parsedInt = parseInt(stringValue, 10);
+    const parsedInt = Number.parseInt(stringValue, 10);
     return (
-      !isNaN(parsedInt) &&
+      !Number.isNaN(parsedInt) &&
       (!taxonomyItem.additionalData.isCalculatedItem || parsedInt !== 0)
     );
   }

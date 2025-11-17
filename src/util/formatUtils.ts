@@ -27,7 +27,7 @@ export function formatNumber(
         break;
       case BeloppFormat.TUSENTAL:
         numberAsString = Math.round(
-          parseInt(numberAsString.trim(), 10) / 1000,
+          Number.parseInt(numberAsString.trim(), 10) / 1000,
         ).toString();
         break;
       default:

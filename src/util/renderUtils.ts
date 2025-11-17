@@ -162,7 +162,7 @@ export function getSignAttribute(
 ): string | undefined {
   belopp = belopp.trim();
 
-  if (belopp.length < 1 || parseInt(belopp, 10) === 0) {
+  if (belopp.length < 1 || Number.parseInt(belopp, 10) === 0) {
     // Inget sign-attribut för noll
     return undefined;
   }
@@ -224,7 +224,7 @@ export function shouldShowSign(
     return false;
   }
 
-  let beloppToDisplay = parseInt(belopp, 10);
+  let beloppToDisplay = Number.parseInt(belopp, 10);
   switch (displayFormat) {
     case BeloppFormat.HELTAL:
       break;
