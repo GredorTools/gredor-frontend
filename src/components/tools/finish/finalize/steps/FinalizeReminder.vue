@@ -168,7 +168,7 @@ li {
     li {
       margin-bottom: $spacing-sm;
       font-size: $font-size-sm;
-      color: $medium;
+      color: $mediumdark;
     }
   }
 }

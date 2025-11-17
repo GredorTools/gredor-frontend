@@ -102,7 +102,7 @@ export class CalculationProcessor {
     let sum = 0;
     for (const child of node.children) {
       const childValue = this.calculateNode(child, valueMap);
-      const weight = parseFloat(child.weight || "1");
+      const weight = Number.parseFloat(child.weight || "1");
       sum += childValue * weight;
     }
 

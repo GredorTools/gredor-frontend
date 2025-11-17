@@ -136,13 +136,17 @@ for (const rootName of [
         ][0];
         if (referenceKontoIntervall[2]) {
           basAccounts.push({
-            start: parseInt(referenceKontoIntervall[1].replace(/x/g, "0")),
-            end: parseInt(referenceKontoIntervall[2].replace(/x/g, "9")),
+            start: Number.parseInt(
+              referenceKontoIntervall[1].replace(/x/g, "0"),
+            ),
+            end: Number.parseInt(referenceKontoIntervall[2].replace(/x/g, "9")),
           });
         } else {
           basAccounts.push({
-            start: parseInt(referenceKontoIntervall[1].replace(/x/g, "0")),
-            end: parseInt(referenceKontoIntervall[1].replace(/x/g, "9")),
+            start: Number.parseInt(
+              referenceKontoIntervall[1].replace(/x/g, "0"),
+            ),
+            end: Number.parseInt(referenceKontoIntervall[1].replace(/x/g, "9")),
           });
         }
       }

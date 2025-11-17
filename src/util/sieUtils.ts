@@ -15,7 +15,7 @@ import { autofillPersonalkostnaderNot, autofillSoliditet } from "@/util/autofill
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 import {
   type BeloppradMonetary,
-  calculateValuesIntoBelopprad
+  calculateValuesIntoBelopprad,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 export interface SieMapping {
@@ -55,7 +55,7 @@ export async function mapSieFileIntoArsredovisning(
 
   // Iterera över varje BAS-kontonummer och dess värden från den parsade filen
   for (const [basAccount, value] of Object.entries(parseResult)) {
-    const basAccountAsNumber = parseInt(basAccount, 10);
+    const basAccountAsNumber = Number.parseInt(basAccount, 10);
     let mappingFound = false;
 
     // Hitta taxonomiobjekt som BAS-kontot matchar

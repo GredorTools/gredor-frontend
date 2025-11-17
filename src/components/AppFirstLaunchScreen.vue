@@ -85,25 +85,13 @@ function onArsredovisningCreated(value: Arsredovisning) {
         </p>
         <h4>Vad vill du göra?</h4>
         <div class="d-flex flex-column gap-3">
-          <button
-            id="newArsredovisningBtn"
-            class="btn btn-primary"
-            @click="showNewArsredovisningModal"
-          >
+          <button class="btn btn-primary" @click="showNewArsredovisningModal">
             <i class="bi bi-file-earmark"></i>Börja på en ny årsredovisning
           </button>
-          <button
-            id="openArsredovisningBtn"
-            class="btn btn-primary"
-            @click="importFile"
-          >
+          <button class="btn btn-primary" @click="importFile">
             <i class="bi bi-folder2-open"></i>Öppna en sparad årsredovisning
           </button>
-          <button
-            id="openArsredovisningBtn"
-            class="btn btn-primary"
-            @click="showExampleArsredovisning"
-          >
+          <button class="btn btn-primary" @click="showExampleArsredovisning">
             <i class="bi bi-eye"></i>Visa en exempel-årsredovisning
           </button>
         </div>
