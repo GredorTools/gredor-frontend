@@ -31,8 +31,8 @@ const userAgreed = ref<boolean>(false);
         speciellt format som används för bland annat årsredovisningar och bör
         motsvara det som har visats i förhandsgranskningen tidigare i flödet. Vi
         som utvecklar Gredor har testat vektyget noggrannt för att minimera
-        risken för att något ska bli fel då, men tänk på att vi inte lämnar
-        några garantier.
+        risken för att något ska bli fel då, men
+        <strong>tänk på att vi inte lämnar några garantier.</strong>
       </p>
 
       <p>Genom att kryssa i rutan nedan godtar du detta.</p>
