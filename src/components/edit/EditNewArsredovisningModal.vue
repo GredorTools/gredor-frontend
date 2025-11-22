@@ -146,6 +146,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
       <input
         v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
         :disabled="busy"
+        data-testid="new-arsredovisning-modal-orgnr"
         maxlength="11"
         name="organisationsnummer"
         placeholder="Skriv företagets organisationsnummer här…"

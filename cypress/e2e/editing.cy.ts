@@ -34,9 +34,9 @@ it("can create and edit manually", function () {
   // Börja på ny årsredovisning
   cy.get("#newArsredovisningBtn").click();
   cy.wait(1000);
-  cy.get('#app [name="organisationsnummer"]').click();
-  cy.get('#app [name="organisationsnummer"]').clear();
-  cy.get('#app [name="organisationsnummer"]').type("556999-9999");
+  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
+  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').clear();
+  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("556999-9999");
   cy.get("#new-arsredovisning-modal-AppHeader-footer-teleport .btn").click();
 
   cy.get(
@@ -1019,8 +1019,6 @@ it("can create and edit manually", function () {
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalBalanseratResultatUtdelning-terseLabel"]',
   ).type("-22500");
-  cy.get("#editor tr:nth-child(11) td:nth-child(10)").click();
-  cy.get("#editor tr:nth-child(11) td:nth-child(10)").click();
   cy.get(
     '[data-testid="edit-se-gen-base:ForandringEgetKapitalTotaltUtdelning-totalLabel"]',
   ).click();
