@@ -11,7 +11,10 @@ const props = defineProps<{
   id: string;
 
   /** Fönstrets rubrik. */
-  title: string;
+  title?: string;
+
+  /** Huruvida fönstret ska visas direkt. */
+  showOnMount?: boolean;
 
   /** Huruvida fönstret ska ha en stäng-knapp (X) uppe till höger
    * (standardvärde är false). */
@@ -48,33 +51,40 @@ onMounted(() => {
       backdrop: "static",
       keyboard: false,
     });
+
+    if (props.showOnMount) {
+      modal.show();
+      modalHasBeenShown.value = true;
+    }
   }
 });
 </script>
 
 <template>
-  <div ref="modal-div" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">{{ title }}</h3>
-          <button
-            v-if="showCloseButton"
-            aria-label="Close"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            type="button"
-          ></button>
+  <Teleport to="body">
+    <div ref="modal-div" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div v-if="title || showCloseButton" class="modal-header">
+            <h3 v-if="title" class="modal-title">{{ title }}</h3>
+            <button
+              v-if="showCloseButton"
+              aria-label="Close"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              type="button"
+            ></button>
+          </div>
+          <div v-if="modalHasBeenShown" class="modal-body">
+            <Suspense>
+              <slot />
+            </Suspense>
+          </div>
+          <div :id="footerTeleportPointId" class="modal-footer"></div>
         </div>
-        <div v-if="modalHasBeenShown" class="modal-body">
-          <Suspense>
-            <slot />
-          </Suspense>
-        </div>
-        <div :id="footerTeleportPointId" class="modal-footer"></div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style lang="scss" scoped>

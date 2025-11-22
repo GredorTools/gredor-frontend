@@ -37,10 +37,13 @@ interface SieValue {
  * @param sieFileText - Innehållet från SIE-filen som ska omvandlas.
  * @param arsredovisning - Årsredovisningsobjektet som ska fyllas med data från
  * SIE-filen.
+ * @param messageCallback - Callback-funktion som anropas för att visa
+ * meddelanden (t.ex. den inbyggda alert-funktionen).
  */
 export async function mapSieFileIntoArsredovisning(
   sieFileText: string,
   arsredovisning: Arsredovisning,
+  messageCallback: (message: string) => void = alert,
 ) {
   const parseResult = parseSieFile(sieFileText);
 
@@ -135,7 +138,7 @@ export async function mapSieFileIntoArsredovisning(
     }
 
     if (!mappingFound) {
-      alert(`Varning: Konto ${basAccount} kunde inte mappas.`);
+      messageCallback(`Varning: Konto ${basAccount} kunde inte mappas.`);
     }
   }
 
@@ -147,7 +150,7 @@ export async function mapSieFileIntoArsredovisning(
         !value.nuvarandeAr.equals(0),
     )
   ) {
-    alert(
+    messageCallback(
       "Årets resultat hittades inte eller var noll i SIE-filen. Gredor kommer" +
         " ändå att importera filen, men du bör kontrollera att du inte har" +
         " missat att slutföra din bokföring.",
@@ -247,8 +250,7 @@ export async function mapSieFileIntoArsredovisning(
                 calculatedBelopprad.beloppTidigareAr[i];
             });
 
-            // TODO: Snyggare/tydligare meddelande
-            alert(
+            messageCallback(
               `Belopprad "${taxonomyItem.additionalData.displayLabel}" har` +
                 " avrundningsfel. Du kan behöva justera detta manuellt.",
             );

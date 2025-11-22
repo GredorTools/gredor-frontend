@@ -12,6 +12,7 @@ import AppFooter from "@/components/AppFooter.vue";
 import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
 import { emptyArsredovisning } from "@/example/emptyArsredovisning.ts";
 import { onBeforeUnmount } from "vue";
+import AppModalController from "@/components/AppModalController.vue";
 
 const {
   ref: arsredovisning,
@@ -64,6 +65,8 @@ onBeforeUnmount(() => {
   </main>
 
   <AppFooter />
+
+  <AppModalController />
 </template>
 
 <style lang="scss" scoped>

@@ -18,6 +18,7 @@ import type { paths } from "@/openapi/gredor-backend-v1";
 import { getConfigValue } from "@/util/configUtils.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { tryFormatOrgnr } from "@/util/formatUtils.ts";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -43,6 +44,8 @@ const arsredovisning = ref<Arsredovisning>(
 
 const busy = ref<boolean>(false);
 
+const { showMessageModal } = useModalStore();
+
 async function handleSieFile(file: File) {
   busy.value = true;
   try {
@@ -53,7 +56,11 @@ async function handleSieFile(file: File) {
       organisationsnummer;
 
     const sieFileText = await file.text();
-    await mapSieFileIntoArsredovisning(sieFileText, arsredovisning.value);
+    await mapSieFileIntoArsredovisning(
+      sieFileText,
+      arsredovisning.value,
+      showMessageModal,
+    );
   } finally {
     busy.value = false;
   }
@@ -65,7 +72,7 @@ async function fetchRecordsAndEmit() {
     await fetchRecords();
   } catch (error) {
     console.error(error);
-    alert(
+    showMessageModal(
       "Misslyckades med att hämta företagets namn och räkenskapsår från Bolagsverket.",
     );
   } finally {

@@ -14,6 +14,7 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -29,6 +30,8 @@ const result = ref<
   components["schemas"]["BolagsverketPreparationResponse"] | undefined
 >();
 const userAgreed = ref<boolean>(false);
+
+const { showMessageModal } = useModalStore();
 
 async function performRequest() {
   loading.value = true;
@@ -52,8 +55,7 @@ async function performRequest() {
     });
 
     if (prepareError) {
-      alert("prepareError");
-      alert(prepareError);
+      showMessageModal(prepareError);
     } else if (prepareData) {
       result.value = prepareData;
     }

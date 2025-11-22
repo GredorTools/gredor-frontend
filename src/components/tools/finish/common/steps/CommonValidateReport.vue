@@ -17,6 +17,7 @@ import { getConfigValue } from "@/util/configUtils.ts";
 import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -35,6 +36,8 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
 
 const loading = ref<boolean>(true);
 const result = ref<components["schemas"]["KontrolleraSvar"] | undefined>();
+
+const { showMessageModal } = useModalStore();
 
 async function performRequest() {
   loading.value = true;
@@ -59,8 +62,7 @@ async function performRequest() {
     });
 
     if (error) {
-      alert("error");
-      alert(error);
+      showMessageModal(error);
     } else if (data) {
       if (data.utfall) {
         if (props.discardFaststallelseintygValidations && data.utfall) {
