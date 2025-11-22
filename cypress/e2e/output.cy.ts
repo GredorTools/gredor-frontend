@@ -28,6 +28,13 @@ describe("validate generated XBRL data", () => {
         datum: "2025-04-28",
       },
     },
+    {
+      testFileName: "TestfilD",
+      faststallelseIntyg: {
+        godkannaStyrelsensForslag: true,
+        datum: "2025-09-27",
+      },
+    },
   ];
 
   cases.forEach(({ testFileName, faststallelseIntyg }) => {
