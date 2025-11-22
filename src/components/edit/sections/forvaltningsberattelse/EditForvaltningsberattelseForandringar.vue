@@ -144,6 +144,9 @@ const commonTaxonomyItemNames = [
 table.edit-forandringar-table {
   width: min-content;
 
+  margin-top: $spacing-md;
+  margin-bottom: $spacing-md;
+
   border-collapse: separate;
   border-spacing: 0;
 
@@ -153,11 +156,18 @@ table.edit-forandringar-table {
     background: white;
   }
 
+  th {
+    text-align: right;
+    vertical-align: bottom;
+  }
+
   th,
   td {
     @include auto-font-sizes;
 
     border: 1px solid #c4c4c4;
+    padding: $spacing-xs $spacing-sm;
+    white-space: nowrap;
 
     &:not(:last-child) {
       border-right: none;
@@ -181,6 +191,8 @@ table.edit-forandringar-table {
     }
 
     &.value-container {
+      text-align: right;
+
       &.empty-container {
         background: #d9d9d9;
       }
@@ -195,6 +207,8 @@ table.edit-forandringar-table {
 
       .value-contents input {
         width: 100%;
+        text-align: right;
+        min-width: 120px;
 
         &.form-control {
           @include auto-font-sizes;
