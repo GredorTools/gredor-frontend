@@ -62,7 +62,7 @@ async function performRequest() {
     });
 
     if (error) {
-      showMessageModal(error);
+      showMessageModal(error, "Fel vid kommunikation med Bolagsverket");
     } else if (data) {
       if (data.utfall) {
         if (props.discardFaststallelseintygValidations && data.utfall) {

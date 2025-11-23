@@ -59,7 +59,7 @@ async function handleSieFile(file: File) {
     await mapSieFileIntoArsredovisning(
       sieFileText,
       arsredovisning.value,
-      showMessageModal,
+      (message) => showMessageModal(message, "SIE-import"),
     );
   } finally {
     busy.value = false;
@@ -73,7 +73,9 @@ async function fetchRecordsAndEmit() {
   } catch (error) {
     console.error(error);
     showMessageModal(
-      "Misslyckades med att hämta företagets namn och räkenskapsår från Bolagsverket.",
+      "Misslyckades med att hämta företagets namn och räkenskapsår från" +
+        " Bolagsverket. Du kan ändå gå vidare och arbeta på din årsredovisning.",
+      "Varning",
     );
   } finally {
     emit(

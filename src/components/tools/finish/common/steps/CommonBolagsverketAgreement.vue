@@ -55,7 +55,7 @@ async function performRequest() {
     });
 
     if (prepareError) {
-      showMessageModal(prepareError);
+      showMessageModal(prepareError, "Fel vid kommunikation med Bolagsverket");
     } else if (prepareData) {
       result.value = prepareData;
     }

@@ -21,7 +21,8 @@ type Args = {
 
 /**
  * Provar att konvertera den renderade HTML:en från den anvigna RenderMain-roten
- * till iXBRL. Gör omförsök varje 250 millisekunder tills det lyckas, eller
+ * till iXBRL. Gör omförsök varje 250 millisekunder (pga att roten kanske inte
+ * finns tillgänglig när funktionen ursprungligen körs) tills det lyckas, eller
  * tills JavaScript-intervallet som funktionen skapar blir avbrutet.
  *
  * @param args - Argument som krävs för att generera iXBRL-årsredovisningen.

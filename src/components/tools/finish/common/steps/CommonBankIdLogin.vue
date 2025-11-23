@@ -12,6 +12,7 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -33,6 +34,8 @@ const result = ref<components["schemas"]["BankIdStatusResponse"] | undefined>();
 const orderRef = ref<string | null | undefined>();
 const autoStartToken = ref<string | null | undefined>();
 
+const { showMessageModal } = useModalStore();
+
 let unmounted: boolean = false;
 
 const client = createClient<paths>({
@@ -53,15 +56,13 @@ async function checkAuthStatus() {
   if (authStatusError) {
     console.error(authStatusError);
     state.value = "callFailure";
+  } else if (authStatusData?.loggedIn) {
+    result.value = {
+      status: "COMPLETE",
+    };
+    state.value = "showQrCodeOrResult";
   } else {
-    if (authStatusData?.loggedIn) {
-      result.value = {
-        status: "COMPLETE",
-      };
-      state.value = "showQrCodeOrResult";
-    } else {
-      state.value = "showInfo";
-    }
+    state.value = "showInfo";
   }
 }
 
@@ -79,7 +80,7 @@ async function performInitRequest() {
     });
 
     if (initError) {
-      console.error(initError);
+      showMessageModal(initError, "Fel vid BankID-legitimering");
       state.value = "callFailure";
     } else if (initData) {
       result.value = initData;

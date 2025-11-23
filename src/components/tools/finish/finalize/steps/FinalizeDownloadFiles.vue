@@ -59,6 +59,7 @@ async function exportUnsignedPdf() {
     return;
   }
 
+  // eslint-disable no-useless-escape
   const htmlToWrite = `${props.ixbrl}
   <script type="text/javascript">
     setTimeout(() => {
@@ -69,6 +70,7 @@ async function exportUnsignedPdf() {
     }, 250);
   <\/script>
   `;
+  // eslint-enable no-useless-escape
 
   printWindow.document.open();
   printWindow.document.write(htmlToWrite);
