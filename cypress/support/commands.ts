@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -36,6 +39,7 @@
 //   }
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare namespace Cypress {
   interface Chainable {
     /**

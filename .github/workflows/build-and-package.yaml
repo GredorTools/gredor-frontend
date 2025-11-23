@@ -25,6 +25,7 @@ jobs:
       - name: Set up environment variables
         run: |
           source .env.cypress
+          echo "INSTRUMENT_BUILD=$INSTRUMENT_BUILD" >> ${GITHUB_ENV}
           echo "VITE_ENV_NAME=$VITE_ENV_NAME" >> ${GITHUB_ENV}
           echo "VITE_GREDOR_BACKEND_BASEURL=$VITE_GREDOR_BACKEND_BASEURL" >> ${GITHUB_ENV}
           echo "VITE_TEST_MODE=$VITE_TEST_MODE" >> ${GITHUB_ENV}
@@ -99,6 +100,13 @@ jobs:
         with:
           start: npm run preview
           browser: ${{ matrix.browser == 'chrome' && steps.setup-chrome.outputs.chrome-path || matrix.browser == 'edge' && steps.setup-edge.outputs.edge-path || steps.setup-firefox.outputs.firefox-path }}
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ matrix.browser == 'chrome' && matrix.browser-variant == 'stable' && matrix.os == 'ubuntu-latest' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ inputs.codecov_token }}
+          directory: ./coverage
 
       - name: Upload test screenshots on failure
         uses: actions/upload-artifact@v4
