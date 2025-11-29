@@ -41,12 +41,12 @@ const userAgreed = ref<boolean>(false);
         <div class="checkbox-container">
           <div class="form-check">
             <input
-              id="bolagsverketAgreementCheck"
+              id="gredorAgreementCheck"
               v-model="userAgreed"
               class="form-check-input"
               type="checkbox"
             />
-            <label class="form-check-label" for="bolagsverketAgreementCheck"
+            <label class="form-check-label" for="gredorAgreementCheck"
               >Jag godkänner Gredors villkor
             </label>
           </div>
