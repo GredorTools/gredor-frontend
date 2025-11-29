@@ -11,8 +11,9 @@ import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
 import { emptyArsredovisning } from "@/example/emptyArsredovisning.ts";
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, useTemplateRef } from "vue";
 import AppModalController from "@/components/AppModalController.vue";
+import { useHorizontalDrag } from "@/components/common/composables/useHorizontalDrag.ts";
 
 const {
   ref: arsredovisning,
@@ -20,6 +21,20 @@ const {
 } = useGredorHighPerformanceStorage(
   "AppAutosaveArsredovisning",
   emptyArsredovisning,
+);
+
+const mainRef = useTemplateRef("main");
+const handleRef = useTemplateRef("handle");
+const editorRef = useTemplateRef("editor");
+const rendererRef = useTemplateRef("renderer");
+
+const { handleDrag } = useHorizontalDrag(
+  mainRef,
+  handleRef,
+  editorRef,
+  rendererRef,
+  700,
+  128,
 );
 
 onBeforeUnmount(() => {
@@ -31,12 +46,20 @@ onBeforeUnmount(() => {
   <main aria-label="Gredor årsredovisningsverktyg" class="d-flex flex-column">
     <AppHeader v-model:arsredovisning="arsredovisning" />
 
-    <div aria-label="Huvudinnehåll" class="d-flex flex overflow-hidden gap-4">
-      <div id="editor" aria-label="Redigeringsvy">
+    <div
+      ref="main"
+      aria-label="Huvudinnehåll"
+      class="d-flex overflow-hidden justify-content-between"
+    >
+      <div id="editor" ref="editor" aria-label="Redigeringsvy">
         <EditMain v-model:arsredovisning="arsredovisning" />
       </div>
 
-      <div id="renderer" aria-label="Förhandsgranskningsvy">
+      <div ref="handle" class="handle" @mousedown="handleDrag">
+        <i class="bi bi-grip-vertical"></i>
+      </div>
+
+      <div id="renderer" ref="renderer" aria-label="Förhandsgranskningsvy">
         <RenderMain
           :arsredovisning="arsredovisning"
           :show-faststallelseintyg="false"
@@ -81,6 +104,18 @@ main {
   padding: $spacing-xl;
   gap: $spacing-xl;
 
+  .handle {
+    width: 1rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      cursor: ew-resize;
+    }
+  }
+
   #editor {
     display: flex;
     flex-direction: column;
@@ -90,12 +125,7 @@ main {
 
   #renderer {
     padding: 0 $spacing-sm $spacing-sm 0;
-
-    @media screen and (max-width: 1600px) {
-      width: calc(210mm * 0.76);
-      scale: 0.75;
-      transform-origin: top left;
-    }
+    transform-origin: top left;
   }
 
   .help-hint {
