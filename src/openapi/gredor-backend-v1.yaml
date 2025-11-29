@@ -362,6 +362,18 @@ paths:
       summary: Records
       tags:
       - Information Resource
+  /v1/ping/ping:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+      summary: Status
+      tags:
+      - Ping Resource
   /v1/submission-flow/prepare:
     post:
       parameters:
