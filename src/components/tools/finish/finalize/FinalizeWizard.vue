@@ -17,7 +17,10 @@ import FinalizeDownloadFiles from "@/components/tools/finish/finalize/steps/Fina
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
-import { useGredorStorage, type WrappedType } from "@/components/common/composables/useGredorStorage.ts";
+import {
+  useGredorStorage,
+  type WrappedType,
+} from "@/components/common/composables/useGredorStorage.ts";
 import FinalizeReminder from "@/components/tools/finish/finalize/steps/FinalizeReminder.vue";
 
 defineProps<{
@@ -122,12 +125,14 @@ const currentStep = ref<
     <FinalizeDownloadFiles
       v-if="currentStep === 'downloadFiles' && ixbrl != null"
       :arsredovisning="arsredovisning"
-      :current-step-number="callBolagsverket ? 6 : 3"
+      :current-step-number="callBolagsverket.wrappedValue ? 6 : 3"
       :ixbrl="ixbrl"
       :num-steps="numSteps"
       class="limit-width"
       @go-to-previous-step="
-        currentStep = callBolagsverket ? 'validateReport' : 'requestInformation'
+        currentStep = callBolagsverket.wrappedValue
+          ? 'validateReport'
+          : 'requestInformation'
       "
       @go-to-next-step="modal?.hide()"
     />
