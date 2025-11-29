@@ -1,4 +1,5 @@
 import type { DataContainer, DataType } from "@/model/DataContainer.ts";
+import { getConfigValue } from "@/util/configUtils.ts";
 
 /**
  * Ber användaren att välja en fil för import och returnerar den.
@@ -20,7 +21,16 @@ export function requestOpenFile(accept: string): Promise<File | null> {
         resolve(null);
       }
     };
-    input.click();
+
+    if (getConfigValue("VITE_IS_CYPRESS") == "true") {
+      // För att bli testbar med Cypress
+      input.dataset.testid = "request-open-file-input";
+      input.style.display = "none";
+      document.getElementsByTagName("body")[0].appendChild(input);
+    } else {
+      // Öppna filväljare normalt
+      input.click();
+    }
   });
 }
 

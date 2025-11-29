@@ -812,7 +812,7 @@
       }
     ],
     "redovisningsinformation": {
-      "faststallandeDatum": "2025-01-04",
+      "datering": "2025-01-04",
       "undertecknandeOrt": "Halmstad",
       "avgivande": {
         "namn": "Styrelsen och verkställande direktören",
@@ -838,8 +838,7 @@
           "roll": "Verkställande direktör",
           "tilltalsnamn": "Karin"
         }
-      ],
-      "underskriftOrt": "Stockholm"
+      ]
     },
     "resultatrakning": [
       {

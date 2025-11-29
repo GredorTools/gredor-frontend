@@ -86,9 +86,7 @@ describe("validate generated XBRL data", () => {
           `cypress/fixtures/input/${testFileName}.gredorfardig`,
           { action: "drag-drop" },
         );
-        cy.get(
-          '#send-wizard-modal-ToolsFinish-footer-teleport button[data-testid="wizard-next-button"]',
-        ).click();
+        cy.get('[data-testid="wizard-next-button"]').click();
 
         // Steg 2 - Fyll i uppgifter
         cy.get('input[data-testid="send-wizard-personalnumber-input"]').click();
@@ -99,20 +97,14 @@ describe("validate generated XBRL data", () => {
         cy.get('input[data-testid="send-wizard-email-input"]').type(
           "example@example.com",
         );
-        cy.get(
-          '#send-wizard-modal-ToolsFinish-footer-teleport button[data-testid="wizard-next-button"]',
-        ).click();
+        cy.get('[data-testid="wizard-next-button"]').click();
 
         // Steg 3 - BankID
-        cy.get(
-          '#send-wizard-modal-ToolsFinish-footer-teleport button[data-testid="wizard-next-button"]',
-        ).click();
+        cy.get('[data-testid="wizard-next-button"]').click();
 
         // Steg 4 - Bolagsverkets villkor
         cy.get("#bolagsverketAgreementCheck").check();
-        cy.get(
-          '#send-wizard-modal-ToolsFinish-footer-teleport button[data-testid="wizard-next-button"]',
-        ).click();
+        cy.get('[data-testid="wizard-next-button"]').click();
 
         // Steg 5 - fastställelseintyg
         cy.get("#datum").type(faststallelseIntyg.datum);
@@ -145,9 +137,7 @@ describe("validate generated XBRL data", () => {
             );
           }
         }
-        cy.get(
-          '#send-wizard-modal-ToolsFinish-footer-teleport button[data-testid="wizard-next-button"]',
-        ).click();
+        cy.get('[data-testid="wizard-next-button"]').click();
 
         // Hämta iXBRL från förhandsgranskning i steg 6, konvertera den till XBRL,
         // och jämför med förväntad XBRL. Då blir det ganska enkelt och vi jämför

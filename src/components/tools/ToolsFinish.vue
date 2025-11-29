@@ -63,7 +63,11 @@ function showSendWizard() {
     >
       Exportera iXBRL-fil (test)
     </button>
-    <button class="btn btn-primary" @click="showFinalizeWizard">
+    <button
+      class="btn btn-primary"
+      data-testid="show-finalize-wizard-button"
+      @click="showFinalizeWizard"
+    >
       Färdigställ inför årsstämma
     </button>
     <button

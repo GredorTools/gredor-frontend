@@ -36,9 +36,8 @@
           "datum": "2025-01-04"
         }
       ],
-      "underskriftOrt": "Stockholm",
       "undertecknandeOrt": "Halmstad",
-      "faststallandeDatum": "2025-01-04"
+      "datering": "2025-01-04"
     },
     "installningar": {
       "flerarsoversiktBeloppFormat": "tusental"
