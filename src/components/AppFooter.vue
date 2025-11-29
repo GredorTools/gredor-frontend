@@ -133,7 +133,7 @@
 
 .aside-container {
   background-color: $background-dark;
-  padding-bottom: $spacing-xl;
+  padding: 0 $spacing-md $spacing-xxl;
 }
 
 #documentation {
