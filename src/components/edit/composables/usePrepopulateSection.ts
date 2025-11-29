@@ -5,15 +5,18 @@ import {
   deleteBelopprad,
   getBeloppradInList,
   hasBeloppradValue,
-  isBeloppradInTaxonomyItemList
+  isBeloppradInTaxonomyItemList,
 } from "@/model/arsredovisning/Belopprad.ts";
 import { computed, type Reactive, reactive, type Ref, ref, watch } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
-import type { Arsredovisning, BeloppradSectionName } from "@/model/arsredovisning/Arsredovisning.ts";
+import type {
+  Arsredovisning,
+  BeloppradSectionName,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 import {
   hasParentTaxonomyItemMatching,
   isTaxonomyItemTuple,
-  type TaxonomyItem
+  type TaxonomyItem,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 
 /**
@@ -85,10 +88,11 @@ function innerPrepopulateSection(args: Args, belopprader: Ref<Belopprad[]>) {
     let belopprad = getBeloppradInList(section, taxonomyItem);
 
     // Om ingen belopprad finns, skapa en ny reaktiv belopprad
-    if (!belopprad) {
-      belopprad = reactive(createBelopprad(taxonomyItem));
-      sectionPool.push(belopprad);
-    }
+    belopprad ??= reactive(createBelopprad(taxonomyItem));
+
+    // Lägg till i pool (lista med belopprader som finns i detta
+    // årsredovisningsavsnitt - alla reaktiva)
+    sectionPool.push(belopprad);
 
     // Skapa en watcher som triggas när man ändrar beloppraden, för att
     // automatiskt lägga till eller ta bort den från årsredovisningen när man

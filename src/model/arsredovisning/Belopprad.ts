@@ -92,9 +92,7 @@ export function createBeloppradInList<T extends TaxonomyItemType>(
     return;
   }
 
-  if (belopprad == null) {
-    belopprad = reactive(createBelopprad(taxonomyItem));
-  }
+  belopprad ??= reactive(createBelopprad(taxonomyItem));
   list.push(belopprad);
 
   if (taxonomyItem.parent != null && taxonomyItem.parent.level > 0) {
@@ -169,7 +167,7 @@ export function getOrCreateBeloppradInList<T extends TaxonomyItemType>(
 ): Belopprad<T> {
   const existingBelopprad = getBeloppradInList(list, taxonomyItem);
   if (existingBelopprad) {
-    return existingBelopprad as Belopprad<T>;
+    return existingBelopprad;
   } else {
     const createdBelopprad = createBeloppradInList(
       taxonomyManager,
@@ -289,7 +287,7 @@ function deleteBeloppradAbstractParents(
     const beloppradParent = getBeloppradInList(from, taxonomyItem.parent);
 
     if (beloppradParent) {
-      let shouldDeleteParent = false;
+      let shouldDeleteParent: boolean;
       if (arsredovisning !== null && maxNumPreviousYears !== null) {
         shouldDeleteParent = !hasBeloppradValue(
           taxonomyManager,
