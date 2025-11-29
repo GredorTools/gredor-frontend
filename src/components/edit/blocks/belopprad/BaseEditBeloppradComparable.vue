@@ -11,7 +11,10 @@ import { computed } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { getTestIdForBelopprad, handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
+import {
+  getTestIdForBelopprad,
+  handleEventForInputWithValueWhitelist,
+} from "@/util/inputUtils.ts";
 
 export interface EditBeloppradComparablePropsBase {
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -97,7 +100,7 @@ function onBeforeValueInput(event: InputEvent) {
         :class="{ 'form-control-sm': small }"
         :data-testid="`edit-${belopprad.taxonomyItemName}-not`"
         class="form-control"
-        maxlength="2"
+        maxlength="10"
         type="text"
       />
     </td>
