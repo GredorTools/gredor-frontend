@@ -4,7 +4,9 @@
  * Gredor.
  */
 
-import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, {
+  type CommonWizardButtonsEmits,
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
@@ -13,7 +15,10 @@ import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 import { getHeaderBeloppraderForNoter } from "@/util/noterUtils.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import {
+  type BaseBeloppradComparable,
+  isBeloppradComparable,
+} from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -52,44 +57,74 @@ const beloppradLists = [
     ),
   },
 ];
-const noterConnections = computed(() =>
+const headerBeloppraderForNoter = computed(() =>
   getHeaderBeloppraderForNoter(
-    props.arsredovisning.noter.map((belopprad) => ({
-      belopprad,
-      taxonomyItem: getTaxonomyItemForBelopprad(
-        noterTaxonomyManager,
-        belopprad,
-      ),
-    })),
-  ).map((headerBelopprad, i) => {
-    const notnummer = i + 1;
-    const resultForNot = {
-      notnummer,
-      notLabel: headerBelopprad.taxonomyItem.additionalData.displayLabel,
-      connections: new Array<string>(),
-    };
-    for (const {
-      beloppradList,
-      beloppradListTaxonomyManager,
-    } of beloppradLists) {
-      for (const belopprad of beloppradList) {
-        if (
-          isBeloppradComparable(belopprad) &&
-          belopprad.not === notnummer.toString()
-        ) {
-          const beloppradDisplayLabel = getTaxonomyItemForBelopprad(
-            beloppradListTaxonomyManager,
-            belopprad,
-          ).additionalData.displayLabel;
-          if (beloppradDisplayLabel) {
-            resultForNot.connections.push(beloppradDisplayLabel);
+    noterTaxonomyManager,
+    props.arsredovisning.noter,
+  ),
+);
+const noterConnections = computed(() =>
+  headerBeloppraderForNoter.value.map(
+    ({ taxonomyItem: headerTaxonomyItem }, i) => {
+      const notnummer = i + 1;
+      const resultForNot = {
+        notnummer,
+        notLabel: headerTaxonomyItem.additionalData.displayLabel,
+        connections: new Array<string>(),
+      };
+      for (const {
+        beloppradList,
+        beloppradListTaxonomyManager,
+      } of beloppradLists) {
+        for (const belopprad of beloppradList) {
+          if (
+            isBeloppradComparable(belopprad) &&
+            belopprad.not === notnummer.toString()
+          ) {
+            const beloppradDisplayLabel = getTaxonomyItemForBelopprad(
+              beloppradListTaxonomyManager,
+              belopprad,
+            ).additionalData.displayLabel;
+            if (beloppradDisplayLabel) {
+              resultForNot.connections.push(beloppradDisplayLabel);
+            }
           }
         }
       }
-    }
-    return resultForNot;
-  }),
+      return resultForNot;
+    },
+  ),
 );
+
+const beloppraderWithNonexistingNoter = computed(() => {
+  const result = new Array<{
+    belopprad: BaseBeloppradComparable;
+    beloppradLabel: string;
+  }>();
+
+  for (const {
+    beloppradList,
+    beloppradListTaxonomyManager,
+  } of beloppradLists) {
+    for (const belopprad of beloppradList) {
+      if (isBeloppradComparable(belopprad) && belopprad.not) {
+        const notNumber = Number.parseInt(belopprad.not, 10);
+        if (notNumber < 1 || notNumber > noterConnections.value.length) {
+          result.push({
+            belopprad,
+            beloppradLabel:
+              getTaxonomyItemForBelopprad(
+                beloppradListTaxonomyManager,
+                belopprad,
+              ).additionalData.displayLabel ?? "< okänd belopprad >",
+          });
+        }
+      }
+    }
+  }
+
+  return result;
+});
 </script>
 
 <template>
@@ -107,7 +142,7 @@ const noterConnections = computed(() =>
       <ul>
         <li>
           …alla noter är korrekt kopplade, om de ska ha någon koppling
-          <ul>
+          <ul data-testid="finalize-reminder-noter-connections-list">
             <li
               v-for="resultForNot in noterConnections"
               :key="resultForNot.notnummer"
@@ -119,12 +154,20 @@ const noterConnections = computed(() =>
               </template>
               <template v-else>inte kopplad till någon belopprad</template>
             </li>
+            <li
+              v-for="beloppradWithNonexistingNot in beloppraderWithNonexistingNoter"
+              :key="beloppradWithNonexistingNot.belopprad.taxonomyItemName"
+            >
+              Belopprad "{{ beloppradWithNonexistingNot.beloppradLabel }}" är
+              kopplad till not
+              {{ beloppradWithNonexistingNot.belopprad.not }} som inte finns
+            </li>
           </ul>
         </li>
         <li>
           …fastställandedatum för årsredovisningen och underskriftsdatumen
           stämmer. Du har fyllt i:
-          <ul>
+          <ul data-testid="finalize-reminder-redovisningsinformation-list">
             <li>
               Datering:
               {{

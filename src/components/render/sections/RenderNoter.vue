@@ -6,7 +6,6 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import RenderBelopprad from "@/components/render/blocks/RenderBelopprad.vue";
-import { computed } from "vue";
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
 import {
   getTaxonomyItemForBelopprad,
@@ -24,15 +23,6 @@ const props = defineProps<{
   /** Årsredovisningen som innehåller noterna. */
   arsredovisning: Arsredovisning;
 }>();
-
-const items = computed(() => {
-  return props.arsredovisning.noter.map((belopprad) => {
-    return {
-      belopprad,
-      taxonomyItem: getTaxonomyItemForBelopprad(taxonomyManager, belopprad),
-    };
-  });
-});
 
 function shouldHideTaxonomyItem(taxonomyItemName: string) {
   // Dölj rubriker "förändringar av [anskaffningsvärden/avskrivningar/
@@ -52,7 +42,7 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
     <table
       v-for="(
         { belopprad: headerBelopprad, taxonomyItem: headerTaxonomyItem }, index
-      ) in getHeaderBeloppraderForNoter(items)"
+      ) in getHeaderBeloppraderForNoter(taxonomyManager, arsredovisning.noter)"
       :key="headerBelopprad.taxonomyItemName"
     >
       <thead>
@@ -90,16 +80,14 @@ function shouldHideTaxonomyItem(taxonomyItemName: string) {
       </thead>
       <tbody>
         <RenderBelopprad
-          v-for="belopprad in items
-            .filter(
-              (i) =>
-                !shouldHideTaxonomyItem(i.belopprad.taxonomyItemName) &&
-                isBeloppradInTaxonomyItemList(
-                  [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat],
-                  i.belopprad,
-                ),
-            )
-            .map((i) => i.belopprad)"
+          v-for="belopprad in props.arsredovisning.noter.filter(
+            (belopprad) =>
+              !shouldHideTaxonomyItem(belopprad.taxonomyItemName) &&
+              isBeloppradInTaxonomyItemList(
+                [headerTaxonomyItem, ...headerTaxonomyItem.childrenFlat],
+                belopprad,
+              ),
+          )"
           :key="belopprad.taxonomyItemName"
           :belopprad="belopprad"
           :comparable-num-previous-years="

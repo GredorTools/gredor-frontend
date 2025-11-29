@@ -1,12 +1,13 @@
 import type { Verksamhetsar } from "@/model/arsredovisning/Arsredovisning.ts";
 import { h, type VNode } from "vue";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
-import { type Belopprad, getBeloppradInList } from "@/model/arsredovisning/Belopprad.ts";
+import { type Belopprad, getBeloppradInList, getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import {
   BeloppradTupleFormat,
   getBeloppradTupleFormat,
   isBeloppradTuple
 } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 
 /**
  * Genererar en VNode för verksamhetsår som visas i tabellhuvudet, för en grupp
@@ -101,14 +102,23 @@ export function getPeriodTypeForGroup(
 }
 
 export function getHeaderBeloppraderForNoter(
-  noter: { belopprad: Belopprad; taxonomyItem: TaxonomyItem }[],
+  taxonomyManager: TaxonomyManager,
+  noter: Belopprad[],
 ) {
-  return noter.filter(
-    (not) =>
-      not.taxonomyItem.xmlName ===
-        "se-gen-base:RedovisningsprinciperAbstract" ||
-      (not.taxonomyItem.level === 2 &&
-        not.taxonomyItem.parent?.xmlName !==
-          "se-gen-base:RedovisningsprinciperAbstract"),
-  );
+  return noter
+    .map((belopprad) => {
+      const taxonomyItem = getTaxonomyItemForBelopprad(
+        taxonomyManager,
+        belopprad,
+      );
+      return { belopprad, taxonomyItem };
+    })
+    .filter(({ taxonomyItem }) => {
+      return (
+        taxonomyItem.xmlName === "se-gen-base:RedovisningsprinciperAbstract" ||
+        (taxonomyItem.level === 2 &&
+          taxonomyItem.parent?.xmlName !==
+            "se-gen-base:RedovisningsprinciperAbstract")
+      );
+    });
 }
