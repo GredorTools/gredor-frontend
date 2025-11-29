@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/**
+ * Renderar en beloppradscell för vallistor (enum).
+ */
+
 import { getContextRef, getContextRefPrefix } from "@/util/renderUtils.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
 import { formatEnumValueDisplayLabel } from "@/util/formatUtils.ts";

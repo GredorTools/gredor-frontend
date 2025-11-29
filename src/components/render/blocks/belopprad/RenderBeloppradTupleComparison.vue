@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera tuples med årsjämförelser i tabellform.
+ * Skapar dolda iXBRL-tuple-instanser för nuvarande och tidigare år.
+ */
+
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";

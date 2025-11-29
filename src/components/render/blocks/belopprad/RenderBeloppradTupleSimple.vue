@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera tuples i en enkel tabell utan årsjämförelser.
+ */
+
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";

@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En komponent för att rendera belopprader av typen tuple.
+ * Växlar mellan enkel tabell och jämförelsetabell beroende på tuple-typ.
+ */
+
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import {
   type BeloppradTuple,

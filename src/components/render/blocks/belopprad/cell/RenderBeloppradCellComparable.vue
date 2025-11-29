@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/**
+ * Renderar en jämförbar beloppradscell.
+ */
+
 import {
   getContextRef,
   getContextRefPrefix,

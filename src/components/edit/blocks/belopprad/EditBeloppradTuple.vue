@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Redigeringskomponent för belopprader av typen tuple.
+ * Låter användaren lägga till/ta bort instanser och växla visningsformat
+ * (endast detta år eller jämförelse mellan år).
+ */
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import {
   type BeloppradTuple,

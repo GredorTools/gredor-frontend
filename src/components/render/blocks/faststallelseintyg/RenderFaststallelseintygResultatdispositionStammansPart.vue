@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Delkomponent för fastställelseintyget som skriver ut en enskild del av
+ * stämmans resultatdisposition, inklusive korrekt skiljetecken mellan delar.
+ */
+
 import { computed } from "vue";
 import { formatNumber } from "@/util/formatUtils.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";

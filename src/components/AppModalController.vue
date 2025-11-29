@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En central controller för att visa köade meddelande‑modals. Tar reaktivt den
+ * översta i kön från en store och visar innehåll med en OK‑knapp.
+ */
+
 import { computed, useTemplateRef } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";

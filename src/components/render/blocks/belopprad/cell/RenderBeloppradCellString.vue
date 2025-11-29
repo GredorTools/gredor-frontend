@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Renderar en beloppradscell för textsträngar. Kan visas som rå text (utan
+ * p-taggar) eller radbrytas per stycke.
+ */
+
 import { type BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import { getContextRef, getContextRefPrefix } from "@/util/renderUtils.ts";
 import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";

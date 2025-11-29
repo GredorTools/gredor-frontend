@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * En hjälpcell som renderar en belopprad beroende på dess datatyp
+ * (sträng, jämförbar eller vallista). Används av tuple- och tabellkomponenter.
+ */
+
 import { isBeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import {
   type Belopprad,
