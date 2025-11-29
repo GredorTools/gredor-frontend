@@ -36,7 +36,7 @@ const belopprader = computed(() =>
   ),
 );
 
-const table = computed(() =>
+const forandringarTable = computed(() =>
   getForandringarAsTable(
     props.taxonomyManager,
     groupTaxonomyItem.value,
@@ -46,15 +46,18 @@ const table = computed(() =>
 </script>
 
 <template>
-  <!-- TODO: Hantera om tabellen blir för bred... -->
-  <table v-if="belopprader.length > 0">
+  <table
+    v-if="belopprader.length > 0"
+    :class="{ [`num-columns-${forandringarTable.columnNames.length}`]: true }"
+    class="forandringar-table"
+  >
     <thead>
       <tr>
         <th scope="col">
           <BaseRenderBeloppradLevel1Header :taxonomy-item="groupTaxonomyItem" />
         </th>
         <th
-          v-for="columnName in table.columnNames"
+          v-for="columnName in forandringarTable.columnNames"
           :key="columnName"
           class="value-container column-name"
           scope="col"
@@ -64,9 +67,9 @@ const table = computed(() =>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row, rowIndex) in table.table" :key="rowIndex">
+      <tr v-for="(row, rowIndex) in forandringarTable.table" :key="rowIndex">
         <td>
-          {{ table.rowNames[rowIndex] }}
+          {{ forandringarTable.rowNames[rowIndex] }}
         </td>
         <td
           v-for="(cell, columnIndex) in row"
@@ -90,7 +93,38 @@ const table = computed(() =>
 </template>
 
 <style lang="scss" scoped>
-th.column-name {
-  white-space: collapse !important;
+.forandringar-table {
+  &.num-columns-6 {
+    font-size: 0.85rem;
+    :deep(.value-container) {
+      min-width: 85px !important;
+    }
+  }
+
+  &.num-columns-7 {
+    font-size: 0.7rem;
+    :deep(.value-container) {
+      min-width: 70px !important;
+    }
+  }
+
+  &.num-columns-8 {
+    font-size: 0.62rem;
+    :deep(.value-container) {
+      min-width: 62px !important;
+    }
+  }
+
+  &.num-columns-9 {
+    // Maxantal
+    font-size: 0.55rem;
+    :deep(.value-container) {
+      min-width: 55px !important;
+    }
+  }
+
+  th.column-name {
+    white-space: collapse !important;
+  }
 }
 </style>
