@@ -12,6 +12,7 @@ import { exampleArsredovisning } from "@/example/exampleArsredovisning.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -22,6 +23,8 @@ const showFirstLaunchScreen = useGredorStorage(
   "AppShowFirstLaunchScreen",
   true,
 );
+
+const { showMessageModal } = useModalStore();
 
 const newArsredovisningModalRenderId = ref<number>(0);
 const newArsredovisningModal =
@@ -46,10 +49,14 @@ async function importFile() {
   const file = await requestOpenFile(".gredorutkast,.gredorfardig");
   const json = await file?.text();
   if (json) {
-    arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
-      "arsredovisning_utkast",
-      "arsredovisning_fardig",
-    ]).data;
+    try {
+      arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+        "arsredovisning_utkast",
+        "arsredovisning_fardig",
+      ]).data;
+    } catch {
+      showMessageModal("Filen är ogiltig och kan inte öppnas i Gredor.");
+    }
     showFirstLaunchScreen.value = false;
   }
 }

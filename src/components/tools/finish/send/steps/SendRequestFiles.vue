@@ -13,6 +13,7 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { ref } from "vue";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 defineProps<CommonStepProps>();
 
@@ -26,13 +27,19 @@ const arsredovisning = defineModel<Arsredovisning | undefined>(
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
+const { showMessageModal } = useModalStore();
+
 const hasPickedArsredovisningFile = ref<boolean>(false);
 
 async function handleArsredovisningFile(file: File) {
   const json = await file.text();
-  arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
-    "arsredovisning_fardig",
-  ]).data;
+  try {
+    arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+      "arsredovisning_fardig",
+    ]).data;
+  } catch {
+    showMessageModal("Filen är ogiltig och kan inte öppnas i Gredor.");
+  }
   hasPickedArsredovisningFile.value = true;
 }
 </script>

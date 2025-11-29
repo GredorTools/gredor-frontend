@@ -64,7 +64,6 @@ export function parseGredorFile<T>(
   json: string,
   allowedDataTypes: DataType[],
 ): DataContainer<T> {
-  // TODO: Återkoppling till användaren också
   const dataContainer: DataContainer<T> = JSON.parse(json);
   if (!dataContainer.dataType) {
     throw new Error("File is not a Gredor file");
