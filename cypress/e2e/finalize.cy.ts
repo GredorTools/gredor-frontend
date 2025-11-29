@@ -87,6 +87,7 @@ describe("go through finalize wizard", () => {
       "cypress/fixtures/input/TestfilA.gredorfardig",
       { force: true },
     );
+    cy.wait(1000); // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
@@ -165,6 +166,7 @@ describe("go through finalize wizard", () => {
       "cypress/fixtures/input/TestfilB.gredorfardig",
       { force: true },
     );
+    cy.wait(1000); // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
