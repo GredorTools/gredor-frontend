@@ -157,11 +157,6 @@ export async function mapSieFileIntoArsredovisning(
     );
   }
 
-  // TODO: Detektera automatiskt om summorna inte stämmer, visa meddelande.
-  //       Gör det genom att autosummera och sen se om något skiljer sig.
-  //       Ev. kan vi behöva stänga av de automatiska summeringarna i
-  //       EditBeloppradMonetary tillfälligt när detta görs.
-
   for (const belopprad of beloppraderAdded) {
     if (isBeloppradComparable(belopprad)) {
       // Avrunda alla värden till närmaste heltal
