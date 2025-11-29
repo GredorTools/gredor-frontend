@@ -83,8 +83,8 @@ describe("go through finalize wizard", () => {
 
     // Öppna fil
     cy.get("#openArsredovisningBtn").click();
-    cy.get("input[type=file]").selectFile(
       "cypress/fixtures/input/TestfilA.gredorfardig",
+    cy.get('[data-testid="request-open-file-input"]').selectFile(
       { force: true },
     );
 
