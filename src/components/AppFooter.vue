@@ -7,153 +7,121 @@
 <template>
   <div class="aside-container">
     <hr aria-hidden="true" />
-    <aside id="documentation" aria-label="Om Gredor">
-      <div></div>
-      <div class="text-center">
-        <h2>Om Gredor</h2>
-      </div>
-      <div></div>
-      <div class="card">
-        <div class="card-header">
-          <strong>Vad är Gredor?</strong>
-        </div>
-        <div class="card-body">
-          <p>
-            Gredor är ett kostnadsfritt verktyg som du kan använda för att ta
-            fram årsredovisningar och skicka in dem till Bolagsverket. Verktyget
-            har stöd för alla delar i en vanlig K2-årsredovisning för aktiebolag
-            utan revisor.
-          </p>
-          <p>
-            Gredor är utvecklat av småföretagare för småföretagare. Vår vision
-            är att det ska vara enkelt och smidigt att driva ett litet bolag –
-            utan att man ska behöva lägga en massa pengar på programvara.
-          </p>
+    <aside id="documentation" aria-label="Om Gredor" class="row">
+      <div class="col-12">
+        <div class="text-center">
+          <h2>Om Gredor</h2>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <strong>Viktigt att tänka på när man använder Gredor</strong>
-        </div>
-        <div class="card-body">
-          <p>
-            Målgruppen för Gredor är främst företagare som är bekväma med att
-            ställa upp årsredovisningen själva. Har du exempelvis tidigare
-            skrivit din årsredovisning i Word och sedan postat den till
-            Bolagsverket, kan Gredor vara ett bra alternativ för dig.
-          </p>
-          <p>
-            Vi som arbetar med Gredor har begränsad möjlighet att ge support;
-            bland annat kan vi inte svara på frågor om vad din årsredovisning
-            borde innehålla. För frågor av sådana slag hänvisar vi till
-            <a
-              href="https://bolagsverket.se/foretag/aktiebolag/arsredovisningforaktiebolag.759.html#h-Innehallienarsredovisning"
-              >Bolagsverkets exempel</a
-            >
-            och
-            <a
-              href="https://www.bfn.se/informationsmaterial/vagledningar/#arsredovisningk2"
-              >Bokföringsnämndens vägledning</a
-            >, alternativt en redovisningskonsult.
-            <strong>Gredor tillhandahålls utan några garantier.</strong>
-          </p>
-          <p>
-            Gredor stöder endast regelverket för årsredovisning i mindre företag
-            (K2), för aktiebolag utan revisor.
-          </p>
+      <div class="card-container col-12 col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-header">
+            <strong>Vad är Gredor?</strong>
+          </div>
+          <div class="card-body">
+            <p>
+              Gredor är ett kostnadsfritt verktyg som du kan använda för att ta
+              fram årsredovisningar och skicka in dem till Bolagsverket.
+              Verktyget har stöd för alla delar i en vanlig K2-årsredovisning
+              för aktiebolag utan revisor.
+            </p>
+            <p>
+              Gredor är utvecklat av småföretagare för småföretagare. Vår vision
+              är att det ska vara enkelt och smidigt att driva ett litet bolag –
+              utan att man ska behöva lägga en massa pengar på programvara.
+            </p>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <strong>Sponsorer</strong>
-        </div>
-        <div class="card-body">
-          <p>
-            Gredor tillhandahålls och sponsras av potatiz (Potatron Tech AB).
-          </p>
-
-          <p>
-            potatiz erbjuder även Tågstationen, en webb- och mobilapplikation
-            som ger tågresenärer möjlighet att enkelt ta reda på spår,
-            förseningar och mer om sina tåg, var man än befinner sig. Låter det
-            intressant?
-            <a href="https://tågstationen.se" target="_blank">Besök hemsidan</a>
-            eller
-            <a href="https://potatiz.com/apps/tagstationen/open" target="_blank"
-              >ladda ner mobilappen</a
-            >.
-          </p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <strong>Källkod, licens och andra nördigheter</strong>
-        </div>
-        <div class="card-body">
-          <p>
-            Gredor är ett open-source-projekt. Programvaran distribueras under
-            AGPLv3-licens (med en tilläggsklausul för friare sammansättning med
-            annan programvara), och källkoden finns på
-            <a href="https://github.com/GredorTools" target="_blank">GitHub</a>.
-          </p>
-          <p>
-            Bidrag till projektet uppskattas stort! Dock är det viktigt att
-            tänka på att t.ex. nya funktioner och förändringar måste passa bra
-            med Gredor i övrigt. Om du vill bidra med något större, öppna gärna
-            en issue och/eller utkasts-PR i GitHub-repot för att få tidig
-            återkoppling på dina tänkta ändringar.
-          </p>
+      <div class="card-container col-12 col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-header">
+            <strong>Viktigt att tänka på när man använder Gredor</strong>
+          </div>
+          <div class="card-body">
+            <p>
+              Målgruppen för Gredor är främst företagare som är bekväma med att
+              ställa upp årsredovisningen själva. Har du exempelvis tidigare
+              skrivit din årsredovisning i Word och sedan postat den till
+              Bolagsverket, kan Gredor vara ett bra alternativ för dig.
+            </p>
+            <p>
+              Vi som arbetar med Gredor har begränsad möjlighet att ge support;
+              bland annat kan vi inte svara på frågor om vad din årsredovisning
+              borde innehålla. För frågor av sådana slag hänvisar vi till
+              <a
+                href="https://bolagsverket.se/foretag/aktiebolag/arsredovisningforaktiebolag.759.html#h-Innehallienarsredovisning"
+                >Bolagsverkets exempel</a
+              >
+              och
+              <a
+                href="https://www.bfn.se/informationsmaterial/vagledningar/#arsredovisningk2"
+                >Bokföringsnämndens vägledning</a
+              >, alternativt en redovisningskonsult.
+              <strong>Gredor tillhandahålls utan några garantier.</strong>
+            </p>
+            <p>
+              Gredor stöder endast regelverket för årsredovisning i mindre
+              företag (K2), för aktiebolag utan revisor.
+            </p>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <strong>Integritetspolicy</strong>
-        </div>
-        <div class="card-body">
-          <p>
-            Till skillnad från en del andra aktörer har Gredor inget intresse av
-            att kartlägga ditt liv; Gredor skickar aldrig någon personlig data
-            via internet utöver det som är nödvändigt för att tjänsten ska
-            fungera.
-          </p>
-          <p>
-            De uppgifter som skickas över internet är, utöver sådant som skickas
-            automatiskt för att kunna ansluta (t.ex. ip-adress), din
-            årsredovisning samt personuppgifter du skriver in. I samband med
-            BankID-identifiering lagras ditt personnummer på Gredors servrar i
-            en vecka för att förhindra spam, i övrigt sparas inget förutom enkla
-            anonymiserade loggar där. Däremot sparar Bolagsverket din
-            årsredovisning när du laddar upp den hos dem, annars hade tjänsten
-            varit någorlunda värdelös 😉
-          </p>
+      <div class="card-container col-12 col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-header">
+            <strong>Integritetspolicy</strong>
+          </div>
+          <div class="card-body">
+            <p>
+              Till skillnad från en del andra aktörer har Gredor inget intresse
+              av att kartlägga ditt liv; Gredor skickar aldrig någon personlig
+              data via internet utöver det som är nödvändigt för att tjänsten
+              ska fungera.
+            </p>
+            <p>
+              De uppgifter som skickas över internet är, utöver sådant som
+              skickas automatiskt för att kunna ansluta (t.ex. ip-adress), din
+              årsredovisning samt personuppgifter du skriver in. I samband med
+              BankID-identifiering lagras ditt personnummer på Gredors servrar i
+              en vecka för att förhindra spam, i övrigt sparas inget förutom
+              enkla anonymiserade loggar där. Däremot sparar Bolagsverket din
+              årsredovisning när du laddar upp den hos dem, annars hade tjänsten
+              varit någorlunda värdelös 😉
+            </p>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <strong>Kontakt</strong>
-        </div>
-        <div class="card-body">
-          <p>
-            <strong
-              >OBS: Vi är inte redovisningskonsulter och kan inte svara på
-              frågor om t.ex. vad din årsredovisning borde innehålla.</strong
-            >
-          </p>
-          <hr />
-          <p>
-            E-post: <a href="mailto:gredor@potatiz.com">gredor@potatiz.com</a>
-          </p>
-          <hr />
-          <p>
-            GitHub:
-            <a href="https://github.com/GredorTools" target="_blank"
-              >GredorTools</a
-            >
-          </p>
-          <hr />
-          <p>
-            Gredor tillhandahålls av Potatron Tech AB (559256-0287, Stockholm).
-          </p>
+      <div class="card-container col-12 col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-header">
+            <strong>Kontakt</strong>
+          </div>
+          <div class="card-body">
+            <p>
+              <strong
+                >OBS: Vi är inte redovisningskonsulter och kan inte svara på
+                frågor om t.ex. vad din årsredovisning borde innehålla.</strong
+              >
+            </p>
+            <hr />
+            <p>
+              E-post: <a href="mailto:gredor@potatiz.com">gredor@potatiz.com</a>
+            </p>
+            <hr />
+            <p>
+              GitHub:
+              <a href="https://github.com/GredorTools" target="_blank"
+                >GredorTools</a
+              >
+              (öppen källkod!)
+            </p>
+            <hr />
+            <p>
+              Gredor tillhandahålls av Potatron Tech AB (559256-0287,
+              Stockholm).
+            </p>
+          </div>
         </div>
       </div>
     </aside>
@@ -165,15 +133,24 @@
 
 .aside-container {
   background-color: $background-dark;
+  padding-bottom: $spacing-xl;
 }
 
 #documentation {
   margin: 0 auto;
-  font-weight: normal;
-  display: grid;
   max-width: $max-page-width;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: calc($spacing-xl * 2) calc($spacing-xl * 3);
-  gap: $spacing-xl;
+
+  h2 {
+    margin-top: $spacing-xxl + $spacing-sm;
+    margin-bottom: $spacing-xl;
+  }
+
+  .card-container {
+    padding: $spacing-md;
+
+    .card {
+      height: 100%;
+    }
+  }
 }
 </style>
