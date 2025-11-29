@@ -55,12 +55,18 @@ async function handleSieFile(file: File) {
     arsredovisning.value.foretagsinformation.organisationsnummer =
       organisationsnummer;
 
+    const messages: string[] = [];
+
     const sieFileText = await file.text();
     await mapSieFileIntoArsredovisning(
       sieFileText,
       arsredovisning.value,
-      (message) => showMessageModal(message, "SIE-import"),
+      (message) => messages.push(message),
     );
+
+    if (messages.length > 0) {
+      showMessageModal(messages.join("\n"), "SIE-import");
+    }
   } finally {
     busy.value = false;
   }
