@@ -2,10 +2,14 @@
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
-import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 import RenderBeloppradCell from "@/components/render/blocks/belopprad/cell/RenderBeloppradCell.vue";
 import { computed } from "vue";
+import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import {
+  hasBeloppradStringValue,
+  isBeloppradString,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -24,6 +28,24 @@ const props = defineProps<{
 const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
 });
+
+const taxonomyItemsWithValues = computed(
+  () =>
+    new Set(
+      props.belopprad.instanser
+        .flatMap((instans) => instans.belopprader)
+        .filter((belopprad) => {
+          if (isBeloppradComparable(belopprad)) {
+            return !!belopprad.beloppNuvarandeAr;
+          } else if (isBeloppradString(belopprad)) {
+            return hasBeloppradStringValue(belopprad);
+          } else {
+            return true;
+          }
+        })
+        .map((belopprad) => belopprad.taxonomyItemName),
+    ),
+);
 </script>
 
 <template>
@@ -45,10 +67,16 @@ const taxonomyItem = computed(() => {
               :key="instansBelopprad.taxonomyItemName"
               scope="col"
             >
-              {{
-                getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
-                  .additionalData.displayLabel
-              }}
+              <template
+                v-if="
+                  taxonomyItemsWithValues.has(instansBelopprad.taxonomyItemName)
+                "
+              >
+                {{
+                  getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
+                    .additionalData.displayLabel
+                }}
+              </template>
             </th>
           </tr>
         </thead>
