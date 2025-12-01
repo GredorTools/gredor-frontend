@@ -13,7 +13,7 @@ import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import CommonValidateReport from "@/components/tools/finish/common/steps/CommonValidateReport.vue";
 import CommonBolagsverketAgreement from "@/components/tools/finish/common/steps/CommonBolagsverketAgreement.vue";
 import FinalizeRequestInformation from "@/components/tools/finish/finalize/steps/FinalizeRequestInformation.vue";
-import FinalizeDownloadFiles from "@/components/tools/finish/finalize/steps/FinalizeDownloadFiles.vue";
+import FinalizeDownloadReport from "@/components/tools/finish/finalize/steps/FinalizeDownloadReport.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
@@ -22,6 +22,8 @@ import {
   type WrappedType,
 } from "@/components/common/composables/useGredorStorage.ts";
 import FinalizeReminder from "@/components/tools/finish/finalize/steps/FinalizeReminder.vue";
+import FinalizeDownloadGredor from "@/components/tools/finish/finalize/steps/FinalizeDownloadGredor.vue";
+import FinalizeFinish from "@/components/tools/finish/finalize/steps/FinalizeFinish.vue";
 
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
@@ -45,7 +47,10 @@ const callBolagsverket = useGredorStorage<WrappedType<boolean | null>>(
 );
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
 const ixbrl = ref<string | undefined>();
-const numSteps = computed(() => (callBolagsverket.value.wrappedValue ? 6 : 3));
+const hasDownloadedGredorfardig = ref<boolean>(false);
+const hasDownloadedPdf = ref<boolean>(false);
+
+const numSteps = computed(() => (callBolagsverket.value.wrappedValue ? 8 : 5));
 
 const currentStep = ref<
   | "reminder"
@@ -53,7 +58,9 @@ const currentStep = ref<
   | "bankIdLogin"
   | "bolagsverketAgreement"
   | "validateReport"
-  | "downloadFiles"
+  | "downloadGredor"
+  | "downloadReport"
+  | "finish"
 >("reminder");
 </script>
 
@@ -85,7 +92,7 @@ const currentStep = ref<
       @go-to-next-step="
         currentStep = callBolagsverket.wrappedValue
           ? 'bankIdLogin'
-          : 'downloadFiles'
+          : 'downloadGredor'
       "
     />
     <CommonBankIdLogin
@@ -120,13 +127,13 @@ const currentStep = ref<
       class="limit-width"
       discard-faststallelseintyg-validations
       @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
-      @go-to-next-step="currentStep = 'downloadFiles'"
+      @go-to-next-step="currentStep = 'downloadGredor'"
     />
-    <FinalizeDownloadFiles
-      v-if="currentStep === 'downloadFiles' && ixbrl != null"
+    <FinalizeDownloadGredor
+      v-if="currentStep === 'downloadGredor'"
+      v-model:has-downloaded-gredorfardig="hasDownloadedGredorfardig"
       :arsredovisning="arsredovisning"
       :current-step-number="callBolagsverket.wrappedValue ? 6 : 3"
-      :ixbrl="ixbrl"
       :num-steps="numSteps"
       class="limit-width"
       @go-to-previous-step="
@@ -134,6 +141,26 @@ const currentStep = ref<
           ? 'validateReport'
           : 'requestInformation'
       "
+      @go-to-next-step="currentStep = 'downloadReport'"
+    />
+    <FinalizeDownloadReport
+      v-if="currentStep === 'downloadReport' && ixbrl != null"
+      v-model:has-downloaded-pdf="hasDownloadedPdf"
+      :current-step-number="callBolagsverket.wrappedValue ? 7 : 4"
+      :ixbrl="ixbrl"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'downloadGredor'"
+      @go-to-next-step="currentStep = 'finish'"
+    />
+    <FinalizeFinish
+      v-if="currentStep === 'finish'"
+      :arsredovisning="arsredovisning"
+      :current-step-number="callBolagsverket.wrappedValue ? 8 : 5"
+      :ixbrl="ixbrl"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'downloadReport'"
       @go-to-next-step="modal?.hide()"
     />
   </CommonModal>

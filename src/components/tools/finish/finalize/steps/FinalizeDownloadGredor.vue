@@ -5,7 +5,7 @@
  *
  * Komponenten ger användaren möjlighet att ladda ner en JSON-fil med
  * årsredovisningsdata, som kommer att behövas efter årsstämman, när
- * årsredovisningen skickas in till Bolagsverket
+ * årsredovisningen skickas in till Bolagsverket.
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
@@ -15,23 +15,24 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
-import { ref } from "vue";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 
 const props = defineProps<
   CommonStepProps & {
     /** Årsredovisningen som ska skickas in till Bolagsverket. */
     arsredovisning: Arsredovisning;
-
-    /** Årsredovisningen i iXBRL-format. */
-    ixbrl: string;
   }
 >();
 
-const emit = defineEmits<CommonWizardButtonsEmits>();
+/** Huruvida användaren har laddat ned .gredorfardig-filen. */
+const hasDownloadedGredorfardig = defineModel<boolean>(
+  "hasDownloadedGredorfardig",
+  {
+    required: true,
+  },
+);
 
-const hasDownloadedGredorfardig = ref<boolean>(false);
-const hasDownloadedPdf = ref<boolean>(false);
+const emit = defineEmits<CommonWizardButtonsEmits>();
 
 function exportGredorfardig() {
   const dataContainer: DataContainer<Arsredovisning> = {
@@ -48,41 +49,12 @@ function exportGredorfardig() {
 
   hasDownloadedGredorfardig.value = true;
 }
-
-async function exportUnsignedPdf() {
-  if (!props.ixbrl) {
-    return;
-  }
-
-  const printWindow = window.open("", "", "popup,width=800,height=800");
-  if (!printWindow) {
-    return;
-  }
-
-  /* eslint-disable no-useless-escape */
-  const htmlToWrite = `${props.ixbrl}
-  <script type="text/javascript">
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => {
-        window.close();
-      }, 250);
-    }, 250);
-  <\/script>
-  `;
-  /* eslint-enable no-useless-escape */
-
-  printWindow.document.open();
-  printWindow.document.write(htmlToWrite);
-
-  hasDownloadedPdf.value = true;
-}
 </script>
 
 <template>
   <div>
     <CommonModalSubtitle>
-      Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda ner filer
+      Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda ner .gredorfardig-fil
     </CommonModalSubtitle>
 
     <div class="file-zone">
@@ -98,36 +70,9 @@ async function exportUnsignedPdf() {
       </p>
     </div>
 
-    <div class="file-zone">
-      <div class="download-zone">
-        <button class="btn btn-primary" @click="exportUnsignedPdf">
-          Skriv ut årsredovisningen
-        </button>
-      </div>
-
-      <p>
-        Efter att du har skrivit ut årsredovisningen är det
-        <strong>mycket viktigt</strong> att du signerar den. Gredors
-        rekommendation är att skriva ut årsredovisningen till en PDF-fil och
-        sedan använda gratistjänten
-        <a href="https://elektronisksignering.se/" target="_blank"
-          >elektronisksignering.se</a
-        >
-        för att signera den digitalt (men du kan också skriva ut den på papper
-        och signera för hand).
-      </p>
-    </div>
-
-    <p class="pb-4">
-      När du har gjort ovanstående är ditt företag redo för årsstämma! Efter
-      årsstämman kan du använda Gredor-funktionen "Ladda upp till Bolagsverket
-      efter årsstämma" för att gå vidare med inlämningen.
-    </p>
-
     <CommonWizardButtons
-      :next-button-disabled="!hasDownloadedGredorfardig || !hasDownloadedPdf"
+      :next-button-disabled="!hasDownloadedGredorfardig"
       :previous-button-hidden="currentStepNumber === 1"
-      next-button-text="Klar"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />

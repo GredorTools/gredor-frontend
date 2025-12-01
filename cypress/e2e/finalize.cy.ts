@@ -144,10 +144,17 @@ describe("go through finalize wizard", () => {
     cy.get("div.alert").should("have.text", "Varning: Mock-varning");
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 6 - Klar
+    // Steg 6 - Ladda ner .gredorfardig
     cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
     cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
-    cy.get("div:nth-child(3) div.download-zone button.btn").click();
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 7 - Skriv ut PDF
+    cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
+    cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 8 - Klar
     cy.get('[data-testid="wizard-next-button"]').click();
   });
 
@@ -213,10 +220,17 @@ describe("go through finalize wizard", () => {
     cy.get("#callBolagsverketRadioNo").check();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 3 - Klar
+    // Steg 3 - Ladda ner .gredorfardig
     cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
     cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
-    cy.get("div:nth-child(3) div.download-zone button.btn").click();
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 4 - Skriv ut PDF
+    cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
+    cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 5 - Klar
     cy.get('[data-testid="wizard-next-button"]').click();
   });
 });
