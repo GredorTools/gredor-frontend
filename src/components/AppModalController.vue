@@ -4,12 +4,14 @@
  * översta i kön från en store och visar innehåll med en OK‑knapp.
  */
 
-import { computed, useTemplateRef } from "vue";
+import { computed, useTemplateRef, ref, watch } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import linkifyStr from "linkify-string";
+
+const closeButtonDisabled = ref(true);
 
 const { modalDefinitions, popTopModalDefinition } = useModalStore();
 
@@ -25,6 +27,24 @@ function nextModal() {
   modal.value?.hide();
   setTimeout(popTopModalDefinition, 500);
 }
+
+// Stängknappen ska vara inaktiverad en kort stund efter att modalen visas, för
+// att förhindra buggar och oavsiktlig stängning av modalen.
+let closeButtonEnableTimeout: number | undefined;
+
+watch(topModalDefinition, (newValue) => {
+  if (newValue) {
+    closeButtonDisabled.value = true;
+
+    if (closeButtonEnableTimeout != null) {
+      clearTimeout(closeButtonEnableTimeout);
+    }
+
+    closeButtonEnableTimeout = setTimeout(() => {
+      closeButtonDisabled.value = false;
+    }, 500);
+  }
+});
 </script>
 
 <template>
@@ -49,6 +69,7 @@ function nextModal() {
     </div>
 
     <CommonWizardButtons
+      :next-button-disabled="closeButtonDisabled"
       next-button-text="OK"
       previous-button-hidden
       @go-to-next-step="nextModal"
