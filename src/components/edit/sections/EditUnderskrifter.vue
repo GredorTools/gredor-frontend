@@ -30,11 +30,13 @@ function removeUnderskrift(index: number) {
 <template>
   <div class="alert alert-primary d-flex gap-2" role="alert">
     <i class="bi bi-info-circle-fill"></i>
-    Efter att du har färdigställt årsredovisningen kommer du behöva signera den,
-    antingen digitalt eller på papper. Signeringen måste göras de datumen som du
-    har fyllt i nedan, och även fältet "Datum då årsredovisningen var färdig för
-    undertecknande" måste stämma överens med verkligheten. Därför är det ofta
-    bäst att fylla i detta avsnitt allra sist.
+    <span>
+      Efter att du har färdigställt årsredovisningen kommer du behöva signera
+      den, antingen digitalt eller på papper. Signeringen måste göras de datumen
+      som du har fyllt i nedan, och även fältet "Datum då årsredovisningen var
+      färdig för undertecknande" måste stämma överens med verkligheten. Därför
+      är det ofta bäst att fylla i detta avsnitt allra sist.
+    </span>
   </div>
 
   <hr class="mt-4 mb-4" />
@@ -75,6 +77,14 @@ function removeUnderskrift(index: number) {
       title="Underskrifter"
     >
       <div class="row p-2">
+        <div class="alert alert-primary d-flex gap-2" role="alert">
+          <i class="bi bi-info-circle-fill"></i>
+          <span>
+            Namnen <strong>måste</strong> stämma överens med vad som är
+            registrerat hos Bolagsverket.
+          </span>
+        </div>
+
         <div
           v-for="(underskrift, index) in arsredovisning.redovisningsinformation
             .underskrifter"
