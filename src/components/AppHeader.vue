@@ -234,6 +234,7 @@ header {
 
     img {
       height: 52px;
+      aspect-ratio: 200 / 58;
     }
 
     .environment {
