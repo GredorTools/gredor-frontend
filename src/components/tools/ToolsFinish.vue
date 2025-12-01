@@ -20,6 +20,7 @@ const props = defineProps<{
 
 const finalizeWizardRenderId = ref<number>(0);
 const finalizeWizard = ref<ComponentExposed<typeof FinalizeWizard>>();
+const sendWizardRenderId = ref<number>(0);
 const sendWizard = ref<ComponentExposed<typeof SendWizard>>();
 
 async function getIXBRL(): Promise<string | undefined> {
@@ -49,8 +50,10 @@ async function showFinalizeWizard() {
   finalizeWizard.value?.show(); // Nu kan vi visa modalen
 }
 
-function showSendWizard() {
-  sendWizard.value?.show();
+async function showSendWizard() {
+  sendWizardRenderId.value++; // Så att komponenten nollställs
+  await nextTick(); // Vänta tills den har uppdaterats
+  sendWizard.value?.show(); // Nu kan vi visa modalen
 }
 </script>
 
