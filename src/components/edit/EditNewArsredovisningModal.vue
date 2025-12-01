@@ -130,7 +130,15 @@ async function fetchRecords() {
       slutdatum: r.tom || "",
     }));
 
-  // TODO: Om krav på revisionsberättelse, visa meddelande
+  if (data.rakenskapsperioder[0].kravPaRevisionsberattelse === "ja") {
+    showMessageModal(
+      "Bolaget har krav på revisionsberättelse det senaste" +
+        " räkenskapsåret. Observera att Gredor ej har stöd för " +
+        "revisionsberättelser; du kommer ändå kunna skapa en årsredovsining i" +
+        " Gredor, men du kommer inte kunna ladda upp den till Bolagsverket.",
+      "OBS!",
+    );
+  }
 }
 
 const orgnrRegex = /^\d{6}-?\d{4}$/;
