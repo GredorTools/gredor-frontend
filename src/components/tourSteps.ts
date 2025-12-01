@@ -38,9 +38,9 @@ export const tourSteps: OnboardingTourStep[] = [
     beforeScript: scrollToTopOfEditor,
     description:
       "<p>" +
-      "Första gången du öppnar Gredor visas en exempel-årsredovisning. När du" +
-      " är redo att börja på din egna årsredovisning bör du klicka på knappen" +
-      ' "Ny årsredovisning" för att göra det.' +
+      "Om du valde att få upp en exempel-årsredovisning när du öppnade Gredor" +
+      " behöver du ju eventuellt börja på din egna. När du är redo för" +
+      ' det bör du klicka på knappen "Ny årsredovisning" för att göra det.' +
       "</p>" +
       "<p>" +
       "Gredor kommer då automatiskt hämta vissa uppgifter från Bolagsverket," +
