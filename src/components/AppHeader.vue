@@ -20,6 +20,7 @@ import { Tooltip } from "bootstrap";
 import type VueOnboardingTour from "vue-onboarding-tour";
 import { tourSteps } from "@/components/tourSteps.ts";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import { formatDateForFilename } from "@/util/formatUtils.ts";
 
 /** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -127,7 +128,7 @@ function exportFile() {
   const filename =
     getConfigValue("VITE_IS_CYPRESS") == "true"
       ? "Arsredovisning.gredorutkast" // För enklare testning
-      : `Arsredovisning_${new Date().getTime()}.gredorutkast`;
+      : `Arsredovisning_${formatDateForFilename(new Date())}.gredorutkast`;
 
   requestSaveFile(JSON.stringify(dataContainer), filename, "application/json");
 }

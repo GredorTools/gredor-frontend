@@ -95,3 +95,12 @@ export function formatEnumValueDisplayLabel(
 ): string | undefined {
   return taxonomyItem.additionalData.displayLabel?.replace(/ \(Värde\)$/g, "");
 }
+
+/**
+ * Formaterar ett datum till en filnamnskompatibel sträng med svensk formatering.
+ *
+ * @param date - Datumet som ska formateras till filnamnsformat
+ */
+export function formatDateForFilename(date: Date): string {
+  return date.toLocaleString("sv-SE").replace(/ /g, "_").replace(/:/g, "-");
+}

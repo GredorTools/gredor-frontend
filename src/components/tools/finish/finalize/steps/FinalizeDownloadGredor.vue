@@ -16,6 +16,7 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import type { DataContainer } from "@/model/DataContainer.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import { formatDateForFilename } from "@/util/formatUtils.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -43,7 +44,7 @@ function exportGredorfardig() {
 
   requestSaveFile(
     JSON.stringify(dataContainer),
-    `Arsredovisning_${new Date().getTime()}.gredorfardig`,
+    `Arsredovisning_${formatDateForFilename(new Date())}.gredorfardig`,
     "application/json",
   );
 
