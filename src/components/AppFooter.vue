@@ -22,8 +22,12 @@
             <p>
               Gredor är ett kostnadsfritt verktyg som du kan använda för att ta
               fram årsredovisningar och skicka in dem till Bolagsverket.
+            </p>
+            <p>
               Verktyget har stöd för alla delar i en vanlig K2-årsredovisning
-              för aktiebolag utan revisor.
+              för aktiebolag utan revisor, och du kan dessutom enkelt komma
+              igång genom att importera en SIE-fil från ditt bokföringssystem om
+              du vill.
             </p>
             <p>
               Gredor är utvecklat av småföretagare för småföretagare. Vår vision
