@@ -14,7 +14,9 @@ import type { components, paths } from "@/openapi/gredor-backend-v1";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import createClient from "openapi-fetch";
 import { getConfigValue } from "@/util/configUtils.ts";
-import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, {
+  type CommonWizardButtonsEmits,
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
@@ -120,7 +122,7 @@ onMounted(() => {
         class="alert"
         role="alert"
       >
-        <strong v-if="utfall.typ === 'error'">Valideringsfel:</strong>
+        <strong v-if="utfall.typ === 'error'">Fel:</strong>
         <strong v-if="utfall.typ === 'warn'">Varning:</strong>
         <strong v-if="utfall.typ === 'info'">Information:</strong>
         {{ utfall.text }}
@@ -130,17 +132,13 @@ onMounted(() => {
         <h5>Hur man tolkar kontrollresultatet</h5>
         <ul>
           <li>
-            <em>Valideringsfel</em>{{ " " }}
-            <span class="text-decoration-underline">måste</span> åtgärdas innan
-            du laddar upp årsredovisningen
+            <strong>Fel</strong> och <strong>varningar</strong>{{ " " }}
+            bör om möjligt åtgärdas innan du fortsätter, för att minimera risken
+            för att du får ett föreläggande från Bolagsverket
           </li>
           <li>
-            <em>Varningar</em>{{ " " }}
-            <span class="text-decoration-underline">bör</span> åtgärdas innan du
-            laddar upp årsredovisningen, för att minimera risken för att du får
-            ett föreläggande från Bolagsverket
+            <strong>Informationsmeddelanden</strong> är endast för upplysning
           </li>
-          <li><em>Informationsmeddelanden</em> är endast för upplysning</li>
         </ul>
       </template>
       <template v-else>
@@ -149,9 +147,7 @@ onMounted(() => {
     </div>
 
     <CommonWizardButtons
-      :next-button-disabled="
-        result == null || result.utfall?.some((item) => item.typ === 'error')
-      "
+      :next-button-disabled="result == null"
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
