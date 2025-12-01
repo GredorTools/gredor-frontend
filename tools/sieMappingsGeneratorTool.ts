@@ -9,10 +9,7 @@ import fs from "fs";
 import { getTaxonomyManager } from "../src/util/TaxonomyManager";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import {
-  TaxonomyItem,
-  TaxonomyRootName,
-} from "../src/model/taxonomy/TaxonomyItem";
+import { TaxonomyRootName } from "../src/model/taxonomy/TaxonomyItem";
 import { SieMapping } from "../src/util/sieUtils";
 import { extraSieMappings } from "../src/data/taxonomy/k2/2021-10-31/extraSieMappings";
 import { TaxonomyItemId } from "../src/data/taxonomy/k2/2021-10-31/taxonomyItemIds";

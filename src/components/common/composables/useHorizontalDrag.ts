@@ -1,4 +1,4 @@
-import { ref, onBeforeUnmount, type Ref, onMounted, watch } from "vue";
+import { ref, type Ref, onMounted, watch } from "vue";
 import { useElementSize } from "@vueuse/core";
 
 /**
@@ -93,7 +93,6 @@ export function useHorizontalDrag(
     document.addEventListener("mouseup", onMouseUp);
   }
 
-  // Init
   onMounted(() => {
     defaultElement2Width.value = element2Ref.value?.clientWidth ?? 0;
     if (element1Ref.value) {
@@ -112,12 +111,6 @@ export function useHorizontalDrag(
         }
       });
     }
-  });
-
-  // Cleanup
-  onBeforeUnmount(() => {
-    document.removeEventListener("mousemove", () => {});
-    document.removeEventListener("mouseup", () => {});
   });
 
   return {
