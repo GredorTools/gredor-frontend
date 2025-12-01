@@ -83,7 +83,7 @@ describe("validate generated XBRL data", () => {
 
         // Steg 1 - Ladda upp fil
         cy.get(".drop-zone").selectFile(
-          `cypress/fixtures/input/${testFileName}.gredorfardig`,
+          `cypress/fixtures/input/gredor/${testFileName}.gredorfardig`,
           { action: "drag-drop" },
         );
         cy.get('[data-testid="wizard-next-button"]').click();
@@ -152,7 +152,7 @@ describe("validate generated XBRL data", () => {
           const actualXbrl = convertIxbrlToXbrl(actualIxbrl);
 
           cy.readFile(
-            `cypress/fixtures/expectedoutput/${testFileName}.xml`,
+            `cypress/fixtures/expectedoutput/gredor/${testFileName}.xml`,
           ).then((expectedXbrl: string) => {
             const parser = new XMLParser({
               ignoreAttributes: false,

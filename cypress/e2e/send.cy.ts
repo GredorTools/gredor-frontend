@@ -100,7 +100,7 @@ describe("go through send wizard", () => {
 
     // Steg 1 - Ladda upp fil
     cy.get(".drop-zone").selectFile(
-      `cypress/fixtures/input/TestfilC.gredorfardig`,
+      `cypress/fixtures/input/gredor/TestfilC.gredorfardig`,
       { action: "drag-drop" },
     );
     cy.get('[data-testid="wizard-next-button"]').click();

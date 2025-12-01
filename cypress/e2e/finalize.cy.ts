@@ -84,7 +84,7 @@ describe("go through finalize wizard", () => {
     // Öppna fil
     cy.get("#openArsredovisningBtn").click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
-      "cypress/fixtures/input/TestfilA.gredorfardig",
+      "cypress/fixtures/input/gredor/TestfilA.gredorfardig",
       { force: true },
     );
     cy.wait(1000); // Behövs för att filen ska hinna laddas in
@@ -163,7 +163,7 @@ describe("go through finalize wizard", () => {
     // Öppna fil
     cy.get("#openArsredovisningBtn").click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
-      "cypress/fixtures/input/TestfilB.gredorfardig",
+      "cypress/fixtures/input/gredor/TestfilB.gredorfardig",
       { force: true },
     );
     cy.wait(1000); // Behövs för att filen ska hinna laddas in

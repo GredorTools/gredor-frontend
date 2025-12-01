@@ -45,7 +45,7 @@ describe("first launch screen", () => {
       '[data-testid="first-launch-screen-open-arsredovisning-button"]',
     ).click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
-      "cypress/fixtures/input/TestfilB.gredorfardig",
+      "cypress/fixtures/input/gredor/TestfilB.gredorfardig",
       { force: true },
     );
   });

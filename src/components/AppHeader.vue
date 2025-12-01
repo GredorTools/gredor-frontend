@@ -124,11 +124,12 @@ function exportFile() {
     data: arsredovisning.value,
   };
 
-  requestSaveFile(
-    JSON.stringify(dataContainer),
-    `Arsredovisning_${new Date().getTime()}.gredorutkast`,
-    "application/json",
-  );
+  const filename =
+    getConfigValue("VITE_IS_CYPRESS") == "true"
+      ? "Arsredovisning.gredorutkast" // För enklare testning
+      : `Arsredovisning_${new Date().getTime()}.gredorutkast`;
+
+  requestSaveFile(JSON.stringify(dataContainer), filename, "application/json");
 }
 
 async function importSIEForTest() {
