@@ -87,14 +87,14 @@ export const exampleArsredovisning: Arsredovisning = {
       taxonomyItemName: "se-gen-base:Nettoomsattning",
       parentTaxonomyItemName: "se-gen-base:Flerarsoversikt",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "5000",
+      beloppNuvarandeAr: "15000",
       beloppTidigareAr: ["3000", "1250", "2500"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItemName: "se-gen-base:ResultatEfterFinansiellaPoster",
       parentTaxonomyItemName: "se-gen-base:Flerarsoversikt",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "3750",
+      beloppNuvarandeAr: "10750",
       beloppTidigareAr: ["-1000", "500", "600"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -224,7 +224,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:ForandringEgetKapitalIngaendeAretsResultatAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "2978",
+      beloppNuvarandeAr: "8742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -233,7 +233,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "2978",
+      beloppNuvarandeAr: "8742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -273,7 +273,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:ForandringEgetKapitalIngaendeTotaltAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "2978",
+      beloppNuvarandeAr: "8742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -281,7 +281,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "periodEndLabel",
       parentTaxonomyItemName: "se-gen-base:ForandringEgetKapitalTotaltAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "38978",
+      beloppNuvarandeAr: "44742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -307,7 +307,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "terseLabel",
       parentTaxonomyItemName: "se-gen-base:MedelDisponeraAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "2978",
+      beloppNuvarandeAr: "8742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -315,7 +315,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "terseLabel",
       parentTaxonomyItemName: "se-gen-base:Resultatdisposition",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "13978",
+      beloppNuvarandeAr: "19742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -329,7 +329,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "terseLabel",
       parentTaxonomyItemName: "se-gen-base:ForslagDispositionAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "13978",
+      beloppNuvarandeAr: "19742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -337,7 +337,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:Resultatdisposition",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "13978",
+      beloppNuvarandeAr: "19742",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
   ],
@@ -361,7 +361,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:RorelsensIntakterLagerforandringarMmAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "5000",
+      beloppNuvarandeAr: "15000",
       beloppTidigareAr: ["3000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -369,7 +369,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:RorelseresultatAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "5000",
+      beloppNuvarandeAr: "15000",
       beloppTidigareAr: ["3000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -406,15 +406,38 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "3750",
+      beloppNuvarandeAr: "13750",
       beloppTidigareAr: ["-1000"],
+    } as Belopprad<"xbrli:monetaryItemType">,
+    {
+      labelType: "terseLabel",
+      parentTaxonomyItemName:
+        "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+      taxonomyItemName: "se-gen-base:FinansiellaPosterAbstract",
+      type: "xbrli:stringItemType",
+    },
+    {
+      beloppNuvarandeAr: "3000",
+      beloppTidigareAr: [""],
+      parentTaxonomyItemName: "se-gen-base:FinansiellaPosterAbstract",
+      taxonomyItemName: "se-gen-base:RantekostnaderLiknandeResultatposter",
+      type: "xbrli:monetaryItemType",
+    } as Belopprad<"xbrli:monetaryItemType">,
+    {
+      beloppNuvarandeAr: "-3000",
+      beloppTidigareAr: ["0"],
+      labelType: "totalLabel",
+      parentTaxonomyItemName:
+        "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+      taxonomyItemName: "se-gen-base:FinansiellaPoster",
+      type: "xbrli:monetaryItemType",
     } as Belopprad<"xbrli:monetaryItemType">,
     {
       taxonomyItemName: "se-gen-base:ResultatEfterFinansiellaPoster",
       parentTaxonomyItemName:
         "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "3750",
+      beloppNuvarandeAr: "10750",
       beloppTidigareAr: ["-1000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -422,7 +445,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "3750",
+      beloppNuvarandeAr: "10750",
       beloppTidigareAr: ["-1000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -437,7 +460,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "terseLabel",
       parentTaxonomyItemName: "se-gen-base:SkatterAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "772",
+      beloppNuvarandeAr: "2008",
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -446,7 +469,7 @@ export const exampleArsredovisning: Arsredovisning = {
       parentTaxonomyItemName:
         "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "2978",
+      beloppNuvarandeAr: "8742",
       beloppTidigareAr: ["-1000"],
     } as Belopprad<"xbrli:monetaryItemType">,
   ],
@@ -474,7 +497,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "terseLabel",
       parentTaxonomyItemName: "se-gen-base:KassaBankAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "39278",
+      beloppNuvarandeAr: "45492",
       beloppTidigareAr: ["36500"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -482,7 +505,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:OmsattningstillgangarAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "39278",
+      beloppNuvarandeAr: "45492",
       beloppTidigareAr: ["36500"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -490,7 +513,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:TillgangarAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "39278",
+      beloppNuvarandeAr: "45492",
       beloppTidigareAr: ["36500"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -498,7 +521,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:BalansrakningAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "39278",
+      beloppNuvarandeAr: "45492",
       beloppTidigareAr: ["36500"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -552,7 +575,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "terseLabel",
       parentTaxonomyItemName: "se-gen-base:FrittEgetKapitalAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "2978",
+      beloppNuvarandeAr: "8742",
       beloppTidigareAr: ["-1000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -560,7 +583,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:EgetKapitalAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "13978",
+      beloppNuvarandeAr: "19742",
       beloppTidigareAr: ["11000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -568,7 +591,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:EgetKapitalSkulderAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "38978",
+      beloppNuvarandeAr: "44742",
       beloppTidigareAr: ["36000"],
     } as Belopprad<"xbrli:monetaryItemType">,
     {
@@ -598,7 +621,7 @@ export const exampleArsredovisning: Arsredovisning = {
       labelType: "totalLabel",
       parentTaxonomyItemName: "se-gen-base:BalansrakningAbstract",
       type: "xbrli:monetaryItemType",
-      beloppNuvarandeAr: "39728",
+      beloppNuvarandeAr: "45492",
       beloppTidigareAr: ["36500"],
     } as Belopprad<"xbrli:monetaryItemType">,
   ],
