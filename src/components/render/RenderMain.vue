@@ -20,6 +20,9 @@ defineProps<{
 
   /** Huruvida fastställelseintyget ska visas. **/
   showFaststallelseintyg: boolean;
+
+  /** Huruvida innehållet ska döljas (en blank sida visas då). */
+  hideContent?: boolean;
 }>();
 
 const arsredovisningRoot = useTemplateRef("arsredovisning-root");
@@ -41,7 +44,7 @@ defineExpose({
     ref="arsredovisning-root"
     class="arsredovisning-root"
   >
-    <Suspense>
+    <Suspense v-if="!hideContent">
       <div>
         <RenderIXBRLHeader :arsredovisning="arsredovisning" />
         <div ref="arsredovisning-content" class="arsredovisning-content">
@@ -60,6 +63,8 @@ defineExpose({
           <RenderUnderskrifter :arsredovisning="arsredovisning" />
         </div>
       </div>
+
+      <template #fallback>Laddar årsredovisning…</template>
     </Suspense>
   </div>
 </template>

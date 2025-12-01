@@ -6,7 +6,10 @@
 import RenderMain from "@/components/render/RenderMain.vue";
 import EditMain from "@/components/edit/EditMain.vue";
 import ToolsFinish from "@/components/tools/ToolsFinish.vue";
-import { useGredorHighPerformanceStorage } from "@/components/common/composables/useGredorStorage.ts";
+import {
+  useGredorHighPerformanceStorage,
+  useGredorStorage,
+} from "@/components/common/composables/useGredorStorage.ts";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
@@ -21,6 +24,11 @@ const {
 } = useGredorHighPerformanceStorage(
   "AppAutosaveArsredovisning",
   emptyArsredovisning,
+);
+
+const showFirstLaunchScreen = useGredorStorage(
+  "AppShowFirstLaunchScreen",
+  true,
 );
 
 const mainRef = useTemplateRef("main");
@@ -62,6 +70,7 @@ onBeforeUnmount(() => {
       <div id="renderer" ref="renderer" aria-label="Förhandsgranskningsvy">
         <RenderMain
           :arsredovisning="arsredovisning"
+          :hide-content="showFirstLaunchScreen"
           :show-faststallelseintyg="false"
         />
       </div>
