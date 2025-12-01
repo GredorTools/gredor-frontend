@@ -137,12 +137,12 @@
 
 .aside-container {
   background-color: $background-dark;
-  padding: 0 $spacing-md $spacing-xxl;
 }
 
 #documentation {
-  margin: 0 auto;
   max-width: $max-page-width;
+  margin: 0 auto;
+  padding: 0 $spacing-md $spacing-xxl;
 
   h2 {
     margin-top: $spacing-xxl + $spacing-sm;
