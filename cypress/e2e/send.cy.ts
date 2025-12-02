@@ -135,7 +135,7 @@ describe("go through send wizard", () => {
     );
 
     // Steg 6 - förhandsgranskning (vi går fram och tillbaka till steg 7 också bara för att testa det)
-    cy.get('[data-testid="wizard-next-button"]').click();
+    cy.get('[data-testid="wizard-next-button"]').click({ timeout: 15000 }); // Kan ta en stund att generera iXBRL
     cy.get('[data-testid="wizard-next-button"]').click();
     cy.get('[data-testid="wizard-previous-button"]').click();
     cy.get('[data-testid="wizard-next-button"]').click();

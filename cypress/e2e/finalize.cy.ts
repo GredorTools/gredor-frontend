@@ -128,7 +128,7 @@ describe("go through finalize wizard", () => {
     cy.get("#callBolagsverketRadioYes").check();
     cy.get('input[maxlength="12"]').click();
     cy.get('input[maxlength="12"]').type("191212121212");
-    cy.get('[data-testid="wizard-next-button"]').click();
+    cy.get('[data-testid="wizard-next-button"]').click({ timeout: 15000 }); // Kan ta en stund att generera iXBRL
 
     // Steg 3 - BankID
     cy.get("div.justify-content-center button.btn").click();
