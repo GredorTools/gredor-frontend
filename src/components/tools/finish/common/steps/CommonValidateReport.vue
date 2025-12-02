@@ -131,10 +131,20 @@ onMounted(() => {
       <template v-if="(result.utfall?.length ?? 0) > 0">
         <h5>Hur man tolkar kontrollresultatet</h5>
         <ul>
+          <li v-if="result.utfall?.some((utfall) => utfall.typ === 'error')">
+            <!-- Vi borde aldrig få typ "error" i utfallen eftersom det bara ska
+                 vara tekniska fel och de bör fångas upp på annat sätt, men
+                 ifall det skulle dyka upp av någon anledning har vi ett färdigt
+                 meddelande för det. -->
+            <strong>Fel</strong>
+            <span class="text-decoration-underline">måste</span> åtgärdas innan
+            du fortsätter; vid tekniska fel, mejla
+            <a href="mailto:gredor@potatiz.com">gredor@potatiz.com</a> för hjälp
+          </li>
           <li>
-            <strong>Fel</strong> och <strong>varningar</strong>{{ " " }}
-            bör om möjligt åtgärdas innan du fortsätter, för att minimera risken
-            för att du får ett föreläggande från Bolagsverket
+            <strong>Varningar</strong> bör om möjligt åtgärdas innan du
+            fortsätter, för att minimera risken för att du får ett föreläggande
+            från Bolagsverket
           </li>
           <li>
             <strong>Informationsmeddelanden</strong> är endast för upplysning
@@ -147,7 +157,9 @@ onMounted(() => {
     </div>
 
     <CommonWizardButtons
-      :next-button-disabled="result == null"
+      :next-button-disabled="
+        result == null || result.utfall?.some((item) => item.typ === 'error')
+      "
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
