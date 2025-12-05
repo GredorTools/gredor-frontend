@@ -43,7 +43,7 @@ export default defineConfig({
        * npm run build.
        * More details below.
        */
-      requireEnv: false,
+      requireEnv: !process.env.INSTRUMENT_BUILD,
       /**
        * If forceBuildInstrument is set to true, this will add coverage instrumentation to the
        * built dist files and allow the reporter to collect coverage from the (built files).
