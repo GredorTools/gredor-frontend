@@ -43,7 +43,7 @@ const groupedBelopprader = groupPrepopulatedSection(belopprader, groups);
 </script>
 
 <template>
-  <div class="d-flex flex-col gap-4">
+  <div class="d-flex flex-column gap-4">
     <div v-for="groupOfGroups in groupsOfGroups" :key="groupOfGroups.xmlName">
       <div class="mb-2">
         <BaseEditBeloppradTitle

@@ -70,7 +70,7 @@ function exportArsredovisning() {
 </script>
 
 <template>
-  <div class="d-flex flex-col preview-container">
+  <div class="d-flex flex-column preview-container">
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Förhandsgranska
       årsredovisningen
