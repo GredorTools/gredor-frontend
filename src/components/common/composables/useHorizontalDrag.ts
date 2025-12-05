@@ -63,6 +63,7 @@ export function useHorizontalDrag(
 
   function handleDrag(mouseDown: MouseEvent) {
     if (
+      mouseDown.buttons !== 1 || // Kör endast vid vänsterklick
       !mainRef.value ||
       !handleRef.value ||
       !element1Ref.value ||
