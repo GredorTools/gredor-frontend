@@ -66,6 +66,13 @@ async function performRequest() {
     } else if (data) {
       result.value = data;
     }
+  } catch (e) {
+    if (e instanceof Error) {
+      showMessageModal(
+        `Teknisk information: ${e.message}`,
+        "Fel vid kommunikation med Bolagsverket",
+      );
+    }
   } finally {
     loading.value = false;
   }

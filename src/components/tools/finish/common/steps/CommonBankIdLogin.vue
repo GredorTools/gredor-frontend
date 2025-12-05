@@ -43,26 +43,36 @@ const client = createClient<paths>({
 });
 
 async function checkAuthStatus() {
-  const {
-    data: authStatusData, // only present if 2XX response
-    error: authStatusError, // only present if 4XX or 5XX response
-  } = await client.POST("/v1/auth/status", {
-    body: {
-      personalNumber: props.personalNumber,
-    },
-    credentials: "include", // Viktigt för att cookies ska funka
-  });
+  try {
+    const {
+      data: authStatusData, // only present if 2XX response
+      error: authStatusError, // only present if 4XX or 5XX response
+    } = await client.POST("/v1/auth/status", {
+      body: {
+        personalNumber: props.personalNumber,
+      },
+      credentials: "include", // Viktigt för att cookies ska funka
+    });
 
-  if (authStatusError) {
-    console.error(authStatusError);
+    if (authStatusError) {
+      showMessageModal(authStatusError, "Fel vid BankID-legitimering");
+      state.value = "callFailure";
+    } else if (authStatusData?.loggedIn) {
+      result.value = {
+        status: "COMPLETE",
+      };
+      state.value = "showQrCodeOrResult";
+    } else {
+      state.value = "showInfo";
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      showMessageModal(
+        `Teknisk information: ${e.message}`,
+        "Fel vid BankID-legitimering",
+      );
+    }
     state.value = "callFailure";
-  } else if (authStatusData?.loggedIn) {
-    result.value = {
-      status: "COMPLETE",
-    };
-    state.value = "showQrCodeOrResult";
-  } else {
-    state.value = "showInfo";
   }
 }
 
@@ -91,7 +101,13 @@ async function performInitRequest() {
         performStatusRequest();
       }, 1000);
     }
-  } catch {
+  } catch (e) {
+    if (e instanceof Error) {
+      showMessageModal(
+        `Teknisk information: ${e.message}`,
+        "Fel vid BankID-legitimering",
+      );
+    }
     state.value = "callFailure";
   }
 }
@@ -101,22 +117,34 @@ async function performStatusRequest() {
     return;
   }
 
-  const {
-    data: initData, // only present if 2XX response
-  } = await client.POST("/v1/bankid/status", {
-    body: {
-      orderRef: orderRef.value,
-    },
-    credentials: "include", // Viktigt för att cookies ska funka
-  });
+  try {
+    const {
+      data: statusData, // only present if 2XX response
+      error: statusError, // only present if 4XX or 5XX response
+    } = await client.POST("/v1/bankid/status", {
+      body: {
+        orderRef: orderRef.value,
+      },
+      credentials: "include", // Viktigt för att cookies ska funka
+    });
 
-  if (initData) {
-    result.value = initData;
-    if (initData.status === "PENDING") {
+    if (statusError) {
       setTimeout(() => {
         performStatusRequest();
       }, 1000);
+    } else if (statusData) {
+      result.value = statusData;
+      if (statusData.status === "PENDING") {
+        setTimeout(() => {
+          performStatusRequest();
+        }, 1000);
+      }
     }
+  } catch {
+    // Försök igen ändå
+    setTimeout(() => {
+      performStatusRequest();
+    }, 1000);
   }
 }
 
