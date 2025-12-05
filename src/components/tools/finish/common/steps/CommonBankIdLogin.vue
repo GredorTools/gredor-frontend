@@ -143,10 +143,16 @@ onBeforeUnmount(() => {
 
     <div v-if="state === 'showInfo' || state === 'loadingQrCode'">
       <p>
-        I syfte att förhindra spam tillåter vi maximalt 10 inloggningar per
-        person och vecka. Ditt personnummer kommer att sparas på Gredors servrar
-        i 7 dygn dels för att vi ska kunna kontrollera detta, och dels så att du
-        under denna period inte ska behöva legitimera dig på nytt varje gång.
+        Legitimering krävs vid kommunikation med Bolagsverket, för att visa att
+        du är den som du uppger dig för att vara.
+      </p>
+
+      <p>
+        Obs: I syfte att förhindra spam tillåter vi maximalt 10 legitimeringar
+        per person och vecka. Ditt personnummer kommer att sparas på Gredors
+        servrar i 7 dygn dels för att vi ska kunna kontrollera detta, och dels
+        så att du under denna period inte ska behöva legitimera dig på nytt
+        varje gång.
       </p>
 
       <div class="d-flex align-items-center justify-content-center pt-4 pb-4">

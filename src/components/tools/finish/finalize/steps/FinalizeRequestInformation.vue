@@ -85,8 +85,7 @@ onBeforeUnmount(() => {
         kontroller på din årsredovisning. Kontrollerna är av begränsad
         omfattning, men de kan vara till hjälp för att upptäcka såväl vanliga
         som ovanliga fel. För att använda funktionen behöver du som initierar
-        detta vara behörig att företräda företaget samt kunna identifiera dig
-        med BankID.
+        detta kunna identifiera dig med BankID.
       </p>
 
       <p>Vill du kontrollera din årsredovisning genom Bolagsverket?</p>
