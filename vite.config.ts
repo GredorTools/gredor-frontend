@@ -68,6 +68,9 @@ export default defineConfig({
       $fonts: resolve("./public/fonts"),
     },
   },
+  build: {
+    sourcemap: true,
+  },
   // Tysta ner deprecationvarningar från Bootstrap.
   css: {
     preprocessorOptions: {
