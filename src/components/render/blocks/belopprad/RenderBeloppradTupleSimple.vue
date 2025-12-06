@@ -5,15 +5,15 @@
 
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
-import type { BeloppradTuple } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
+import {
+  type BeloppradTuple,
+  filterInstanserWithValues,
+  getTaxonomyItemNamesWithValues,
+} from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 import RenderBeloppradCell from "@/components/render/blocks/belopprad/cell/RenderBeloppradCell.vue";
 import { computed } from "vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
-import {
-  filterInstanserWithValues,
-  getTaxonomyItemNamesWithValues,
-} from "@/util/tupleUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
