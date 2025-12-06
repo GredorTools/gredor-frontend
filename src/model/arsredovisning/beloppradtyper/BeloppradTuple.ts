@@ -50,6 +50,7 @@ function hasBeloppradTupleInstansValue(
   maxNumPreviousYears: number,
 ): boolean {
   return (
+    // Första beloppraden är obligatorisk
     instans.belopprader.length > 0 &&
     hasBeloppradTupleInstansBeloppradValue(
       instans.belopprader[0],
