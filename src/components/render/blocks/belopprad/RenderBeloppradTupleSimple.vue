@@ -50,6 +50,18 @@ const taxonomyItemsWithValues = computed(
         .map((belopprad) => belopprad.taxonomyItemName),
     ),
 );
+
+// Filtrera bort tomma belopprader
+const filteredInstanser = computed(() =>
+  props.belopprad.instanser.map((instans) => {
+    return {
+      ...instans,
+      belopprader: instans.belopprader.filter((belopprad) =>
+        taxonomyItemsWithValues.value.has(belopprad.taxonomyItemName),
+      ),
+    };
+  }),
+);
 </script>
 
 <template>
@@ -63,11 +75,16 @@ const taxonomyItemsWithValues = computed(
         {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
       </div>
 
-      <table class="render-tuple-instance">
+      <table
+        :class="{
+          [`num-columns-${filteredInstanser[0].belopprader.length}`]: true,
+        }"
+        class="render-tuple-instance"
+      >
         <thead>
           <tr>
             <th
-              v-for="instansBelopprad in belopprad.instanser[0].belopprader"
+              v-for="instansBelopprad in filteredInstanser[0].belopprader"
               :key="instansBelopprad.taxonomyItemName"
               scope="col"
             >
@@ -85,7 +102,7 @@ const taxonomyItemsWithValues = computed(
           </tr>
         </thead>
         <tbody>
-          <tr v-for="instans in belopprad.instanser" :key="instans.id">
+          <tr v-for="instans in filteredInstanser" :key="instans.id">
             <td
               v-for="(
                 instansBelopprad, instansBeloppradIndex
@@ -141,6 +158,63 @@ table.render-tuple-instance {
   th:first-child,
   td:first-child {
     width: unset !important;
+  }
+
+  // För att tuples inte ska bli för breda minskar vi textstorleken m.m.
+  @for $i from 4 through 5 {
+    &.num-columns-#{$i} {
+      th,
+      td {
+        padding-right: calc((6 - #{$i}) * 1rem) !important;
+      }
+    }
+  }
+
+  @for $i from 6 through 10 {
+    &.num-columns-#{$i} {
+      th,
+      td {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  &.num-columns-6 {
+    font-size: 0.85rem;
+    :deep(.value-container) {
+      min-width: 85px !important;
+    }
+  }
+
+  &.num-columns-7 {
+    font-size: 0.7rem;
+    :deep(.value-container) {
+      min-width: 70px !important;
+    }
+  }
+
+  &.num-columns-8 {
+    font-size: 0.62rem;
+    :deep(.value-container) {
+      min-width: 62px !important;
+    }
+  }
+
+  &.num-columns-9 {
+    font-size: 0.55rem;
+
+    :deep(.value-container) {
+      min-width: 55px !important;
+    }
+  }
+
+  &.num-columns-10 {
+    // Maxantal
+    font-size: 0.5rem;
+
+    :deep(.value-container) {
+      min-width: 50px !important;
+    }
   }
 }
 </style>
