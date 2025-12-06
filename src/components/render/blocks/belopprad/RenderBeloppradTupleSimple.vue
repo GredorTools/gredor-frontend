@@ -11,9 +11,9 @@ import RenderBeloppradCell from "@/components/render/blocks/belopprad/cell/Rende
 import { computed } from "vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import {
-  hasBeloppradStringValue,
-  isBeloppradString,
-} from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
+  filterInstanserWithValues,
+  getTaxonomyItemNamesWithValues,
+} from "@/util/tupleUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -33,34 +33,15 @@ const taxonomyItem = computed(() => {
   return getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad);
 });
 
-const taxonomyItemsWithValues = computed(
-  () =>
-    new Set(
-      props.belopprad.instanser
-        .flatMap((instans) => instans.belopprader)
-        .filter((belopprad) => {
-          if (isBeloppradComparable(belopprad)) {
-            return !!belopprad.beloppNuvarandeAr;
-          } else if (isBeloppradString(belopprad)) {
-            return hasBeloppradStringValue(belopprad);
-          } else {
-            return true;
-          }
-        })
-        .map((belopprad) => belopprad.taxonomyItemName),
-    ),
+const taxonomyItemNamesWithValues = computed(() =>
+  getTaxonomyItemNamesWithValues(props.belopprad, 0),
 );
 
-// Filtrera bort tomma belopprader
 const filteredInstanser = computed(() =>
-  props.belopprad.instanser.map((instans) => {
-    return {
-      ...instans,
-      belopprader: instans.belopprader.filter((belopprad) =>
-        taxonomyItemsWithValues.value.has(belopprad.taxonomyItemName),
-      ),
-    };
-  }),
+  filterInstanserWithValues(
+    props.belopprad.instanser,
+    taxonomyItemNamesWithValues.value,
+  ),
 );
 </script>
 
@@ -90,7 +71,9 @@ const filteredInstanser = computed(() =>
             >
               <template
                 v-if="
-                  taxonomyItemsWithValues.has(instansBelopprad.taxonomyItemName)
+                  taxonomyItemNamesWithValues.has(
+                    instansBelopprad.taxonomyItemName,
+                  )
                 "
               >
                 {{
@@ -179,42 +162,29 @@ table.render-tuple-instance {
     }
   }
 
+  &.num-columns-5 {
+    font-size: 0.925rem;
+  }
+
   &.num-columns-6 {
     font-size: 0.85rem;
-    :deep(.value-container) {
-      min-width: 85px !important;
-    }
   }
 
   &.num-columns-7 {
     font-size: 0.7rem;
-    :deep(.value-container) {
-      min-width: 70px !important;
-    }
   }
 
   &.num-columns-8 {
     font-size: 0.62rem;
-    :deep(.value-container) {
-      min-width: 62px !important;
-    }
   }
 
   &.num-columns-9 {
     font-size: 0.55rem;
-
-    :deep(.value-container) {
-      min-width: 55px !important;
-    }
   }
 
   &.num-columns-10 {
     // Maxantal
     font-size: 0.5rem;
-
-    :deep(.value-container) {
-      min-width: 50px !important;
-    }
   }
 }
 </style>

@@ -5,11 +5,13 @@ import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/Bas
 type TupleID = `tuple-${string}-${string}-${string}-${string}-${string}`;
 
 export interface BeloppradTuple extends Belopprad {
-  instanser: {
-    id: TupleID;
-    belopprader: Belopprad[];
-  }[];
+  instanser: BeloppradTupleInstans[];
   format?: BeloppradTupleFormat;
+}
+
+export interface BeloppradTupleInstans {
+  id: TupleID;
+  belopprader: Belopprad[];
 }
 
 export enum BeloppradTupleFormat {

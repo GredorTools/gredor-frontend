@@ -12,8 +12,12 @@ import RenderBeloppradCellComparable from "@/components/render/blocks/belopprad/
 import { computed } from "vue";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import RenderBeloppradCell from "@/components/render/blocks/belopprad/cell/RenderBeloppradCell.vue";
-import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { embeddedComparisonTuples } from "@/data/embeddedComparisonTuples.ts";
+import {
+  filterInstanserWithValues,
+  getMainValueBeloppradForInstans,
+  getTaxonomyItemNamesWithValues,
+} from "@/util/tupleUtils.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -35,16 +39,44 @@ const props = defineProps<{
 const taxonomyItem = computed(() =>
   getTaxonomyItemForBelopprad(props.taxonomyManager, props.belopprad),
 );
+
+const taxonomyItemNamesWithValues = computed(() =>
+  getTaxonomyItemNamesWithValues(props.belopprad, props.numPreviousYears),
+);
+
+const filteredInstanser = computed(() =>
+  filterInstanserWithValues(
+    props.belopprad.instanser,
+    taxonomyItemNamesWithValues.value,
+  ),
+);
+
+const instansForTableHeader = computed(() =>
+  filteredInstanser.value[0].belopprader.filter(
+    (instansBelopprad) =>
+      instansBelopprad.taxonomyItemName !==
+      getMainValueBeloppradForInstans(
+        props.belopprad.instanser[0],
+        props.belopprad.instanser,
+      )?.taxonomyItemName,
+  ),
+);
+
+const mainValueBeloppradPerFilteredInstans = computed(() =>
+  filteredInstanser.value.map((instans) =>
+    getMainValueBeloppradForInstans(instans, props.belopprad.instanser),
+  ),
+);
 </script>
 
 <template>
-  <tr v-if="belopprad.instanser.length > 0">
+  <tr v-if="filteredInstanser.length > 0">
     <td
       class="render-tuple"
       colspan="3"
       xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
     >
-      <template v-for="instans in belopprad.instanser" :key="instans.id">
+      <template v-for="instans in filteredInstanser" :key="instans.id">
         <template v-for="i in numPreviousYears + 1" :key="i">
           <ix:tuple
             :name="belopprad.taxonomyItemName"
@@ -60,10 +92,38 @@ const taxonomyItem = computed(() =>
         {{ displayHeader || taxonomyItem.additionalData.displayLabel }}
       </div>
 
-      <table class="render-tuple-instance">
+      <table
+        :class="{
+          [`num-columns-${filteredInstanser[0].belopprader.length}`]: true,
+        }"
+        class="render-tuple-instance"
+      >
+        <thead v-if="!embeddedComparisonTuples.includes(taxonomyItem.xmlName)">
+          <tr>
+            <th
+              v-for="instansBelopprad in instansForTableHeader"
+              :key="instansBelopprad.taxonomyItemName"
+              scope="col"
+            >
+              <template
+                v-if="
+                  taxonomyItemNamesWithValues.has(
+                    instansBelopprad.taxonomyItemName,
+                  )
+                "
+              >
+                {{
+                  getTaxonomyItemForBelopprad(taxonomyManager, instansBelopprad)
+                    .additionalData.displayLabel
+                }}
+              </template>
+            </th>
+          </tr>
+        </thead>
+
         <tbody>
           <tr
-            v-for="instans in belopprad.instanser"
+            v-for="(instans, instansIndex) in filteredInstanser"
             :key="instans.id"
             :class="{
               [`level-${taxonomyItem.level}`]: true,
@@ -72,49 +132,48 @@ const taxonomyItem = computed(() =>
             <td
               v-for="(
                 instansBelopprad, instansBeloppradIndex
-              ) in instans.belopprader"
+              ) in instans.belopprader.filter(
+                (b) =>
+                  b.taxonomyItemName !==
+                  mainValueBeloppradPerFilteredInstans[instansIndex]
+                    ?.taxonomyItemName,
+              )"
               :key="instansBelopprad.taxonomyItemName"
+              class="extra-segment"
             >
-              <template
-                v-if="instansBeloppradIndex < instans.belopprader.length - 1"
-              >
+              <RenderBeloppradCell
+                :additional-ixbrl-attrs="{
+                  order: (instansBeloppradIndex + 1).toString(),
+                  tupleRef: `${instans.id}-year0`,
+                }"
+                :belopprad="instansBelopprad"
+                :string-raw="true"
+                :taxonomy-manager="taxonomyManager"
+                :year-index="0"
+              />
+
+              <span class="d-none">
                 <RenderBeloppradCell
+                  v-for="i in numPreviousYears"
+                  :key="i"
                   :additional-ixbrl-attrs="{
                     order: (instansBeloppradIndex + 1).toString(),
-                    tupleRef: `${instans.id}-year0`,
+                    tupleRef: `${instans.id}-year${i}`,
                   }"
                   :belopprad="instansBelopprad"
+                  :context-ref-override-year-index="i"
                   :string-raw="true"
                   :taxonomy-manager="taxonomyManager"
                   :year-index="0"
                 />
-
-                <span class="d-none">
-                  <RenderBeloppradCell
-                    v-for="i in numPreviousYears"
-                    :key="i"
-                    :additional-ixbrl-attrs="{
-                      order: (instansBeloppradIndex + 1).toString(),
-                      tupleRef: `${instans.id}-year${i}`,
-                    }"
-                    :belopprad="instansBelopprad"
-                    :context-ref-override-year-index="i"
-                    :string-raw="true"
-                    :taxonomy-manager="taxonomyManager"
-                    :year-index="0"
-                  />
-                </span>
-              </template>
+              </span>
             </td>
 
             <td class="value-container">
               <template
                 v-if="
-                  (
-                    instans.belopprader[
-                      instans.belopprader.length - 1
-                    ] as BaseBeloppradComparable
-                  ).beloppNuvarandeAr.length > 0
+                  !!mainValueBeloppradPerFilteredInstans[instansIndex]
+                    ?.beloppNuvarandeAr
                 "
               >
                 <RenderBeloppradCellComparable
@@ -123,15 +182,13 @@ const taxonomyItem = computed(() =>
                     tupleRef: `${instans.id}-year0`,
                   }"
                   :belopprad="
-                    instans.belopprader[
-                      instans.belopprader.length - 1
-                    ] as BaseBeloppradComparable
+                    mainValueBeloppradPerFilteredInstans[instansIndex]
                   "
                   :display-format="BeloppFormat.HELTAL"
                   :taxonomy-item="
                     getTaxonomyItemForBelopprad(
                       taxonomyManager,
-                      instans.belopprader[instans.belopprader.length - 1],
+                      mainValueBeloppradPerFilteredInstans[instansIndex],
                     )
                   "
                   :year-index="0"
@@ -142,11 +199,9 @@ const taxonomyItem = computed(() =>
             <td v-for="i in numPreviousYears" :key="i" class="value-container">
               <template
                 v-if="
-                  (
-                    instans.belopprader[
-                      instans.belopprader.length - 1
-                    ] as BaseBeloppradComparable
-                  ).beloppTidigareAr[i - 1]?.length > 0
+                  mainValueBeloppradPerFilteredInstans[
+                    instansIndex
+                  ]?.beloppTidigareAr?.some((belopp) => !!belopp)
                 "
               >
                 <RenderBeloppradCellComparable
@@ -155,15 +210,13 @@ const taxonomyItem = computed(() =>
                     tupleRef: `${instans.id}-year${i}`,
                   }"
                   :belopprad="
-                    instans.belopprader[
-                      instans.belopprader.length - 1
-                    ] as BaseBeloppradComparable
+                    mainValueBeloppradPerFilteredInstans[instansIndex]
                   "
                   :display-format="BeloppFormat.HELTAL"
                   :taxonomy-item="
                     getTaxonomyItemForBelopprad(
                       taxonomyManager,
-                      instans.belopprader[instans.belopprader.length - 1],
+                      mainValueBeloppradPerFilteredInstans[instansIndex],
                     )
                   "
                   :year-index="i"
@@ -185,11 +238,36 @@ const taxonomyItem = computed(() =>
   font-style: italic;
 }
 
-.render-tuple-instance {
+table.render-tuple-instance {
   margin-bottom: $spacing-sm;
 
   td.render-tuple {
     padding: 0 !important;
+  }
+
+  &.num-columns-5 {
+    font-size: 0.925rem;
+  }
+
+  &.num-columns-6 {
+    font-size: 0.85rem;
+  }
+
+  &.num-columns-7 {
+    font-size: 0.7rem;
+  }
+
+  &.num-columns-8 {
+    font-size: 0.62rem;
+  }
+
+  &.num-columns-9 {
+    font-size: 0.55rem;
+  }
+
+  &.num-columns-10 {
+    // Maxantal
+    font-size: 0.5rem;
   }
 }
 </style>
