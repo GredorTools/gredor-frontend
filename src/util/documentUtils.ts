@@ -37,7 +37,8 @@ export async function convertVueHTMLToiXBRL(
 
   // Omvandla attribut som börjar på "data-" eftersom de inte är giltig XHTML/iXBRL
   for (const element of doc.querySelectorAll("*")) {
-    for (const attribute of element.attributes) {
+    // element.attributes måste hämtas med spread operator
+    for (const attribute of [...element.attributes] /* NOSONAR */) {
       if (attribute.name.startsWith("data-")) {
         if (!element.tagName.includes(":")) {
           // För rena HTML-element lägger vi på attributnamnet som en klass
