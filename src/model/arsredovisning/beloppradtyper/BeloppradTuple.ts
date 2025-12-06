@@ -36,32 +36,37 @@ export function isBeloppradTuple(
   return belopprad.type.endsWith("Tuple@anonymousType");
 }
 
-export function hasBeloppradTupleValue(belopprad: BeloppradTuple): boolean {
-  return belopprad.instanser.length > 0;
+export function hasBeloppradTupleValue(
+  belopprad: BeloppradTuple,
+  maxNumPreviousYears: number,
+): boolean {
+  return belopprad.instanser.some((instans) =>
+    hasBeloppradTupleInstansValue(instans, maxNumPreviousYears),
+  );
 }
 
-export function hasBeloppradTupleInstansValue(
+function hasBeloppradTupleInstansValue(
   instans: BeloppradTupleInstans,
-  numPreviousYears: number,
+  maxNumPreviousYears: number,
 ): boolean {
-  for (const belopprad of instans.belopprader) {
-    if (hasBeloppradTupleInstansBeloppradValue(belopprad, numPreviousYears)) {
-      return true;
-    }
-  }
-
-  return false;
+  return (
+    instans.belopprader.length > 0 &&
+    hasBeloppradTupleInstansBeloppradValue(
+      instans.belopprader[0],
+      maxNumPreviousYears,
+    )
+  );
 }
 
 function hasBeloppradTupleInstansBeloppradValue(
   instansBelopprad: Belopprad,
-  numPreviousYears: number,
+  maxNumPreviousYears: number,
 ): boolean {
   if (isBeloppradComparable(instansBelopprad)) {
     return (
       !!instansBelopprad.beloppNuvarandeAr ||
       instansBelopprad.beloppTidigareAr
-        .slice(0, numPreviousYears)
+        .slice(0, maxNumPreviousYears)
         .some((belopp) => !!belopp)
     );
   } else if (isBeloppradString(instansBelopprad)) {
@@ -146,13 +151,13 @@ export function isEditBeloppradTupleFormatAllowed(
  * tuple-beloppraden.
  *
  * @param tupleBelopprad - Tuple-beloppraden som ska genomsökas
- * @param numPreviousYears - Antal tidigare år som visas i tuplen
+ * @param maxNumPreviousYears - Antal tidigare år som visas i tuplen
  *
  * @returns En mängd med taxonomi-item-namn som har värden
  */
 export function getTaxonomyItemNamesWithValuesInTuple(
   tupleBelopprad: BeloppradTuple,
-  numPreviousYears: number,
+  maxNumPreviousYears: number,
 ) {
   return new Set(
     tupleBelopprad.instanser
@@ -160,7 +165,7 @@ export function getTaxonomyItemNamesWithValuesInTuple(
       .filter((instansBelopprad) =>
         hasBeloppradTupleInstansBeloppradValue(
           instansBelopprad,
-          numPreviousYears,
+          maxNumPreviousYears,
         ),
       )
       .map((instansBelopprad) => instansBelopprad.taxonomyItemName),
@@ -173,14 +178,14 @@ export function getTaxonomyItemNamesWithValuesInTuple(
  * @param instanser - Array med instanser som ska filtreras
  * @param taxonomyItemNamesWithValues - Namnen på alla taxonomiobjekt som har
  * värden
- * @param numPreviousYears - Antal tidigare år som visas i tuplen
+ * @param maxNumPreviousYears - Antal tidigare år som visas i tuplen
  *
  * @returns En ny array med filtrerade instanser
  */
 export function filterInstanserWithValuesInTuple(
   instanser: BeloppradTupleInstans[],
   taxonomyItemNamesWithValues: Set<string>,
-  numPreviousYears: number,
+  maxNumPreviousYears: number,
 ) {
   return instanser
     .map((instans) => {
@@ -194,18 +199,18 @@ export function filterInstanserWithValuesInTuple(
     .filter(
       (instans) =>
         instans.belopprader.length > 0 &&
-        hasBeloppradTupleInstansValue(instans, numPreviousYears),
+        hasBeloppradTupleInstansValue(instans, maxNumPreviousYears),
     );
 }
 
 /**
  * Hittar huvudvärde-beloppraden för den angivna tuple-instansen.
- * Huvudärde-beloppraden är den belopprad som har samma taxonomiobjektsnamn som
+ * Huvudvärde-beloppraden är den belopprad som har samma taxonomiobjektsnamn som
  * den sista beloppraden i definitionen av tuplen (t.ex. "belopp" för en tuple
  * för revisorsersättningar). Endast tillämpbart på tuples som kan jämföras
  * mellan år.
  *
- * @param instans - Instansen där vi ska hämta värde-beloppraden
+ * @param instans - Instansen där vi ska hämta huvudvärde-beloppraden
  * @param allUnfilteredInstanser - Array med alla ofiltrerade instanser i tuplen
  * (ofiltrerad innebär att även belopprader utan värden finns med)
  *

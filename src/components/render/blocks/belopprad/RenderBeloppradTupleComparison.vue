@@ -41,7 +41,10 @@ const taxonomyItem = computed(() =>
 );
 
 const taxonomyItemNamesWithValues = computed(() =>
-  getTaxonomyItemNamesWithValuesInTuple(props.belopprad, props.numPreviousYears),
+  getTaxonomyItemNamesWithValuesInTuple(
+    props.belopprad,
+    props.numPreviousYears,
+  ),
 );
 
 const filteredInstanser = computed(() =>
@@ -55,11 +58,7 @@ const filteredInstanser = computed(() =>
 const instansForTableHeader = computed(() =>
   filteredInstanser.value[0].belopprader.filter(
     (instansBelopprad) =>
-      instansBelopprad.taxonomyItemName !==
-      getMainValueBeloppradForInstans(
-        props.belopprad.instanser[0],
-        props.belopprad.instanser,
-      )?.taxonomyItemName,
+      instansBelopprad.taxonomyItemName !== mainValueTaxonomyItemName.value,
   ),
 );
 
@@ -67,6 +66,10 @@ const mainValueBeloppradPerFilteredInstans = computed(() =>
   filteredInstanser.value.map((instans) =>
     getMainValueBeloppradForInstans(instans, props.belopprad.instanser),
   ),
+);
+
+const mainValueTaxonomyItemName = computed(
+  () => mainValueBeloppradPerFilteredInstans.value?.[0]?.taxonomyItemName,
 );
 </script>
 
@@ -134,13 +137,9 @@ const mainValueBeloppradPerFilteredInstans = computed(() =>
               v-for="(
                 instansBelopprad, instansBeloppradIndex
               ) in instans.belopprader.filter(
-                (b) =>
-                  b.taxonomyItemName !==
-                  mainValueBeloppradPerFilteredInstans[instansIndex]
-                    ?.taxonomyItemName,
+                (b) => b.taxonomyItemName !== mainValueTaxonomyItemName,
               )"
               :key="instansBelopprad.taxonomyItemName"
-              class="extra-segment"
             >
               <RenderBeloppradCell
                 :additional-ixbrl-attrs="{

@@ -395,7 +395,7 @@ export function hasBeloppradValue(
   } else if (isBeloppradString(belopprad)) {
     return hasBeloppradStringValue(belopprad);
   } else if (isBeloppradTuple(belopprad)) {
-    return hasBeloppradTupleValue(belopprad);
+    return hasBeloppradTupleValue(belopprad, maxNumPreviousYears);
   } else {
     throw new Error("Unknown belopprad type");
   }
