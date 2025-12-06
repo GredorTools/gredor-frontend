@@ -67,7 +67,7 @@ const commonTaxonomyItemNames = [
 </script>
 
 <template>
-  <div class="d-flex flex-col">
+  <div class="d-flex flex-column">
     <span class="text-center">
       Du kan behöva skrolla i tabellen. De vanligaste cellerna är
       <strong class="common-hint">blåmarkerade</strong>.
