@@ -23,7 +23,7 @@ export async function convertVueHTMLToiXBRL(
   );
 
   // Lägg till CSS
-  let rulesCss = await getCssTextForUsedRules(doc.querySelectorAll("*"));
+  let rulesCss = await getCssTextForUsedRules(doc);
 
   // Omvandla CSS-attribut som inte är kompatibla med wkhtmltopdf som Bolagsverket använder
   rulesCss = rulesCss.replace(
@@ -37,7 +37,7 @@ export async function convertVueHTMLToiXBRL(
 
   // Omvandla attribut som börjar på "data-" eftersom de inte är giltig XHTML/iXBRL
   for (const element of doc.querySelectorAll("*")) {
-    for (const attribute of [...element.attributes]) {
+    for (const attribute of element.attributes) {
       if (attribute.name.startsWith("data-")) {
         if (!element.tagName.includes(":")) {
           // För rena HTML-element lägger vi på attributnamnet som en klass
@@ -156,25 +156,20 @@ export async function convertVueHTMLToiXBRL(
 
 /**
  * Extraherar och returnerar CSS-texten för alla CSSStyleRules som används av
- * de angivna DOM-elementen.
+ * det angivna dokumentet.
  *
- * @param elements - En samling av DOM-element som ska kontrolleras för
- * matchande CSS-regler.
+ * @param doc - Ett dokument som ska kontrolleras för matchande CSS-regler.
  * @returns En sträng som innehåller den sammanfogade CSS-texten för alla
  * matchande regler.
  */
-async function getCssTextForUsedRules(
-  elements: NodeListOf<Element>,
-): Promise<string> {
+async function getCssTextForUsedRules(doc: Document): Promise<string> {
   const rulesUsed = new Set<CSSRule>();
   const fontFamiliesUsed = new Set<string>();
 
-  function processRule(
-    rule: CSSRule,
-    styleRule: CSSStyleRule,
-    element: Element,
-  ) {
-    if (element.matches && element.matches(styleRule.selectorText)) {
+  function processRule(rule: CSSRule, styleRule: CSSStyleRule) {
+    const matchingElements = doc.querySelectorAll(styleRule.selectorText);
+    if (matchingElements.length > 0) {
+      // Regeln används i dokumentet, ta med den i resultatet
       rulesUsed.add(rule);
 
       if (styleRule.style.fontFamily) {
@@ -195,24 +190,22 @@ async function getCssTextForUsedRules(
     }
 
     for (const rule of Object.values(sheet.cssRules)) {
-      for (const element of elements) {
-        if (rule instanceof CSSStyleRule) {
-          // Alla vanliga style-rules ska behandlas
-          processRule(rule, rule, element);
-        } else if (
-          rule instanceof CSSMediaRule &&
-          Array.from(rule.media).some((media) => media === "screen")
-        ) {
-          for (const subrule of rule.cssRules) {
-            if (
-              subrule instanceof CSSStyleRule &&
-              subrule.selectorText != "body"
-            ) {
-              // Alla style-rules i media screen-regler ska behandlas, förutom
-              // de som har "body" som selektor - för att det ska bli snyggt när
-              // årsredovisningen visas i Bolagsverkets e-tjänst (ej PDF)
-              processRule(rule, subrule, element);
-            }
+      if (rule instanceof CSSStyleRule) {
+        // Alla vanliga style-rules ska behandlas
+        processRule(rule, rule);
+      } else if (
+        rule instanceof CSSMediaRule &&
+        Array.from(rule.media).includes("screen")
+      ) {
+        for (const subrule of rule.cssRules) {
+          if (
+            subrule instanceof CSSStyleRule &&
+            subrule.selectorText !== "body"
+          ) {
+            // Alla style-rules i media screen-regler ska behandlas, förutom
+            // de som har "body" som selektor - för att det ska bli snyggt när
+            // årsredovisningen visas i Bolagsverkets e-tjänst (ej PDF)
+            processRule(rule, subrule);
           }
         }
       }
@@ -272,9 +265,7 @@ async function getFontReferencesInDocument() {
     const cssRules = styleSheet.cssRules;
 
     // Gå igenom varje CSS-regel i stilmallen
-    for (let i = 0; i < cssRules.length; i++) {
-      const rule = cssRules[i];
-
+    for (const rule of cssRules) {
       // Kontrollera om regeln är en CSSFontFaceRule (dvs en @font-face-regel)
       if (rule instanceof CSSFontFaceRule) {
         const style = rule.style;
@@ -289,7 +280,7 @@ async function getFontReferencesInDocument() {
         const unicodeRange = style.getPropertyValue("unicode-range");
 
         // Konvertera till base64
-        const urlMatches = src.split(",")[0]?.match(/\(([^)]+)\)/);
+        const urlMatches = new RegExp(/\(([^)]+)\)/).exec(src.split(",")[0]);
         const url = urlMatches ? urlMatches[1].replace(/"/g, "") : "";
         const response = await fetch(url);
         const blob = await response.blob();
