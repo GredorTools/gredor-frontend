@@ -40,6 +40,38 @@ export function hasBeloppradTupleValue(belopprad: BeloppradTuple): boolean {
   return belopprad.instanser.length > 0;
 }
 
+export function hasBeloppradTupleInstansValue(
+  instans: BeloppradTupleInstans,
+  numPreviousYears: number,
+): boolean {
+  for (const belopprad of instans.belopprader) {
+    if (hasBeloppradTupleInstansBeloppradValue(belopprad, numPreviousYears)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function hasBeloppradTupleInstansBeloppradValue(
+  instansBelopprad: Belopprad,
+  numPreviousYears: number,
+): boolean {
+  if (isBeloppradComparable(instansBelopprad)) {
+    return (
+      !!instansBelopprad.beloppNuvarandeAr ||
+      instansBelopprad.beloppTidigareAr
+        .slice(0, numPreviousYears)
+        .some((belopp) => !!belopp)
+    );
+  } else if (isBeloppradString(instansBelopprad)) {
+    return hasBeloppradStringValue(instansBelopprad);
+  } else {
+    // Vi borde inte hamna här för det ska inte finnas några andra typer i tuples
+    throw new Error("Unknown belopprad type: " + instansBelopprad.type);
+  }
+}
+
 /**
  * Returnerar vilket format som en given tuple-belopprad ska visas i.
  *
@@ -114,56 +146,56 @@ export function isEditBeloppradTupleFormatAllowed(
  * tuple-beloppraden.
  *
  * @param tupleBelopprad - Tuple-beloppraden som ska genomsökas
- * @param numPreviousYears - Antal tidigare år som ska inkluderas i sökningen
+ * @param numPreviousYears - Antal tidigare år som visas i tuplen
  *
  * @returns En mängd med taxonomi-item-namn som har värden
  */
-export function getTaxonomyItemNamesWithValues(
+export function getTaxonomyItemNamesWithValuesInTuple(
   tupleBelopprad: BeloppradTuple,
   numPreviousYears: number,
 ) {
   return new Set(
     tupleBelopprad.instanser
       .flatMap((instans) => instans.belopprader)
-      .filter((belopprad) => {
-        if (isBeloppradComparable(belopprad)) {
-          return (
-            !!belopprad.beloppNuvarandeAr ||
-            belopprad.beloppTidigareAr
-              .slice(0, numPreviousYears)
-              .some((belopp) => !!belopp)
-          );
-        } else if (isBeloppradString(belopprad)) {
-          return hasBeloppradStringValue(belopprad);
-        } else {
-          return true;
-        }
-      })
-      .map((belopprad) => belopprad.taxonomyItemName),
+      .filter((instansBelopprad) =>
+        hasBeloppradTupleInstansBeloppradValue(
+          instansBelopprad,
+          numPreviousYears,
+        ),
+      )
+      .map((instansBelopprad) => instansBelopprad.taxonomyItemName),
   );
 }
 
 /**
- * Filtrerar instanser så att endast belopprader som har värden behålls.
+ * Filtrerar instanser så att endast belopprader som används i tuplen behålls.
  *
  * @param instanser - Array med instanser som ska filtreras
  * @param taxonomyItemNamesWithValues - Namnen på alla taxonomiobjekt som har
  * värden
+ * @param numPreviousYears - Antal tidigare år som visas i tuplen
  *
  * @returns En ny array med filtrerade instanser
  */
-export function filterInstanserWithValues(
+export function filterInstanserWithValuesInTuple(
   instanser: BeloppradTupleInstans[],
   taxonomyItemNamesWithValues: Set<string>,
+  numPreviousYears: number,
 ) {
-  return instanser.map((instans) => {
-    return {
-      ...instans,
-      belopprader: instans.belopprader.filter((belopprad) =>
-        taxonomyItemNamesWithValues.has(belopprad.taxonomyItemName),
-      ),
-    };
-  });
+  return instanser
+    .map((instans) => {
+      return {
+        ...instans,
+        belopprader: instans.belopprader.filter((belopprad) =>
+          taxonomyItemNamesWithValues.has(belopprad.taxonomyItemName),
+        ),
+      };
+    })
+    .filter(
+      (instans) =>
+        instans.belopprader.length > 0 &&
+        hasBeloppradTupleInstansValue(instans, numPreviousYears),
+    );
 }
 
 /**

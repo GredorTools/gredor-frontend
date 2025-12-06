@@ -7,13 +7,14 @@ import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import {
   type BeloppradTuple,
-  filterInstanserWithValues,
-  getTaxonomyItemNamesWithValues,
+  filterInstanserWithValuesInTuple,
+  getTaxonomyItemNamesWithValuesInTuple,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 import RenderBeloppradCell from "@/components/render/blocks/belopprad/cell/RenderBeloppradCell.vue";
 import { computed } from "vue";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import { isBeloppradEnum } from "@/model/arsredovisning/beloppradtyper/BeloppradEnum.ts";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -34,21 +35,22 @@ const taxonomyItem = computed(() => {
 });
 
 const taxonomyItemNamesWithValues = computed(() =>
-  getTaxonomyItemNamesWithValues(props.belopprad, 0),
+  getTaxonomyItemNamesWithValuesInTuple(props.belopprad, 0),
 );
 
 const filteredInstanser = computed(() =>
-  filterInstanserWithValues(
+  filterInstanserWithValuesInTuple(
     props.belopprad.instanser,
     taxonomyItemNamesWithValues.value,
+    0,
   ),
 );
 </script>
 
 <template>
-  <tr v-if="belopprad.instanser.length > 0">
+  <tr v-if="filteredInstanser.length > 0">
     <td colspan="3" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">
-      <template v-for="instans in belopprad.instanser" :key="instans.id">
+      <template v-for="instans in filteredInstanser" :key="instans.id">
         <ix:tuple :name="belopprad.taxonomyItemName" :tupleID="instans.id" />
       </template>
 
@@ -91,7 +93,11 @@ const filteredInstanser = computed(() =>
                 instansBelopprad, instansBeloppradIndex
               ) in instans.belopprader"
               :key="instansBelopprad.taxonomyItemName"
-              :class="{ numeric: isBeloppradComparable(instansBelopprad) }"
+              :class="{
+                numeric:
+                  isBeloppradComparable(instansBelopprad) &&
+                  !isBeloppradEnum(instansBelopprad),
+              }"
             >
               <RenderBeloppradCell
                 :additional-ixbrl-attrs="{

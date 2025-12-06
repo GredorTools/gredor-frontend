@@ -41,4 +41,5 @@ const COMPARABLE_TAXONOMY_ITEM_TYPES: TaxonomyItemType[] = [
   "xbrli:decimalItemType",
   "xbrli:pureItemType",
   "xbrli:sharesItemType",
+  "enum:enumerationItemType",
 ];

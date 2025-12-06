@@ -7,9 +7,9 @@
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import {
   type BeloppradTuple,
-  filterInstanserWithValues,
+  filterInstanserWithValuesInTuple,
   getMainValueBeloppradForInstans,
-  getTaxonomyItemNamesWithValues,
+  getTaxonomyItemNamesWithValuesInTuple,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradTuple.ts";
 import type { Redovisningsvaluta } from "@/model/arsredovisning/Redovisningsinformation.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
@@ -41,13 +41,14 @@ const taxonomyItem = computed(() =>
 );
 
 const taxonomyItemNamesWithValues = computed(() =>
-  getTaxonomyItemNamesWithValues(props.belopprad, props.numPreviousYears),
+  getTaxonomyItemNamesWithValuesInTuple(props.belopprad, props.numPreviousYears),
 );
 
 const filteredInstanser = computed(() =>
-  filterInstanserWithValues(
+  filterInstanserWithValuesInTuple(
     props.belopprad.instanser,
     taxonomyItemNamesWithValues.value,
+    props.numPreviousYears,
   ),
 );
 

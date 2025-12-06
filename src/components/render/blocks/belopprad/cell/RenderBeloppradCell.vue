@@ -49,15 +49,6 @@ defineProps<{
     :taxonomy-item="getTaxonomyItemForBelopprad(taxonomyManager, belopprad)"
     :year-index="yearIndex"
   />
-  <RenderBeloppradCellComparable
-    v-else-if="isBeloppradComparable(belopprad) && belopprad.beloppNuvarandeAr"
-    :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
-    :belopprad="belopprad"
-    :context-ref-override-year-index="contextRefOverrideYearIndex"
-    :display-format="BeloppFormat.HELTAL"
-    :taxonomy-item="getTaxonomyItemForBelopprad(taxonomyManager, belopprad)"
-    :year-index="yearIndex"
-  />
   <RenderBeloppradCellEnum
     v-else-if="isBeloppradEnum(belopprad) && belopprad.beloppNuvarandeAr"
     :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
@@ -65,6 +56,15 @@ defineProps<{
     :context-ref-override-year-index="contextRefOverrideYearIndex"
     :taxonomy-item="getTaxonomyItemForBelopprad(taxonomyManager, belopprad)"
     :taxonomy-manager="taxonomyManager"
+    :year-index="yearIndex"
+  />
+  <RenderBeloppradCellComparable
+    v-else-if="isBeloppradComparable(belopprad) && belopprad.beloppNuvarandeAr"
+    :additional-ixbrl-attrs="additionalIxbrlAttrs || {}"
+    :belopprad="belopprad"
+    :context-ref-override-year-index="contextRefOverrideYearIndex"
+    :display-format="BeloppFormat.HELTAL"
+    :taxonomy-item="getTaxonomyItemForBelopprad(taxonomyManager, belopprad)"
     :year-index="yearIndex"
   />
 </template>
