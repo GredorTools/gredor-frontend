@@ -89,7 +89,7 @@ defineModel<Arsredovisning>("arsredovisning", {
   <div class="card mb-4 p-4">
     <div class="mb-3">
       <label class="form-label" for="startdatumNuvarande">
-        Startdatum aktuellt räkenskapsår för årsredovisningen:
+        Startdatum räkenskapsår för årsredovisningen:
       </label>
       <input
         id="startdatumNuvarande"
@@ -104,7 +104,7 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
     <div class="mb-3">
       <label class="form-label" for="slutdatumNuvarande"
-        >Slutdatum aktuellt räkenskapsår för årsredovisningen:</label
+        >Slutdatum räkenskapsår för årsredovisningen:</label
       >
       <input
         id="slutdatumNuvarande"
@@ -141,13 +141,13 @@ defineModel<Arsredovisning>("arsredovisning", {
         "
       />
       <label :for="'verksamhetsarTidigareAktivt' + i" class="form-check-label">
-        Verksamheten existerade {{ i }} år före aktuellt räkenskapsår
+        Verksamheten existerade {{ i }} år före årsredovisningens räkenskapsår
       </label>
     </div>
     <template v-if="arsredovisning.verksamhetsarTidigare.length > i - 1">
       <div class="mb-3">
         <label class="form-label" for="startdatumTidigare"
-          >Startdatum tidigare räkenskapsår, {{ i }} år före aktuellt
+          >Startdatum tidigare räkenskapsår, {{ i }} år före årsredovisningens
           räkenskapsår:</label
         >
         <input
@@ -159,7 +159,7 @@ defineModel<Arsredovisning>("arsredovisning", {
       </div>
       <div class="mb-3">
         <label class="form-label" for="slutdatumTidigare"
-          >Slutdatum tidigare räkenskapsår, {{ i }} år före aktuellt
+          >Slutdatum tidigare räkenskapsår, {{ i }} år före årsredovisningens
           räkenskapsår:</label
         >
         <input

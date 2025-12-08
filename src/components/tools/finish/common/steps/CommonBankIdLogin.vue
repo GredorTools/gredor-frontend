@@ -199,7 +199,7 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="state === 'callFailure'">
-      Något gick fel vid hämtning av data från BankID. Prova att gå tillbaka ett
+      Något gick fel vid kommunikation med BankID. Prova att gå tillbaka ett
       steg och sedan försöka igen.
     </div>
 

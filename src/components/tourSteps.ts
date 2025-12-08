@@ -79,7 +79,7 @@ export const tourSteps: OnboardingTourStep[] = [
       " här för att färdigställa och lämna in den till Bolagsverket." +
       "<ul>" +
       "<li>Verktyget <strong>Färdigställ inför årsstämma</strong> låter dig" +
-      " färdigställa årsredovisningen inför ditt företags årsstämma.</li>" +
+      " färdigställa årsredovisningen inför företagets årsstämma.</li>" +
       "<li>Efter årsstämman använder du verktyget <strong>Ladda upp till" +
       " Bolagsverket efter årsstämma</strong> för att ladda upp" +
       " årsredovisningen till ditt egna utrymme hos Bolagsverket (kräver" +

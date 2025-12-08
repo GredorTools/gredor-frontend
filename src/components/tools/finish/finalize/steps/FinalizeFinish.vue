@@ -26,9 +26,9 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
     </CommonModalSubtitle>
 
     <p>
-      Nu är ditt företag redo för årsstämma! Efter årsstämman kan du använda
-      Gredor-funktionen "Ladda upp till Bolagsverket efter årsstämma" för att gå
-      vidare med inlämningen.
+      Har du signerat årsredovisningen? I så fall är företaget redo för
+      årsstämma! Efter årsstämman kan du använda Gredor-funktionen "Ladda upp
+      till Bolagsverket efter årsstämma" för att gå vidare med inlämningen.
     </p>
 
     <CommonWizardButtons
