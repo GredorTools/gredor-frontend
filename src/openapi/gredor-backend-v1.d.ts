@@ -82,7 +82,9 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": unknown;
+                    };
                 };
                 /** @description Bad Request */
                 400: {
@@ -231,6 +233,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/message/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Messages */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Message"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/ping/ping": {
         parameters: {
             query?: never;
@@ -282,8 +320,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: {
-                    personalNumber?: string | null;
+                cookie: {
+                    personalNumber: string;
                 };
             };
             requestBody: {
@@ -331,8 +369,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: {
-                    personalNumber?: string | null;
+                cookie: {
+                    personalNumber: string;
                 };
             };
             requestBody: {
@@ -380,8 +418,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path?: never;
-                cookie?: {
-                    personalNumber?: string | null;
+                cookie: {
+                    personalNumber: string;
                 };
             };
             requestBody: {
@@ -513,6 +551,9 @@ export interface components {
          * @example 2022-03-10
          */
         LocalDate: string;
+        Message: {
+            text: string;
+        };
         Rakenskapsperiod: {
             from?: components["schemas"]["LocalDate"];
             tom?: components["schemas"]["LocalDate"];

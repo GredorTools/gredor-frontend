@@ -17,6 +17,7 @@ import { emptyArsredovisning } from "@/example/emptyArsredovisning.ts";
 import { onBeforeUnmount, useTemplateRef } from "vue";
 import AppModalController from "@/components/AppModalController.vue";
 import { useHorizontalDrag } from "@/components/common/composables/useHorizontalDrag.ts";
+import AppMessages from "@/components/AppMessages.vue";
 
 const {
   ref: arsredovisning,
@@ -46,6 +47,8 @@ onBeforeUnmount(() => {
 <template>
   <main aria-label="Gredor årsredovisningsverktyg" class="d-flex flex-column">
     <AppHeader v-model:arsredovisning="arsredovisning" />
+
+    <AppMessages v-if="!showFirstLaunchScreen" />
 
     <div
       ref="main"

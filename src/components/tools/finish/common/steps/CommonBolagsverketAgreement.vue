@@ -51,6 +51,11 @@ async function performRequest() {
             "",
           ),
       },
+      params: {
+        cookie: {
+          personalNumber: "dummy",
+        },
+      },
       credentials: "include", // Viktigt för att cookies ska funka
     });
 

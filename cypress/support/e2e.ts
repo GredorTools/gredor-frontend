@@ -17,3 +17,14 @@ import "@cypress/code-coverage/support";
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
+
+// Default-intercepts
+beforeEach(() => {
+  cy.intercept(
+    {
+      method: "GET",
+      url: "http://gredor-backend/v1/message/messages",
+    },
+    [],
+  );
+});

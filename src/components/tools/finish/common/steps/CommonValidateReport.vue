@@ -60,6 +60,11 @@ async function performRequest() {
           ),
         ixbrl: base64encode(props.ixbrl),
       },
+      params: {
+        cookie: {
+          personalNumber: "dummy", // Skrivs över av webbläsaren
+        },
+      },
       credentials: "include", // Viktigt för att cookies ska funka
     });
 

@@ -225,6 +225,13 @@ components:
       format: date
       examples:
       - 2022-03-10
+    Message:
+      type: object
+      required:
+      - text
+      properties:
+        text:
+          type: string
     Rakenskapsperiod:
       type: object
       properties:
@@ -299,6 +306,9 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema: {}
         "400":
           description: Bad Request
       summary: Cancel
@@ -352,6 +362,7 @@ paths:
         required: true
         schema:
           type: string
+          pattern: "^\\d{10}$"
       responses:
         "200":
           description: OK
@@ -362,6 +373,20 @@ paths:
       summary: Records
       tags:
       - Information Resource
+  /v1/message/messages:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+      summary: Messages
+      tags:
+      - Message Resource
   /v1/ping/ping:
     get:
       responses:
@@ -380,9 +405,8 @@ paths:
       - name: personalNumber
         in: cookie
         schema:
-          type:
-          - string
-          - "null"
+          type: string
+        required: true
       requestBody:
         content:
           application/json:
@@ -407,9 +431,8 @@ paths:
       - name: personalNumber
         in: cookie
         schema:
-          type:
-          - string
-          - "null"
+          type: string
+        required: true
       requestBody:
         content:
           application/json:
@@ -434,9 +457,8 @@ paths:
       - name: personalNumber
         in: cookie
         schema:
-          type:
-          - string
-          - "null"
+          type: string
+        required: true
       requestBody:
         content:
           application/json:
