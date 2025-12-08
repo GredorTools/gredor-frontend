@@ -93,7 +93,11 @@ async function showSendWizard() {
     :arsredovisning="arsredovisning"
     instance-id="ToolsFinish"
   />
-  <SendWizard ref="sendWizard" instance-id="ToolsFinish" />
+  <SendWizard
+    :key="sendWizardRenderId"
+    ref="sendWizard"
+    instance-id="ToolsFinish"
+  />
 </template>
 
 <style lang="scss" scoped></style>
