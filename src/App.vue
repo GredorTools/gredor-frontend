@@ -36,14 +36,7 @@ const handleRef = useTemplateRef("handle");
 const editorRef = useTemplateRef("editor");
 const rendererRef = useTemplateRef("renderer");
 
-const { handleDrag } = useHorizontalDrag(
-  mainRef,
-  handleRef,
-  editorRef,
-  rendererRef,
-  700,
-  128,
-);
+useHorizontalDrag(mainRef, handleRef, editorRef, rendererRef, 700, 128);
 
 onBeforeUnmount(() => {
   removeArsredovisningStorageChangeListener();
@@ -63,7 +56,7 @@ onBeforeUnmount(() => {
         <EditMain v-model:arsredovisning="arsredovisning" />
       </div>
 
-      <div ref="handle" class="handle" @mousedown="handleDrag">
+      <div ref="handle" class="handle">
         <i class="bi bi-grip-vertical"></i>
       </div>
 

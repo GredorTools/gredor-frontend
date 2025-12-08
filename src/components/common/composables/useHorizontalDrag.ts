@@ -1,4 +1,4 @@
-import { ref, type Ref, onMounted, watch } from "vue";
+import { ref, type Ref, onMounted, watch, onBeforeUnmount } from "vue";
 import { useElementSize } from "@vueuse/core";
 
 /**
@@ -26,7 +26,7 @@ export function useHorizontalDrag(
 ) {
   const defaultElement2Width = ref<number | null>(null);
 
-  function resizeElement(elementWidth: number) {
+  function resizeElement1(elementWidth: number) {
     if (
       !mainRef.value ||
       !handleRef.value ||
@@ -61,7 +61,7 @@ export function useHorizontalDrag(
     element2Ref.value.style.transform = `scale(${Math.min(1, newTargetWidth / defaultElement2Width.value)})`;
   }
 
-  function handleDrag(mouseDown: MouseEvent) {
+  function onMouseDown(mouseDown: MouseEvent) {
     if (
       mouseDown.buttons !== 1 || // Kör endast vid vänsterklick
       !mainRef.value ||
@@ -76,45 +76,51 @@ export function useHorizontalDrag(
     // För att förhindra att saker blir markerade iom mousedown
     mouseDown.preventDefault();
 
-    let dragX = mouseDown.clientX;
-    const element = element1Ref.value;
+    const initialElement1Width = element1Ref.value.offsetWidth;
+    const initialMouseX = mouseDown.clientX;
 
-    const onMouseMove = (mouseMove: MouseEvent) => {
-      const elementWidth = element.offsetWidth + mouseMove.clientX - dragX;
-      resizeElement(elementWidth);
-      dragX = mouseMove.clientX;
-    };
+    function onMouseMove(mouseMove: MouseEvent) {
+      resizeElement1(initialElement1Width + mouseMove.clientX - initialMouseX);
+    }
 
-    const onMouseUp = () => {
+    function onMouseUp() {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
-    };
+    }
 
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
   }
 
   onMounted(() => {
-    defaultElement2Width.value = element2Ref.value?.clientWidth ?? 0;
-    if (element1Ref.value) {
-      if (element1Ref.value.clientWidth < minimumElement1Width) {
-        resizeElement(minimumElement1Width);
-      } else {
-        resizeElement(0); // Så element2 tar så mycket plats som möjligt
-      }
+    if (
+      !mainRef.value ||
+      !handleRef.value ||
+      !element1Ref.value ||
+      !element2Ref.value
+    ) {
+      console.warn("Missing required refs for useHorizontalDrag");
+      return;
     }
 
-    if (mainRef.value) {
-      const { width: mainWidth } = useElementSize(mainRef.value);
-      watch(mainWidth, () => {
-        if (element1Ref.value) {
-          resizeElement(element1Ref.value.clientWidth);
-        }
-      });
+    defaultElement2Width.value = element2Ref.value?.clientWidth ?? 0;
+    if (element1Ref.value.clientWidth < minimumElement1Width) {
+      resizeElement1(minimumElement1Width);
+    } else {
+      resizeElement1(0); // Så element2 tar så mycket plats som möjligt
     }
+
+    const { width: mainWidth } = useElementSize(mainRef.value);
+    watch(mainWidth, () => {
+      if (element1Ref.value) {
+        resizeElement1(element1Ref.value.clientWidth);
+      }
+    });
+
+    handleRef.value.addEventListener("mousedown", onMouseDown);
   });
 
-  return {
-    handleDrag,
-  };
+  onBeforeUnmount(() => {
+    handleRef.value?.removeEventListener("mousedown", onMouseDown);
+  });
 }
