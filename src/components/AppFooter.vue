@@ -21,7 +21,8 @@
           <div class="card-body">
             <p>
               Gredor är ett kostnadsfritt verktyg som du kan använda för att ta
-              fram årsredovisningar och skicka in dem till Bolagsverket.
+              fram årsredovisningar och skicka in dem till Bolagsverket. Du kan
+              alltså lämna in företagets åredovisning digitalt helt gratis.
             </p>
             <p>
               Verktyget har stöd för alla delar i en vanlig K2-årsredovisning
@@ -118,7 +119,7 @@
               <a href="https://github.com/GredorTools" target="_blank"
                 >GredorTools</a
               >
-              (öppen källkod!)
+              (open-source!)
             </p>
             <hr />
             <p>
