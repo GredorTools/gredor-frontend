@@ -115,12 +115,11 @@ defineModel<Arsredovisning>("arsredovisning", {
     </div>
   </div>
 
-  <div v-for="i in 3" :key="i" class="card mb-4 p-4">
+  <div v-for="i in 3" :key="i" :class="{ 'mb-4': i < 3 }" class="card p-4">
     <div class="form-check mb-3">
       <input
         :id="'verksamhetsarTidigareAktivt' + i"
         :checked="arsredovisning.verksamhetsarTidigare[i - 1] != null"
-        :disabled="arsredovisning.verksamhetsarTidigare.length > i"
         class="form-check-input"
         type="checkbox"
         @change="
@@ -134,7 +133,7 @@ defineModel<Arsredovisning>("arsredovisning", {
                   });
                 }
               } else {
-                arsredovisning.verksamhetsarTidigare.splice(i - 1, 1);
+                arsredovisning.verksamhetsarTidigare.length = i - 1;
               }
             }
           }

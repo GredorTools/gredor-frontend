@@ -57,6 +57,12 @@ it("can create and edit manually", function () {
     "have.text",
     " Om inte annat särskilt anges, redovisas alla belopp i hela kronor. ",
   );
+  cy.get(
+    "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(2)",
+  ).should("have.text", "2025");
+  cy.get(
+    "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(3)",
+  ).should("have.text", "2024");
 
   // Börja på förvaltningsberättelsen
   cy.get("#editor li:nth-child(2) .nav-link").click();
@@ -778,6 +784,8 @@ it("can create and edit manually", function () {
   cy.get("#editor li:nth-child(1) .nav-link").click();
   cy.get("#verksamhetsarTidigareAktivt2").check();
   cy.get("#verksamhetsarTidigareAktivt3").check();
+  cy.get("#verksamhetsarTidigareAktivt2").uncheck();
+  cy.get("#verksamhetsarTidigareAktivt3").check();
   cy.get("div:nth-child(6) #startdatumTidigare").click();
   cy.get("div:nth-child(6) #startdatumTidigare").clear();
   cy.get("div:nth-child(6) #startdatumTidigare").type("2023-01-01");
@@ -790,6 +798,18 @@ it("can create and edit manually", function () {
   cy.get("div:nth-child(7) #startdatumTidigare").type("2022-01-01");
   cy.get("div:nth-child(7) #slutdatumTidigare").clear();
   cy.get("div:nth-child(7) #slutdatumTidigare").type("2022-12-31");
+  cy.get(
+    "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(2)",
+  ).should("have.text", "2025");
+  cy.get(
+    "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(3)",
+  ).should("have.text", "2024");
+  cy.get(
+    "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(4)",
+  ).should("have.text", "2023");
+  cy.get(
+    "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(5)",
+  ).should("have.text", "2022");
 
   // Tillbaka till förvaltningsberättelsen
   cy.get("#editor li:nth-child(2) .nav-link").click();
