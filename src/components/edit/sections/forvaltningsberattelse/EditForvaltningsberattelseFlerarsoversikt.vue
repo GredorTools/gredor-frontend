@@ -42,6 +42,12 @@ const belopprader = prepopulateSection();
 </script>
 
 <template>
+  <div class="top-explainer">
+    Beloppen nedan ska skrivas in i <strong>hela kronor</strong>.
+  </div>
+
+  <hr />
+
   <table>
     <thead>
       <tr>
@@ -123,11 +129,19 @@ const belopprader = prepopulateSection();
         {{ arsredovisning.redovisningsinformation.redovisningsvaluta.namn }}
       </label>
     </div>
+
+    <div class="format-radios-explainer">
+      Obs: Du ska skriva in beloppen i hela kronor oavsett inställningarna ovan.
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/_variables.scss";
+
+.top-explainer {
+  margin: $spacing-sm 0;
+}
 
 .format-radios {
   margin: $spacing-lg 0;
@@ -135,5 +149,9 @@ const belopprader = prepopulateSection();
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+
+  .format-radios-explainer {
+    margin-top: $spacing-sm;
+  }
 }
 </style>
