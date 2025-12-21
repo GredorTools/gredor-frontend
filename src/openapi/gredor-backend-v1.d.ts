@@ -502,6 +502,8 @@ export interface components {
         BolagsverketRecordsResponse: {
             foretagsnamn: string;
             rakenskapsperioder: components["schemas"]["Rakenskapsperiod"][];
+            harVerkstallandeDirektor?: boolean;
+            harLikvidator?: boolean;
         };
         BolagsverketSubmissionRequest: {
             foretagOrgnr: string;

@@ -25,6 +25,8 @@ describe("first launch screen", () => {
             revisorsplikt: "uppgift_saknas",
           },
         ],
+        harVerkstallandeDirektor: false,
+        harLikvidator: true,
       },
     );
 

@@ -130,6 +130,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Rakenskapsperiod"
+        harVerkstallandeDirektor:
+          type: boolean
+        harLikvidator:
+          type: boolean
     BolagsverketSubmissionRequest:
       type: object
       required:
@@ -483,4 +487,4 @@ servers:
 - url: https://api.gredor.se
 info:
   title: gredor-backend API
-  version: 1.0-SNAPSHOT
+  version: 1.0.1
