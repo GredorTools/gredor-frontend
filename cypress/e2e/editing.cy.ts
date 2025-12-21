@@ -28,6 +28,8 @@ it("can create and edit manually", function () {
           revisorsplikt: "uppgift_saknas",
         },
       ],
+      harVerkstallandeDirektor: true,
+      harLikvidator: false,
     },
   );
 
@@ -51,7 +53,7 @@ it("can create and edit manually", function () {
   );
   cy.get("#arsredovisning-for-export p:nth-child(3)").should(
     "have.text",
-    "Styrelsen avger härmed följande årsredovisningför räkenskapsåret 2025-01-01 – 2025-12-31. ",
+    "Styrelsen och verkställande direktören avger härmed följande årsredovisningför räkenskapsåret 2025-01-01 – 2025-12-31. ",
   );
   cy.get("#arsredovisning-for-export .currency-info").should(
     "have.text",

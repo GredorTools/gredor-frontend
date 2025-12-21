@@ -19,6 +19,11 @@ import { getConfigValue } from "@/util/configUtils.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import {
+  AvgivandeLikvidator,
+  AvgivandeStyrelsen,
+  AvgivandeStyrelsenOchVD,
+} from "@/data/avgivande.ts";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -116,7 +121,18 @@ async function fetchRecords() {
     throw new Error(error);
   }
 
+  // Uppdatera årsredovisningen med data från Bolagsverket
   arsredovisning.value.foretagsinformation.foretagsnamn = data.foretagsnamn;
+
+  if (data.harLikvidator) {
+    arsredovisning.value.redovisningsinformation.avgivande =
+      AvgivandeLikvidator;
+  } else if (data.harVerkstallandeDirektor) {
+    arsredovisning.value.redovisningsinformation.avgivande =
+      AvgivandeStyrelsenOchVD;
+  } else {
+    arsredovisning.value.redovisningsinformation.avgivande = AvgivandeStyrelsen;
+  }
 
   arsredovisning.value.verksamhetsarNuvarande.startdatum =
     data.rakenskapsperioder[0]?.from || "";
