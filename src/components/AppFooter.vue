@@ -3,17 +3,7 @@
  * Applikationens sidfot.
  */
 
-import { computed } from "vue";
-import { getConfigValue } from "@/util/configUtils.ts";
-
-const version = computed(() => {
-  let result = __APP_VERSION__;
-  const environmentName = getConfigValue("VITE_ENV_NAME");
-  if (environmentName) {
-    result += `-${environmentName}`;
-  }
-  return result;
-});
+import { getAppFullVersion } from "@/util/configUtils.ts";
 </script>
 
 <template>
@@ -143,7 +133,7 @@ const version = computed(() => {
       </div>
 
       <div class="col-12 mt-4 small opacity-75 text-center">
-        Version: {{ version }}
+        Version: {{ getAppFullVersion() }}
       </div>
     </aside>
   </div>
