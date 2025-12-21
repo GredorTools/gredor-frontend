@@ -15,6 +15,19 @@ export function getConfigValue(key: EnvironmentKey): string | undefined {
   return window.config[key] || import.meta.env[key];
 }
 
+/**
+ * Returnerar applikationens versionsnummer, inklusive miljönamn om det är
+ * konfigurerat.
+ */
+export function getAppFullVersion() {
+  let version = __APP_VERSION__;
+  const environmentName = getConfigValue("VITE_ENV_NAME");
+  if (environmentName) {
+    version += `-${environmentName}`;
+  }
+  return version;
+}
+
 declare global {
   interface Window {
     config: EnvironmentConfig; // Kommer från config.js
