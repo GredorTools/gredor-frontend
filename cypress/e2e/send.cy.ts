@@ -70,7 +70,7 @@ describe("go through send wizard", () => {
         url: "http://gredor-backend/v1/submission-flow/validate",
       },
       {
-        orgnr: "5569999999",
+        orgnr: "5560021361",
         utfall: [],
       },
     );
@@ -81,7 +81,7 @@ describe("go through send wizard", () => {
         url: "http://gredor-backend/v1/submission-flow/submit",
       },
       {
-        orgnr: "5569999999",
+        orgnr: "5560021361",
         avsandare: "191212121212",
         undertecknare: "191212121212",
         url: "http://127.0.0.1",

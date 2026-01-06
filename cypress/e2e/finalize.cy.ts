@@ -70,7 +70,7 @@ describe("go through finalize wizard", () => {
         url: "http://gredor-backend/v1/submission-flow/validate",
       },
       {
-        orgnr: "5569999999",
+        orgnr: "5560021361",
         utfall: [
           {
             typ: "warn",
