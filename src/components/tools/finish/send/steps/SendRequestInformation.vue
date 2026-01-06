@@ -11,6 +11,8 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import { computed } from "vue";
+import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
 defineProps<CommonStepProps>();
 
@@ -27,6 +29,12 @@ const notificationEmail = defineModel<string>("notificationEmail", {
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
 const personnummerRegex = /^\d{12}$/;
+
+const personnummerCorrectFormatButInvalidLuhn = computed(
+  () =>
+    personnummerRegex.test(personalNumber.value) &&
+    !LuhnAlgorithm.isValid(personalNumber.value.substring(2)),
+);
 </script>
 
 <template>
@@ -51,6 +59,9 @@ const personnummerRegex = /^\d{12}$/;
         placeholder="Skriv personnummer här…"
         type="text"
       />
+      <strong v-if="personnummerCorrectFormatButInvalidLuhn" class="ms-2"
+        >Ogiltigt personnummer.</strong
+      >
     </div>
 
     <div>
@@ -69,7 +80,9 @@ const personnummerRegex = /^\d{12}$/;
 
     <CommonWizardButtons
       :next-button-disabled="
-        !personnummerRegex.test(personalNumber) || !isEmail(notificationEmail)
+        !personnummerRegex.test(personalNumber) ||
+        personnummerCorrectFormatButInvalidLuhn ||
+        !isEmail(notificationEmail)
       "
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
