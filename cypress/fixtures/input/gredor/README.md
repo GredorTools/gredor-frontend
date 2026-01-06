@@ -59,3 +59,9 @@ Innehåller:
 
 Testfil med alla fält ifyllda. Värdena går inte ihop logiskt utan detta är bara
 till för regressionstestning.
+
+
+## TestfilE
+
+Liknar TestfilA, men har avrundningsfel på ett av fälten för balanserat
+resultat.

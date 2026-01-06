@@ -40,7 +40,7 @@ watch(topModalDefinition, (newValue) => {
       clearTimeout(closeButtonEnableTimeout);
     }
 
-    closeButtonEnableTimeout = setTimeout(() => {
+    closeButtonEnableTimeout = window.setTimeout(() => {
       closeButtonDisabled.value = false;
     }, 500);
   }

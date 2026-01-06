@@ -30,12 +30,12 @@ type Args = {
  * generera rapporten - kan användas för att avbryta intervallet.
  */
 function tryGenerateIXBRLInInterval(args: Args) {
-  const intervalId = setInterval(async () => {
+  const intervalId = window.setInterval(async () => {
     const arsredovisningRoot = args.renderMain.value?.getArsredovisningRoot();
     if (arsredovisningRoot) {
       if (intervalId != null) {
         // Vi har fått tag på roten, behöver inte köra intervallet mer
-        clearInterval(intervalId);
+        window.clearInterval(intervalId);
       }
 
       const { foretagsinformation } = args.arsredovisning;

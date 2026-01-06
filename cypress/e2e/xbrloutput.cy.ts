@@ -1,7 +1,8 @@
 import * as path from "path";
 import { XMLParser } from "fast-xml-parser";
 import { diff } from "json-diff-ts";
-import { convertIxbrlToXbrl } from "../../tools/simpleIxbrlToXbrl";
+
+import { convertiXBRLToXBRL } from "../../src/util/convertiXBRLToXBRL";
 
 describe("validate generated XBRL data", () => {
   const cases = [
@@ -149,7 +150,7 @@ describe("validate generated XBRL data", () => {
         const downloadsFolder = Cypress.config("downloadsFolder");
         const downloadPath = path.join(downloadsFolder, "arsredovisning.xhtml");
         cy.readFile(downloadPath).then((actualIxbrl: string) => {
-          const actualXbrl = convertIxbrlToXbrl(actualIxbrl);
+          const actualXbrl = convertiXBRLToXBRL(actualIxbrl);
 
           cy.readFile(
             `cypress/fixtures/expectedoutput/gredor/${testFileName}.xml`,
