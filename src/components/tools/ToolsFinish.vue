@@ -7,12 +7,17 @@
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
 import { convertVueHTMLToiXBRL } from "@/util/documentUtils.ts";
-import { nextTick, ref } from "vue";
+import { defineAsyncComponent, nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
-import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
-import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
+
+const FinalizeWizard = defineAsyncComponent(
+  () => import("@/components/tools/finish/finalize/FinalizeWizard.vue"),
+);
+const SendWizard = defineAsyncComponent(
+  () => import("@/components/tools/finish/send/SendWizard.vue"),
+);
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
@@ -93,18 +98,23 @@ async function showSendWizard() {
     </button>
   </div>
 
-  <FinalizeWizard
-    :key="finalizeWizardRenderId"
-    ref="finalizeWizard"
-    v-model:todo-list="todoList"
-    :arsredovisning="arsredovisning"
-    instance-id="ToolsFinish"
-  />
-  <SendWizard
-    :key="sendWizardRenderId"
-    ref="sendWizard"
-    instance-id="ToolsFinish"
-  />
+  <Suspense>
+    <FinalizeWizard
+      :key="finalizeWizardRenderId"
+      ref="finalizeWizard"
+      v-model:todo-list="todoList"
+      :arsredovisning="arsredovisning"
+      instance-id="ToolsFinish"
+    />
+  </Suspense>
+
+  <Suspense>
+    <SendWizard
+      :key="sendWizardRenderId"
+      ref="sendWizard"
+      instance-id="ToolsFinish"
+    />
+  </Suspense>
 </template>
 
 <style lang="scss" scoped></style>

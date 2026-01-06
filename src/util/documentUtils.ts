@@ -1,6 +1,5 @@
-import xmlFormat from "xml-formatter";
-
 import { getAppFullVersion } from "@/util/configUtils.ts";
+import xmlFormat from "xml-formatter";
 
 /**
  * Konverterar innehållet i ett Vue HTML-element till iXBRL-format.

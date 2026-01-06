@@ -9,15 +9,12 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
-import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import RenderMain from "@/components/render/RenderMain.vue";
+import { computed } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
-const props = defineProps<
+defineProps<
   CommonStepProps & {
     /** Årsredovisningen som ska skickas in till Bolagsverket. */
     arsredovisning: Arsredovisning;
@@ -34,14 +31,7 @@ const personalNumber = defineModel<string>("personalNumber", {
   required: true,
 });
 
-/** Årsredovisningen i iXBRL-format. */
-const ixbrl = defineModel<string | undefined>("ixbrl", {
-  required: true,
-});
-
 const emit = defineEmits<CommonWizardButtonsEmits>();
-
-const renderMain = ref<ComponentExposed<typeof RenderMain>>();
 
 const personnummerRegex = /^\d{12}$/;
 
@@ -50,27 +40,6 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
     personnummerRegex.test(personalNumber.value) &&
     !LuhnAlgorithm.isValid(personalNumber.value.substring(2)),
 );
-
-// Generering av iXBRL - sker i bakgrunden
-const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
-  renderMain,
-  arsredovisning: props.arsredovisning,
-  ixbrlOutput: ixbrl,
-});
-let reportGeneratorIntervalId: number | undefined;
-onMounted(() => {
-  // Timeout så att förhandsgranskningen hinner ladda in innan vi skapar iXBRL
-  setTimeout(async () => {
-    // Konvertera renderad HTML till iXBRL
-    reportGeneratorIntervalId = tryGenerateIXBRLInInterval();
-  }, 250);
-});
-
-onBeforeUnmount(() => {
-  if (reportGeneratorIntervalId != null) {
-    clearInterval(reportGeneratorIntervalId);
-  }
-});
 </script>
 
 <template>
@@ -78,14 +47,6 @@ onBeforeUnmount(() => {
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter
     </CommonModalSubtitle>
-
-    <div v-if="arsredovisning" hidden>
-      <RenderMain
-        ref="renderMain"
-        :arsredovisning="arsredovisning"
-        :show-faststallelseintyg="false"
-      />
-    </div>
 
     <div>
       <h5>Bolagsverkets kontroller</h5>
@@ -151,9 +112,8 @@ onBeforeUnmount(() => {
         (callBolagsverket &&
           (!personnummerRegex.test(personalNumber) ||
             personnummerCorrectFormatButInvalidLuhn)) ||
-        !ixbrl
+        false
       "
-      :next-button-text="ixbrl ? 'Nästa' : 'Vänta – arbetar i bakgrunden…'"
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"

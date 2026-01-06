@@ -79,6 +79,7 @@ const currentStep = ref<
   >
     <FinalizeReminder
       v-if="currentStep === 'reminder'"
+      v-model:ixbrl="ixbrl"
       :arsredovisning="arsredovisning"
       :current-step-number="1"
       :num-steps="numSteps"
@@ -88,7 +89,6 @@ const currentStep = ref<
     <FinalizeRequestInformation
       v-if="currentStep === 'requestInformation'"
       v-model:call-bolagsverket="callBolagsverket.wrappedValue"
-      v-model:ixbrl="ixbrl"
       v-model:personal-number="personalNumber"
       :arsredovisning="arsredovisning"
       :current-step-number="2"

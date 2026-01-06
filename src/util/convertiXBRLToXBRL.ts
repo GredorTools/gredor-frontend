@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { Element } from "domhandler";
-import xmlFormat from "xml-formatter";
 import Decimal from "decimal.js";
+import xmlFormat from "xml-formatter";
 
 /**
  * Enkel konverterare som tar in ett iXBRL-dokument och transfomerar det till
@@ -10,18 +10,21 @@ import Decimal from "decimal.js";
  * @param ixbrl - iXBRL-dokument som en sträng
  * @returns XBRL-dokument som en sträng
  */
-export function convertIxbrlToXbrl(ixbrl: string): string {
+export function convertiXBRLToXBRL(ixbrl: string): string {
   const xbrlDoc = cheerio.load('<?xml version="1.0" encoding="UTF-8"?>', {
     xml: true,
+    // @ts-expect-error - typningen av CheerioOptions verkar inte stämma med verkligheten
     decodeEntities: false,
   });
 
   const ixbrlDoc = cheerio.load(ixbrl, {
     xml: true,
+    // @ts-expect-error - typningen av CheerioOptions verkar inte stämma med verkligheten
     decodeEntities: false,
   });
 
   const xbrlRoot = xbrlDoc("<xbrli:xbrl></xbrli:xbrl>");
+  // @ts-expect-error - oklart vad som är fel här
   Object.entries(ixbrlDoc("html").attr())
     .filter(([key]) => !["xmlns", "xmlns:ix", "xmlns:ixt"].includes(key))
     .forEach(([key, value]) => {
@@ -64,6 +67,7 @@ export function convertIxbrlToXbrl(ixbrl: string): string {
         const tupleChildren = Array.from(
           ixbrlDoc(`[tupleRef='${el.attribs["tupleID"]}']`),
         ).map(handleRegularElement);
+        // @ts-expect-error - oklart vad som är fel här
         tupleElement.append(tupleChildren);
         return tupleElement;
       }
@@ -77,6 +81,7 @@ export function convertIxbrlToXbrl(ixbrl: string): string {
     .get();
 
   xbrlRoot.append(ixbrlDoc("ix\\:references").children());
+  // @ts-expect-error - oklart vad som är fel här
   xbrlRoot.append(dataElements);
   xbrlRoot.append(ixbrlDoc("ix\\:resources").children());
   xbrlRoot.find("*").each((i, el) => {
