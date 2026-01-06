@@ -17,7 +17,7 @@ defineProps<{
     class="signatures-container"
     xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
   >
-    <p>
+    <p class="ort-datum">
       <ix:nonNumeric
         contextRef="period_nuvarande"
         name="se-gen-base:UndertecknandeArsredovisningOrt"
@@ -96,13 +96,18 @@ defineProps<{
 <style lang="scss" scoped>
 .signatures-container {
   margin-top: 8rem;
+  page-break-inside: avoid;
+}
+
+.ort-datum {
+  margin-bottom: 2rem;
 }
 
 .name {
   display: inline-block;
   width: 49%;
   vertical-align: top;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 
   .signature {
     font-weight: 600;
