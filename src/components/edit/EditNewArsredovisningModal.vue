@@ -6,11 +6,14 @@
  * möjlighet att importera en SIE-fil.
  */
 
-import { ref } from "vue";
+import { ref, unref } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
-import { starterArsredovisning } from "@/example/starterArsredovisning.ts";
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import { starterArsredovisning } from "@/templates/starterArsredovisning.ts";
+import {
+  type Arsredovisning,
+  createArsredovisningFromTemplate,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import createClient from "openapi-fetch";
@@ -24,6 +27,8 @@ import {
   AvgivandeStyrelsen,
   AvgivandeStyrelsenOchVD,
 } from "@/data/avgivande.ts";
+import { addTodoListItem } from "@/model/todolist/TodoList.ts";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -44,8 +49,9 @@ defineExpose({
 });
 
 const arsredovisning = ref<Arsredovisning>(
-  JSON.parse(JSON.stringify(starterArsredovisning)), // Deep copy
+  createArsredovisningFromTemplate(starterArsredovisning),
 );
+const sieMessages = ref<string[]>([]);
 
 const busy = ref<boolean>(false);
 
@@ -53,31 +59,38 @@ const { showMessageModal } = useModalStore();
 
 async function handleSieFile(file: File) {
   busy.value = true;
+
   try {
     const organisationsnummer =
       arsredovisning.value.foretagsinformation.organisationsnummer;
-    arsredovisning.value = JSON.parse(JSON.stringify(starterArsredovisning)); // Nollställer
+    arsredovisning.value = createArsredovisningFromTemplate(
+      starterArsredovisning,
+    ); // Nollställer
     arsredovisning.value.foretagsinformation.organisationsnummer =
       organisationsnummer;
 
-    const messages: string[] = [];
+    sieMessages.value = [];
 
     const sieFileText = await file.text();
     await mapSieFileIntoArsredovisning(
       sieFileText,
       arsredovisning.value,
-      (message) => messages.push(message),
+      (message) => sieMessages.value.push(message),
     );
 
-    if (messages.length > 0) {
-      showMessageModal(messages.join("\n"), "SIE-import");
+    if (sieMessages.value.length > 0) {
+      showMessageModal(
+        sieMessages.value.join("\n") +
+          "\n\nVarningarna kommer att dyka upp i din att-åtgärda-lista.",
+        "SIE-import",
+      );
     }
   } finally {
     busy.value = false;
   }
 }
 
-async function fetchRecordsAndEmit() {
+async function createArsredovisning() {
   busy.value = true;
   try {
     await fetchRecords();
@@ -89,6 +102,20 @@ async function fetchRecordsAndEmit() {
       "Varning",
     );
   } finally {
+    if (sieMessages.value.length > 0) {
+      addTodoListItem(arsredovisning.value.gredorState.todoList, {
+        id: "sie-import",
+        title: "Varningar från SIE-import",
+        description:
+          "Följande varningar uppstod när du importerade din SIE-fil.",
+        timestamp: Date.now(),
+        tasks: unref(sieMessages.value).map((message) => ({
+          text: message,
+          complete: false,
+        })),
+      });
+    }
+
     emit(
       "arsredovisningCreated",
       JSON.parse(JSON.stringify(arsredovisning.value)), // Deep copy
@@ -167,7 +194,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
     show-close-button
     title="Ny årsredovisning"
   >
-    <div class="limit-width">
+    <CommonModalContents class="limit-width">
       <h5>Organisationsnummer</h5>
 
       <p>
@@ -210,7 +237,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
         :disabled="busy"
         @file-picked="handleSieFile"
       />
-    </div>
+    </CommonModalContents>
 
     <CommonWizardButtons
       :next-button-disabled="
@@ -219,7 +246,7 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
       "
       :next-button-text="busy ? 'Vänta – arbetar…' : 'Skapa'"
       previous-button-hidden
-      @go-to-next-step="fetchRecordsAndEmit"
+      @go-to-next-step="createArsredovisning"
     />
   </CommonModal>
 </template>

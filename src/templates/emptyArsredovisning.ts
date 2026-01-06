@@ -54,4 +54,9 @@ export const emptyArsredovisning: Arsredovisning = {
   resultatrakning: [],
   balansrakning: [],
   noter: [],
+  gredorState: {
+    todoList: {
+      items: [],
+    },
+  },
 };

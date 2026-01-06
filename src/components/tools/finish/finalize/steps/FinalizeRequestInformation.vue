@@ -4,7 +4,9 @@
  * till backend/Bolagsverket.
  */
 
-import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, {
+  type CommonWizardButtonsEmits,
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
@@ -12,6 +14,7 @@ import { onBeforeUnmount, onMounted, ref } from "vue";
 import RenderMain from "@/components/render/RenderMain.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -64,7 +67,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter
     </CommonModalSubtitle>
@@ -143,7 +146,7 @@ onBeforeUnmount(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>

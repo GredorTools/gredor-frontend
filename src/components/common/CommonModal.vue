@@ -105,7 +105,6 @@ onMounted(() => {
   max-width: 98vw;
   max-height: 75vh;
   overflow-y: auto;
-  padding-bottom: $spacing-xl;
 }
 
 h3 {

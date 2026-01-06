@@ -9,6 +9,7 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -55,7 +56,7 @@ async function exportUnsignedPdf() {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Skriv ut och signera
     </CommonModalSubtitle>
@@ -86,7 +87,7 @@ async function exportUnsignedPdf() {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>
@@ -96,7 +97,6 @@ async function exportUnsignedPdf() {
   border: 1px solid $border-color-dark;
   border-radius: var(--bs-border-radius);
   padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
 }
 
 .download-zone {

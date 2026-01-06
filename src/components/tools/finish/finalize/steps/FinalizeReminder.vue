@@ -19,6 +19,7 @@ import {
   type BaseBeloppradComparable,
   isBeloppradComparable,
 } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -128,7 +129,7 @@ const beloppraderWithNonexistingNoter = computed(() => {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Glöm inte…
     </CommonModalSubtitle>
@@ -195,7 +196,7 @@ const beloppraderWithNonexistingNoter = computed(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>

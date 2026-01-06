@@ -20,6 +20,8 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import { addTodoListItem, type TodoList } from "@/model/todolist/TodoList.ts";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -33,6 +35,12 @@ const props = defineProps<
     discardFaststallelseintygValidations?: boolean;
   }
 >();
+
+/** Eventuell att-åtgärda-lista där fel/varningar från Bolagsverket kan läggas
+ * till av denna komponent. */
+const todoList = defineModel<TodoList | undefined>("todoList", {
+  required: false,
+});
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
@@ -102,6 +110,30 @@ async function performRequest() {
   } finally {
     loading.value = false;
   }
+
+  updateTodoList();
+}
+
+function updateTodoList() {
+  if (todoList.value == null) {
+    return;
+  }
+
+  const errorsAndWarnings = result.value?.utfall?.filter(
+    (utfall) => utfall.typ && ["error", "warn"].includes(utfall.typ),
+  );
+  if (errorsAndWarnings && errorsAndWarnings.length > 0) {
+    addTodoListItem(todoList.value, {
+      id: "bolagsverkets-kontroller",
+      title: "Bolagsverkets kontroller",
+      description: "Följande fel/varningar upptäcktes av Bolagsverket.",
+      timestamp: Date.now(),
+      tasks: errorsAndWarnings
+        .map((utfall) => utfall.text || "")
+        .filter((text) => !!text)
+        .map((text) => ({ text, complete: false })),
+    });
+  }
 }
 
 onMounted(() => {
@@ -113,7 +145,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Bolagsverkets kontroller
     </CommonModalSubtitle>
@@ -162,6 +194,18 @@ onMounted(() => {
             <strong>Informationsmeddelanden</strong> är endast för upplysning
           </li>
         </ul>
+
+        <p
+          v-if="
+            todoList != null &&
+            result.utfall?.some(
+              (utfall) => utfall.typ && ['error', 'warn'].includes(utfall.typ),
+            )
+          "
+          class="mb-0"
+        >
+          Varningarna har lagts till i din att-åtgärda-lista.
+        </p>
       </template>
       <template v-else>
         Bolagsverkets automatiska kontroller hittade inga anmärkningar.
@@ -176,7 +220,7 @@ onMounted(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>

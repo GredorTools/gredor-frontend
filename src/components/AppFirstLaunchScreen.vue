@@ -7,8 +7,12 @@
 
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
 import { parseGredorFile, requestOpenFile } from "@/util/fileUtils.ts";
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { exampleArsredovisning } from "@/example/exampleArsredovisning.ts";
+import {
+  type Arsredovisning,
+  createArsredovisningFromTemplate,
+  upgradeArsredovisningObject,
+} from "@/model/arsredovisning/Arsredovisning.ts";
+import { exampleArsredovisning } from "@/templates/exampleArsredovisning.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
@@ -50,10 +54,12 @@ async function importFile() {
   const json = await file?.text();
   if (json) {
     try {
-      arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+      const arsredovisningInput = parseGredorFile<Arsredovisning>(json, [
         "arsredovisning_utkast",
         "arsredovisning_fardig",
       ]).data;
+      upgradeArsredovisningObject(arsredovisningInput);
+      arsredovisning.value = arsredovisningInput;
     } catch {
       showMessageModal("Filen är ogiltig och kan inte öppnas i Gredor.");
     }
@@ -66,7 +72,9 @@ function showExampleArsredovisning() {
     return; // Förhindra flera klick
   }
 
-  arsredovisning.value = exampleArsredovisning;
+  arsredovisning.value = createArsredovisningFromTemplate(
+    exampleArsredovisning,
+  );
   showFirstLaunchScreen.value = false;
 }
 

@@ -134,4 +134,9 @@ export const starterArsredovisning: Arsredovisning = {
       beloppTidigareAr: [""],
     } as Belopprad<"xbrli:decimalItemType">,
   ],
+  gredorState: {
+    todoList: {
+      items: [],
+    },
+  },
 };

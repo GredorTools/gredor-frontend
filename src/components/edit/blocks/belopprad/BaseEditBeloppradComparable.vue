@@ -6,7 +6,7 @@
 
 import BaseEditBeloppradContainer from "@/components/edit/blocks/belopprad/BaseEditBeloppradContainer.vue";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
-import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
+import CommonDeleteButton from "@/components/common/CommonDeleteButton.vue";
 import { computed } from "vue";
 import { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
@@ -180,7 +180,10 @@ function onBeforeValueInput(event: InputEvent) {
       </div>
     </td>
     <td v-if="allowDelete">
-      <BaseEditBeloppradDeleteButton @delete="emit('delete')" />
+      <CommonDeleteButton
+        description="Ta bort beloppraden"
+        @delete="emit('delete')"
+      />
     </td>
   </BaseEditBeloppradContainer>
 </template>

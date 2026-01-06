@@ -142,6 +142,10 @@ describe("go through finalize wizard", () => {
 
     // Steg 5 - Bolagsverkets kontroller
     cy.get("div.alert").should("have.text", "Varning: Mock-varning");
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
+      "have.text",
+      "1",
+    );
     cy.get('[data-testid="wizard-next-button"]').click();
 
     // Steg 6 - Ladda ner .gredorfardig
@@ -232,5 +236,6 @@ describe("go through finalize wizard", () => {
 
     // Steg 5 - Klar
     cy.get('[data-testid="wizard-next-button"]').click();
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should("not.exist");
   });
 });

@@ -12,11 +12,17 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
+import type { TodoList } from "@/model/todolist/TodoList.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
   arsredovisning: Arsredovisning;
 }>();
+
+/** Att-åtgärda-lista där fel/varningar kan läggas till av denna komponent. */
+const todoList = defineModel<TodoList>("todoList", {
+  required: true,
+});
 
 const finalizeWizardRenderId = ref<number>(0);
 const finalizeWizard = ref<ComponentExposed<typeof FinalizeWizard>>();
@@ -58,7 +64,7 @@ async function showSendWizard() {
 </script>
 
 <template>
-  <div class="d-flex justify-content-end gap-2">
+  <div class="d-inline-flex justify-content-end gap-2">
     <button
       v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
       class="btn btn-outline-primary"
@@ -90,6 +96,7 @@ async function showSendWizard() {
   <FinalizeWizard
     :key="finalizeWizardRenderId"
     ref="finalizeWizard"
+    v-model:todo-list="todoList"
     :arsredovisning="arsredovisning"
     instance-id="ToolsFinish"
   />

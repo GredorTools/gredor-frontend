@@ -40,18 +40,24 @@ export function useGredorStorage<T>(store: Store, defaultValue: T): Ref<T> {
 /**
  * Hämtar ett fält från webbläsarens lagring, som en Vue-ref. Beroende på vilket
  * fält som anges används antingen localStorage eller sessionStorage. Detta är
- * en alternativ till useGredorStorage med högre prestanda; inkommande
+ * ett alternativ till useGredorStorage med högre prestanda; inkommande
  * förändringar synkas endast när sidan får fokus efter att ha varit ur fokus.
  *
  * @param store - Nyckeln till fältet som ska hämtas
  * @param defaultValue - Värde som returneras om fältet inte har något sparat
  * värde
+ * @param options - Alternativ för lagringshantering. Innehåller just nu endast
+ * preloadCallback, som anropas innan det sparade värdet laddas in och därmed
+ * tillåter mutering av värdet.
  * @returns Fältet som en Vue-ref, samt en funktion för att avaktivera lyssnaren
  * som synkar inkommande förändringar
  */
 export function useGredorHighPerformanceStorage<T>(
   store: Store,
   defaultValue: T,
+  options?: {
+    preloadCallback?: (newValue: T) => void;
+  },
 ): { ref: Ref<T>; removeFocusChangeListener: () => void } {
   // Detta tillvägagångssätt verkar ge bättre prestanda med stora objekt
   // som t.ex. årsredovisningsobjekt.
@@ -64,11 +70,16 @@ export function useGredorHighPerformanceStorage<T>(
     storage.setItem(store, JSON.stringify(defaultValue));
   }
 
-  const storageItemRef = ref(
-    existingStorageItem != null
-      ? JSON.parse(existingStorageItem)
-      : defaultValue,
-  );
+  let storageItemRef;
+  if (existingStorageItem != null) {
+    const parsedExistingStorageItem = JSON.parse(existingStorageItem);
+    if (options?.preloadCallback) {
+      options.preloadCallback(parsedExistingStorageItem);
+    }
+    storageItemRef = ref(parsedExistingStorageItem);
+  } else {
+    storageItemRef = ref(defaultValue);
+  }
 
   // Lyssna på förändringar i applikationen och spara dem
   watchDeep(storageItemRef, (newValue) => {
@@ -79,7 +90,11 @@ export function useGredorHighPerformanceStorage<T>(
   const focusChangeListener = () => {
     const updatedItem = localStorage.getItem(store);
     if (updatedItem != null) {
-      storageItemRef.value = JSON.parse(updatedItem);
+      const parsedUpdatedItem = JSON.parse(updatedItem);
+      if (options?.preloadCallback) {
+        options.preloadCallback(parsedUpdatedItem);
+      }
+      storageItemRef.value = parsedUpdatedItem;
     }
   };
   document.addEventListener("focus", focusChangeListener);

@@ -10,7 +10,10 @@ import {
   requestOpenFile,
   requestSaveFile,
 } from "@/util/fileUtils.ts";
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import {
+  type Arsredovisning,
+  upgradeArsredovisningObject,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
@@ -108,10 +111,12 @@ async function importFile() {
   const json = await file?.text();
   if (json) {
     try {
-      arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+      const arsredovisningInput = parseGredorFile<Arsredovisning>(json, [
         "arsredovisning_utkast",
         "arsredovisning_fardig",
       ]).data;
+      upgradeArsredovisningObject(arsredovisningInput);
+      arsredovisning.value = arsredovisningInput;
     } catch {
       showMessageModal("Filen är ogiltig och kan inte öppnas i Gredor.");
     }
