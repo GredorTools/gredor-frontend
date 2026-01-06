@@ -4,7 +4,10 @@
  * ladda upp årsredovisningen till Bolagsverket.
  */
 
-import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
+import {
+  type Arsredovisning,
+  upgradeArsredovisningObject,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 import { parseGredorFile } from "@/util/fileUtils.ts";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
@@ -14,6 +17,7 @@ import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { ref } from "vue";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 defineProps<CommonStepProps>();
 
@@ -34,9 +38,11 @@ const hasPickedArsredovisningFile = ref<boolean>(false);
 async function handleArsredovisningFile(file: File) {
   const json = await file.text();
   try {
-    arsredovisning.value = parseGredorFile<Arsredovisning>(json, [
+    const arsredovisningInput = parseGredorFile<Arsredovisning>(json, [
       "arsredovisning_fardig",
     ]).data;
+    upgradeArsredovisningObject(arsredovisningInput);
+    arsredovisning.value = arsredovisningInput;
   } catch {
     showMessageModal("Filen är ogiltig och kan inte öppnas i Gredor.");
   }
@@ -45,7 +51,7 @@ async function handleArsredovisningFile(file: File) {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <div class="d-flex flex-column gap-3">
       <CommonModalSubtitle>
         Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp filer
@@ -63,7 +69,7 @@ async function handleArsredovisningFile(file: File) {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped></style>

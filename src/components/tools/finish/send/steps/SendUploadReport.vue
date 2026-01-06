@@ -17,6 +17,7 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -92,7 +93,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp
     </CommonModalSubtitle>
@@ -111,7 +112,7 @@ onMounted(() => {
         </a>
       </p>
 
-      <p>
+      <p class="mb-0">
         <strong>
           Observera att årsredovisningen inte är mottagen av Bolagsverket förrän
           du har signerat den i deras e-tjänst.
@@ -126,7 +127,7 @@ onMounted(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>

@@ -666,4 +666,9 @@ export const exampleArsredovisning: Arsredovisning = {
       beloppTidigareAr: ["2"],
     } as Belopprad<"xbrli:decimalItemType">,
   ],
+  gredorState: {
+    todoList: {
+      items: [],
+    },
+  },
 };

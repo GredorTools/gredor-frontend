@@ -1,0 +1,827 @@
+{
+  "dataType": "arsredovisning_utkast",
+  "version": 1,
+  "data": {
+    "metadata": {
+      "taxonomiTyp": "k2",
+      "taxonomiVersion": "2021-10-31"
+    },
+    "foretagsinformation": {
+      "foretagsnamn": "Testbolaget AB",
+      "organisationsnummer": "556999-9999"
+    },
+    "redovisningsinformation": {
+      "avgivande": {
+        "namn": "Styrelsen",
+        "xbrlId": "se-mem-base:FinansiellRapportStyrelsenAvgerArsredovisningMember"
+      },
+      "redovisningsvaluta": {
+        "kod": "SEK",
+        "namn": "kronor",
+        "namnKort": "kr",
+        "namnKortTusental": "tkr",
+        "xbrlId": "se-mem-base:ValutaSvenskaKronorMember"
+      },
+      "underskrifter": [
+        {
+          "tilltalsnamn": "",
+          "efternamn": "",
+          "roll": "",
+          "datum": "2026-01-06"
+        }
+      ],
+      "undertecknandeOrt": "",
+      "datering": "2026-01-06"
+    },
+    "installningar": {
+      "flerarsoversiktBeloppFormat": "tusental"
+    },
+    "faststallelseintyg": {
+      "datumArsstamma": "",
+      "resultatdispositionBeslut": {
+        "text": "",
+        "xbrlId": ""
+      },
+      "resultatdispositionStammans": {},
+      "underskrift": {
+        "tilltalsnamn": "",
+        "efternamn": "",
+        "roll": "",
+        "datum": ""
+      }
+    },
+    "verksamhetsarNuvarande": {
+      "startdatum": "2024-01-01",
+      "slutdatum": "2024-12-31"
+    },
+    "verksamhetsarTidigare": [
+      {
+        "startdatum": "2023-01-01",
+        "slutdatum": "2023-12-31"
+      }
+    ],
+    "forvaltningsberattelse": [
+      {
+        "taxonomyItemName": "se-gen-base:VerksamhetenAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForvaltningsberattelseAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AllmantVerksamheten",
+        "parentTaxonomyItemName": "se-gen-base:VerksamhetenAbstract",
+        "type": "xbrli:stringItemType",
+        "text": "Företaget bedriver [...].\n\nBolaget har sitt säte i [...] kommun."
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Flerarsoversikt",
+        "parentTaxonomyItemName": "se-gen-base:ForvaltningsberattelseAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Nettoomsattning",
+        "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "207157",
+        "beloppTidigareAr": [
+          "274012"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ResultatEfterFinansiellaPoster",
+        "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55573",
+        "beloppTidigareAr": [
+          "59635"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Soliditet",
+        "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
+        "type": "xbrli:pureItemType",
+        "beloppNuvarandeAr": "90",
+        "beloppTidigareAr": [
+          "94",
+          "",
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapital",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForvaltningsberattelseAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapital",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalAktiekapitalAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Aktiekapital",
+        "labelType": "periodStartLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAktiekapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "25000",
+        "beloppTidigareAr": [
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Aktiekapital",
+        "labelType": "periodEndLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAktiekapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "25000",
+        "beloppTidigareAr": [
+          "25000"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:BalanseratResultat",
+        "labelType": "periodStartLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "75407",
+        "beloppTidigareAr": [
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:BalanseratResultat",
+        "labelType": "periodEndLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "100229",
+        "beloppTidigareAr": [
+          "75407"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AretsResultatEgetKapital",
+        "labelType": "periodStartLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "47322",
+        "beloppTidigareAr": [
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalIngaendeAretsResultatAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalIngaendeAretsResultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "48867",
+        "beloppTidigareAr": [
+          "47322"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AretsResultatEgetKapital",
+        "labelType": "periodEndLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAretsResultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "48867",
+        "beloppTidigareAr": [
+          "47322"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalTotaltAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalTotalt",
+        "labelType": "periodStartLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalTotaltAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "147729",
+        "beloppTidigareAr": [
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalIngaendeTotaltAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalTotaltAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalTotaltAretsResultat",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalIngaendeTotaltAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "48867",
+        "beloppTidigareAr": [
+          "47322"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForandringEgetKapitalTotalt",
+        "labelType": "periodEndLabel",
+        "parentTaxonomyItemName": "se-gen-base:ForandringEgetKapitalTotaltAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "174096",
+        "beloppTidigareAr": [
+          "147729"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Resultatdisposition",
+        "parentTaxonomyItemName": "se-gen-base:ForvaltningsberattelseAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:MedelDisponeraAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:Resultatdisposition",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:BalanseratResultat",
+        "parentTaxonomyItemName": "se-gen-base:MedelDisponeraAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "100229",
+        "beloppTidigareAr": [
+          "75407"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AretsResultatEgetKapital",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:MedelDisponeraAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "48867",
+        "beloppTidigareAr": [
+          "47322"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FrittEgetKapital",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:Resultatdisposition",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "149096",
+        "beloppTidigareAr": [
+          "122729"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForslagDisposition",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:Resultatdisposition",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "149096",
+        "beloppTidigareAr": [
+          "122729"
+        ]
+      }
+    ],
+    "resultatrakning": [
+      {
+        "taxonomyItemName": "se-gen-base:RorelseresultatAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:RorelsensIntakterLagerforandringarMmAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:RorelseresultatAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Nettoomsattning",
+        "parentTaxonomyItemName": "se-gen-base:RorelsensIntakterLagerforandringarMmAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "207157",
+        "beloppTidigareAr": [
+          "274012"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:RorelseintakterLagerforandringarMm",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:RorelseresultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "207157",
+        "beloppTidigareAr": [
+          "274012"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:RorelsekostnaderAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:RorelseresultatAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:OvrigaExternaKostnader",
+        "parentTaxonomyItemName": "se-gen-base:RorelsekostnaderAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "6097",
+        "beloppTidigareAr": [
+          "7901"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Personalkostnader",
+        "parentTaxonomyItemName": "se-gen-base:RorelsekostnaderAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "146530",
+        "beloppTidigareAr": [
+          "206983"
+        ],
+        "not": "2"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Rorelsekostnader",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:RorelseresultatAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "152627",
+        "beloppTidigareAr": [
+          "214884"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Rorelseresultat",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "54530",
+        "beloppTidigareAr": [
+          "59128"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FinansiellaPosterAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:OvrigaRanteintakterLiknandeResultatposter",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:FinansiellaPosterAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "1044",
+        "beloppTidigareAr": [
+          "507"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FinansiellaPoster",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "1044",
+        "beloppTidigareAr": [
+          "507"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ResultatEfterFinansiellaPoster",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55574",
+        "beloppTidigareAr": [
+          "59635"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ResultatForeSkatt",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55574",
+        "beloppTidigareAr": [
+          "59635"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:SkatterAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:SkattAretsResultat",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:SkatterAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "12706",
+        "beloppTidigareAr": [
+          "12313"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AretsResultat",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "42868",
+        "beloppTidigareAr": [
+          "47322"
+        ]
+      }
+    ],
+    "balansrakning": [
+      {
+        "taxonomyItemName": "se-gen-base:TillgangarAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:BalansrakningAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AnlaggningstillgangarAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:TillgangarAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FinansiellaAnlaggningstillgangarAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:AnlaggningstillgangarAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AndraLangfristigaVardepappersinnehav",
+        "parentTaxonomyItemName": "se-gen-base:FinansiellaAnlaggningstillgangarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55000",
+        "beloppTidigareAr": [
+          "50000"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FinansiellaAnlaggningstillgangar",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:AnlaggningstillgangarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55000",
+        "beloppTidigareAr": [
+          "50000"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Anlaggningstillgangar",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:TillgangarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55000",
+        "beloppTidigareAr": [
+          "50000"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:OmsattningstillgangarAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:TillgangarAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KortfristigaFordringarAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:OmsattningstillgangarAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:OvrigaFordringarKortfristiga",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:KortfristigaFordringarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "7761",
+        "beloppTidigareAr": [
+          "871"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter",
+        "parentTaxonomyItemName": "se-gen-base:KortfristigaFordringarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "14248",
+        "beloppTidigareAr": [
+          "19367"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KortfristigaFordringar",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:OmsattningstillgangarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "22009",
+        "beloppTidigareAr": [
+          "20238"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KassaBankAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:OmsattningstillgangarAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KassaBankExklRedovisningsmedel",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:KassaBankAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "115922",
+        "beloppTidigareAr": [
+          "87229"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KassaBank",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:OmsattningstillgangarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "115922",
+        "beloppTidigareAr": [
+          "87229"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Omsattningstillgangar",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:TillgangarAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "137931",
+        "beloppTidigareAr": [
+          "107467"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Tillgangar",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:BalansrakningAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "192931",
+        "beloppTidigareAr": [
+          "157467"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:EgetKapitalSkulderAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:BalansrakningAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:EgetKapitalAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalSkulderAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:BundetEgetKapitalAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Aktiekapital",
+        "parentTaxonomyItemName": "se-gen-base:BundetEgetKapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "25000",
+        "beloppTidigareAr": [
+          "25000"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:BundetEgetKapital",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "25000",
+        "beloppTidigareAr": [
+          "25000"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FrittEgetKapitalAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:BalanseratResultat",
+        "parentTaxonomyItemName": "se-gen-base:FrittEgetKapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "100229",
+        "beloppTidigareAr": [
+          "75407"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AretsResultatEgetKapital",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:FrittEgetKapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "48867",
+        "beloppTidigareAr": [
+          "47322"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:FrittEgetKapital",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "149096",
+        "beloppTidigareAr": [
+          "122729"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:EgetKapital",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalSkulderAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "174096",
+        "beloppTidigareAr": [
+          "147729"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KortfristigaSkulderAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalSkulderAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:Skatteskulder",
+        "parentTaxonomyItemName": "se-gen-base:KortfristigaSkulderAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "15150",
+        "beloppTidigareAr": [
+          "9738"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:OvrigaKortfristigaSkulder",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:KortfristigaSkulderAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "3685",
+        "beloppTidigareAr": [
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:KortfristigaSkulder",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:EgetKapitalSkulderAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "18835",
+        "beloppTidigareAr": [
+          "9738"
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:EgetKapitalSkulder",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:BalansrakningAbstract",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "192931",
+        "beloppTidigareAr": [
+          "157467"
+        ]
+      }
+    ],
+    "noter": [
+      {
+        "taxonomyItemName": "se-gen-base:RedovisningsprinciperAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:NoterAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:RedovisningsVarderingsprinciper",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:RedovisningsprinciperAbstract",
+        "type": "xbrli:stringItemType",
+        "text": "Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag."
+      },
+      {
+        "taxonomyItemName": "se-gen-base:UpplysningarResultatrakningenAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:NoterAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:NotMedelantaletAnstallda",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:UpplysningarResultatrakningenAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:MedelantaletAnstalldaAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:NotMedelantaletAnstallda",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:MedelantaletAnstallda",
+        "parentTaxonomyItemName": "se-gen-base:MedelantaletAnstalldaAbstract",
+        "type": "xbrli:decimalItemType",
+        "beloppNuvarandeAr": "",
+        "beloppTidigareAr": [
+          ""
+        ]
+      },
+      {
+        "taxonomyItemName": "se-gen-base:UpplysningarBalansrakningenAbstract",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:NoterAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:NotAndraLangfristigaVardepappersinnehav",
+        "labelType": "terseLabel",
+        "parentTaxonomyItemName": "se-gen-base:UpplysningarBalansrakningenAbstract",
+        "type": "xbrli:stringItemType"
+      },
+      {
+        "taxonomyItemName": "se-gen-base:AndraLangfristigaVardepappersinnehav",
+        "labelType": "totalLabel",
+        "parentTaxonomyItemName": "se-gen-base:NotAndraLangfristigaVardepappersinnehav",
+        "type": "xbrli:monetaryItemType",
+        "beloppNuvarandeAr": "55000",
+        "beloppTidigareAr": [
+          "50000"
+        ]
+      }
+    ],
+    "gredorState": {
+      "todoList": {
+        "items": [
+          {
+            "id": "exempel",
+            "title": "Exempeltitel",
+            "description": "Exempelbeskrivning.",
+            "timestamp": 1767719501267,
+            "tasks": [
+              {
+                "text": "Exempeluppgift 1.",
+                "complete": false
+              },
+              {
+                "text": "Exempeluppgift 2.",
+                "complete": false
+              }
+            ]
+          },
+          {
+            "id": "sie-import",
+            "title": "Varningar från SIE-import",
+            "description": "Följande varningar uppstod när du importerade din SIE-fil.",
+            "timestamp": 1767719541267,
+            "tasks": [
+              {
+                "text": "Belopprad \"Resultat efter finansiella poster\" har avrundningsfel. Du kan behöva justera detta manuellt.",
+                "complete": true
+              },
+              {
+                "text": "Belopprad \"Resultat före skatt\" har avrundningsfel. Du kan behöva justera detta manuellt.",
+                "complete": false
+              },
+              {
+                "text": "Belopprad \"Årets resultat\" har avrundningsfel. Du kan behöva justera detta manuellt.",
+                "complete": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "id": "8dc40569-5bbc-4ef2-91b6-0cfc657717bd"
+  }
+}

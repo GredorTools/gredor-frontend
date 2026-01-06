@@ -13,18 +13,26 @@ import {
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
-import { emptyArsredovisning } from "@/example/emptyArsredovisning.ts";
+import { emptyArsredovisning } from "@/templates/emptyArsredovisning.ts";
 import { onBeforeUnmount, useTemplateRef } from "vue";
 import AppModalController from "@/components/AppModalController.vue";
 import { useHorizontalDrag } from "@/components/common/composables/useHorizontalDrag.ts";
 import AppMessages from "@/components/AppMessages.vue";
+import ToolsTodoList from "@/components/tools/ToolsTodoList.vue";
+import {
+  createArsredovisningFromTemplate,
+  upgradeArsredovisningObject,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 
 const {
   ref: arsredovisning,
   removeFocusChangeListener: removeArsredovisningStorageChangeListener,
 } = useGredorHighPerformanceStorage(
   "AppAutosaveArsredovisning",
-  emptyArsredovisning,
+  createArsredovisningFromTemplate(emptyArsredovisning),
+  {
+    preloadCallback: upgradeArsredovisningObject,
+  },
 );
 
 const showFirstLaunchScreen = useGredorStorage(
@@ -84,8 +92,19 @@ onBeforeUnmount(() => {
         </strong>
       </div>
 
-      <div id="tools" aria-label="Verktyg för färdigställande">
-        <ToolsFinish :arsredovisning="arsredovisning" />
+      <div
+        id="tools"
+        aria-label="Verktyg för färdigställande"
+        class="d-flex gap-3"
+      >
+        <ToolsTodoList
+          v-model:todo-list="arsredovisning.gredorState.todoList"
+        />
+        <div class="horizontal-separator" />
+        <ToolsFinish
+          v-model:todo-list="arsredovisning.gredorState.todoList"
+          :arsredovisning="arsredovisning"
+        />
       </div>
     </div>
 
@@ -131,6 +150,12 @@ main {
   #renderer {
     padding: 0 $spacing-sm $spacing-sm 0;
     transform-origin: top left;
+  }
+
+  #tools {
+    .horizontal-separator {
+      border-left: 1px solid $border-color-normal;
+    }
   }
 
   .help-hint {

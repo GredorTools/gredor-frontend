@@ -373,6 +373,25 @@ describe("importing SIE files", () => {
     cy.get(
       '#arsredovisning-for-export tr.summa td:nth-child(3) [name="se-gen-base:AndraLangfristigaVardepappersinnehav"]',
     ).should("have.text", "50 000");
+
+    // Kolla att-åtgärda-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
+      "have.text",
+      "3",
+    );
+    cy.get("[data-testid='todo-list-button']").click();
+    cy.get("[data-testid='todo-list-item-sie-import-task-0'] span").should(
+      "have.text",
+      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
+    );
+    cy.get("[data-testid='todo-list-item-sie-import-task-1'] span").should(
+      "have.text",
+      'Belopprad "Resultat före skatt" har avrundningsfel. Du kan behöva justera detta manuellt.',
+    );
+    cy.get("[data-testid='todo-list-item-sie-import-task-2'] span").should(
+      "have.text",
+      'Belopprad "Årets resultat" har avrundningsfel. Du kan behöva justera detta manuellt.',
+    );
   });
 
   it("generates correct .gredorutkast file", () => {

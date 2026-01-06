@@ -6,7 +6,7 @@
 import { computed, useAttrs } from "vue";
 import type { BeloppradString } from "@/model/arsredovisning/beloppradtyper/BeloppradString.ts";
 import BaseEditBeloppradTitle from "@/components/edit/blocks/belopprad/BaseEditBeloppradTitle.vue";
-import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
+import CommonDeleteButton from "@/components/common/CommonDeleteButton.vue";
 import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import BaseEditBeloppradContainer from "@/components/edit/blocks/belopprad/BaseEditBeloppradContainer.vue";
@@ -135,8 +135,9 @@ const trClasses = computed(() => [
       />
     </td>
     <td v-if="allowDelete">
-      <BaseEditBeloppradDeleteButton
+      <CommonDeleteButton
         v-if="!isAbstract"
+        description="Ta bort beloppraden"
         @delete="emit('delete')"
       />
     </td>

@@ -15,6 +15,7 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -86,7 +87,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Information från Bolagsverket
     </CommonModalSubtitle>
@@ -103,7 +104,7 @@ onMounted(() => {
         {{ line }}
       </p>
 
-      <div class="d-flex align-items-center justify-content-center pb-4">
+      <div class="d-flex align-items-center justify-content-center">
         <div class="checkbox-container">
           <div class="form-check">
             <input
@@ -126,7 +127,7 @@ onMounted(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>

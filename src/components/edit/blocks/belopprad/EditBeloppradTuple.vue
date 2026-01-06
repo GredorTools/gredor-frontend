@@ -18,7 +18,7 @@ import {
   createBelopprad,
   getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
-import BaseEditBeloppradDeleteButton from "@/components/edit/blocks/belopprad/BaseEditBeloppradDeleteButton.vue";
+import CommonDeleteButton from "@/components/common/CommonDeleteButton.vue";
 
 const props = defineProps<{
   /** TaxonomyManager för att hantera taxonomiobjekt för beloppraden. */
@@ -133,9 +133,10 @@ function deleteInstance(index: number) {
               />
             </tbody>
           </table>
-          <BaseEditBeloppradDeleteButton
+          <CommonDeleteButton
             v-if="beloppradTupleFormat === BeloppradTupleFormat.SIMPLE"
             class="edit-tuple-instance-delete"
+            description="Ta bort beloppraden"
             @delete="deleteInstance(instansIndex)"
           />
         </div>
@@ -143,8 +144,9 @@ function deleteInstance(index: number) {
         <template
           v-if="beloppradTupleFormat === BeloppradTupleFormat.COMPARISON"
         >
-          <BaseEditBeloppradDeleteButton
+          <CommonDeleteButton
             class="edit-tuple-instance-delete float-end"
+            description="Ta bort beloppraden"
             @delete="deleteInstance(instansIndex)"
           />
           <div class="clearfix"></div>

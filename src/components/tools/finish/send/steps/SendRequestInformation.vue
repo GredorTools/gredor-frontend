@@ -5,9 +5,12 @@
  */
 
 import isEmail from "validator/es/lib/isEmail";
-import CommonWizardButtons, { type CommonWizardButtonsEmits } from "@/components/common/CommonWizardButtons.vue";
+import CommonWizardButtons, {
+  type CommonWizardButtonsEmits,
+} from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
+import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 defineProps<CommonStepProps>();
 
@@ -27,7 +30,7 @@ const personnummerRegex = /^\d{12}$/;
 </script>
 
 <template>
-  <div>
+  <CommonModalContents>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter
     </CommonModalSubtitle>
@@ -71,7 +74,7 @@ const personnummerRegex = /^\d{12}$/;
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </div>
+  </CommonModalContents>
 </template>
 
 <style lang="scss" scoped>

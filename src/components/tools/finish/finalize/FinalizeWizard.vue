@@ -24,6 +24,7 @@ import {
 import FinalizeReminder from "@/components/tools/finish/finalize/steps/FinalizeReminder.vue";
 import FinalizeDownloadGredor from "@/components/tools/finish/finalize/steps/FinalizeDownloadGredor.vue";
 import FinalizeFinish from "@/components/tools/finish/finalize/steps/FinalizeFinish.vue";
+import type { TodoList } from "@/model/todolist/TodoList.ts";
 
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
@@ -32,6 +33,11 @@ defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
   instanceId: string;
 }>();
+
+/** Att-åtgärda-lista där fel/varningar kan läggas till av denna komponent. */
+const todoList = defineModel<TodoList>("todoList", {
+  required: true,
+});
 
 const modal = ref<ComponentExposed<typeof CommonModal>>();
 defineExpose({
@@ -120,6 +126,7 @@ const currentStep = ref<
         arsredovisning != null &&
         ixbrl != null
       "
+      v-model:todo-list="todoList"
       :arsredovisning="arsredovisning"
       :current-step-number="5"
       :ixbrl="ixbrl"

@@ -141,10 +141,11 @@ describe("go through send wizard", () => {
     cy.get('[data-testid="wizard-next-button"]').click();
 
     // Steg 7 - Bolagsverkets kontroller
-    cy.get("div.limit-width div").should(
+    cy.get("div.wizard-contents-container div").should(
       "have.text",
       "Kontrollresultat Bolagsverkets automatiska kontroller hittade inga anmärkningar. ",
     );
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should("not.exist");
     cy.get('[data-testid="wizard-next-button"]').click();
 
     // Steg 8 - Gredors villkor
