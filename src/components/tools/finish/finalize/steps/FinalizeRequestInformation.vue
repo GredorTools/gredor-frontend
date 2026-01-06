@@ -10,11 +10,12 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import RenderMain from "@/components/render/RenderMain.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
 const props = defineProps<
   CommonStepProps & {
@@ -43,6 +44,12 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
 const renderMain = ref<ComponentExposed<typeof RenderMain>>();
 
 const personnummerRegex = /^\d{12}$/;
+
+const personnummerCorrectFormatButInvalidLuhn = computed(
+  () =>
+    personnummerRegex.test(personalNumber.value) &&
+    !LuhnAlgorithm.isValid(personalNumber.value.substring(2)),
+);
 
 // Generering av iXBRL - sker i bakgrunden
 const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
@@ -132,13 +139,18 @@ onBeforeUnmount(() => {
           placeholder="Skriv personnummer här…"
           type="text"
         />
+        <strong v-if="personnummerCorrectFormatButInvalidLuhn" class="ms-2"
+          >Ogiltigt personnummer.</strong
+        >
       </div>
     </div>
 
     <CommonWizardButtons
       :next-button-disabled="
         callBolagsverket === undefined ||
-        (callBolagsverket && !personnummerRegex.test(personalNumber)) ||
+        (callBolagsverket &&
+          (!personnummerRegex.test(personalNumber) ||
+            personnummerCorrectFormatButInvalidLuhn)) ||
         !ixbrl
       "
       :next-button-text="ixbrl ? 'Nästa' : 'Vänta – arbetar i bakgrunden…'"

@@ -6,7 +6,7 @@
  * möjlighet att importera en SIE-fil.
  */
 
-import { ref, unref } from "vue";
+import { computed, ref, unref } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { starterArsredovisning } from "@/templates/starterArsredovisning.ts";
@@ -29,6 +29,7 @@ import {
 } from "@/data/avgivande.ts";
 import { addTodoListItem } from "@/model/todolist/TodoList.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -185,6 +186,19 @@ async function fetchRecords() {
 }
 
 const orgnrRegex = /^\d{6}-?\d{4}$/;
+
+const orgnrCorrectFormatButInvalidLuhn = computed(
+  () =>
+    orgnrRegex.test(
+      arsredovisning.value.foretagsinformation.organisationsnummer,
+    ) &&
+    !LuhnAlgorithm.isValid(
+      arsredovisning.value.foretagsinformation.organisationsnummer.replace(
+        "-",
+        "",
+      ),
+    ),
+);
 </script>
 
 <template>
@@ -217,6 +231,9 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
             )
         "
       />
+      <strong v-if="orgnrCorrectFormatButInvalidLuhn" class="ms-2"
+        >Ogiltigt organisationsnummer.</strong
+      >
 
       <h5>Bokföringsimport (frivilligt)</h5>
 
@@ -242,7 +259,10 @@ const orgnrRegex = /^\d{6}-?\d{4}$/;
     <CommonWizardButtons
       :next-button-disabled="
         busy ||
-        !orgnrRegex.test(arsredovisning.foretagsinformation.organisationsnummer)
+        !orgnrRegex.test(
+          arsredovisning.foretagsinformation.organisationsnummer,
+        ) ||
+        orgnrCorrectFormatButInvalidLuhn
       "
       :next-button-text="busy ? 'Vänta – arbetar…' : 'Skapa'"
       previous-button-hidden
@@ -262,7 +282,7 @@ h5:not(:first-of-type) {
   margin-top: $spacing-xxl;
 }
 
-input {
-  width: 75%;
+input[type="text"] {
+  width: 50%;
 }
 </style>

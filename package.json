@@ -23,6 +23,7 @@
     "cy:run": "npx -y dotenv-cli -e .env.cypress -- start-server-and-test build-and-preview http://localhost:4173 'cypress run'"
   },
   "dependencies": {
+    "@designbycode/luhn-algorithm": "^1.0.1",
     "@popperjs/core": "^2.11.8",
     "@vueuse/core": "^14.1.0",
     "bootstrap": "^5.3.8",

@@ -15,7 +15,7 @@ describe("importing SIE files", () => {
     cy.intercept(
       {
         method: "GET",
-        url: "http://gredor-backend/v1/information/records/5569999999",
+        url: "http://gredor-backend/v1/information/records/5560021361",
       },
       {
         foretagsnamn: "Testbolaget AB",
@@ -42,7 +42,7 @@ describe("importing SIE files", () => {
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').clear();
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type(
-      "556999-9999",
+      "556002-1361",
     );
     cy.get(".drop-zone").selectFile(`cypress/fixtures/input/sie/SIETest.se`, {
       action: "drag-drop",
@@ -69,7 +69,7 @@ describe("importing SIE files", () => {
     ).should("have.text", "Testbolaget AB");
     cy.get(
       '#arsredovisning-for-export [name="se-cd-base:Organisationsnummer"]',
-    ).should("have.text", "556999-9999");
+    ).should("have.text", "556002-1361");
     cy.get("#arsredovisning-for-export h1").should(
       "have.text",
       "Årsredovisning för räkenskapsåret 2024",
