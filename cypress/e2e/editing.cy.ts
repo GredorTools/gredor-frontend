@@ -10,7 +10,7 @@ it("can create and edit manually", function () {
   cy.intercept(
     {
       method: "GET",
-      url: "http://gredor-backend/v1/information/records/5569999999",
+      url: "http://gredor-backend/v1/information/records/5560021361",
     },
     {
       foretagsnamn: "Aktiebolaget Exemplet",
@@ -38,7 +38,7 @@ it("can create and edit manually", function () {
   cy.wait(1000);
   cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
   cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').clear();
-  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("556999-9999");
+  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("556002-1361");
   cy.get("#new-arsredovisning-modal-AppHeader-footer-teleport .btn").click();
 
   cy.get(
@@ -46,7 +46,7 @@ it("can create and edit manually", function () {
   ).should("have.text", "Aktiebolaget Exemplet");
   cy.get(
     '#arsredovisning-for-export [name="se-cd-base:Organisationsnummer"]',
-  ).should("have.text", "556999-9999");
+  ).should("have.text", "556002-1361");
   cy.get("#arsredovisning-for-export h1").should(
     "have.text",
     "Årsredovisning för räkenskapsåret 2025",

@@ -7,7 +7,7 @@ describe("first launch screen", () => {
     cy.intercept(
       {
         method: "GET",
-        url: "http://gredor-backend/v1/information/records/5569999999",
+        url: "http://gredor-backend/v1/information/records/5560021361",
       },
       {
         foretagsnamn: "Aktiebolaget Exemplet",
@@ -34,7 +34,7 @@ describe("first launch screen", () => {
       '[data-testid="first-launch-screen-new-arsredovisning-button"]',
     ).click();
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
-    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("5569999999");
+    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("5560021361");
     cy.get('[data-testid="wizard-next-button"]').click();
   });
 
