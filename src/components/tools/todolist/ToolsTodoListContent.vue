@@ -50,9 +50,9 @@ const todoList = defineModel<TodoList>("todoList", { required: true });
                 <div>
                   <span class="badge bg-light text-dark border">
                     <i class="bi bi-clock me-1"></i>
-                    {{ new Date(item.timestamp).toLocaleDateString() }}
+                    {{ new Date(item.timestamp).toLocaleDateString("sv-SE") }}
                     {{
-                      new Date(item.timestamp).toLocaleTimeString(undefined, {
+                      new Date(item.timestamp).toLocaleTimeString("sv-SE", {
                         hour: "2-digit",
                         minute: "2-digit",
                       })
