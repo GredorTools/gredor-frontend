@@ -37,28 +37,34 @@ export function useHorizontalDrag(
       return;
     }
 
-    let newTargetWidth =
+    let newElement2Width =
       mainRef.value.clientWidth -
       elementWidth -
       handleRef.value.clientWidth -
       16;
 
     if (
-      newTargetWidth < minimumElement2Width ||
-      newTargetWidth > defaultElement2Width.value
+      newElement2Width < minimumElement2Width ||
+      newElement2Width > defaultElement2Width.value
     ) {
-      newTargetWidth = Math.min(defaultElement2Width.value, newTargetWidth);
-      newTargetWidth = Math.max(minimumElement2Width, newTargetWidth);
+      newElement2Width = Math.min(defaultElement2Width.value, newElement2Width);
+      newElement2Width = Math.max(minimumElement2Width, newElement2Width);
       elementWidth =
         mainRef.value.clientWidth -
-        newTargetWidth -
+        newElement2Width -
         handleRef.value.clientWidth -
         16;
     }
 
+    const element2Scale = Math.min(
+      1,
+      newElement2Width / defaultElement2Width.value,
+    );
+
     element1Ref.value.style.width = elementWidth + "px";
-    element2Ref.value.style.width = `${newTargetWidth}px`;
-    element2Ref.value.style.transform = `scale(${Math.min(1, newTargetWidth / defaultElement2Width.value)})`;
+    element2Ref.value.style.width = `${newElement2Width}px`;
+    element2Ref.value.style.transform = `scale(${element2Scale})`;
+    element2Ref.value.style.height = `calc(100% / ${element2Scale})`;
   }
 
   function onMouseDown(mouseDown: MouseEvent) {

@@ -45,7 +45,7 @@ const handleRef = useTemplateRef("handle");
 const editorRef = useTemplateRef("editor");
 const rendererRef = useTemplateRef("renderer");
 
-useHorizontalDrag(mainRef, handleRef, editorRef, rendererRef, 700, 128);
+useHorizontalDrag(mainRef, handleRef, editorRef, rendererRef, 700, 320);
 
 onBeforeUnmount(() => {
   removeArsredovisningStorageChangeListener();
