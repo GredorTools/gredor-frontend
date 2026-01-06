@@ -69,6 +69,7 @@ function getDisplayAsType(belopprad: Belopprad) {
     shouldDisplaySimpleUtdelning.value &&
     [
       "se-gen-base:ForslagDispositionUtdelning",
+      "se-gen-base:FrittEgetKapitalEfterUtdelningBeslutadExtraBolagsstamma",
       "se-gen-base:ForslagDisposition",
     ].includes(belopprad.taxonomyItemName)
   ) {

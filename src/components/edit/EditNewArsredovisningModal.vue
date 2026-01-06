@@ -231,7 +231,7 @@ const orgnrCorrectFormatButInvalidLuhn = computed(
             )
         "
       />
-      <strong v-if="orgnrCorrectFormatButInvalidLuhn" class="ms-2"
+      <strong v-if="orgnrCorrectFormatButInvalidLuhn" class="d-block mt-2"
         >Ogiltigt organisationsnummer.</strong
       >
 
@@ -283,6 +283,6 @@ h5:not(:first-of-type) {
 }
 
 input[type="text"] {
-  width: 50%;
+  width: 75%;
 }
 </style>
