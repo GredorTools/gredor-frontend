@@ -239,7 +239,7 @@ const mainValueTaxonomyItemName = computed(
 }
 
 table.render-tuple-instance {
-  margin-bottom: $spacing-sm;
+  margin-bottom: 0.5rem;
 
   td.render-tuple {
     padding: 0 !important;

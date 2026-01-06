@@ -122,7 +122,7 @@ const filteredInstanser = computed(() =>
 
 .rubrik {
   font-style: italic;
-  margin-bottom: $spacing-sm;
+  margin-bottom: 0.5rem;
 }
 
 table.render-tuple-instance {
