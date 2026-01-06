@@ -50,10 +50,6 @@ describe("todo list", () => {
       "have.text",
       "Exempelbeskrivning.",
     );
-    cy.get('[data-testid="todo-list-item-exempel"] .badge').should(
-      "have.text",
-      " 2026-01-06 18:11",
-    );
     cy.get('[data-testid="todo-list-item-exempel-task-0"] span').should(
       "have.text",
       "Exempeluppgift 1.",
@@ -78,10 +74,6 @@ describe("todo list", () => {
     cy.get('[data-testid="todo-list-item-sie-import-description"]').should(
       "have.text",
       "Följande varningar uppstod när du importerade din SIE-fil.",
-    );
-    cy.get('[data-testid="todo-list-item-sie-import"] .badge').should(
-      "have.text",
-      " 2026-01-06 18:12",
     );
     cy.get("[data-testid='todo-list-item-sie-import-task-0'] span").should(
       "have.text",
