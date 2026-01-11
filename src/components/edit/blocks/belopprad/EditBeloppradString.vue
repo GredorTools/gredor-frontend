@@ -11,6 +11,7 @@ import type { TaxonomyManager } from "@/util/TaxonomyManager.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import BaseEditBeloppradContainer from "@/components/edit/blocks/belopprad/BaseEditBeloppradContainer.vue";
 import { getTestIdForBelopprad } from "@/util/inputUtils.ts";
+import CommonAutoresizeTextarea from "@/components/common/CommonAutoresizeTextarea.vue";
 
 defineOptions({
   inheritAttrs: false,
@@ -99,11 +100,11 @@ const trClasses = computed(() => [
         }"
         :colspan="comparableNumPreviousYears + 3"
       >
-        <textarea
+        <CommonAutoresizeTextarea
           v-model="belopprad.text"
           :data-testid="getTestIdForBelopprad(belopprad)"
-          class="form-control"
-        ></textarea>
+          class="form-control belopprad-textarea"
+        ></CommonAutoresizeTextarea>
       </td>
     </BaseEditBeloppradContainer>
   </template>
@@ -152,13 +153,12 @@ const trClasses = computed(() => [
     width: 100%;
   }
 
-  textarea {
+  .belopprad-textarea {
     margin-bottom: $spacing-md;
   }
 }
 
-textarea {
+.belopprad-textarea {
   min-height: 6rem;
-  resize: vertical;
 }
 </style>
