@@ -12,6 +12,10 @@ export const exampleArsredovisning: Arsredovisning = {
   foretagsinformation: {
     foretagsnamn: "Exempelbolaget AB",
     organisationsnummer: "556002-1361",
+    logotyp: {
+      base64: null,
+      placering: "höger",
+    },
   },
   redovisningsinformation: {
     avgivande: AvgivandeStyrelsenOchVD,

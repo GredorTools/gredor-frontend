@@ -28,6 +28,12 @@ export interface Metadata {
 export interface Foretagsinformation {
   foretagsnamn: string;
   organisationsnummer: string;
+  logotyp: Logotyp;
+}
+
+export interface Logotyp {
+  base64: string | null;
+  placering: "vänster" | "höger" | "topp";
 }
 
 export interface Installningar {
@@ -81,5 +87,12 @@ export function upgradeArsredovisningObject(
 
   if (arsredovisning.gredorState == null) {
     arsredovisning.gredorState = { todoList: { items: [] } };
+  }
+
+  if (arsredovisning.foretagsinformation.logotyp == null) {
+    arsredovisning.foretagsinformation.logotyp = {
+      base64: null,
+      placering: "höger",
+    };
   }
 }

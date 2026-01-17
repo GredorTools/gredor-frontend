@@ -59,6 +59,7 @@ async function handleArsredovisningFile(file: File) {
 
       <CommonFileInput
         :allowed-file-extensions="['.gredorfardig']"
+        data-testid="send-wizard-gredor-file-input"
         @file-picked="handleArsredovisningFile"
       />
     </div>

@@ -44,9 +44,12 @@ describe("importing SIE files", () => {
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type(
       "556002-1361",
     );
-    cy.get(".drop-zone").selectFile(`cypress/fixtures/input/sie/SIETest.se`, {
-      action: "drag-drop",
-    });
+    cy.get('[data-testid="new-arsredovisning-sie-file-input"]').selectFile(
+      `cypress/fixtures/input/sie/SIETest.se`,
+      {
+        action: "drag-drop",
+      },
+    );
     cy.get("div.message-modal-content p:nth-child(2)").should(
       "have.text",
       'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
