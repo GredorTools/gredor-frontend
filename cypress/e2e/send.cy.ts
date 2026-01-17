@@ -99,7 +99,7 @@ describe("go through send wizard", () => {
     cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Ladda upp fil
-    cy.get(".drop-zone").selectFile(
+    cy.get('[data-testid="send-wizard-gredor-file-input"]').selectFile(
       `cypress/fixtures/input/gredor/TestfilC.gredorfardig`,
       { action: "drag-drop" },
     );

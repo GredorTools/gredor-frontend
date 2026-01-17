@@ -158,7 +158,10 @@ function onLogoFilePicked(file: File) {
     </div>
   </div>
 
-  <div class="card mb-4 p-4">
+  <div
+    class="card mb-4 p-4"
+    data-testid="edit-grunduppgifter-rakenskapsar-nuvarande"
+  >
     <div class="mb-3">
       <label class="form-label" for="startdatumNuvarande">
         Startdatum räkenskapsår för årsredovisningen:
@@ -187,10 +190,16 @@ function onLogoFilePicked(file: File) {
     </div>
   </div>
 
-  <div v-for="i in 3" :key="i" :class="{ 'mb-4': i < 3 }" class="card p-4">
+  <div
+    v-for="i in 3"
+    :key="i"
+    :class="{ 'mb-4': i < 3 }"
+    :data-testid="`edit-grunduppgifter-rakenskapsar-nuvarande-${i}`"
+    class="card p-4"
+  >
     <div class="form-check mb-3">
       <input
-        :id="'verksamhetsarTidigareAktivt' + i"
+        :id="`verksamhetsarTidigareAktivt${i}`"
         :checked="arsredovisning.verksamhetsarTidigare[i - 1] != null"
         class="form-check-input"
         type="checkbox"
@@ -211,30 +220,30 @@ function onLogoFilePicked(file: File) {
           }
         "
       />
-      <label :for="'verksamhetsarTidigareAktivt' + i" class="form-check-label">
+      <label :for="`verksamhetsarTidigareAktivt${i}`" class="form-check-label">
         Verksamheten existerade {{ i }} år före årsredovisningens räkenskapsår
       </label>
     </div>
     <template v-if="arsredovisning.verksamhetsarTidigare.length > i - 1">
       <div class="mb-3">
-        <label class="form-label" for="startdatumTidigare"
+        <label :for="`startdatumTidigare${i}`" class="form-label"
           >Startdatum tidigare räkenskapsår, {{ i }} år före årsredovisningens
           räkenskapsår:</label
         >
         <input
-          id="startdatumTidigare"
+          :id="`startdatumTidigare${i}`"
           v-model.trim="arsredovisning.verksamhetsarTidigare[i - 1].startdatum"
           class="form-control"
           type="date"
         />
       </div>
       <div class="mb-3">
-        <label class="form-label" for="slutdatumTidigare"
+        <label :for="`slutdatumTidigare${i}`" class="form-label"
           >Slutdatum tidigare räkenskapsår, {{ i }} år före årsredovisningens
           räkenskapsår:</label
         >
         <input
-          id="slutdatumTidigare"
+          :id="`slutdatumTidigare${i}`"
           v-model.trim="arsredovisning.verksamhetsarTidigare[i - 1].slutdatum"
           class="form-control"
           type="date"

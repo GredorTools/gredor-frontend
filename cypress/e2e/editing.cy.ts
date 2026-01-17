@@ -788,18 +788,18 @@ it("can create and edit manually", function () {
   cy.get("#verksamhetsarTidigareAktivt3").check();
   cy.get("#verksamhetsarTidigareAktivt2").uncheck();
   cy.get("#verksamhetsarTidigareAktivt3").check();
-  cy.get("div:nth-child(6) #startdatumTidigare").click();
-  cy.get("div:nth-child(6) #startdatumTidigare").clear();
-  cy.get("div:nth-child(6) #startdatumTidigare").type("2023-01-01");
-  cy.get("div:nth-child(6) #slutdatumTidigare").click();
-  cy.get("div:nth-child(6) #slutdatumTidigare").clear();
-  cy.get("div:nth-child(6) #slutdatumTidigare").type("2023-12-31");
-  cy.get("div:nth-child(7) #startdatumTidigare").click();
-  cy.get("div:nth-child(7) #startdatumTidigare").clear();
-  cy.get("div:nth-child(7) #slutdatumTidigare").click();
-  cy.get("div:nth-child(7) #startdatumTidigare").type("2022-01-01");
-  cy.get("div:nth-child(7) #slutdatumTidigare").clear();
-  cy.get("div:nth-child(7) #slutdatumTidigare").type("2022-12-31");
+  cy.get("#startdatumTidigare2").click();
+  cy.get("#startdatumTidigare2").clear();
+  cy.get("#startdatumTidigare2").type("2023-01-01");
+  cy.get("#slutdatumTidigare2").click();
+  cy.get("#slutdatumTidigare2").clear();
+  cy.get("#slutdatumTidigare2").type("2023-12-31");
+  cy.get("#startdatumTidigare3").click();
+  cy.get("#startdatumTidigare3").clear();
+  cy.get("#slutdatumTidigare3").click();
+  cy.get("#startdatumTidigare3").type("2022-01-01");
+  cy.get("#slutdatumTidigare3").clear();
+  cy.get("#slutdatumTidigare3").type("2022-12-31");
   cy.get(
     "#arsredovisning-for-export div:nth-child(1) > table > thead > tr > th:nth-child(2)",
   ).should("have.text", "2025");

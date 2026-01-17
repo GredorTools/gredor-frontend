@@ -252,6 +252,7 @@ const orgnrCorrectFormatButInvalidLuhn = computed(
       <CommonFileInput
         :allowed-file-extensions="['.se', '.si', '.sie']"
         :disabled="busy"
+        data-testid="new-arsredovisning-sie-file-input"
         @file-picked="handleSieFile"
       />
     </CommonModalContents>
