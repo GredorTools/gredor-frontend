@@ -58,7 +58,7 @@ Innehåller:
 ## TestfilD
 
 Testfil med alla fält ifyllda. Värdena går inte ihop logiskt utan detta är bara
-till för regressionstestning.
+till för regressionstestning. Innehåller även logotyp.
 
 
 ## TestfilE

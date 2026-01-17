@@ -33,6 +33,19 @@ const rakenskapsarText = computed(() => {
 
 <template>
   <div class="cover" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">
+    <img
+      v-if="arsredovisning.foretagsinformation.logotyp.base64"
+      :class="{
+        left:
+          arsredovisning.foretagsinformation.logotyp.placering === 'vänster',
+        right: arsredovisning.foretagsinformation.logotyp.placering === 'höger',
+        top: arsredovisning.foretagsinformation.logotyp.placering === 'topp',
+      }"
+      :src="arsredovisning.foretagsinformation.logotyp.base64"
+      alt=""
+      class="logo"
+    />
+
     <div>
       <ix:nonNumeric
         contextRef="period_nuvarande"
@@ -75,7 +88,25 @@ const rakenskapsarText = computed(() => {
   padding-top: 1rem;
 }
 
+.logo {
+  height: 2.48rem; // Passar bra med texten intill
+
+  &.left {
+    float: left;
+    margin-right: 1rem;
+  }
+
+  &.right {
+    float: right;
+  }
+
+  &.top {
+    margin-bottom: 0.5rem;
+  }
+}
+
 h1 {
+  clear: both;
   margin-top: 4rem;
 }
 

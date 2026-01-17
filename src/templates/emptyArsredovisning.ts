@@ -11,6 +11,10 @@ export const emptyArsredovisning: Arsredovisning = {
   foretagsinformation: {
     foretagsnamn: "",
     organisationsnummer: "",
+    logotyp: {
+      base64: null,
+      placering: "höger",
+    },
   },
   redovisningsinformation: {
     avgivande: AvgivandeStyrelsen,

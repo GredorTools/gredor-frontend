@@ -19,6 +19,9 @@ const props = defineProps<{
    * fil. */
   disabled?: boolean;
 
+  /** Huruvida namnet på den valda filen ska döljas. */
+  hideSelectedFileName?: boolean;
+
   /** Skriver över texten "Dra och släpp din .filtyp-fil här" med det angivna */
   dragAndDropTextOverride?: string;
 }>();
@@ -60,7 +63,14 @@ function onFilePicked(file: File | null | undefined) {
 </script>
 
 <template>
-  <div ref="dropZoneRef" :class="{ hover: isOverDropZone }" class="drop-zone">
+  <div
+    ref="dropZoneRef"
+    :class="{
+      hover: isOverDropZone,
+      'hide-selected-file-name': hideSelectedFileName,
+    }"
+    class="drop-zone"
+  >
     {{
       dragAndDropTextOverride ??
       `Dra och släpp din ${allowedFileExtensions.join("/")}-fil här`
@@ -72,10 +82,13 @@ function onFilePicked(file: File | null | undefined) {
     >
       Eller tryck här för att välja fil
     </button>
-    <div v-if="filename" class="filename">
-      Vald fil: {{ filename }} <i class="bi bi-check-lg"></i>
-    </div>
-    <div v-else>&nbsp;</div>
+
+    <template v-if="!hideSelectedFileName">
+      <div v-if="filename" class="filename">
+        Vald fil: {{ filename }} <i class="bi bi-check-lg"></i>
+      </div>
+      <div v-else>&nbsp;</div>
+    </template>
   </div>
 </template>
 
@@ -95,6 +108,11 @@ function onFilePicked(file: File | null | undefined) {
 
   &.hover {
     background-color: lighten($primary-color, 40%);
+  }
+
+  &.hide-selected-file-name {
+    height: 8rem;
+    padding-bottom: 0.5rem;
   }
 
   .filename {
