@@ -1,4 +1,24 @@
 describe("todo list", () => {
+  it("can be opened and closed", () => {
+    cy.viewport(1800, 1000);
+
+    cy.visit("http://localhost:4173");
+
+    cy.get(
+      '[data-testid="first-launch-screen-example-arsredovisning-button"]',
+    ).click();
+
+    // Öppna att-åtgärda-listan
+    cy.get("[data-testid='todo-list-button']").click();
+    cy.get('[data-testid="todo-list-popover-content"]').should("be.visible");
+
+    cy.wait(500);
+
+    // Stäng att-åtgärda-listan
+    cy.get("[data-testid='todo-list-button']").click();
+    cy.get('[data-testid="todo-list-popover-content"]').should("not.exist");
+  });
+
   it("is empty by default", () => {
     cy.viewport(1800, 1000);
 
