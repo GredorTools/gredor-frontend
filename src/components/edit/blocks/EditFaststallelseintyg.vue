@@ -94,7 +94,7 @@ defineModel<Arsredovisning>("arsredovisning", {
   <div class="form-section">
     <div class="row">
       <div class="form-group col">
-        <label for="tilltalsnamn">Underskrift, tilltalsnamn:</label>
+        <label for="tilltalsnamn">Ditt tilltalsnamn:</label>
         <input
           id="tilltalsnamn"
           v-model.trim="
@@ -105,7 +105,7 @@ defineModel<Arsredovisning>("arsredovisning", {
         />
       </div>
       <div class="form-group col">
-        <label for="efternamn">Underskrift, efternamn:</label>
+        <label for="efternamn">Ditt/dina efternamn:</label>
         <input
           id="efternamn"
           v-model.trim="arsredovisning.faststallelseintyg.underskrift.efternamn"
@@ -114,7 +114,7 @@ defineModel<Arsredovisning>("arsredovisning", {
         />
       </div>
       <div class="form-group col">
-        <label for="roll">Underskrift, befattning:</label>
+        <label for="roll">Din befattning:</label>
         <select
           id="roll"
           v-model="arsredovisning.faststallelseintyg.underskrift.roll"

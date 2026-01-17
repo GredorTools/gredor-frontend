@@ -51,6 +51,12 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
         till ditt egna utrymme, och du som initierar detta måste vara behörig
         att företräda företaget samt kunna identifiera dig med BankID.
       </p>
+      <p>
+        <strong>
+          Du kommer även att fylla i ett fastställelseintyg, och det måste då
+          vara ditt namn som står på det.
+        </strong>
+      </p>
       <p>Format: ÅÅÅÅMMDDXXXX (12 siffror utan bindestreck)</p>
       <input
         v-model.trim="personalNumber"

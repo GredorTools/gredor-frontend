@@ -48,6 +48,8 @@ const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
 });
 let reportGeneratorIntervalId: number | undefined;
 onMounted(() => {
+  ixbrl.value = undefined;
+
   // Timeout så att förhandsgranskningen hinner ladda in innan vi skapar iXBRL
   setTimeout(async () => {
     // Konvertera renderad HTML till iXBRL
