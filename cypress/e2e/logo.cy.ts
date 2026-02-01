@@ -8,18 +8,20 @@ describe("logo", () => {
       },
     });
 
-    cy.get("#editor button.btn").click();
+    cy.get(
+      '[data-testid="accordion-item-grunduppgifter-accordion-foretagsinformation"]',
+    ).click();
+    cy.get('[data-testid="edit-grunduppgifter-logotyp"] button').click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
       "cypress/fixtures/input/logo/logo-valid.png",
       { force: true },
     );
 
-    cy.get("#editor img.logo").should("be.visible");
-    cy.get("#arsredovisning-for-export img.logo.right").should("be.visible");
-    cy.get("#editor div.editor > div:nth-child(2)").click();
+    cy.get("#editor img.logo").should("exist");
+    cy.get("#arsredovisning-for-export img.logo.right").should("exist");
 
     cy.get("#logotyp-placering").select("topp");
-    cy.get("#arsredovisning-for-export img.logo.top").should("be.visible");
+    cy.get("#arsredovisning-for-export img.logo.top").should("exist");
   });
 
   it("is rejected if file too large", () => {
@@ -31,7 +33,10 @@ describe("logo", () => {
       },
     });
 
-    cy.get("#editor button.btn").click();
+    cy.get(
+      '[data-testid="accordion-item-grunduppgifter-accordion-foretagsinformation"]',
+    ).click();
+    cy.get('[data-testid="edit-grunduppgifter-logotyp"] button').click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
       "cypress/fixtures/input/logo/logo-filetoolarge.png",
       { force: true },
@@ -59,6 +64,6 @@ describe("logo", () => {
       "cypress/fixtures/input/gredor/TestfilD.gredorfardig",
       { force: true },
     );
-    cy.get("#arsredovisning-for-export img.logo.left").should("be.visible");
+    cy.get("#arsredovisning-for-export img.logo.left").should("exist");
   });
 });

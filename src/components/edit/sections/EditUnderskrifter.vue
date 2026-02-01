@@ -46,7 +46,7 @@ function removeUnderskrift(index: number) {
       id="signatures-accordion-general"
       title="Ort och datum"
     >
-      <div class="mb-3">
+      <div class="input-section">
         <label class="form-label" for="undertecknandeOrt"
           >Ort för undertecknande:</label
         >
@@ -59,7 +59,7 @@ function removeUnderskrift(index: number) {
           type="text"
         />
       </div>
-      <div class="mb-3">
+      <div class="input-section">
         <label class="form-label" for="datering"
           >Datum då årsredovisningen var färdig för undertecknande:</label
         >
@@ -92,7 +92,7 @@ function removeUnderskrift(index: number) {
           class="mb-2 p-2 col-12 col-sm-6 col-lg-4"
         >
           <div class="card p-3">
-            <div class="mb-3">
+            <div class="input-section">
               <label :for="'tilltalsnamn' + index" class="form-label"
                 >Tilltalsnamn:</label
               >
@@ -103,7 +103,7 @@ function removeUnderskrift(index: number) {
                 type="text"
               />
             </div>
-            <div class="mb-3">
+            <div class="input-section">
               <label :for="'efternamn' + index" class="form-label"
                 >Efternamn:</label
               >
@@ -114,7 +114,7 @@ function removeUnderskrift(index: number) {
                 type="text"
               />
             </div>
-            <div class="mb-3">
+            <div class="input-section">
               <label :for="'roll' + index" class="form-label"
                 >Befattning (valfritt):</label
               >
@@ -125,7 +125,7 @@ function removeUnderskrift(index: number) {
                 type="text"
               />
             </div>
-            <div class="mb-3">
+            <div class="input-section">
               <label :for="'datum' + index" class="form-label"
                 >Undertecknandedatum:</label
               >
@@ -158,4 +158,14 @@ function removeUnderskrift(index: number) {
   </CommonAccordion>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
+.input-section {
+  margin-bottom: $spacing-md;
+
+  &:first-child {
+    margin-top: $spacing-sm;
+  }
+}
+</style>

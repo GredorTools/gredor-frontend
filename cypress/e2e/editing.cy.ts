@@ -826,6 +826,9 @@ it("can create and edit manually", function () {
     '[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]',
   ).click();
   cy.get("#editor li:nth-child(1) .nav-link").click();
+  cy.get(
+    '[data-testid="accordion-item-grunduppgifter-accordion-rakenskapsar"]',
+  ).click();
   cy.get("#verksamhetsarTidigareAktivt2").check();
   cy.get("#verksamhetsarTidigareAktivt3").check();
   cy.get("#verksamhetsarTidigareAktivt2").uncheck();
