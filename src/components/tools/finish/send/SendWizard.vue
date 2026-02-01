@@ -14,10 +14,12 @@ import CommonModal from "@/components/common/CommonModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import CommonComponentLoadError from "@/components/common/CommonComponentLoadError.vue";
 
-const SendWizardSteps = defineAsyncComponent(
-  () => import("@/components/tools/finish/send/SendWizardSteps.vue"),
-);
+const SendWizardSteps = defineAsyncComponent({
+  loader: () => import("@/components/tools/finish/send/SendWizardSteps.vue"),
+  errorComponent: CommonComponentLoadError,
+});
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
