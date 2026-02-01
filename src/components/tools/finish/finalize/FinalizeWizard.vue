@@ -15,10 +15,13 @@ import CommonModal from "@/components/common/CommonModal.vue";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import CommonComponentLoadError from "@/components/common/CommonComponentLoadError.vue";
 
-const FinalizeWizardSteps = defineAsyncComponent(
-  () => import("@/components/tools/finish/finalize/FinalizeWizardSteps.vue"),
-);
+const FinalizeWizardSteps = defineAsyncComponent({
+  loader: () =>
+    import("@/components/tools/finish/finalize/FinalizeWizardSteps.vue"),
+  errorComponent: CommonComponentLoadError,
+});
 
 defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
