@@ -10,12 +10,51 @@ import {
   isFaststallseintygRequiresStammansResultatdisposition,
   RESULTATDISPOSITION_BESLUT,
   RESULTATDISPOSITION_STAMMANS_DEFINITIONS,
+  ResultatdispositionBeslutGodkannaForlust,
+  ResultatdispositionBeslutGodkannaVinst,
+  ResultatdispositionBeslutInteGodkannaForlust,
+  ResultatdispositionBeslutInteGodkannaVinst,
 } from "@/data/faststallelseintyg.ts";
 import { handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
+import { computed } from "vue";
+import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 /** Årsredovisningen som innehåller fastställelseintyget. */
-defineModel<Arsredovisning>("arsredovisning", {
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
+});
+
+// Vi visar bara relevanta beslut för resultatdisposition, dvs alternativ för
+// vinst om fritt eget kapital är >= 0 och förlust om fritt eget kapital är < 0
+const availableResultatdispositionBeslut = computed(() => {
+  const frittEgetKapital = arsredovisning.value.balansrakning.find(
+    (balansrakning) =>
+      balansrakning.taxonomyItemName === "se-gen-base:FrittEgetKapital",
+  );
+
+  if (!frittEgetKapital || !isBeloppradMonetary(frittEgetKapital)) {
+    // Fritt eget kapital ej med i balansräkningen
+    return RESULTATDISPOSITION_BESLUT;
+  } else {
+    const frittEgetKapitalBelopp = Number.parseInt(
+      frittEgetKapital.beloppNuvarandeAr,
+      10,
+    );
+    if (frittEgetKapitalBelopp >= 0) {
+      return [
+        ResultatdispositionBeslutGodkannaVinst,
+        ResultatdispositionBeslutInteGodkannaVinst,
+      ];
+    } else if (frittEgetKapitalBelopp < 0) {
+      return [
+        ResultatdispositionBeslutGodkannaForlust,
+        ResultatdispositionBeslutInteGodkannaForlust,
+      ];
+    } else {
+      // Bör aldrig hända
+      throw new Error("Ogiltigt belopp för fritt eget kapital");
+    }
+  }
 });
 </script>
 
@@ -29,7 +68,7 @@ defineModel<Arsredovisning>("arsredovisning", {
         class="form-select"
       >
         <option
-          v-for="resultatdispositionBeslut in RESULTATDISPOSITION_BESLUT"
+          v-for="resultatdispositionBeslut in availableResultatdispositionBeslut"
           :key="resultatdispositionBeslut.xbrlId"
           :value="resultatdispositionBeslut"
         >
