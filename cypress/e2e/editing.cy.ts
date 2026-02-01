@@ -738,6 +738,34 @@ it("can create and edit manually", function () {
   );
 
   cy.get("#editor li:nth-child(5) .nav-link").click();
+
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:RedovisningsVarderingsprinciper"]',
+  ).should("exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotOvrigaRorelsekostnader"]',
+  ).should("exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotAndraOvrigaUpplysningar"]',
+  ).should("exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotMedelantaletAnstallda"]',
+  ).should("exist");
+  cy.get('[name="edit-noter-filter"]').click();
+  cy.get('[name="edit-noter-filter"]').type("anställ");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:RedovisningsVarderingsprinciper"]',
+  ).should("not.exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotOvrigaRorelsekostnader"]',
+  ).should("not.exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotAndraOvrigaUpplysningar"]',
+  ).should("not.exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotMedelantaletAnstallda"]',
+  ).should("exist");
+
   cy.get(
     '[data-testid="accordion-item-noter-accordion-se-gen-base:NotMedelantaletAnstallda"]',
   ).click();
@@ -774,6 +802,20 @@ it("can create and edit manually", function () {
   cy.get(
     '#arsredovisning-for-export td:nth-child(3) [name="se-gen-base:MedelantaletAnstallda"]',
   ).should("have.text", "0");
+
+  cy.get("#editor .filter-contents .bi.bi-x-lg").click();
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:RedovisningsVarderingsprinciper"]',
+  ).should("exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotOvrigaRorelsekostnader"]',
+  ).should("exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotAndraOvrigaUpplysningar"]',
+  ).should("exist");
+  cy.get(
+    '[data-testid="accordion-item-noter-accordion-se-gen-base:NotMedelantaletAnstallda"]',
+  ).should("exist");
 
   // Fixar till grunduppgifter
   cy.get("#editor li:nth-child(2) .nav-link").click();
