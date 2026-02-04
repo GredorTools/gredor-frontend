@@ -25,7 +25,7 @@ export const exampleArsredovisning: Arsredovisning = {
         tilltalsnamn: "Karl",
         efternamn: "Karlsson",
         roll: "",
-        datum: "2026-03-12",
+        datum: "2026-03-11",
       },
       {
         tilltalsnamn: "Karin",
@@ -35,7 +35,7 @@ export const exampleArsredovisning: Arsredovisning = {
       },
     ],
     undertecknandeOrt: "Halmstad",
-    datering: "2026-03-12",
+    datering: "2026-03-11",
   },
   installningar: {
     flerarsoversiktBeloppFormat: BeloppFormat.TUSENTAL,

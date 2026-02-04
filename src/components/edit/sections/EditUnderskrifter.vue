@@ -61,7 +61,8 @@ function removeUnderskrift(index: number) {
       </div>
       <div class="input-section">
         <label class="form-label" for="datering"
-          >Datum då årsredovisningen var färdig för undertecknande:</label
+          >Datum då årsredovisningen var upprättad (redo att skrivas
+          under):</label
         >
         <input
           id="datering"
@@ -69,6 +70,10 @@ function removeUnderskrift(index: number) {
           class="form-control"
           type="date"
         />
+        <div class="form-text muted">
+          Får <strong>inte</strong> vara senare än datumet för tidigaste
+          underskriften nedan.
+        </div>
       </div>
     </CommonAccordionItem>
 
@@ -89,7 +94,7 @@ function removeUnderskrift(index: number) {
           v-for="(underskrift, index) in arsredovisning.redovisningsinformation
             .underskrifter"
           :key="index"
-          class="mb-2 p-2 col-12 col-sm-6 col-lg-4"
+          class="mb-2 p-2 col-12 col-sm-6"
         >
           <div class="card p-3">
             <div class="input-section">
@@ -127,7 +132,7 @@ function removeUnderskrift(index: number) {
             </div>
             <div class="input-section">
               <label :for="'datum' + index" class="form-label"
-                >Undertecknandedatum:</label
+                >Underskriftsdatum:</label
               >
               <input
                 :id="'datum' + index"
@@ -135,6 +140,15 @@ function removeUnderskrift(index: number) {
                 class="form-control"
                 type="date"
               />
+              <div class="alert alert-primary d-flex gap-2 mt-2" role="alert">
+                <i class="bi bi-info-circle-fill"></i>
+                <span class="small">
+                  <strong>OBS!</strong> Detta är inte samma sak som datum för
+                  årsstämma eller fastställelseintyg. Årsstämman ska hållas
+                  efter att årsredovisningen skrivits under, dvs den får
+                  <strong>inte</strong> hållas tidigare än detta datum.
+                </span>
+              </div>
             </div>
             <button
               class="btn btn-danger mt-2"
