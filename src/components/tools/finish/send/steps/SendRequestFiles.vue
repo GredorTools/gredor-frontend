@@ -62,6 +62,9 @@ async function handleArsredovisningFile(file: File) {
         data-testid="send-wizard-gredor-file-input"
         @file-picked="handleArsredovisningFile"
       />
+
+      Filen ska du ha laddat ner i samband med att du färdigställde din
+      årsredovisning inför årsstämman.
     </div>
 
     <CommonWizardButtons

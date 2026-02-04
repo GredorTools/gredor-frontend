@@ -28,6 +28,7 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import RenderMain from "@/components/render/RenderMain.vue";
 import { XMLParser } from "fast-xml-parser";
 import { convertiXBRLToXBRL } from "@/util/convertiXBRLToXBRL.ts";
+import type { Underskrift } from "@/model/arsredovisning/Underskrift.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -64,6 +65,47 @@ onBeforeUnmount(() => {
   if (reportGeneratorIntervalId != null) {
     clearInterval(reportGeneratorIntervalId);
   }
+});
+
+// Kolla att nödvändiga fält är ifyllda
+const namesAndDatesAreFilled = computed(() => {
+  return (
+    props.arsredovisning.redovisningsinformation.datering &&
+    props.arsredovisning.redovisningsinformation.underskrifter.length > 0 &&
+    props.arsredovisning.redovisningsinformation.underskrifter.every(
+      (signature) =>
+        signature.tilltalsnamn && signature.efternamn && signature.datum,
+    )
+  );
+});
+
+// Räkna ut senaste underskriftsdatum
+const latestSignatureDate = computed(() => {
+  const signatures = props.arsredovisning.redovisningsinformation.underskrifter;
+  if (!signatures || signatures.length === 0) {
+    return null;
+  }
+
+  const result = signatures.reduce(
+    (
+      {
+        maxDate,
+        maxDateSignature,
+      }: { maxDate: Date; maxDateSignature: Underskrift | null },
+      signature: Underskrift,
+    ) => {
+      if (!signature.datum.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        return { maxDate, maxDateSignature };
+      }
+      const signatureDate = new Date(signature.datum);
+      return signatureDate > maxDate
+        ? { maxDate: signatureDate, maxDateSignature: signature }
+        : { maxDate, maxDateSignature };
+    },
+    { maxDate: new Date(0), maxDateSignature: null },
+  );
+
+  return result.maxDateSignature?.datum || null;
 });
 
 // Räkna ut notkopplingar
@@ -310,10 +352,10 @@ const mismatchingValueBelopprader = computed(() => {
           <ul data-testid="finalize-reminder-redovisningsinformation-list">
             <li>
               Datering:
-              {{
-                arsredovisning.redovisningsinformation.datering ||
-                "inget ifyllt"
-              }}
+              <template v-if="arsredovisning.redovisningsinformation.datering">
+                {{ arsredovisning.redovisningsinformation.datering }}
+              </template>
+              <strong v-else>Inget ifyllt!</strong>
             </li>
             <li
               v-for="(underskrift, i) in props.arsredovisning
@@ -321,11 +363,31 @@ const mismatchingValueBelopprader = computed(() => {
               :key="i"
             >
               Underskrift,
-              {{ underskrift.tilltalsnamn || "< tilltalsnamn saknas >" }}
-              {{ underskrift.efternamn || "< efternamn saknas >" }}:
-              {{ underskrift.datum || "inget ifyllt" }}
+
+              <template v-if="underskrift.tilltalsnamn">
+                {{ underskrift.tilltalsnamn }}
+              </template>
+              <strong v-else>&lt;tilltalsnamn saknas!&gt;</strong>
+              {{ " " }}
+              <template v-if="underskrift.efternamn">
+                {{ underskrift.efternamn }}:
+              </template>
+              <strong v-else>&lt;efternamn saknas!&gt;:</strong>
+              {{ " " }}
+              <template v-if="underskrift.datum">
+                {{ underskrift.datum }}
+              </template>
+              <strong v-else>&lt;datum saknas!&gt;</strong>
             </li>
           </ul>
+          <div
+            v-if="latestSignatureDate"
+            data-testid="finalize-reminder-latest-signature-date"
+          >
+            Årsstämman får därmed hållas
+            <strong>tidigast {{ latestSignatureDate }}</strong
+            >.
+          </div>
         </li>
         <li v-if="mismatchingValueBelopprader.length > 0">
           …beloppen för följande fält; det förekommer olika värden på olika
@@ -346,8 +408,14 @@ const mismatchingValueBelopprader = computed(() => {
     </div>
 
     <CommonWizardButtons
-      :next-button-disabled="!ixbrl"
-      :next-button-text="ixbrl ? 'Nästa' : 'Vänta – arbetar i bakgrunden…'"
+      :next-button-disabled="!ixbrl || !namesAndDatesAreFilled"
+      :next-button-text="
+        ixbrl
+          ? namesAndDatesAreFilled
+            ? 'Nästa'
+            : 'Nödvändiga uppgifter saknas!'
+          : 'Vänta – arbetar i bakgrunden…'
+      "
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"

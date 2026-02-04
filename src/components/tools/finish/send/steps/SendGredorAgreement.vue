@@ -29,11 +29,11 @@ const userAgreed = ref<boolean>(false);
       <p>
         Gredor är ett gratisverktyg. I slutet av flödet kommer din
         årsredovisning att laddas upp till Bolagsverket i iXBRL-format, ett
-        speciellt format som används för bland annat årsredovisningar och bör
+        speciellt format som används för bland annat årsredovisningar och ska
         motsvara det som har visats i förhandsgranskningen tidigare i flödet. Vi
-        som utvecklar Gredor har testat vektyget noggrannt för att minimera
-        risken för att något ska bli fel då, men
-        <strong>tänk på att vi inte lämnar några garantier.</strong>
+        som utvecklar Gredor har testat verktyget noggrant för att minimera
+        risken för att något ska bli fel då, men tänk på att vi inte lämnar
+        några garantier.
       </p>
 
       <p>Genom att kryssa i rutan nedan godtar du detta.</p>

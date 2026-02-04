@@ -117,12 +117,16 @@ describe("finalize wizard", () => {
     ).should("have.text", " Datering: 2025-01-04");
     cy.get(
       '[data-testid="finalize-reminder-redovisningsinformation-list"] li:nth-child(2)',
-    ).should("have.text", " Underskrift, Karl Karlsson: 2025-01-04");
+    ).should("have.text", " Underskrift, Karl   Karlsson:    2025-01-04");
     cy.get(
       '[data-testid="finalize-reminder-redovisningsinformation-list"] li:nth-child(3)',
-    ).should("have.text", " Underskrift, Karin Olsson: 2025-01-04");
+    ).should("have.text", " Underskrift, Karin   Olsson:    2025-01-04");
     cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
       "not.exist",
+    );
+    cy.get('[data-testid="finalize-reminder-latest-signature-date"]').should(
+      "have.text",
+      " Årsstämman får därmed hållas tidigast 2025-01-04. ",
     );
     cy.get('[data-testid="wizard-next-button"]').click();
 
@@ -213,13 +217,17 @@ describe("finalize wizard", () => {
     );
     cy.get(
       '[data-testid="finalize-reminder-redovisningsinformation-list"] li:nth-child(1)',
-    ).should("have.text", " Datering: 2025-01-04");
+    ).should("have.text", " Datering: 2025-01-03");
     cy.get(
       '[data-testid="finalize-reminder-redovisningsinformation-list"] li:nth-child(2)',
-    ).should("have.text", " Underskrift, Karl Karlsson: 2025-01-03");
+    ).should("have.text", " Underskrift, Karl   Karlsson:    2025-01-03");
     cy.get(
       '[data-testid="finalize-reminder-redovisningsinformation-list"] li:nth-child(3)',
-    ).should("have.text", " Underskrift, Karin Olsson: 2025-01-04");
+    ).should("have.text", " Underskrift, Karin   Olsson:    2025-01-04");
+    cy.get('[data-testid="finalize-reminder-latest-signature-date"]').should(
+      "have.text",
+      " Årsstämman får därmed hållas tidigast 2025-01-04. ",
+    );
     cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
       "not.exist",
     );
