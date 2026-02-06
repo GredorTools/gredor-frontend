@@ -1,5 +1,5 @@
 {
-  "dataType": "arsredovisning_fardig",
+  "dataType": "arsredovisning_utkast",
   "version": 1,
   "data": {
     "metadata": {
@@ -8,7 +8,7 @@
     },
     "foretagsinformation": {
       "foretagsnamn": "Exempelbolaget AB",
-      "organisationsnummer": "556999-9999"
+      "organisationsnummer": "556002-1361"
     },
     "redovisningsinformation": {
       "avgivande": {
@@ -66,7 +66,7 @@
         "slutdatum": "2023-12-31"
       },
       {
-        "startdatum": "2022-01-01",
+        "startdatum": "",
         "slutdatum": "2022-12-31"
       },
       {
@@ -1100,7 +1100,7 @@
         "taxonomyItemName": "se-gen-base:BalanseratResultat",
         "parentTaxonomyItemName": "se-gen-base:FrittEgetKapitalAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "95229",
+        "beloppNuvarandeAr": "95228",
         "beloppTidigareAr": [
           "70406"
         ]

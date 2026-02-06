@@ -29,6 +29,7 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import { XMLParser } from "fast-xml-parser";
 import { convertiXBRLToXBRL } from "@/util/convertiXBRLToXBRL.ts";
 import type { Underskrift } from "@/model/arsredovisning/Underskrift.ts";
+import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
 const props = defineProps<
   CommonStepProps & {
@@ -68,8 +69,37 @@ onBeforeUnmount(() => {
 });
 
 // Kolla att nödvändiga fält är ifyllda
-const namesAndDatesAreFilled = computed(() => {
+const orgnrIsFilledAndValid = computed(() => {
   return (
+    props.arsredovisning.foretagsinformation.organisationsnummer &&
+    props.arsredovisning.foretagsinformation.organisationsnummer.match(
+      /^\d{6}-?\d{4}$/,
+    ) &&
+    LuhnAlgorithm.isValid(
+      props.arsredovisning.foretagsinformation.organisationsnummer.replace(
+        "-",
+        "",
+      ),
+    )
+  );
+});
+
+const verksamhetsarDatesAreFilled = computed(() => {
+  return (
+    props.arsredovisning.verksamhetsarNuvarande &&
+    props.arsredovisning.verksamhetsarNuvarande.startdatum &&
+    props.arsredovisning.verksamhetsarNuvarande.slutdatum &&
+    (!props.arsredovisning.verksamhetsarTidigare ||
+      props.arsredovisning.verksamhetsarTidigare.every(
+        (verksamhetsar) => verksamhetsar.startdatum && verksamhetsar.slutdatum,
+      ))
+  );
+});
+
+const requiredFieldsAreFilled = computed(() => {
+  return (
+    orgnrIsFilledAndValid.value &&
+    verksamhetsarDatesAreFilled.value &&
     props.arsredovisning.redovisningsinformation.datering &&
     props.arsredovisning.redovisningsinformation.underskrifter.length > 0 &&
     props.arsredovisning.redovisningsinformation.underskrifter.every(
@@ -404,14 +434,28 @@ const mismatchingValueBelopprader = computed(() => {
             </li>
           </ul>
         </li>
+        <li
+          v-if="!orgnrIsFilledAndValid"
+          data-testid="finalize-reminder-invalid-orgnr"
+        >
+          …att organisationsnumret är korrekt ifyllt under fliken
+          "Grunduppgifter"; <strong>just nu är det inte korrekt ifyllt.</strong>
+        </li>
+        <li
+          v-if="!verksamhetsarDatesAreFilled"
+          data-testid="finalize-reminder-invalid-verksamhetsar"
+        >
+          …att verksamhetsåren är korrekt ifyllda under fliken "Grunduppgifter";
+          <strong>just nu är de inte korrekt ifyllda.</strong>.
+        </li>
       </ul>
     </div>
 
     <CommonWizardButtons
-      :next-button-disabled="!ixbrl || !namesAndDatesAreFilled"
+      :next-button-disabled="!ixbrl || !requiredFieldsAreFilled"
       :next-button-text="
         ixbrl
-          ? namesAndDatesAreFilled
+          ? requiredFieldsAreFilled
             ? 'Nästa'
             : 'Nödvändiga uppgifter saknas!'
           : 'Vänta – arbetar i bakgrunden…'

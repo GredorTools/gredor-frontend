@@ -10,7 +10,7 @@
   <se-cd-base:RakenskapsarForstaDag contextRef="period_nuvarande">2024-07-01</se-cd-base:RakenskapsarForstaDag>
   <se-cd-base:RakenskapsarSistaDag contextRef="period_nuvarande">2025-06-30</se-cd-base:RakenskapsarSistaDag>
   <se-cd-base:ForetagetsNamn contextRef="period_nuvarande">Exempelbolaget AB</se-cd-base:ForetagetsNamn>
-  <se-cd-base:Organisationsnummer contextRef="period_nuvarande">556999-9999</se-cd-base:Organisationsnummer>
+  <se-cd-base:Organisationsnummer contextRef="period_nuvarande">556002-1361</se-cd-base:Organisationsnummer>
   <se-bol-base:FaststallelseResultatBalansrakning contextRef="balans_nuvarande">Jag intygar att resultaträkningen och balansräkningen har fastställts på årsstämma</se-bol-base:FaststallelseResultatBalansrakning>
   <se-bol-base:Arsstamma contextRef="balans_nuvarande">2025-09-27</se-bol-base:Arsstamma>
   <se-bol-base:ArsstammaResultatDispositionGodkannaStyrelsensForslag contextRef="balans_nuvarande">Årsstämman beslöt att godkänna styrelsens förslag till vinstdisposition.</se-bol-base:ArsstammaResultatDispositionGodkannaStyrelsensForslag>
@@ -2041,7 +2041,7 @@
   </se-gaap-ext:UnderskriftArsredovisningForetradareTuple>
   <xbrli:context id="period_nuvarande">
     <xbrli:entity>
-      <xbrli:identifier scheme="http://www.bolagsverket.se">556999-9999</xbrli:identifier>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
       <xbrli:startDate>2024-07-01</xbrli:startDate>
@@ -2050,7 +2050,7 @@
   </xbrli:context>
   <xbrli:context id="period_tidigare1">
     <xbrli:entity>
-      <xbrli:identifier scheme="http://www.bolagsverket.se">556999-9999</xbrli:identifier>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
       <xbrli:startDate>2023-07-01</xbrli:startDate>
@@ -2059,7 +2059,7 @@
   </xbrli:context>
   <xbrli:context id="period_tidigare2">
     <xbrli:entity>
-      <xbrli:identifier scheme="http://www.bolagsverket.se">556999-9999</xbrli:identifier>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
       <xbrli:startDate>2022-07-01</xbrli:startDate>
@@ -2068,7 +2068,7 @@
   </xbrli:context>
   <xbrli:context id="balans_nuvarande">
     <xbrli:entity>
-      <xbrli:identifier scheme="http://www.bolagsverket.se">556999-9999</xbrli:identifier>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
       <xbrli:instant>2025-06-30</xbrli:instant>
@@ -2076,7 +2076,7 @@
   </xbrli:context>
   <xbrli:context id="balans_tidigare1">
     <xbrli:entity>
-      <xbrli:identifier scheme="http://www.bolagsverket.se">556999-9999</xbrli:identifier>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
       <xbrli:instant>2024-06-30</xbrli:instant>
@@ -2084,7 +2084,7 @@
   </xbrli:context>
   <xbrli:context id="balans_tidigare2">
     <xbrli:entity>
-      <xbrli:identifier scheme="http://www.bolagsverket.se">556999-9999</xbrli:identifier>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
       <xbrli:instant>2023-06-30</xbrli:instant>

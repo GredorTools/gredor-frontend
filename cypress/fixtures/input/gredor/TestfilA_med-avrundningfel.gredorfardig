@@ -1100,7 +1100,7 @@
         "taxonomyItemName": "se-gen-base:BalanseratResultat",
         "parentTaxonomyItemName": "se-gen-base:FrittEgetKapitalAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "95228",
+        "beloppNuvarandeAr": "95229",
         "beloppTidigareAr": [
           "70406"
         ]
