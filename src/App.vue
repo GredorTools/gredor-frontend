@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
     <div
       ref="main"
       aria-label="Huvudinnehåll"
-      class="d-flex overflow-hidden justify-content-between"
+      class="d-flex overflow-hidden justify-content-between flex-grow-1"
     >
       <div id="editor" ref="editor" aria-label="Redigeringsvy">
         <EditMain v-model:arsredovisning="arsredovisning" />
