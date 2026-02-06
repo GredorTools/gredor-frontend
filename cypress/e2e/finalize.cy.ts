@@ -121,12 +121,18 @@ describe("finalize wizard", () => {
     cy.get(
       '[data-testid="finalize-reminder-redovisningsinformation-list"] li:nth-child(3)',
     ).should("have.text", " Underskrift, Karin   Olsson:    2025-01-04");
-    cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
-      "not.exist",
-    );
     cy.get('[data-testid="finalize-reminder-latest-signature-date"]').should(
       "have.text",
       " Årsstämman får därmed hållas tidigast 2025-01-04. ",
+    );
+    cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
+      "not.exist",
+    );
+    cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
+      "not.exist",
+    );
+    cy.get('[data-testid="finalize-reminder-invalid-verksametsar"]').should(
+      "not.exist",
     );
     cy.get('[data-testid="wizard-next-button"]').click();
 
@@ -231,6 +237,12 @@ describe("finalize wizard", () => {
     cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
       "not.exist",
     );
+    cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
+      "not.exist",
+    );
+    cy.get('[data-testid="finalize-reminder-invalid-verksametsar"]').should(
+      "not.exist",
+    );
     cy.get('[data-testid="wizard-next-button"]').click();
 
     // Steg 2 - Inte OK att köra kontroller hos Bolagsverket
@@ -265,7 +277,7 @@ describe("finalize wizard", () => {
     // Öppna fil
     cy.get("#openArsredovisningBtn").click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
-      "cypress/fixtures/input/gredor/TestfilE.gredorutkast",
+      "cypress/fixtures/input/gredor/TestfilA_med-avrundningfel.gredorfardig",
       { force: true },
     );
     cy.wait(1000); // Behövs för att filen ska hinna laddas in
@@ -282,5 +294,61 @@ describe("finalize wizard", () => {
     cy.get(
       '[data-testid="finalize-reminder-mismatching-values-list"] li',
     ).should("have.text", "Balanserat resultat: [95228 / 95228 / 95229] kr");
+  });
+
+  it("reports missing orgnr", () => {
+    cy.viewport(1600, 900);
+
+    cy.visit("http://localhost:4173", {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+      },
+    });
+
+    // Öppna fil
+    cy.get("#openArsredovisningBtn").click();
+    cy.get('[data-testid="request-open-file-input"]').selectFile(
+      "cypress/fixtures/input/gredor/TestfilA_utan-orgnr.gredorutkast",
+      { force: true },
+    );
+    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+
+    // Öppna wizard
+    cy.get('[data-testid="show-finalize-wizard-button"]').click();
+    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+
+    // Steg 1 - Glöm inte...
+    cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
+      "have.length",
+      1,
+    );
+  });
+
+  it("reports invalid verksamhetsar", () => {
+    cy.viewport(1600, 900);
+
+    cy.visit("http://localhost:4173", {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+      },
+    });
+
+    // Öppna fil
+    cy.get("#openArsredovisningBtn").click();
+    cy.get('[data-testid="request-open-file-input"]').selectFile(
+      "cypress/fixtures/input/gredor/TestfilA_med-ogiltigt-verksamhetsar.gredorutkast",
+      { force: true },
+    );
+    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+
+    // Öppna wizard
+    cy.get('[data-testid="show-finalize-wizard-button"]').click();
+    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+
+    // Steg 1 - Glöm inte...
+    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar"]').should(
+      "have.length",
+      1,
+    );
   });
 });

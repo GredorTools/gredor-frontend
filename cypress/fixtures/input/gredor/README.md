@@ -20,6 +20,19 @@ Innehåller:
 * Undertecknande med två företrädare och datum för undertecknande är lika för
   respektive företrädare
 
+### TestfilA_med-avrundningfel
+
+Liknar TestfilA, men har avrundningsfel på ett av fälten för balanserat
+resultat.
+
+### TestfilA_utan-orgnr
+
+Liknar TestfilA, men saknar organisationsnummer.
+
+### TestfilA_med-ogiltigt-verksamhetsar
+
+Liknar TestfilA, men saknar startdatum på ett av verksamhetsåren.
+
 
 ## TestfilB
 
@@ -59,9 +72,3 @@ Innehåller:
 
 Testfil med alla fält ifyllda. Värdena går inte ihop logiskt utan detta är bara
 till för regressionstestning. Innehåller även logotyp.
-
-
-## TestfilE
-
-Liknar TestfilA, men har avrundningsfel på ett av fälten för balanserat
-resultat.

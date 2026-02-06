@@ -200,7 +200,7 @@ function onLogoFilePicked(file: File) {
 
       <div
         v-for="i in 3"
-        :key="i"
+        :key="`rakenskapsar-${i}`"
         :data-testid="`edit-grunduppgifter-rakenskapsar-nuvarande-${i}`"
         class="input-section"
       >
