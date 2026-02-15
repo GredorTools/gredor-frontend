@@ -19,7 +19,7 @@ defineProps<{
   >
     <p class="ort-datum">
       <ix:nonNumeric
-        contextRef="period_nuvarande"
+        contextRef="period0"
         name="se-gen-base:UndertecknandeArsredovisningOrt"
         >{{ arsredovisning.redovisningsinformation.undertecknandeOrt }}
       </ix:nonNumeric>
@@ -33,7 +33,7 @@ defineProps<{
       >
         {{ " " }}
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-gen-base:UndertecknandeArsredovisningDatum"
           >{{ arsredovisning.redovisningsinformation.datering }}
         </ix:nonNumeric>
@@ -58,7 +58,7 @@ defineProps<{
         <br />
         <ix:nonNumeric
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-gen-base:UnderskriftHandlingTilltalsnamn"
           order="1"
           >{{ underskrift.tilltalsnamn }}
@@ -66,7 +66,7 @@ defineProps<{
         {{ " " }}
         <ix:nonNumeric
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-gen-base:UnderskriftHandlingEfternamn"
           order="2"
           >{{ underskrift.efternamn }}
@@ -75,7 +75,7 @@ defineProps<{
         <ix:nonNumeric
           v-if="underskrift.roll"
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-gen-base:UnderskriftHandlingRoll"
           order="3"
           >{{ underskrift.roll }}
@@ -83,7 +83,7 @@ defineProps<{
         <br />
         <ix:nonNumeric
           :tupleRef="'UnderskriftArsredovisningForetradareTuple' + index"
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-gen-base:UndertecknandeDatum"
           order="4"
           >{{ underskrift.datum }}

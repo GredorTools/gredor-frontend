@@ -117,6 +117,12 @@ export function getContextRefPrefix(
  * Returnerar lämpligt contextRef baserat på bl.a. etikett-typen för det angivna
  * taxonomiobjektet.
  *
+ * Aktuellt räkenskapsår för redovisningsperioden blir period0/balans0 (beroende
+ * på prefix), första tidigare år blir period1/balans1 osv enligt "BÖR"-regeln
+ * i Bolagsverkets tillämpningsanvisning. Andra format är egentligen tillåtna
+ * men systemen som tar in XBRL-filerna kan vara hårdkodade och förvänta sig
+ * detta format.
+ *
  * Det kan vara lite lurigt eftersom om det är etikett-typ periodStartLabel på
  * en balansrad ingår det i förra årets context.
  *
@@ -124,6 +130,7 @@ export function getContextRefPrefix(
  * @param prefix - Prefix för contextRef, kan hämtas med getContextRefPrefix.
  * @param yearIndex - 0 för nuvarande räkenskapsår, 1 för senaste tidigare
  * räkenskapsåret, osv.
+ *
  * @returns contextRef som motsvarar bl.a. taxonomiobjektets etikett-typ.
  */
 export function getContextRef(
@@ -135,14 +142,10 @@ export function getContextRef(
     prefix === "balans" &&
     taxonomyItem.additionalData.labelType === "periodStartLabel"
   ) {
-    return `${prefix}_tidigare${yearIndex + 1}`;
+    return `${prefix}${yearIndex + 1}`;
   }
 
-  if (yearIndex === 0) {
-    return `${prefix}_nuvarande`;
-  } else {
-    return `${prefix}_tidigare${yearIndex}`;
-  }
+  return `${prefix}${yearIndex}`;
 }
 
 /**

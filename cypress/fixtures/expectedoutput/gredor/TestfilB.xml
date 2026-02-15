@@ -2,194 +2,194 @@
 <xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se-mem-base="http://www.taxonomier.se/se/fr/mem-base/2021-10-31" xmlns:se-bol-base="http://www.bolagsverket.se/se/fr/comp-base/2020-12-01" xmlns:se-gen-base="http://www.taxonomier.se/se/fr/gen-base/2021-10-31" xmlns:se-cd-base="http://www.taxonomier.se/se/fr/cd-base/2021-10-31" xmlns:se-k2-type="http://www.taxonomier.se/se/fr/k2/datatype" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:se-gaap-ext="http://www.taxonomier.se/se/fr/gaap/gaap-ext/2021-10-31">
   <link:schemaRef xlink:type="simple" xlink:href="http://xbrl.taxonomier.se/se/fr/gaap/k2/risbs/2021-10-31/se-k2-risbs-2021-10-31.xsd"/>
   <link:schemaRef xlink:type="simple" xlink:href="http://xbrl.taxonomier.se/se/fr/gaap/coa/rplc/2020-12-01/se-coa-rplc-2020-12-01.xsd"/>
-  <se-cd-base:SprakHandlingUpprattadList contextRef="period_nuvarande">se-mem-base:SprakSvenskaMember </se-cd-base:SprakHandlingUpprattadList>
-  <se-cd-base:LandForetagetsSateList contextRef="period_nuvarande">se-mem-base:LandSverigeMember </se-cd-base:LandForetagetsSateList>
-  <se-cd-base:RedovisningsvalutaHandlingList contextRef="period_nuvarande">se-mem-base:ValutaSvenskaKronorMember</se-cd-base:RedovisningsvalutaHandlingList>
-  <se-gen-base:FinansiellRapportList contextRef="period_nuvarande">se-mem-base:FinansiellRapportStyrelsenVerkstallandeDirektorenAvgerArsredovisningMember</se-gen-base:FinansiellRapportList>
-  <se-cd-base:BeloppsformatList contextRef="period_nuvarande">se-mem-base:BeloppsformatNormalformMember </se-cd-base:BeloppsformatList>
-  <se-cd-base:RakenskapsarForstaDag contextRef="period_nuvarande">2024-01-01</se-cd-base:RakenskapsarForstaDag>
-  <se-cd-base:RakenskapsarSistaDag contextRef="period_nuvarande">2024-12-31</se-cd-base:RakenskapsarSistaDag>
-  <se-cd-base:ForetagetsNamn contextRef="period_nuvarande">Exempelbolaget AB</se-cd-base:ForetagetsNamn>
-  <se-cd-base:Organisationsnummer contextRef="period_nuvarande">556002-1361</se-cd-base:Organisationsnummer>
-  <se-bol-base:FaststallelseResultatBalansrakning contextRef="balans_nuvarande">Jag intygar att resultaträkningen och balansräkningen har fastställts på årsstämma</se-bol-base:FaststallelseResultatBalansrakning>
-  <se-bol-base:Arsstamma contextRef="balans_nuvarande">2025-01-20</se-bol-base:Arsstamma>
-  <se-bol-base:ArsstammaResultatDispositionInteGodkannaStyrelsensForslag contextRef="balans_nuvarande">Årsstämman beslöt att inte godkänna styrelsens förslag till vinstdisposition.</se-bol-base:ArsstammaResultatDispositionInteGodkannaStyrelsensForslag>
-  <se-bol-base:ArsstammaResultatDispositionAvsattningReservfond contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">10000</se-bol-base:ArsstammaResultatDispositionAvsattningReservfond>
-  <se-bol-base:ArsstammaResultatDispositionBalanserasINyRakning contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">71801</se-bol-base:ArsstammaResultatDispositionBalanserasINyRakning>
-  <se-bol-base:ArsstammaResultatDispositionBeslutstext contextRef="balans_nuvarande"> Istället beslöt årsstämman att sätta av 10 000 till reservfond och att 71 801 balanseras i ny räkning.</se-bol-base:ArsstammaResultatDispositionBeslutstext>
-  <se-bol-base:ArsstammaIntygande contextRef="balans_nuvarande">Jag intygar att resultaträkningen och balansräkningen har fastställts på årsstämma   2025-01-20. Årsstämman beslöt att inte godkänna styrelsens förslag till vinstdisposition.   Istället beslöt årsstämman att sätta av 10 000 till reservfond och att 71 801 balanseras i ny räkning.
+  <se-cd-base:SprakHandlingUpprattadList contextRef="period0">se-mem-base:SprakSvenskaMember </se-cd-base:SprakHandlingUpprattadList>
+  <se-cd-base:LandForetagetsSateList contextRef="period0">se-mem-base:LandSverigeMember </se-cd-base:LandForetagetsSateList>
+  <se-cd-base:RedovisningsvalutaHandlingList contextRef="period0">se-mem-base:ValutaSvenskaKronorMember</se-cd-base:RedovisningsvalutaHandlingList>
+  <se-gen-base:FinansiellRapportList contextRef="period0">se-mem-base:FinansiellRapportStyrelsenVerkstallandeDirektorenAvgerArsredovisningMember</se-gen-base:FinansiellRapportList>
+  <se-cd-base:BeloppsformatList contextRef="period0">se-mem-base:BeloppsformatNormalformMember </se-cd-base:BeloppsformatList>
+  <se-cd-base:RakenskapsarForstaDag contextRef="period0">2024-01-01</se-cd-base:RakenskapsarForstaDag>
+  <se-cd-base:RakenskapsarSistaDag contextRef="period0">2024-12-31</se-cd-base:RakenskapsarSistaDag>
+  <se-cd-base:ForetagetsNamn contextRef="period0">Exempelbolaget AB</se-cd-base:ForetagetsNamn>
+  <se-cd-base:Organisationsnummer contextRef="period0">556002-1361</se-cd-base:Organisationsnummer>
+  <se-bol-base:FaststallelseResultatBalansrakning contextRef="balans0">Jag intygar att resultaträkningen och balansräkningen har fastställts på årsstämma</se-bol-base:FaststallelseResultatBalansrakning>
+  <se-bol-base:Arsstamma contextRef="balans0">2025-01-20</se-bol-base:Arsstamma>
+  <se-bol-base:ArsstammaResultatDispositionInteGodkannaStyrelsensForslag contextRef="balans0">Årsstämman beslöt att inte godkänna styrelsens förslag till vinstdisposition.</se-bol-base:ArsstammaResultatDispositionInteGodkannaStyrelsensForslag>
+  <se-bol-base:ArsstammaResultatDispositionAvsattningReservfond contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">10000</se-bol-base:ArsstammaResultatDispositionAvsattningReservfond>
+  <se-bol-base:ArsstammaResultatDispositionBalanserasINyRakning contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">71801</se-bol-base:ArsstammaResultatDispositionBalanserasINyRakning>
+  <se-bol-base:ArsstammaResultatDispositionBeslutstext contextRef="balans0"> Istället beslöt årsstämman att sätta av 10 000 till reservfond och att 71 801 balanseras i ny räkning.</se-bol-base:ArsstammaResultatDispositionBeslutstext>
+  <se-bol-base:ArsstammaIntygande contextRef="balans0">Jag intygar att resultaträkningen och balansräkningen har fastställts på årsstämma   2025-01-20. Årsstämman beslöt att inte godkänna styrelsens förslag till vinstdisposition.   Istället beslöt årsstämman att sätta av 10 000 till reservfond och att 71 801 balanseras i ny räkning.
                                 Jag intygar att innehållet i dessa elektroniska handlingar överensstämmer med originalen och att originalen undertecknats av samtliga personer som enligt lag ska underteckna dessa.
                             </se-bol-base:ArsstammaIntygande>
-  <se-bol-base:IntygandeOriginalInnehall contextRef="balans_nuvarande">Jag intygar att innehållet i dessa elektroniska handlingar överensstämmer med originalen och att originalen undertecknats av samtliga personer som enligt lag ska underteckna dessa.</se-bol-base:IntygandeOriginalInnehall>
-  <se-bol-base:UnderskriftFaststallelseintygElektroniskt contextRef="balans_nuvarande">Elektroniskt underskriven av</se-bol-base:UnderskriftFaststallelseintygElektroniskt>
-  <se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn contextRef="period_nuvarande">Karl</se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn>
-  <se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn contextRef="period_nuvarande">Karlsson</se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn>
-  <se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll contextRef="period_nuvarande">Styrelseledamot</se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll>
-  <se-bol-base:UnderskriftFastallelseintygDatum contextRef="balans_nuvarande">2025-09-27</se-bol-base:UnderskriftFastallelseintygDatum>
-  <se-gen-base:AllmantVerksamheten contextRef="period_nuvarande">
+  <se-bol-base:IntygandeOriginalInnehall contextRef="balans0">Jag intygar att innehållet i dessa elektroniska handlingar överensstämmer med originalen och att originalen undertecknats av samtliga personer som enligt lag ska underteckna dessa.</se-bol-base:IntygandeOriginalInnehall>
+  <se-bol-base:UnderskriftFaststallelseintygElektroniskt contextRef="balans0">Elektroniskt underskriven av</se-bol-base:UnderskriftFaststallelseintygElektroniskt>
+  <se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn contextRef="period0">Karl</se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn>
+  <se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn contextRef="period0">Karlsson</se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn>
+  <se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll contextRef="period0">Styrelseledamot</se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll>
+  <se-bol-base:UnderskriftFastallelseintygDatum contextRef="balans0">2025-09-27</se-bol-base:UnderskriftFastallelseintygDatum>
+  <se-gen-base:AllmantVerksamheten contextRef="period0">
                                             Verksamheten har varit att grilla körv.
                                             Bolaget har sitt säte i Halmstads kommun.
                                         </se-gen-base:AllmantVerksamheten>
-  <se-gen-base:VasentligaHandelserRakenskapsaret contextRef="period_nuvarande">
+  <se-gen-base:VasentligaHandelserRakenskapsaret contextRef="period0">
                                             Mängden körv som grillas har ökat från 1st/månad till 2st/månad.
                                         </se-gen-base:VasentligaHandelserRakenskapsaret>
-  <se-gen-base:Nettoomsattning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="-3">213000</se-gen-base:Nettoomsattning>
-  <se-gen-base:Nettoomsattning contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="-3">274000</se-gen-base:Nettoomsattning>
-  <se-gen-base:Nettoomsattning contextRef="period_tidigare2" unitRef="redovisningsvaluta" decimals="-3">259000</se-gen-base:Nettoomsattning>
-  <se-gen-base:Nettoomsattning contextRef="period_tidigare3" unitRef="redovisningsvaluta" decimals="-3">210000</se-gen-base:Nettoomsattning>
-  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="-3">-18000</se-gen-base:ResultatEfterFinansiellaPoster>
-  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="-3">-20000</se-gen-base:ResultatEfterFinansiellaPoster>
-  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period_tidigare2" unitRef="redovisningsvaluta" decimals="-3">17000</se-gen-base:ResultatEfterFinansiellaPoster>
-  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period_tidigare3" unitRef="redovisningsvaluta" decimals="-3">15000</se-gen-base:ResultatEfterFinansiellaPoster>
-  <se-gen-base:Soliditet contextRef="balans_nuvarande" unitRef="pure" decimals="INF">0.85</se-gen-base:Soliditet>
-  <se-gen-base:Soliditet contextRef="balans_tidigare1" unitRef="pure" decimals="INF">0.89</se-gen-base:Soliditet>
-  <se-gen-base:Soliditet contextRef="balans_tidigare2" unitRef="pure" decimals="INF">0.83</se-gen-base:Soliditet>
-  <se-gen-base:Soliditet contextRef="balans_tidigare3" unitRef="pure" decimals="INF">0.79</se-gen-base:Soliditet>
-  <se-gen-base:Aktiekapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
-  <se-gen-base:BalanseratResultat contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">75406</se-gen-base:BalanseratResultat>
-  <se-gen-base:AretsResultatEgetKapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:AretsResultatEgetKapital>
-  <se-gen-base:ForandringEgetKapitalTotalt contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">80041</se-gen-base:ForandringEgetKapitalTotalt>
-  <se-gen-base:ForandringEgetKapitalBalanseratResultatErhallnaAktieagartillskott contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">45187</se-gen-base:ForandringEgetKapitalBalanseratResultatErhallnaAktieagartillskott>
-  <se-gen-base:ForandringEgetKapitalTotaltErhallnaAktieagartillskott contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">45187</se-gen-base:ForandringEgetKapitalTotaltErhallnaAktieagartillskott>
-  <se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning>
-  <se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">20365</se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning>
-  <se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning>
-  <se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat>
-  <se-gen-base:ForandringEgetKapitalTotaltAretsResultat contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ForandringEgetKapitalTotaltAretsResultat>
-  <se-gen-base:Aktiekapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
-  <se-gen-base:BalanseratResultat contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">100228</se-gen-base:BalanseratResultat>
-  <se-gen-base:AretsResultatEgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultatEgetKapital>
-  <se-gen-base:ForandringEgetKapitalTotalt contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">106801</se-gen-base:ForandringEgetKapitalTotalt>
-  <se-gen-base:BalanseratResultat contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">100228</se-gen-base:BalanseratResultat>
-  <se-gen-base:AretsResultatEgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultatEgetKapital>
-  <se-gen-base:FrittEgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:FrittEgetKapital>
-  <se-gen-base:ForslagDispositionBalanserasINyRakning contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:ForslagDispositionBalanserasINyRakning>
-  <se-gen-base:ForslagDisposition contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:ForslagDisposition>
-  <se-gen-base:Nettoomsattning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">213154</se-gen-base:Nettoomsattning>
-  <se-gen-base:Nettoomsattning contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">274012</se-gen-base:Nettoomsattning>
-  <se-gen-base:ForandringLagerProdukterIArbeteFardigaVarorPagaendeArbetenAnnansRakning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ForandringLagerProdukterIArbeteFardigaVarorPagaendeArbetenAnnansRakning>
-  <se-gen-base:AktiveratArbeteEgenRakning contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:AktiveratArbeteEgenRakning>
-  <se-gen-base:OvrigaRorelseintakter contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:OvrigaRorelseintakter>
-  <se-gen-base:RorelseintakterLagerforandringarMm contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">213157</se-gen-base:RorelseintakterLagerforandringarMm>
-  <se-gen-base:RorelseintakterLagerforandringarMm contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">274012</se-gen-base:RorelseintakterLagerforandringarMm>
-  <se-gen-base:RavarorFornodenheterKostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:RavarorFornodenheterKostnader>
-  <se-gen-base:HandelsvarorKostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:HandelsvarorKostnader>
-  <se-gen-base:OvrigaExternaKostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">86092</se-gen-base:OvrigaExternaKostnader>
-  <se-gen-base:OvrigaExternaKostnader contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">87901</se-gen-base:OvrigaExternaKostnader>
-  <se-gen-base:Personalkostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">146530</se-gen-base:Personalkostnader>
-  <se-gen-base:Personalkostnader contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">206983</se-gen-base:Personalkostnader>
-  <se-gen-base:AvskrivningarNedskrivningarMateriellaImmateriellaAnlaggningstillgangar contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:AvskrivningarNedskrivningarMateriellaImmateriellaAnlaggningstillgangar>
-  <se-gen-base:NedskrivningarOmsattningstillgangarUtoverNormalaNedskrivningar contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:NedskrivningarOmsattningstillgangarUtoverNormalaNedskrivningar>
-  <se-gen-base:OvrigaRorelsekostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:OvrigaRorelsekostnader>
-  <se-gen-base:Rorelsekostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">232627</se-gen-base:Rorelsekostnader>
-  <se-gen-base:Rorelsekostnader contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">294884</se-gen-base:Rorelsekostnader>
-  <se-gen-base:Rorelseresultat contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-19470</se-gen-base:Rorelseresultat>
-  <se-gen-base:Rorelseresultat contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">-20872</se-gen-base:Rorelseresultat>
-  <se-gen-base:ResultatAndelarKoncernforetag contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatAndelarKoncernforetag>
-  <se-gen-base:ResultatAndelarIntresseforetagGemensamtStyrda contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatAndelarIntresseforetagGemensamtStyrda>
-  <se-gen-base:ResultatOvrigaforetagAgarintresse contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatOvrigaforetagAgarintresse>
-  <se-gen-base:ResultatOvrigaFinansiellaAnlaggningstillgangar contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatOvrigaFinansiellaAnlaggningstillgangar>
-  <se-gen-base:OvrigaRanteintakterLiknandeResultatposter contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1041</se-gen-base:OvrigaRanteintakterLiknandeResultatposter>
-  <se-gen-base:OvrigaRanteintakterLiknandeResultatposter contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">507</se-gen-base:OvrigaRanteintakterLiknandeResultatposter>
-  <se-gen-base:NedskrivningarFinansiellaAnlaggningstillgangarKortfristigaPlaceringar contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:NedskrivningarFinansiellaAnlaggningstillgangarKortfristigaPlaceringar>
-  <se-gen-base:RantekostnaderLiknandeResultatposter contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:RantekostnaderLiknandeResultatposter>
-  <se-gen-base:FinansiellaPoster contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1043</se-gen-base:FinansiellaPoster>
-  <se-gen-base:FinansiellaPoster contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">507</se-gen-base:FinansiellaPoster>
-  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ResultatEfterFinansiellaPoster>
-  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:ResultatEfterFinansiellaPoster>
-  <se-gen-base:ErhallnaKoncernbidrag contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ErhallnaKoncernbidrag>
-  <se-gen-base:LamnadeKoncernbidrag contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">4</se-gen-base:LamnadeKoncernbidrag>
-  <se-gen-base:ForandringPeriodiseringsfond contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ForandringPeriodiseringsfond>
-  <se-gen-base:ForandringOveravskrivningar contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ForandringOveravskrivningar>
-  <se-gen-base:OvrigaBokslutsdispositioner contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:OvrigaBokslutsdispositioner>
-  <se-gen-base:ResultatForeSkatt contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ResultatForeSkatt>
-  <se-gen-base:ResultatForeSkatt contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:ResultatForeSkatt>
-  <se-gen-base:SkattAretsResultat contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:SkattAretsResultat>
-  <se-gen-base:SkattAretsResultat contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:SkattAretsResultat>
-  <se-gen-base:OvrigaSkatter contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:OvrigaSkatter>
-  <se-gen-base:OvrigaSkatter contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:OvrigaSkatter>
-  <se-gen-base:AretsResultat contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultat>
-  <se-gen-base:AretsResultat contextRef="period_tidigare1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:AretsResultat>
-  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:AndraLangfristigaVardepappersinnehav>
-  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehav>
-  <se-gen-base:FinansiellaAnlaggningstillgangar contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:FinansiellaAnlaggningstillgangar>
-  <se-gen-base:FinansiellaAnlaggningstillgangar contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:FinansiellaAnlaggningstillgangar>
-  <se-gen-base:Anlaggningstillgangar contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:Anlaggningstillgangar>
-  <se-gen-base:Anlaggningstillgangar contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:Anlaggningstillgangar>
-  <se-gen-base:Kundfordringar contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">500</se-gen-base:Kundfordringar>
-  <se-gen-base:OvrigaFordringarKortfristiga contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">7761</se-gen-base:OvrigaFordringarKortfristiga>
-  <se-gen-base:OvrigaFordringarKortfristiga contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">371</se-gen-base:OvrigaFordringarKortfristiga>
-  <se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">14248</se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter>
-  <se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">19367</se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter>
-  <se-gen-base:KortfristigaFordringar contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">22009</se-gen-base:KortfristigaFordringar>
-  <se-gen-base:KortfristigaFordringar contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">20238</se-gen-base:KortfristigaFordringar>
-  <se-gen-base:KassaBankExklRedovisningsmedel contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">48628</se-gen-base:KassaBankExklRedovisningsmedel>
-  <se-gen-base:KassaBankExklRedovisningsmedel contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">19542</se-gen-base:KassaBankExklRedovisningsmedel>
-  <se-gen-base:KassaBank contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">48628</se-gen-base:KassaBank>
-  <se-gen-base:KassaBank contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">19542</se-gen-base:KassaBank>
-  <se-gen-base:Omsattningstillgangar contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">70637</se-gen-base:Omsattningstillgangar>
-  <se-gen-base:Omsattningstillgangar contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">39780</se-gen-base:Omsattningstillgangar>
-  <se-gen-base:Tillgangar contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">125637</se-gen-base:Tillgangar>
-  <se-gen-base:Tillgangar contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">89780</se-gen-base:Tillgangar>
-  <se-gen-base:Aktiekapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
-  <se-gen-base:Aktiekapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
-  <se-gen-base:BundetEgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:BundetEgetKapital>
-  <se-gen-base:BundetEgetKapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:BundetEgetKapital>
-  <se-gen-base:BalanseratResultat contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">100228</se-gen-base:BalanseratResultat>
-  <se-gen-base:BalanseratResultat contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">75406</se-gen-base:BalanseratResultat>
-  <se-gen-base:AretsResultatEgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultatEgetKapital>
-  <se-gen-base:AretsResultatEgetKapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:AretsResultatEgetKapital>
-  <se-gen-base:FrittEgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:FrittEgetKapital>
-  <se-gen-base:FrittEgetKapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">55041</se-gen-base:FrittEgetKapital>
-  <se-gen-base:EgetKapital contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">106801</se-gen-base:EgetKapital>
-  <se-gen-base:EgetKapital contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">80041</se-gen-base:EgetKapital>
-  <se-gen-base:Skatteskulder contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">9739</se-gen-base:Skatteskulder>
-  <se-gen-base:Skatteskulder contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">9739</se-gen-base:Skatteskulder>
-  <se-gen-base:OvrigaKortfristigaSkulder contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">9097</se-gen-base:OvrigaKortfristigaSkulder>
-  <se-gen-base:KortfristigaSkulder contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">18836</se-gen-base:KortfristigaSkulder>
-  <se-gen-base:KortfristigaSkulder contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">9739</se-gen-base:KortfristigaSkulder>
-  <se-gen-base:EgetKapitalSkulder contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">125637</se-gen-base:EgetKapitalSkulder>
-  <se-gen-base:EgetKapitalSkulder contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">89780</se-gen-base:EgetKapitalSkulder>
-  <se-gen-base:RedovisningsVarderingsprinciper contextRef="period_nuvarande">
+  <se-gen-base:Nettoomsattning contextRef="period0" unitRef="redovisningsvaluta" decimals="-3">213000</se-gen-base:Nettoomsattning>
+  <se-gen-base:Nettoomsattning contextRef="period1" unitRef="redovisningsvaluta" decimals="-3">274000</se-gen-base:Nettoomsattning>
+  <se-gen-base:Nettoomsattning contextRef="period2" unitRef="redovisningsvaluta" decimals="-3">259000</se-gen-base:Nettoomsattning>
+  <se-gen-base:Nettoomsattning contextRef="period3" unitRef="redovisningsvaluta" decimals="-3">210000</se-gen-base:Nettoomsattning>
+  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period0" unitRef="redovisningsvaluta" decimals="-3">-18000</se-gen-base:ResultatEfterFinansiellaPoster>
+  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period1" unitRef="redovisningsvaluta" decimals="-3">-20000</se-gen-base:ResultatEfterFinansiellaPoster>
+  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period2" unitRef="redovisningsvaluta" decimals="-3">17000</se-gen-base:ResultatEfterFinansiellaPoster>
+  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period3" unitRef="redovisningsvaluta" decimals="-3">15000</se-gen-base:ResultatEfterFinansiellaPoster>
+  <se-gen-base:Soliditet contextRef="balans0" unitRef="pure" decimals="INF">0.85</se-gen-base:Soliditet>
+  <se-gen-base:Soliditet contextRef="balans1" unitRef="pure" decimals="INF">0.89</se-gen-base:Soliditet>
+  <se-gen-base:Soliditet contextRef="balans2" unitRef="pure" decimals="INF">0.83</se-gen-base:Soliditet>
+  <se-gen-base:Soliditet contextRef="balans3" unitRef="pure" decimals="INF">0.79</se-gen-base:Soliditet>
+  <se-gen-base:Aktiekapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
+  <se-gen-base:BalanseratResultat contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">75406</se-gen-base:BalanseratResultat>
+  <se-gen-base:AretsResultatEgetKapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:AretsResultatEgetKapital>
+  <se-gen-base:ForandringEgetKapitalTotalt contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">80041</se-gen-base:ForandringEgetKapitalTotalt>
+  <se-gen-base:ForandringEgetKapitalBalanseratResultatErhallnaAktieagartillskott contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">45187</se-gen-base:ForandringEgetKapitalBalanseratResultatErhallnaAktieagartillskott>
+  <se-gen-base:ForandringEgetKapitalTotaltErhallnaAktieagartillskott contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">45187</se-gen-base:ForandringEgetKapitalTotaltErhallnaAktieagartillskott>
+  <se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:ForandringEgetKapitalBalanseratResultatBalanserasNyRakning>
+  <se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">20365</se-gen-base:ForandringEgetKapitalAretsResultatBalanserasNyRakning>
+  <se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:ForandringEgetKapitalTotaltBalanserasNyRakning>
+  <se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ForandringEgetKapitalAretsResultatAretsResultat>
+  <se-gen-base:ForandringEgetKapitalTotaltAretsResultat contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ForandringEgetKapitalTotaltAretsResultat>
+  <se-gen-base:Aktiekapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
+  <se-gen-base:BalanseratResultat contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">100228</se-gen-base:BalanseratResultat>
+  <se-gen-base:AretsResultatEgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultatEgetKapital>
+  <se-gen-base:ForandringEgetKapitalTotalt contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">106801</se-gen-base:ForandringEgetKapitalTotalt>
+  <se-gen-base:BalanseratResultat contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">100228</se-gen-base:BalanseratResultat>
+  <se-gen-base:AretsResultatEgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultatEgetKapital>
+  <se-gen-base:FrittEgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:FrittEgetKapital>
+  <se-gen-base:ForslagDispositionBalanserasINyRakning contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:ForslagDispositionBalanserasINyRakning>
+  <se-gen-base:ForslagDisposition contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:ForslagDisposition>
+  <se-gen-base:Nettoomsattning contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">213154</se-gen-base:Nettoomsattning>
+  <se-gen-base:Nettoomsattning contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">274012</se-gen-base:Nettoomsattning>
+  <se-gen-base:ForandringLagerProdukterIArbeteFardigaVarorPagaendeArbetenAnnansRakning contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ForandringLagerProdukterIArbeteFardigaVarorPagaendeArbetenAnnansRakning>
+  <se-gen-base:AktiveratArbeteEgenRakning contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:AktiveratArbeteEgenRakning>
+  <se-gen-base:OvrigaRorelseintakter contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:OvrigaRorelseintakter>
+  <se-gen-base:RorelseintakterLagerforandringarMm contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">213157</se-gen-base:RorelseintakterLagerforandringarMm>
+  <se-gen-base:RorelseintakterLagerforandringarMm contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">274012</se-gen-base:RorelseintakterLagerforandringarMm>
+  <se-gen-base:RavarorFornodenheterKostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:RavarorFornodenheterKostnader>
+  <se-gen-base:HandelsvarorKostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:HandelsvarorKostnader>
+  <se-gen-base:OvrigaExternaKostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">86092</se-gen-base:OvrigaExternaKostnader>
+  <se-gen-base:OvrigaExternaKostnader contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">87901</se-gen-base:OvrigaExternaKostnader>
+  <se-gen-base:Personalkostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">146530</se-gen-base:Personalkostnader>
+  <se-gen-base:Personalkostnader contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">206983</se-gen-base:Personalkostnader>
+  <se-gen-base:AvskrivningarNedskrivningarMateriellaImmateriellaAnlaggningstillgangar contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:AvskrivningarNedskrivningarMateriellaImmateriellaAnlaggningstillgangar>
+  <se-gen-base:NedskrivningarOmsattningstillgangarUtoverNormalaNedskrivningar contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:NedskrivningarOmsattningstillgangarUtoverNormalaNedskrivningar>
+  <se-gen-base:OvrigaRorelsekostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:OvrigaRorelsekostnader>
+  <se-gen-base:Rorelsekostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">232627</se-gen-base:Rorelsekostnader>
+  <se-gen-base:Rorelsekostnader contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">294884</se-gen-base:Rorelsekostnader>
+  <se-gen-base:Rorelseresultat contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-19470</se-gen-base:Rorelseresultat>
+  <se-gen-base:Rorelseresultat contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">-20872</se-gen-base:Rorelseresultat>
+  <se-gen-base:ResultatAndelarKoncernforetag contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatAndelarKoncernforetag>
+  <se-gen-base:ResultatAndelarIntresseforetagGemensamtStyrda contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatAndelarIntresseforetagGemensamtStyrda>
+  <se-gen-base:ResultatOvrigaforetagAgarintresse contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatOvrigaforetagAgarintresse>
+  <se-gen-base:ResultatOvrigaFinansiellaAnlaggningstillgangar contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ResultatOvrigaFinansiellaAnlaggningstillgangar>
+  <se-gen-base:OvrigaRanteintakterLiknandeResultatposter contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1041</se-gen-base:OvrigaRanteintakterLiknandeResultatposter>
+  <se-gen-base:OvrigaRanteintakterLiknandeResultatposter contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">507</se-gen-base:OvrigaRanteintakterLiknandeResultatposter>
+  <se-gen-base:NedskrivningarFinansiellaAnlaggningstillgangarKortfristigaPlaceringar contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:NedskrivningarFinansiellaAnlaggningstillgangarKortfristigaPlaceringar>
+  <se-gen-base:RantekostnaderLiknandeResultatposter contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:RantekostnaderLiknandeResultatposter>
+  <se-gen-base:FinansiellaPoster contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1043</se-gen-base:FinansiellaPoster>
+  <se-gen-base:FinansiellaPoster contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">507</se-gen-base:FinansiellaPoster>
+  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ResultatEfterFinansiellaPoster>
+  <se-gen-base:ResultatEfterFinansiellaPoster contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:ResultatEfterFinansiellaPoster>
+  <se-gen-base:ErhallnaKoncernbidrag contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ErhallnaKoncernbidrag>
+  <se-gen-base:LamnadeKoncernbidrag contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">4</se-gen-base:LamnadeKoncernbidrag>
+  <se-gen-base:ForandringPeriodiseringsfond contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ForandringPeriodiseringsfond>
+  <se-gen-base:ForandringOveravskrivningar contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:ForandringOveravskrivningar>
+  <se-gen-base:OvrigaBokslutsdispositioner contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">1</se-gen-base:OvrigaBokslutsdispositioner>
+  <se-gen-base:ResultatForeSkatt contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:ResultatForeSkatt>
+  <se-gen-base:ResultatForeSkatt contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:ResultatForeSkatt>
+  <se-gen-base:SkattAretsResultat contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:SkattAretsResultat>
+  <se-gen-base:SkattAretsResultat contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:SkattAretsResultat>
+  <se-gen-base:OvrigaSkatter contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:OvrigaSkatter>
+  <se-gen-base:OvrigaSkatter contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">0</se-gen-base:OvrigaSkatter>
+  <se-gen-base:AretsResultat contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultat>
+  <se-gen-base:AretsResultat contextRef="period1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:AretsResultat>
+  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:AndraLangfristigaVardepappersinnehav>
+  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehav>
+  <se-gen-base:FinansiellaAnlaggningstillgangar contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:FinansiellaAnlaggningstillgangar>
+  <se-gen-base:FinansiellaAnlaggningstillgangar contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:FinansiellaAnlaggningstillgangar>
+  <se-gen-base:Anlaggningstillgangar contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:Anlaggningstillgangar>
+  <se-gen-base:Anlaggningstillgangar contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:Anlaggningstillgangar>
+  <se-gen-base:Kundfordringar contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">500</se-gen-base:Kundfordringar>
+  <se-gen-base:OvrigaFordringarKortfristiga contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">7761</se-gen-base:OvrigaFordringarKortfristiga>
+  <se-gen-base:OvrigaFordringarKortfristiga contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">371</se-gen-base:OvrigaFordringarKortfristiga>
+  <se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">14248</se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter>
+  <se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">19367</se-gen-base:ForutbetaldaKostnaderUpplupnaIntakter>
+  <se-gen-base:KortfristigaFordringar contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">22009</se-gen-base:KortfristigaFordringar>
+  <se-gen-base:KortfristigaFordringar contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">20238</se-gen-base:KortfristigaFordringar>
+  <se-gen-base:KassaBankExklRedovisningsmedel contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">48628</se-gen-base:KassaBankExklRedovisningsmedel>
+  <se-gen-base:KassaBankExklRedovisningsmedel contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">19542</se-gen-base:KassaBankExklRedovisningsmedel>
+  <se-gen-base:KassaBank contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">48628</se-gen-base:KassaBank>
+  <se-gen-base:KassaBank contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">19542</se-gen-base:KassaBank>
+  <se-gen-base:Omsattningstillgangar contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">70637</se-gen-base:Omsattningstillgangar>
+  <se-gen-base:Omsattningstillgangar contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">39780</se-gen-base:Omsattningstillgangar>
+  <se-gen-base:Tillgangar contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">125637</se-gen-base:Tillgangar>
+  <se-gen-base:Tillgangar contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">89780</se-gen-base:Tillgangar>
+  <se-gen-base:Aktiekapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
+  <se-gen-base:Aktiekapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:Aktiekapital>
+  <se-gen-base:BundetEgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:BundetEgetKapital>
+  <se-gen-base:BundetEgetKapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:BundetEgetKapital>
+  <se-gen-base:BalanseratResultat contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">100228</se-gen-base:BalanseratResultat>
+  <se-gen-base:BalanseratResultat contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">75406</se-gen-base:BalanseratResultat>
+  <se-gen-base:AretsResultatEgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">-18427</se-gen-base:AretsResultatEgetKapital>
+  <se-gen-base:AretsResultatEgetKapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">-20365</se-gen-base:AretsResultatEgetKapital>
+  <se-gen-base:FrittEgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">81801</se-gen-base:FrittEgetKapital>
+  <se-gen-base:FrittEgetKapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">55041</se-gen-base:FrittEgetKapital>
+  <se-gen-base:EgetKapital contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">106801</se-gen-base:EgetKapital>
+  <se-gen-base:EgetKapital contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">80041</se-gen-base:EgetKapital>
+  <se-gen-base:Skatteskulder contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">9739</se-gen-base:Skatteskulder>
+  <se-gen-base:Skatteskulder contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">9739</se-gen-base:Skatteskulder>
+  <se-gen-base:OvrigaKortfristigaSkulder contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">9097</se-gen-base:OvrigaKortfristigaSkulder>
+  <se-gen-base:KortfristigaSkulder contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">18836</se-gen-base:KortfristigaSkulder>
+  <se-gen-base:KortfristigaSkulder contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">9739</se-gen-base:KortfristigaSkulder>
+  <se-gen-base:EgetKapitalSkulder contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">125637</se-gen-base:EgetKapitalSkulder>
+  <se-gen-base:EgetKapitalSkulder contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">89780</se-gen-base:EgetKapitalSkulder>
+  <se-gen-base:RedovisningsVarderingsprinciper contextRef="period0">
                                         Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag.
                                     </se-gen-base:RedovisningsVarderingsprinciper>
-  <se-gen-base:MedelantaletAnstallda contextRef="period_nuvarande" unitRef="decimal-MedelantaletAnstallda" decimals="INF">1</se-gen-base:MedelantaletAnstallda>
-  <se-gen-base:MedelantaletAnstallda contextRef="period_tidigare1" unitRef="decimal-MedelantaletAnstallda" decimals="INF">2</se-gen-base:MedelantaletAnstallda>
-  <se-gen-base:NotExceptionellaIntakterKostnader contextRef="period_nuvarande">
+  <se-gen-base:MedelantaletAnstallda contextRef="period0" unitRef="decimal-MedelantaletAnstallda" decimals="INF">1</se-gen-base:MedelantaletAnstallda>
+  <se-gen-base:MedelantaletAnstallda contextRef="period1" unitRef="decimal-MedelantaletAnstallda" decimals="INF">2</se-gen-base:MedelantaletAnstallda>
+  <se-gen-base:NotExceptionellaIntakterKostnader contextRef="period0">
                                         Följande exceptionella kostnader har påverkat bolaget under räkenskapsåret 2024:
                                     </se-gen-base:NotExceptionellaIntakterKostnader>
   <se-gaap-ext:ExceptionellaKostnaderTuple>
-    <se-gen-base:ExceptionellaKostnaderPost contextRef="period_nuvarande">
+    <se-gen-base:ExceptionellaKostnaderPost contextRef="period0">
                                                         Röd målarfärg (ketchupsubstitut)
                                                     </se-gen-base:ExceptionellaKostnaderPost>
-    <se-gen-base:ExceptionellaKostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:ExceptionellaKostnader>
+    <se-gen-base:ExceptionellaKostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:ExceptionellaKostnader>
   </se-gaap-ext:ExceptionellaKostnaderTuple>
   <se-gaap-ext:ExceptionellaKostnaderTuple>
-    <se-gen-base:ExceptionellaKostnaderPost contextRef="period_nuvarande">
+    <se-gen-base:ExceptionellaKostnaderPost contextRef="period0">
                                                         Pannkakor (korvbröden tog slut)
                                                     </se-gen-base:ExceptionellaKostnaderPost>
-    <se-gen-base:ExceptionellaKostnader contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:ExceptionellaKostnader>
+    <se-gen-base:ExceptionellaKostnader contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">25000</se-gen-base:ExceptionellaKostnader>
   </se-gaap-ext:ExceptionellaKostnaderTuple>
-  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
-  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans_tidigare2" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
-  <se-gen-base:AndraLangfristigaVardepappersinnehavForandringAnskaffningsvardenInkop contextRef="period_nuvarande" unitRef="redovisningsvaluta" decimals="INF">5000</se-gen-base:AndraLangfristigaVardepappersinnehavForandringAnskaffningsvardenInkop>
-  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
-  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
-  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans_nuvarande" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:AndraLangfristigaVardepappersinnehav>
-  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans_tidigare1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehav>
-  <se-gen-base:UndertecknandeArsredovisningOrt contextRef="period_nuvarande">Halmstad</se-gen-base:UndertecknandeArsredovisningOrt>
+  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
+  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans2" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
+  <se-gen-base:AndraLangfristigaVardepappersinnehavForandringAnskaffningsvardenInkop contextRef="period0" unitRef="redovisningsvaluta" decimals="INF">5000</se-gen-base:AndraLangfristigaVardepappersinnehavForandringAnskaffningsvardenInkop>
+  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
+  <se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehavAnskaffningsvarden>
+  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans0" unitRef="redovisningsvaluta" decimals="INF">55000</se-gen-base:AndraLangfristigaVardepappersinnehav>
+  <se-gen-base:AndraLangfristigaVardepappersinnehav contextRef="balans1" unitRef="redovisningsvaluta" decimals="INF">50000</se-gen-base:AndraLangfristigaVardepappersinnehav>
+  <se-gen-base:UndertecknandeArsredovisningOrt contextRef="period0">Halmstad</se-gen-base:UndertecknandeArsredovisningOrt>
   <se-gaap-ext:UnderskriftArsredovisningForetradareTuple>
-    <se-gen-base:UnderskriftHandlingTilltalsnamn contextRef="period_nuvarande">Karl</se-gen-base:UnderskriftHandlingTilltalsnamn>
-    <se-gen-base:UnderskriftHandlingEfternamn contextRef="period_nuvarande">Karlsson</se-gen-base:UnderskriftHandlingEfternamn>
-    <se-gen-base:UndertecknandeDatum contextRef="period_nuvarande">2025-01-03</se-gen-base:UndertecknandeDatum>
+    <se-gen-base:UnderskriftHandlingTilltalsnamn contextRef="period0">Karl</se-gen-base:UnderskriftHandlingTilltalsnamn>
+    <se-gen-base:UnderskriftHandlingEfternamn contextRef="period0">Karlsson</se-gen-base:UnderskriftHandlingEfternamn>
+    <se-gen-base:UndertecknandeDatum contextRef="period0">2025-01-03</se-gen-base:UndertecknandeDatum>
   </se-gaap-ext:UnderskriftArsredovisningForetradareTuple>
   <se-gaap-ext:UnderskriftArsredovisningForetradareTuple>
-    <se-gen-base:UnderskriftHandlingTilltalsnamn contextRef="period_nuvarande">Karin</se-gen-base:UnderskriftHandlingTilltalsnamn>
-    <se-gen-base:UnderskriftHandlingEfternamn contextRef="period_nuvarande">Olsson</se-gen-base:UnderskriftHandlingEfternamn>
-    <se-gen-base:UnderskriftHandlingRoll contextRef="period_nuvarande">Verkställande direktör</se-gen-base:UnderskriftHandlingRoll>
-    <se-gen-base:UndertecknandeDatum contextRef="period_nuvarande">2025-01-04</se-gen-base:UndertecknandeDatum>
+    <se-gen-base:UnderskriftHandlingTilltalsnamn contextRef="period0">Karin</se-gen-base:UnderskriftHandlingTilltalsnamn>
+    <se-gen-base:UnderskriftHandlingEfternamn contextRef="period0">Olsson</se-gen-base:UnderskriftHandlingEfternamn>
+    <se-gen-base:UnderskriftHandlingRoll contextRef="period0">Verkställande direktör</se-gen-base:UnderskriftHandlingRoll>
+    <se-gen-base:UndertecknandeDatum contextRef="period0">2025-01-04</se-gen-base:UndertecknandeDatum>
   </se-gaap-ext:UnderskriftArsredovisningForetradareTuple>
-  <xbrli:context id="period_nuvarande">
+  <xbrli:context id="period0">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -198,7 +198,7 @@
       <xbrli:endDate>2024-12-31</xbrli:endDate>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="balans_nuvarande">
+  <xbrli:context id="balans0">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -206,7 +206,7 @@
       <xbrli:instant>2024-12-31</xbrli:instant>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="period_tidigare1">
+  <xbrli:context id="period1">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -215,7 +215,7 @@
       <xbrli:endDate>2023-12-31</xbrli:endDate>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="period_tidigare2">
+  <xbrli:context id="period2">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -224,7 +224,7 @@
       <xbrli:endDate>2022-12-31</xbrli:endDate>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="period_tidigare3">
+  <xbrli:context id="period3">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -233,7 +233,7 @@
       <xbrli:endDate>2021-12-31</xbrli:endDate>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="balans_tidigare1">
+  <xbrli:context id="balans1">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -241,7 +241,7 @@
       <xbrli:instant>2023-12-31</xbrli:instant>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="balans_tidigare2">
+  <xbrli:context id="balans2">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>
@@ -249,7 +249,7 @@
       <xbrli:instant>2022-12-31</xbrli:instant>
     </xbrli:period>
   </xbrli:context>
-  <xbrli:context id="balans_tidigare3">
+  <xbrli:context id="balans3">
     <xbrli:entity>
       <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
     </xbrli:entity>

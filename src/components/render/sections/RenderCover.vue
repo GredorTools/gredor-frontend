@@ -47,16 +47,12 @@ const rakenskapsarText = computed(() => {
     />
 
     <div>
-      <ix:nonNumeric
-        contextRef="period_nuvarande"
-        name="se-cd-base:ForetagetsNamn"
+      <ix:nonNumeric contextRef="period0" name="se-cd-base:ForetagetsNamn"
         >{{ arsredovisning.foretagsinformation.foretagsnamn }}
       </ix:nonNumeric>
       <br />
       <abbr>Org.nr</abbr>{{ " " }}
-      <ix:nonNumeric
-        contextRef="period_nuvarande"
-        name="se-cd-base:Organisationsnummer"
+      <ix:nonNumeric contextRef="period0" name="se-cd-base:Organisationsnummer"
         >{{ arsredovisning.foretagsinformation.organisationsnummer }}
       </ix:nonNumeric>
     </div>

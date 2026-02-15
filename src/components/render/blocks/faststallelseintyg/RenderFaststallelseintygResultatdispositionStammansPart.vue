@@ -63,7 +63,7 @@ const beloppNextNextPart = computed(() => {
     {{ textBefore }}
     <ix:nonFraction
       :name="xbrlId"
-      contextRef="balans_nuvarande"
+      contextRef="balans0"
       decimals="INF"
       format="ixt:numspacecomma"
       scale="0"
