@@ -42,7 +42,7 @@
     "xml-formatter": "^3.6.7"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.14.7",
+    "@cypress/code-coverage": "^4.0.0",
     "@tsconfig/node22": "^22.0.5",
     "@types/bootstrap": "^5.2.10",
     "@types/node": "^24.10.1",
