@@ -446,7 +446,7 @@ const mismatchingValueBelopprader = computed(() => {
           data-testid="finalize-reminder-invalid-verksamhetsar"
         >
           …att verksamhetsåren är korrekt ifyllda under fliken "Grunduppgifter";
-          <strong>just nu är de inte korrekt ifyllda.</strong>.
+          <strong>just nu är de inte korrekt ifyllda.</strong>
         </li>
       </ul>
     </div>

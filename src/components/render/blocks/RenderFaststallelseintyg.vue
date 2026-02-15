@@ -40,12 +40,12 @@ const allStammansDispositionPartXmlNames =
     <h2>Fastställelseintyg</h2>
     <p>
       <ix:nonNumeric
-        contextRef="balans_nuvarande"
+        contextRef="balans0"
         continuedAt="intygande_forts"
         name="se-bol-base:ArsstammaIntygande"
       >
         <ix:nonNumeric
-          contextRef="balans_nuvarande"
+          contextRef="balans0"
           name="se-bol-base:FaststallelseResultatBalansrakning"
         >
           <!-- @delete-whitespace -->
@@ -54,10 +54,7 @@ const allStammansDispositionPartXmlNames =
           <!-- @delete-whitespace -->
         </ix:nonNumeric>
         {{ " " }}
-        <ix:nonNumeric
-          contextRef="balans_nuvarande"
-          name="se-bol-base:Arsstamma"
-        >
+        <ix:nonNumeric contextRef="balans0" name="se-bol-base:Arsstamma">
           <!-- @delete-whitespace -->
           {{ arsredovisning.faststallelseintyg.datumArsstamma
           }}<!-- @delete-whitespace --></ix:nonNumeric
@@ -67,7 +64,7 @@ const allStammansDispositionPartXmlNames =
           :name="
             arsredovisning.faststallelseintyg.resultatdispositionBeslut.xbrlId
           "
-          contextRef="balans_nuvarande"
+          contextRef="balans0"
         >
           <!-- @delete-whitespace -->
           {{ arsredovisning.faststallelseintyg.resultatdispositionBeslut.text }}
@@ -82,7 +79,7 @@ const allStammansDispositionPartXmlNames =
         >
           {{ " " }}
           <ix:nonNumeric
-            contextRef="balans_nuvarande"
+            contextRef="balans0"
             name="se-bol-base:ArsstammaResultatDispositionBeslutstext"
           >
             Istället beslöt årsstämman
@@ -111,7 +108,7 @@ const allStammansDispositionPartXmlNames =
     <p>
       <ix:continuation id="intygande_forts">
         <ix:nonNumeric
-          contextRef="balans_nuvarande"
+          contextRef="balans0"
           name="se-bol-base:IntygandeOriginalInnehall"
         >
           <!-- @delete-whitespace -->
@@ -126,21 +123,21 @@ const allStammansDispositionPartXmlNames =
     <p>
       <span class="signature-header">
         <ix:nonNumeric
-          contextRef="balans_nuvarande"
+          contextRef="balans0"
           name="se-bol-base:UnderskriftFaststallelseintygElektroniskt"
           >Elektroniskt underskriven av</ix:nonNumeric
         >:
       </span>
       <br />
       <ix:nonNumeric
-        contextRef="period_nuvarande"
+        contextRef="period0"
         name="se-bol-base:UnderskriftFaststallelseintygForetradareTilltalsnamn"
       >
         {{ arsredovisning.faststallelseintyg.underskrift.tilltalsnamn }}
       </ix:nonNumeric>
       {{ " " }}
       <ix:nonNumeric
-        contextRef="period_nuvarande"
+        contextRef="period0"
         name="se-bol-base:UnderskriftFaststallelseintygForetradareEfternamn"
       >
         {{
@@ -148,7 +145,7 @@ const allStammansDispositionPartXmlNames =
         }} </ix:nonNumeric
       ><!-- @delete-whitespace -->,
       <ix:nonNumeric
-        contextRef="period_nuvarande"
+        contextRef="period0"
         name="se-bol-base:UnderskriftFaststallelseintygForetradareForetradarroll"
       >
         <!-- @delete-whitespace -->
@@ -158,7 +155,7 @@ const allStammansDispositionPartXmlNames =
       <br />
       <ix:nonNumeric
         id="ID_DATUM_UNDERTECKNANDE_FASTSTALLELSEINTYG"
-        contextRef="balans_nuvarande"
+        contextRef="balans0"
         name="se-bol-base:UnderskriftFastallelseintygDatum"
         >{{ new Date().toISOString().split("T")[0] }}
       </ix:nonNumeric>

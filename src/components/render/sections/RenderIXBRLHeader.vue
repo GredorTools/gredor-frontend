@@ -55,39 +55,37 @@ const allDecimalTaxonomyItems = [
     <ix:header>
       <ix:hidden>
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-cd-base:SprakHandlingUpprattadList"
           >se-mem-base:SprakSvenskaMember
         </ix:nonNumeric>
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-cd-base:LandForetagetsSateList"
           >se-mem-base:LandSverigeMember
         </ix:nonNumeric>
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-cd-base:RedovisningsvalutaHandlingList"
           >{{
             arsredovisning.redovisningsinformation.redovisningsvaluta.xbrlId
           }}
         </ix:nonNumeric>
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-gen-base:FinansiellRapportList"
           >{{ arsredovisning.redovisningsinformation.avgivande.xbrlId }}
         </ix:nonNumeric>
-        <ix:nonNumeric
-          contextRef="period_nuvarande"
-          name="se-cd-base:BeloppsformatList"
+        <ix:nonNumeric contextRef="period0" name="se-cd-base:BeloppsformatList"
           >se-mem-base:BeloppsformatNormalformMember
         </ix:nonNumeric>
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-cd-base:RakenskapsarForstaDag"
           >{{ arsredovisning.verksamhetsarNuvarande.startdatum }}
         </ix:nonNumeric>
         <ix:nonNumeric
-          contextRef="period_nuvarande"
+          contextRef="period0"
           name="se-cd-base:RakenskapsarSistaDag"
           >{{ arsredovisning.verksamhetsarNuvarande.slutdatum }}
         </ix:nonNumeric>
@@ -103,7 +101,7 @@ const allDecimalTaxonomyItems = [
         />
       </ix:references>
       <ix:resources>
-        <xbrli:context id="period_nuvarande">
+        <xbrli:context id="period0">
           <xbrli:entity>
             <xbrli:identifier scheme="http://www.bolagsverket.se"
               >{{ arsredovisning.foretagsinformation.organisationsnummer }}
@@ -118,7 +116,7 @@ const allDecimalTaxonomyItems = [
             </xbrli:endDate>
           </xbrli:period>
         </xbrli:context>
-        <xbrli:context id="balans_nuvarande">
+        <xbrli:context id="balans0">
           <xbrli:entity>
             <xbrli:identifier scheme="http://www.bolagsverket.se"
               >{{ arsredovisning.foretagsinformation.organisationsnummer }}
@@ -134,7 +132,7 @@ const allDecimalTaxonomyItems = [
           v-for="i in arsredovisning.verksamhetsarTidigare.length"
           :key="i"
         >
-          <xbrli:context :id="'period_tidigare' + i">
+          <xbrli:context :id="'period' + i">
             <xbrli:entity>
               <xbrli:identifier scheme="http://www.bolagsverket.se"
                 >{{ arsredovisning.foretagsinformation.organisationsnummer }}
@@ -149,7 +147,7 @@ const allDecimalTaxonomyItems = [
               </xbrli:endDate>
             </xbrli:period>
           </xbrli:context>
-          <xbrli:context :id="'balans_tidigare' + i">
+          <xbrli:context :id="'balans' + i">
             <xbrli:entity>
               <xbrli:identifier scheme="http://www.bolagsverket.se"
                 >{{ arsredovisning.foretagsinformation.organisationsnummer }}
@@ -164,7 +162,7 @@ const allDecimalTaxonomyItems = [
         </template>
         <template v-if="arsredovisning.verksamhetsarTidigare.length == 0">
           <!-- Öppningsbalans för nystartade företag -->
-          <xbrli:context id="balans_tidigare1">
+          <xbrli:context id="balans1">
             <xbrli:entity>
               <xbrli:identifier scheme="http://www.bolagsverket.se"
                 >{{ arsredovisning.foretagsinformation.organisationsnummer }}
