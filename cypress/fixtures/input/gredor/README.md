@@ -71,4 +71,5 @@ Innehåller:
 ## TestfilD
 
 Testfil med alla fält ifyllda. Värdena går inte ihop logiskt utan detta är bara
-till för regressionstestning. Innehåller även logotyp.
+till för regressionstestning. Innehåller även logotyp samt fält med
+decimaltecken.

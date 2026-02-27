@@ -97,10 +97,39 @@ export interface TaxonomyItem<T extends TaxonomyItemType = TaxonomyItemType> {
 }
 
 // Hjälpfunktioner
+/**
+ * Returnerar huruvida det givna taxonomiobjektet är en tuple.
+ *
+ * @param taxonomyItem - taxonomiobjektet som ska kontrolleras
+ * @returns Huruvida taxonomiobjektet är en tuple
+ */
 export function isTaxonomyItemTuple(taxonomyItem: TaxonomyItem) {
   return taxonomyItem.properties.type.endsWith("Tuple@anonymousType");
 }
 
+/**
+ * Returnerar huruvida det givna taxonomiobjekt ska innehålla ett reellt tal.
+ *
+ * @param taxonomyItem - taxonomiobjektet som ska kontrolleras
+ * @returns Huruvida taxonomiobjektet ska innehålla ett reellt tal
+ */
+export function isTaxonomyItemForRealNumber(taxonomyItem: TaxonomyItem) {
+  return [
+    "xbrli:decimalItemType",
+    "xbrli:pureItemType",
+    "xbrli:sharesItemType",
+  ].includes(taxonomyItem.properties.type);
+}
+
+/**
+ * Returnerar huruvida det givna taxonomiobjektet har någon föräldrer som
+ * matchar den givna funktionen.
+ *
+ * @param taxonomyItem - taxonomiobjektet som ska kontrolleras
+ * @param matcherFunc - funktionen som ska användas för att matcha föräldrar
+ * @returns Huruvida taxonomiobjeketet har någon föräldrer som matchar
+ * funktionen
+ */
 export function hasParentTaxonomyItemMatching(
   taxonomyItem: TaxonomyItem,
   matcherFunc: (taxonomyItem: TaxonomyItem) => boolean,

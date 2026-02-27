@@ -4007,9 +4007,9 @@
         "taxonomyItemName": "se-gen-base:MedelantaletAnstallda",
         "parentTaxonomyItemName": "se-gen-base:MedelantaletAnstalldaAbstract",
         "type": "xbrli:decimalItemType",
-        "beloppNuvarandeAr": "440",
+        "beloppNuvarandeAr": "440,2",
         "beloppTidigareAr": [
-          "441",
+          "441,99999",
           "",
           ""
         ]

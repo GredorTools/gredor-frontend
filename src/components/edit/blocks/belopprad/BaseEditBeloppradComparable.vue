@@ -38,9 +38,6 @@ export interface EditBeloppradComparablePropsBase {
 
   /** Huruvida notfält ska visas för beloppraden. */
   allowNot?: boolean;
-
-  /** Reguljärt uttryck som definierar vilka värden som är tillåtna. */
-  allowedValueRegex?: RegExp;
 }
 
 export interface EditBeloppradComparableEmitsBase {
@@ -56,6 +53,9 @@ const props = defineProps<
     /** Huruvida balanstecken (plus/minus) får visas för beloppraden utifrån det
      * motsvarande taxonomiobjektets balance-värde. */
     showBalanceSign?: boolean;
+
+    /** Reguljärt uttryck som definierar vilka värden som är tillåtna. */
+    allowedValueRegex?: RegExp;
   }
 >();
 
@@ -72,12 +72,10 @@ const taxonomyItem = computed(() => {
 
 // Hjälpfunktioner
 function onBeforeValueInput(event: InputEvent) {
-  if (!props.allowedValueRegex) {
-    return;
+  if (props.allowedValueRegex) {
+    // För att bara tillåta vissa tecken i värdet
+    handleEventForInputWithValueWhitelist(event, props.allowedValueRegex);
   }
-
-  // För att bara tillåta vissa tecken i värdet
-  handleEventForInputWithValueWhitelist(event, props.allowedValueRegex);
 }
 </script>
 

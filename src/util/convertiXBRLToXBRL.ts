@@ -52,7 +52,9 @@ export function convertiXBRLToXBRL(ixbrl: string): string {
       text = "-" + text;
     }
     if (el.attribs["scale"]) {
-      text = Decimal(text).mul(Decimal(10).pow(el.attribs["scale"])).toString();
+      text = Decimal(text.replace(",", "."))
+        .mul(Decimal(10).pow(el.attribs["scale"]))
+        .toString();
     }
     element.text(text);
 

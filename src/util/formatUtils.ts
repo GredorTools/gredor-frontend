@@ -1,4 +1,7 @@
-import type { TaxonomyItem } from "@/model/taxonomy/TaxonomyItem.ts";
+import {
+  isTaxonomyItemForRealNumber,
+  type TaxonomyItem,
+} from "@/model/taxonomy/TaxonomyItem.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 
@@ -35,9 +38,21 @@ export function formatNumber(
     }
   }
 
-  let result = numberAsString
-    .trim()
-    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");
+  let result = numberAsString.trim();
+
+  if (taxonomyItem != null && isTaxonomyItemForRealNumber(taxonomyItem)) {
+    // Gör om punkter till kommatecken
+    result = result.replace(/\./g, ",");
+
+    // Om det finns inledande kommatecken, lägg till en nolla i början
+    result = result.replace(/^,/, "0,");
+  }
+
+  // Tusentalsavskiljare
+  const resultParts = result.split(","); // [heltal, decimaler]
+  result =
+    resultParts[0].replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ") +
+    (resultParts[1]?.length > 0 ? `,${resultParts[1]}` : "");
 
   if (options?.removeSign) {
     result = result.replace(/^[-+]/, "");

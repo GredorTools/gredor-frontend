@@ -7,10 +7,13 @@
 import type { BaseBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import BaseEditBeloppradComparable, {
   type EditBeloppradComparableEmitsBase,
-  type EditBeloppradComparablePropsBase
+  type EditBeloppradComparablePropsBase,
 } from "@/components/edit/blocks/belopprad/BaseEditBeloppradComparable.vue";
+import { computed } from "vue";
+import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import { isTaxonomyItemForRealNumber } from "@/model/taxonomy/TaxonomyItem.ts";
 
-defineProps<EditBeloppradComparablePropsBase>();
+const props = defineProps<EditBeloppradComparablePropsBase>();
 
 const emit = defineEmits<EditBeloppradComparableEmitsBase>();
 
@@ -18,12 +21,29 @@ const emit = defineEmits<EditBeloppradComparableEmitsBase>();
 const belopprad = defineModel<BaseBeloppradComparable>("belopprad", {
   required: true,
 });
+
+const taxonomyItem = computed(() => {
+  return getTaxonomyItemForBelopprad(props.taxonomyManager, belopprad.value);
+});
+
+const allowedValueRegex = computed(() => {
+  if (isTaxonomyItemForRealNumber(taxonomyItem.value)) {
+    // Tillåt endast reella tal
+    // OBS: Punkt är egentligen inte tillåtet som decimaltecken, men vi gör om
+    // det till kommatecken vid rendering
+    return /^-?\d+[.,]?\d*$/;
+  } else {
+    // Tillåt vad som helst
+    return undefined;
+  }
+});
 </script>
 
 <template>
   <BaseEditBeloppradComparable
     :allow-delete="allowDelete"
     :allow-not="allowNot"
+    :allowed-value-regex="allowedValueRegex"
     :belopprad="belopprad"
     :display-as-level="displayAsLevel"
     :num-previous-years="numPreviousYears"
