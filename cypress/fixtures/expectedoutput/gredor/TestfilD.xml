@@ -677,8 +677,8 @@
   <se-gen-base:NotMedelantaletAnstallda contextRef="period0">
                                         439
                                     </se-gen-base:NotMedelantaletAnstallda>
-  <se-gen-base:MedelantaletAnstallda contextRef="period0" unitRef="decimal-MedelantaletAnstallda" decimals="INF">440</se-gen-base:MedelantaletAnstallda>
-  <se-gen-base:MedelantaletAnstallda contextRef="period1" unitRef="decimal-MedelantaletAnstallda" decimals="INF">441</se-gen-base:MedelantaletAnstallda>
+  <se-gen-base:MedelantaletAnstallda contextRef="period0" unitRef="decimal-MedelantaletAnstallda" decimals="INF">440.2</se-gen-base:MedelantaletAnstallda>
+  <se-gen-base:MedelantaletAnstallda contextRef="period1" unitRef="decimal-MedelantaletAnstallda" decimals="INF">441.99999</se-gen-base:MedelantaletAnstallda>
   <se-gen-base:NotMedelantaletAnstalldaKommentar contextRef="period0">
                                         442
                                     </se-gen-base:NotMedelantaletAnstalldaKommentar>
