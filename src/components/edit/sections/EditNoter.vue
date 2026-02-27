@@ -59,7 +59,7 @@ const visibleGroups = computed(() => {
 
 <template>
   <div class="d-flex flex-column">
-    <div class="filter-container sticky-top">
+    <div class="filter-container">
       <div class="filter-contents">
         <div class="d-flex flex-col align-items-center gap-2">
           <label for="edit-noter-filter">Filtrera noter:</label>
@@ -157,6 +157,8 @@ const visibleGroups = computed(() => {
 
 // Det här är ganska fult...
 .filter-container {
+  position: sticky;
+  z-index: 10;
   top: $spacing-md;
 
   .filter-contents {
