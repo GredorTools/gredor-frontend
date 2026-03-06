@@ -167,6 +167,7 @@ main {
 
     strong {
       color: $secondary-color;
+      font-weight: 600;
     }
 
     .bi-arrow-down-square-fill {

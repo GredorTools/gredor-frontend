@@ -11,11 +11,14 @@ import xmlFormat from "xml-formatter";
  * @param rootElement - HTML-elementet som ska konverteras. Elementets innehåll
  * bearbetas och omvandlas till iXBRL-format.
  * @param title - Titeln på det resulterande iXBRL-dokumentet.
+ * @param fontFamilyWhitelist - En lista med typsnitt som får bäddas in i
+ * iXBRL-dokumentet.
  * @returns En sträng som representerar det konverterade iXBRL-innehållet.
  */
 export async function convertVueHTMLToiXBRL(
   rootElement: HTMLElement,
   title: string,
+  fontFamilyWhitelist: string[],
 ): Promise<string> {
   const doc = new DOMParser().parseFromString(
     rootElement.innerHTML,
@@ -23,7 +26,7 @@ export async function convertVueHTMLToiXBRL(
   );
 
   // Lägg till CSS
-  let rulesCss = await getCssTextForUsedRules(doc);
+  let rulesCss = await getCssTextForUsedRules(doc, fontFamilyWhitelist);
 
   // Omvandla CSS-attribut som inte är kompatibla med wkhtmltopdf som Bolagsverket använder
   rulesCss = rulesCss.replace(
@@ -154,10 +157,15 @@ export async function convertVueHTMLToiXBRL(
  * det angivna dokumentet.
  *
  * @param doc - Ett dokument som ska kontrolleras för matchande CSS-regler.
+ * @param fontFamilyWhitelist - En lista med typsnitt som får bäddas in i
+ * iXBRL-dokumentet.
  * @returns En sträng som innehåller den sammanfogade CSS-texten för alla
  * matchande regler.
  */
-async function getCssTextForUsedRules(doc: Document): Promise<string> {
+async function getCssTextForUsedRules(
+  doc: Document,
+  fontFamilyWhitelist: string[],
+): Promise<string> {
   const rulesUsed = new Set<CSSRule>();
   const fontFamiliesUsed = new Set<string>();
 
@@ -212,7 +220,8 @@ async function getCssTextForUsedRules(doc: Document): Promise<string> {
     rulesCss += rule.cssText + "\n";
   }
 
-  const fontReferencesInDocument = await getFontReferencesInDocument();
+  const fontReferencesInDocument =
+    await getFontReferencesInDocument(fontFamilyWhitelist);
   for (const fontReference of fontReferencesInDocument) {
     if (fontFamiliesUsed.has(fontReference.fontFamily)) {
       rulesCss += `
@@ -235,6 +244,8 @@ async function getCssTextForUsedRules(doc: Document): Promise<string> {
  * CSS-stilmallar i dokumentet och extraherar detaljer som fontfamilj, vikt,
  * stil, källa (src) och unicode-område.
  *
+ * @param fontFamilyWhitelist - En lista med typsnitt som får bäddas in i
+ * iXBRL-dokumentet.
  * @returns En array med objekt som innehåller typsnittsinformation:
  * - fontFamily: Namnet på typsnittet.
  * - fontWeight: Vikten för typsnittet, t.ex. 400 för normal vikt.
@@ -243,7 +254,7 @@ async function getCssTextForUsedRules(doc: Document): Promise<string> {
  * - srcBase64: Källa till typsnittet i base64-format.
  * - unicodeRange: Det unicode-intervall som typsnittet gäller för.
  */
-async function getFontReferencesInDocument() {
+async function getFontReferencesInDocument(fontFamilyWhitelist: string[]) {
   // Ursprunglig källa: https://stackoverflow.com/a/75857870
 
   const fontFiles: Array<{
@@ -273,6 +284,15 @@ async function getFontReferencesInDocument() {
         const fontStyle = style.getPropertyValue("font-style");
         const src = style.getPropertyValue("src");
         const unicodeRange = style.getPropertyValue("unicode-range");
+
+        // Kolla att aktuell fontFamily får bäddas in i iXBRL-dokumentet
+        if (
+          !fontFamilyWhitelist
+            .map((ff) => ff.toLowerCase())
+            .includes(fontFamily.toLowerCase())
+        ) {
+          continue;
+        }
 
         // Konvertera till base64
         const urlMatches = new RegExp(/\(([^)]+)\)/).exec(src.split(",")[0]);

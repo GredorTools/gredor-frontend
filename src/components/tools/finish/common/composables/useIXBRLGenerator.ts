@@ -3,6 +3,7 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import RenderMain from "@/components/render/RenderMain.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { Ref } from "vue";
+import { RENDER_FONT_FAMILY_WHITELIST } from "@/util/renderUtils.ts";
 
 /**
  * Argument som krävs för att generera en iXBRL-årsredovisning.
@@ -42,6 +43,7 @@ function tryGenerateIXBRLInInterval(args: Args) {
       args.ixbrlOutput.value = await convertVueHTMLToiXBRL(
         arsredovisningRoot,
         `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
+        RENDER_FONT_FAMILY_WHITELIST,
       );
     }
   }, 250);
