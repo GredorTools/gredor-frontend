@@ -1,5 +1,6 @@
 @import "@/assets/_variables.scss";
 @import "@/assets/base.scss";
+@import "$fonts/inter/inter.css";
 @import "$fonts/ebgaramond/EBGaramond.css";
 @import "$fonts/freesans/FreeSans.css";
 
@@ -78,16 +79,15 @@ $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
     outline-offset: 2px;
     box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
   }
-}
 
-.btn {
+  // Knappar med ikoner
   &:has(i.bi), &:has(img) {
     display: flex;
     align-items: center;
   }
 
+  // Knapp-ikoner
   i.bi, img {
-    // Knapp-ikoner
     margin-right: var(--bs-btn-padding-x);
   }
 }

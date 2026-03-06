@@ -287,6 +287,8 @@ export function isPercentageBelopprad(belopprad: Belopprad): boolean {
   return PERCENTAGE_TAXONOMY_ITEMS.includes(belopprad.taxonomyItemName);
 }
 
+export const RENDER_FONT_FAMILY_WHITELIST = ["EB Garamond", "FreeSans"];
+
 const PERCENTAGE_TAXONOMY_ITEMS = [
   "se-gen-base:Soliditet",
   "se-gen-base:Rorelsemarginal",

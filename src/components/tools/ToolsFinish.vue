@@ -13,6 +13,7 @@ import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
+import { RENDER_FONT_FAMILY_WHITELIST } from "@/util/renderUtils.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
@@ -39,6 +40,7 @@ async function getIXBRL(): Promise<string | undefined> {
     return await convertVueHTMLToiXBRL(
       arsredovisningForExport,
       `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
+      RENDER_FONT_FAMILY_WHITELIST,
     );
   }
 }
