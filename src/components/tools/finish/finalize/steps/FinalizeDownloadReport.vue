@@ -38,6 +38,7 @@ async function exportUnsignedPdf() {
   /* eslint-disable no-useless-escape */
   const htmlToWrite = `${props.ixbrl}
   <script type="text/javascript">
+    window.onafterprint = window.close;
     setTimeout(() => {
       window.print();
       setTimeout(() => {
@@ -50,6 +51,7 @@ async function exportUnsignedPdf() {
 
   printWindow.document.open();
   printWindow.document.write(htmlToWrite);
+  printWindow.document.close();
 
   hasDownloadedPdf.value = true;
 }
