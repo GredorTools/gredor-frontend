@@ -38,13 +38,10 @@ async function exportUnsignedPdf() {
   /* eslint-disable no-useless-escape */
   const htmlToWrite = `${props.ixbrl}
   <script type="text/javascript">
-    window.onafterprint = window.close;
+    window.onafterprint = () => setTimeout(window.close, 500);
     setTimeout(() => {
       window.print();
-      setTimeout(() => {
-        window.close();
-      }, 250);
-    }, 250);
+    }, 500);
   <\/script>
   `;
   /* eslint-enable no-useless-escape */
