@@ -226,11 +226,11 @@ async function print() {
               >
                 <template v-if="!isPrinting">
                   <i v-if="!isPrinting" class="bi bi-printer"></i>
-                  Skriv ut
+                  Skriv ut / Spara till PDF
                 </template>
                 <template v-else>
-                  <div class="spinner-border" role="status"></div>
-                  Skriver ut…
+                  <div class="spinner-border"></div>
+                  Förbereder utskrift…
                 </template>
               </a>
             </li>
