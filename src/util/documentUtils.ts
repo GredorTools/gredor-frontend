@@ -153,6 +153,33 @@ export async function convertVueHTMLToiXBRL(
 }
 
 /**
+ * Skriver ut ett dokument genom webbläsarens utskriftsfunktion.
+ *
+ * @param doc - Dokumentet som ska skrivas ut (HTML/XHTML/iXBRL)
+ */
+export function printDocument(doc: string) {
+  const printWindow = window.open("", "", "popup,width=800,height=800");
+  if (!printWindow) {
+    return;
+  }
+
+  /* eslint-disable no-useless-escape */
+  const htmlToWrite = `${doc}
+  <script type="text/javascript">
+    window.onafterprint = () => setTimeout(window.close, 500);
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  <\/script>
+  `;
+  /* eslint-enable no-useless-escape */
+
+  printWindow.document.open();
+  printWindow.document.write(htmlToWrite);
+  printWindow.document.close();
+}
+
+/**
  * Extraherar och returnerar CSS-texten för alla CSSStyleRules som används av
  * det angivna dokumentet.
  *

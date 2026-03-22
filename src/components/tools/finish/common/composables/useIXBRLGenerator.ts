@@ -33,7 +33,7 @@ type Args = {
 function tryGenerateIXBRLInInterval(args: Args) {
   const intervalId = window.setInterval(async () => {
     const arsredovisningRoot = args.renderMain.value?.getArsredovisningRoot();
-    if (arsredovisningRoot) {
+    if (arsredovisningRoot?.value) {
       if (intervalId != null) {
         // Vi har fått tag på roten, behöver inte köra intervallet mer
         window.clearInterval(intervalId);
@@ -41,7 +41,7 @@ function tryGenerateIXBRLInInterval(args: Args) {
 
       const { foretagsinformation } = args.arsredovisning;
       args.ixbrlOutput.value = await convertVueHTMLToiXBRL(
-        arsredovisningRoot,
+        arsredovisningRoot.value,
         `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
         RENDER_FONT_FAMILY_WHITELIST,
       );

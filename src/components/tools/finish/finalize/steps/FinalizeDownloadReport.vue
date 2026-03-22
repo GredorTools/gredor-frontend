@@ -10,6 +10,7 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import { printDocument } from "@/util/documentUtils.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -30,26 +31,7 @@ async function exportUnsignedPdf() {
     return;
   }
 
-  const printWindow = window.open("", "", "popup,width=800,height=800");
-  if (!printWindow) {
-    return;
-  }
-
-  /* eslint-disable no-useless-escape */
-  const htmlToWrite = `${props.ixbrl}
-  <script type="text/javascript">
-    window.onafterprint = () => setTimeout(window.close, 500);
-    setTimeout(() => {
-      window.print();
-    }, 500);
-  <\/script>
-  `;
-  /* eslint-enable no-useless-escape */
-
-  printWindow.document.open();
-  printWindow.document.write(htmlToWrite);
-  printWindow.document.close();
-
+  printDocument(props.ixbrl);
   hasDownloadedPdf.value = true;
 }
 </script>

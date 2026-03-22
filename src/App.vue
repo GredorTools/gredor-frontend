@@ -23,6 +23,8 @@ import {
   createArsredovisningFromTemplate,
   upgradeArsredovisningObject,
 } from "@/model/arsredovisning/Arsredovisning.ts";
+import { useGetIXBRL } from "@/components/common/composables/useGetIXBRL.ts";
+import type { ComponentExposed } from "vue-component-type-helpers";
 
 const {
   ref: arsredovisning,
@@ -45,6 +47,10 @@ const handleRef = useTemplateRef("handle");
 const editorRef = useTemplateRef("editor");
 const rendererRef = useTemplateRef("renderer");
 
+const renderMain =
+  useTemplateRef<ComponentExposed<typeof RenderMain>>("renderMain");
+const { getIXBRL } = useGetIXBRL(arsredovisning, renderMain);
+
 useHorizontalDrag(mainRef, handleRef, editorRef, rendererRef, 700, 320);
 
 onBeforeUnmount(() => {
@@ -54,7 +60,10 @@ onBeforeUnmount(() => {
 
 <template>
   <main aria-label="Gredor årsredovisningsverktyg" class="d-flex flex-column">
-    <AppHeader v-model:arsredovisning="arsredovisning" />
+    <AppHeader
+      v-model:arsredovisning="arsredovisning"
+      :get-ixbrl-for-preview="getIXBRL"
+    />
 
     <AppMessages v-if="!showFirstLaunchScreen" />
 
@@ -73,6 +82,7 @@ onBeforeUnmount(() => {
 
       <div id="renderer" ref="renderer" aria-label="Förhandsgranskningsvy">
         <RenderMain
+          ref="renderMain"
           :arsredovisning="arsredovisning"
           :hide-content="showFirstLaunchScreen"
           :show-faststallelseintyg="false"
@@ -104,6 +114,7 @@ onBeforeUnmount(() => {
         <ToolsFinish
           v-model:todo-list="arsredovisning.gredorState.todoList"
           :arsredovisning="arsredovisning"
+          :get-ixbrl-for-preview="getIXBRL"
         />
       </div>
     </div>

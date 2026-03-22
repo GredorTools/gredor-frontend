@@ -6,18 +6,19 @@
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
-import { convertVueHTMLToiXBRL } from "@/util/documentUtils.ts";
 import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
-import { RENDER_FONT_FAMILY_WHITELIST } from "@/util/renderUtils.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
   arsredovisning: Arsredovisning;
+
+  /** En funktion som returnerar den iXBRL som visas i live-förhandsgranskningen. */
+  getIxbrlForPreview: () => Promise<string | undefined>;
 }>();
 
 /** Att-åtgärda-lista där fel/varningar kan läggas till av denna komponent. */
@@ -30,23 +31,8 @@ const finalizeWizard = ref<ComponentExposed<typeof FinalizeWizard>>();
 const sendWizardRenderId = ref<number>(0);
 const sendWizard = ref<ComponentExposed<typeof SendWizard>>();
 
-async function getIXBRL(): Promise<string | undefined> {
-  const arsredovisningForExport = document.getElementById(
-    "arsredovisning-for-export",
-  );
-
-  if (arsredovisningForExport) {
-    const { foretagsinformation } = props.arsredovisning;
-    return await convertVueHTMLToiXBRL(
-      arsredovisningForExport,
-      `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
-      RENDER_FONT_FAMILY_WHITELIST,
-    );
-  }
-}
-
 async function exportArsredovisning() {
-  const ixbrl = await getIXBRL();
+  const ixbrl = await props.getIxbrlForPreview();
   if (ixbrl) {
     requestSaveFile(ixbrl, "arsredovisning.xhtml", "text/html");
   }

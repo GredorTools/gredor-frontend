@@ -38,6 +38,10 @@ $font-size-base: $font-size-base;
 $form-check-input-bg: $background-input;
 $form-check-input-border: 2px solid $border-color-dark;
 
+$dropdown-bg: $background-light;
+$dropdown-link-hover-bg: $background-light;
+$dropdown-border-color: $border-color-dark;
+
 $tooltip-max-width: 320px;
 $tooltip-padding-x: 0.75rem;
 $tooltip-padding-y: 0.5rem;
@@ -79,16 +83,31 @@ $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
     outline-offset: 2px;
     box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
   }
+}
 
-  // Knappar med ikoner
-  &:has(i.bi), &:has(img) {
+.btn, a {
+  &.dropdown-item {
+    transition: none;
+  }
+
+  // Knappar med ikoner/spinners
+  &:has(i.bi), &:has(img), &:has(.spinner-border), &:has(.spinner-grow) {
     display: flex;
     align-items: center;
   }
 
-  // Knapp-ikoner
-  i.bi, img {
-    margin-right: var(--bs-btn-padding-x);
+  // Knapp-ikoner/spinners
+  i.bi, img, .spinner-border, .spinner-grow {
+    margin-right: var(--bs-btn-padding-x, $spacing-sm);
+  }
+
+  .spinner-border, .spinner-grow {
+    width: 1em;
+    height: 1em;
+  }
+
+  .spinner-border {
+    border-width: 0.125em;
   }
 }
 
