@@ -12,7 +12,7 @@ import RenderForvaltningsberattelse from "@/components/render/sections/RenderFor
 import RenderNoter from "@/components/render/sections/RenderNoter.vue";
 import RenderCover from "@/components/render/sections/RenderCover.vue";
 import RenderUnderskrifter from "@/components/render/sections/RenderUnderskrifter.vue";
-import { useTemplateRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 defineProps<{
   /** Årsredovisningen som ska renderas. */
@@ -28,12 +28,17 @@ defineProps<{
 const arsredovisningRoot = useTemplateRef("arsredovisning-root");
 const arsredovisningContent = useTemplateRef("arsredovisning-content");
 
+const arsredovisningRootToReturn = computed(() => {
+  // Vi vill inte returnera roten förrän innehållet har laddats in
+  if (arsredovisningContent.value != null) {
+    return arsredovisningRoot.value;
+  }
+  return undefined;
+});
+
 defineExpose({
   getArsredovisningRoot: () => {
-    // Vi vill inte returnera roten förrän innehållet har laddats in
-    if (arsredovisningContent.value != null) {
-      return arsredovisningRoot.value;
-    }
+    return arsredovisningRootToReturn;
   },
 });
 </script>

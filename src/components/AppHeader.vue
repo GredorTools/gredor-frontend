@@ -15,15 +15,20 @@ import {
   upgradeArsredovisningObject,
 } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { DataContainer } from "@/model/DataContainer.ts";
-import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
-import { Tooltip } from "bootstrap";
+import { Dropdown, Tooltip } from "bootstrap";
 import type VueOnboardingTour from "vue-onboarding-tour";
 import { tourSteps } from "@/components/tourSteps.ts";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import { formatDateForFilename } from "@/util/formatUtils.ts";
+import { printDocument } from "@/util/documentUtils.ts";
+
+const props = defineProps<{
+  /** En funktion som returnerar den iXBRL som visas i live-förhandsgranskningen. */
+  getIxbrlForPreview: () => Promise<string | undefined>;
+}>();
 
 /** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -93,7 +98,7 @@ function endTour() {
   window.scrollTo(0, 0);
 }
 
-// I/O
+// Ny årsredovisning
 const newArsredovisningModalRenderId = ref<number>(0);
 const newArsredovisningModal =
   ref<ComponentExposed<typeof EditNewArsredovisningModal>>();
@@ -106,6 +111,7 @@ async function showNewArsredovisningModal() {
   newArsredovisningModal.value?.show(); // Nu kan vi visa modalen
 }
 
+// Öppna/Spara
 async function importFile() {
   const file = await requestOpenFile(".gredorutkast,.gredorfardig");
   const json = await file?.text();
@@ -138,11 +144,26 @@ function exportFile() {
   requestSaveFile(JSON.stringify(dataContainer), filename, "application/json");
 }
 
-async function importSIEForTest() {
-  const file = await requestOpenFile(".se,.si,.sie");
-  const text = await file?.text();
-  if (text) {
-    await mapSieFileIntoArsredovisning(text, arsredovisning.value);
+// Utskrift
+const moreDropdownToggle = useTemplateRef("moreDropdownToggle");
+const isPrinting = ref(false);
+
+async function print() {
+  if (isPrinting.value) {
+    return;
+  }
+
+  isPrinting.value = true;
+  try {
+    const ixbrl = await props.getIxbrlForPreview();
+    if (ixbrl) {
+      printDocument(ixbrl);
+    }
+  } finally {
+    isPrinting.value = false;
+    if (moreDropdownToggle.value) {
+      Dropdown.getInstance(moreDropdownToggle.value)?.hide();
+    }
   }
 }
 </script>
@@ -166,31 +187,55 @@ async function importSIEForTest() {
           class="btn btn-primary"
           @click="showNewArsredovisningModal"
         >
-          <i class="bi bi-file-earmark"></i>Ny årsredovisning…
+          <i class="bi bi-file-earmark"></i>Ny årsredovisning
         </button>
-        <div id="openAndSaveArsredovisningBtns" class="d-flex gap-2">
+        <div id="openAndSaveArsredovisningBtns" class="gap-2">
           <button
             id="openArsredovisningBtn"
             class="btn btn-primary"
             @click="importFile"
           >
-            <i class="bi bi-folder2-open"></i>Öppna…
+            <i class="bi bi-folder2-open"></i>Öppna
           </button>
           <button
             id="saveArsredovisningBtn"
             class="btn btn-primary"
             @click="exportFile"
           >
-            <i class="bi bi-floppy"></i>Spara som…
+            <i class="bi bi-floppy"></i>Spara som
           </button>
         </div>
-        <button
-          v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
-          class="btn btn-outline-primary"
-          @click="importSIEForTest"
-        >
-          Importera SIE-fil… (test)
-        </button>
+        <div class="dropdown">
+          <button
+            ref="moreDropdownToggle"
+            aria-expanded="false"
+            class="btn btn-outline-primary dropdown-toggle"
+            data-bs-auto-close="outside"
+            data-bs-toggle="dropdown"
+            type="button"
+          >
+            Mer…
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a
+                :role="!isPrinting ? 'button' : 'status'"
+                class="dropdown-item"
+                href="#"
+                @click.prevent="print"
+              >
+                <template v-if="!isPrinting">
+                  <i v-if="!isPrinting" class="bi bi-printer"></i>
+                  Skriv ut
+                </template>
+                <template v-else>
+                  <div class="spinner-border" role="status"></div>
+                  Skriver ut…
+                </template>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -264,6 +309,10 @@ header {
     padding-left: $spacing-xl;
     border-left: 1px solid $border-color-normal;
     margin-left: $spacing-xl;
+
+    & > div {
+      display: flex;
+    }
   }
 }
 </style>
