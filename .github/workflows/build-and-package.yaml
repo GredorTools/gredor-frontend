@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up environment variables
         run: |
@@ -32,14 +32,14 @@ jobs:
           echo "VITE_TEST_MODE=$VITE_TEST_MODE" >> ${GITHUB_ENV}
 
       - name: Build for Cypress
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           # Disable running of tests within build job
           runTests: false
           build: npm run build
 
       - name: Save build folder
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cypress-build
           path: dist
@@ -97,7 +97,7 @@ jobs:
           firefox-version: ${{ matrix.browser-variant == 'beta' && 'latest-beta' || 'latest' }}
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           start: npm run preview
           browser: ${{ matrix.browser == 'chrome' && steps.setup-chrome.outputs.chrome-path || matrix.browser == 'edge' && steps.setup-edge.outputs.edge-path || steps.setup-firefox.outputs.firefox-path }}
@@ -110,7 +110,7 @@ jobs:
           directory: ./coverage
 
       - name: Upload test screenshots on failure
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: cypress-screenshots_${{ matrix.os }}_${{ matrix.browser }}_${{ matrix.browser-variant }}
@@ -118,7 +118,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload test videos
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: cypress-videos_${{ matrix.os }}_${{ matrix.browser }}_${{ matrix.browser-variant }}
@@ -138,10 +138,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.repository_owner }}
@@ -153,7 +153,7 @@ jobs:
           echo "IMAGE_REF=$IMAGE_REF" >> ${GITHUB_ENV}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Get Docker metadata
         id: meta
@@ -163,7 +163,7 @@ jobs:
 
       - name: Build and push
         id: push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: ${{ github.event_name == 'push' }}
@@ -172,7 +172,7 @@ jobs:
 
       - name: Generate artifact attestation
         if: ${{ github.event_name == 'push' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-name: ${{ env.IMAGE_REF }}
           subject-digest: ${{ steps.push.outputs.digest }}
