@@ -9,11 +9,7 @@
  */
 
 import { onMounted, ref } from "vue";
-import { base64encode } from "byte-base64";
-import type { components, paths } from "@/openapi/gredor-backend-v1";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import createClient from "openapi-fetch";
-import { getConfigValue } from "@/util/configUtils.ts";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
 } from "@/components/common/CommonWizardButtons.vue";
@@ -22,6 +18,7 @@ import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import { addTodoListItem, type TodoList } from "@/model/todolist/TodoList.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import { useValidateSubmissionApi } from "@/api/composables/useValidateSubmissionApi.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -44,73 +41,26 @@ const todoList = defineModel<TodoList | undefined>("todoList", {
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
-const loading = ref<boolean>(true);
-const result = ref<components["schemas"]["KontrolleraSvar"] | undefined>();
-
 const { showMessageModal } = useModalStore();
+const { loading, validateSubmission } = useValidateSubmissionApi({
+  apiErrorHandler: (error) =>
+    showMessageModal(error, "Fel vid kommunikation med Bolagsverket"),
+  exceptionHandler: (e) =>
+    showMessageModal(
+      `Teknisk information: ${e.message}`,
+      "Fel vid kommunikation med Bolagsverket",
+    ),
+});
+
+const result = ref<Awaited<ReturnType<typeof validateSubmission>>>();
 
 async function performRequest() {
-  loading.value = true;
-  try {
-    const client = createClient<paths>({
-      baseUrl: getConfigValue("VITE_GREDOR_BACKEND_BASEURL"),
-    });
-
-    const {
-      data: data, // only present if 2XX response
-      error: error, // only present if 4XX or 5XX response
-    } = await client.POST("/v1/submission-flow/validate", {
-      body: {
-        foretagOrgnr:
-          props.arsredovisning.foretagsinformation.organisationsnummer.replace(
-            "-",
-            "",
-          ),
-        ixbrl: base64encode(props.ixbrl),
-      },
-      params: {
-        cookie: {
-          personalNumber: "dummy", // Skrivs över av webbläsaren
-        },
-      },
-      credentials: "include", // Viktigt för att cookies ska funka
-    });
-
-    if (error) {
-      showMessageModal(error, "Fel vid kommunikation med Bolagsverket");
-    } else if (data) {
-      if (data.utfall) {
-        if (props.discardFaststallelseintygValidations && data.utfall) {
-          // Filtrera bort varningar kopplade till fastställelseintyget
-          data.utfall = data.utfall.filter(
-            (kontroll) =>
-              kontroll.kod == null ||
-              !["1103", "1164", "1169", "1179"].includes(kontroll.kod),
-          );
-        }
-
-        if (props.arsredovisning.verksamhetsarTidigare.length === 0) {
-          // Filtrera bort varningen "Jämförelsesiffror saknas i
-          // resultaträkningen. De behövs om det inte är företagets första
-          // räkenskapsår."
-          data.utfall = data.utfall.filter(
-            (kontroll) => kontroll.kod !== "3007",
-          );
-        }
-      }
-      result.value = data;
-    }
-  } catch (e) {
-    if (e instanceof Error) {
-      showMessageModal(
-        `Teknisk information: ${e.message}`,
-        "Fel vid kommunikation med Bolagsverket",
-      );
-    }
-  } finally {
-    loading.value = false;
-  }
-
+  result.value = await validateSubmission({
+    arsredovisning: props.arsredovisning,
+    ixbrl: props.ixbrl,
+    discardFaststallelseintygValidations:
+      props.discardFaststallelseintygValidations,
+  });
   updateTodoList();
 }
 

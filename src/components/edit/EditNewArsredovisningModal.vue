@@ -16,9 +16,6 @@ import {
 } from "@/model/arsredovisning/Arsredovisning.ts";
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
-import createClient from "openapi-fetch";
-import type { paths } from "@/openapi/gredor-backend-v1";
-import { getConfigValue } from "@/util/configUtils.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
@@ -30,6 +27,7 @@ import {
 import { addTodoListItem } from "@/model/todolist/TodoList.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import LuhnAlgorithm from "@designbycode/luhn-algorithm";
+import { useCompanyRecordsApi } from "@/api/composables/useCompanyRecordsApi.ts";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -57,6 +55,14 @@ const sieMessages = ref<string[]>([]);
 const busy = ref<boolean>(false);
 
 const { showMessageModal } = useModalStore();
+const { fetchCompanyRecords } = useCompanyRecordsApi({
+  apiErrorHandler: (message) => {
+    throw new Error(message);
+  },
+  exceptionHandler: (e) => {
+    throw e;
+  },
+});
 
 async function handleSieFile(file: File) {
   busy.value = true;
@@ -126,27 +132,13 @@ async function createArsredovisning() {
 }
 
 async function fetchRecords() {
-  const client = createClient<paths>({
-    baseUrl: getConfigValue("VITE_GREDOR_BACKEND_BASEURL"),
+  const data = await fetchCompanyRecords({
+    organisationsnummer:
+      arsredovisning.value.foretagsinformation.organisationsnummer,
   });
 
-  const {
-    data, // only present if 2XX response
-    error, // only present if 4XX or 5XX response
-  } = await client.GET("/v1/information/records/{orgnr}", {
-    params: {
-      path: {
-        orgnr:
-          arsredovisning.value.foretagsinformation.organisationsnummer.replace(
-            "-",
-            "",
-          ),
-      },
-    },
-  });
-
-  if (error) {
-    throw new Error(error);
+  if (!data) {
+    throw new Error("Data saknas");
   }
 
   // Uppdatera årsredovisningen med data från Bolagsverket

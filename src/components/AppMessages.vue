@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-import createClient from "openapi-fetch";
-import type { components, paths } from "@/openapi/gredor-backend-v1";
-import { getConfigValue } from "@/util/configUtils.ts";
+import type { components } from "@/api/schema/gredor-backend-v1";
 import { computed, onMounted, ref } from "vue";
 import linkifyStr from "linkify-string";
+import { useMessagesApi } from "@/api/composables/useMessagesApi.ts";
+
+const { fetchMessages } = useMessagesApi({
+  apiErrorHandler: console.warn,
+  exceptionHandler: (e) => console.warn(e.message),
+});
 
 const messages = ref<components["schemas"]["Message"][]>([]);
 const dismissedMessages = ref<components["schemas"]["Message"][]>([]);
@@ -14,29 +18,8 @@ const visibleMessages = computed(() =>
   ),
 );
 
-async function fetchMessages() {
-  const client = createClient<paths>({
-    baseUrl: getConfigValue("VITE_GREDOR_BACKEND_BASEURL"),
-  });
-
-  try {
-    const {
-      data, // only present if 2XX response
-      error, // only present if 4XX or 5XX response
-    } = await client.GET("/v1/message/messages");
-
-    if (error) {
-      console.warn(error);
-    } else {
-      messages.value = data;
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
-onMounted(() => {
-  fetchMessages();
+onMounted(async () => {
+  messages.value = (await fetchMessages()) ?? [];
 });
 </script>
 
