@@ -6,11 +6,7 @@
  */
 
 import { onMounted, ref } from "vue";
-import { base64encode } from "byte-base64";
-import type { components, paths } from "@/openapi/gredor-backend-v1";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import createClient from "openapi-fetch";
-import { getConfigValue } from "@/util/configUtils.ts";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
 } from "@/components/common/CommonWizardButtons.vue";
@@ -18,6 +14,7 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import { useSubmitSubmissionApi } from "@/api/composables/useSubmitSubmissionApi.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -34,54 +31,25 @@ const props = defineProps<
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
-const loading = ref<boolean>(true);
-const result = ref<components["schemas"]["InlamningOK"] | undefined>();
-
 const { showMessageModal } = useModalStore();
+const { loading, submitSubmission } = useSubmitSubmissionApi({
+  apiErrorHandler: (error) =>
+    showMessageModal(error, "Fel vid kommunikation med Bolagsverket"),
+  exceptionHandler: (e) =>
+    showMessageModal(
+      `Teknisk information: ${e.message}`,
+      "Fel vid kommunikation med Bolagsverket",
+    ),
+});
+
+const result = ref<Awaited<ReturnType<typeof submitSubmission>>>();
 
 async function performRequest() {
-  loading.value = true;
-  try {
-    const client = createClient<paths>({
-      baseUrl: getConfigValue("VITE_GREDOR_BACKEND_BASEURL"),
-    });
-
-    const {
-      data: data, // only present if 2XX response
-      error: error, // only present if 4XX or 5XX response
-    } = await client.POST("/v1/submission-flow/submit", {
-      body: {
-        foretagOrgnr:
-          props.arsredovisning.foretagsinformation.organisationsnummer.replace(
-            "-",
-            "",
-          ),
-        ixbrl: base64encode(props.ixbrl),
-        aviseringEpost: props.notificationEmail,
-      },
-      params: {
-        cookie: {
-          personalNumber: "dummy", // Skrivs över av webbläsaren
-        },
-      },
-      credentials: "include", // Viktigt för att cookies ska funka
-    });
-
-    if (error) {
-      showMessageModal(error, "Fel vid kommunikation med Bolagsverket");
-    } else if (data) {
-      result.value = data;
-    }
-  } catch (e) {
-    if (e instanceof Error) {
-      showMessageModal(
-        `Teknisk information: ${e.message}`,
-        "Fel vid kommunikation med Bolagsverket",
-      );
-    }
-  } finally {
-    loading.value = false;
-  }
+  result.value = await submitSubmission({
+    arsredovisning: props.arsredovisning,
+    ixbrl: props.ixbrl,
+    notificationEmail: props.notificationEmail,
+  });
 }
 
 onMounted(() => {

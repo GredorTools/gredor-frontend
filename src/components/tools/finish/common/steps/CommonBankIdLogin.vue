@@ -3,10 +3,7 @@
  * En komponent för att legitimera användaren med BankID.
  */
 
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import type { components, paths } from "@/openapi/gredor-backend-v1";
-import createClient from "openapi-fetch";
-import { getConfigValue } from "@/util/configUtils.ts";
+import { onBeforeUnmount, onMounted } from "vue";
 import CommonWizardButtons, {
   type CommonWizardButtonsEmits,
 } from "@/components/common/CommonWizardButtons.vue";
@@ -14,6 +11,7 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import { useBankIdLoginApi } from "@/api/composables/useBankIdLoginApi.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -24,130 +22,26 @@ const props = defineProps<
 
 const emit = defineEmits<CommonWizardButtonsEmits>();
 
-const state = ref<
-  | "checkAuthStatus" // kollar om redan legitimerad
-  | "showInfo" // visar info om legitimering
-  | "loadingQrCode" // laddar QR-koden
-  | "showQrCodeOrResult" // visar QR-koden eller resultatet av legitimeringen
-  | "callFailure" // anrop till BankID misslyckades
->("checkAuthStatus");
-const result = ref<components["schemas"]["BankIdStatusResponse"] | undefined>();
-const orderRef = ref<string | null | undefined>();
-const autoStartToken = ref<string | null | undefined>();
-
 const { showMessageModal } = useModalStore();
-
-let unmounted: boolean = false;
-
-const client = createClient<paths>({
-  baseUrl: getConfigValue("VITE_GREDOR_BACKEND_BASEURL"),
+const {
+  stage,
+  authResult,
+  autoStartLink,
+  checkAuthStatus,
+  initLogin,
+  abortLogin,
+} = useBankIdLoginApi({
+  personalNumber: props.personalNumber,
+  apiErrorHandler: (error) => {
+    showMessageModal(error, "Fel vid BankID-legitimering");
+  },
+  exceptionHandler: (e) => {
+    showMessageModal(
+      `Teknisk information: ${e.message}`,
+      "Fel vid BankID-legitimering",
+    );
+  },
 });
-
-async function checkAuthStatus() {
-  try {
-    const {
-      data: authStatusData, // only present if 2XX response
-      error: authStatusError, // only present if 4XX or 5XX response
-    } = await client.POST("/v1/auth/status", {
-      body: {
-        personalNumber: props.personalNumber,
-      },
-      credentials: "include", // Viktigt för att cookies ska funka
-    });
-
-    if (authStatusError) {
-      showMessageModal(authStatusError, "Fel vid BankID-legitimering");
-      state.value = "callFailure";
-    } else if (authStatusData?.loggedIn) {
-      result.value = {
-        status: "COMPLETE",
-      };
-      state.value = "showQrCodeOrResult";
-    } else {
-      state.value = "showInfo";
-    }
-  } catch (e) {
-    if (e instanceof Error) {
-      showMessageModal(
-        `Teknisk information: ${e.message}`,
-        "Fel vid BankID-legitimering",
-      );
-    }
-    state.value = "callFailure";
-  }
-}
-
-async function performInitRequest() {
-  state.value = "loadingQrCode";
-  try {
-    const {
-      data: initData, // only present if 2XX response
-      error: initError, // only present if 4XX or 5XX response
-    } = await client.POST("/v1/bankid/init", {
-      body: {
-        personalNumber: props.personalNumber,
-      },
-      credentials: "include", // Viktigt för att cookies ska funka
-    });
-
-    if (initError) {
-      showMessageModal(initError, "Fel vid BankID-legitimering");
-      state.value = "callFailure";
-    } else if (initData) {
-      result.value = initData;
-      orderRef.value = initData.orderRef;
-      autoStartToken.value = initData.autoStartToken;
-      state.value = "showQrCodeOrResult";
-      setTimeout(() => {
-        performStatusRequest();
-      }, 1000);
-    }
-  } catch (e) {
-    if (e instanceof Error) {
-      showMessageModal(
-        `Teknisk information: ${e.message}`,
-        "Fel vid BankID-legitimering",
-      );
-    }
-    state.value = "callFailure";
-  }
-}
-
-async function performStatusRequest() {
-  if (unmounted || !orderRef.value) {
-    return;
-  }
-
-  try {
-    const {
-      data: statusData, // only present if 2XX response
-      error: statusError, // only present if 4XX or 5XX response
-    } = await client.POST("/v1/bankid/status", {
-      body: {
-        orderRef: orderRef.value,
-      },
-      credentials: "include", // Viktigt för att cookies ska funka
-    });
-
-    if (statusError) {
-      setTimeout(() => {
-        performStatusRequest();
-      }, 1000);
-    } else if (statusData) {
-      result.value = statusData;
-      if (statusData.status === "PENDING") {
-        setTimeout(() => {
-          performStatusRequest();
-        }, 1000);
-      }
-    }
-  } catch {
-    // Försök igen ändå
-    setTimeout(() => {
-      performStatusRequest();
-    }, 1000);
-  }
-}
 
 onMounted(() => {
   // Timeout så att komponenten hinner renderas och man hinner uppfatta
@@ -158,7 +52,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  unmounted = true;
+  abortLogin();
 });
 </script>
 
@@ -168,9 +62,9 @@ onBeforeUnmount(() => {
       Steg {{ currentStepNumber }}/{{ numSteps }}: Legitimera med BankID
     </CommonModalSubtitle>
 
-    <div v-if="state === 'checkAuthStatus'">Laddar…</div>
+    <div v-if="stage === 'checkAuthStatus'">Laddar…</div>
 
-    <div v-if="state === 'showInfo' || state === 'loadingQrCode'">
+    <div v-if="stage === 'showInfo' || stage === 'loadingQrCode'">
       <p>
         Legitimering krävs vid kommunikation med Bolagsverket, för att visa att
         du är den som du uppger dig för att vara.
@@ -186,12 +80,12 @@ onBeforeUnmount(() => {
 
       <div class="d-flex align-items-center justify-content-center pt-4 pb-4">
         <button
-          :disabled="state === 'loadingQrCode'"
+          :disabled="stage === 'loadingQrCode'"
           class="btn btn-primary"
-          @click="performInitRequest"
+          @click="initLogin"
         >
           {{
-            state === "loadingQrCode"
+            stage === "loadingQrCode"
               ? "Laddar…"
               : "Starta legitimering med BankID"
           }}
@@ -199,18 +93,21 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div v-if="state === 'callFailure'">
+    <div v-if="stage === 'callFailure'">
       Något gick fel vid kommunikation med BankID. Prova att gå tillbaka ett
       steg och sedan försöka igen.
     </div>
 
-    <template v-if="state === 'showQrCodeOrResult'">
+    <template v-if="stage === 'showQrCodeOrAuthResult'">
       <div
-        v-if="result?.status === 'PENDING' && result.statusPendingData != null"
+        v-if="
+          authResult?.status === 'PENDING' &&
+          authResult.statusPendingData != null
+        "
         class="d-flex flex-column align-items-center justify-content-center gap-3 pt-3"
       >
         <img
-          :src="result.statusPendingData.qrCodeImageBase64"
+          :src="authResult.statusPendingData.qrCodeImageBase64"
           alt="QR-kod för BankID"
         />
 
@@ -219,24 +116,22 @@ onBeforeUnmount(() => {
         </p>
 
         <p class="text-center">
-          <a
-            v-if="autoStartToken"
-            :href="`bankid:///?autostarttoken=${autoStartToken}`"
+          <a v-if="autoStartLink" :href="autoStartLink"
             >Öppna BankID på denna enhet</a
           >
         </p>
       </div>
 
-      <div v-if="result?.status === 'COMPLETE'">Du är legitimerad.</div>
+      <div v-if="authResult?.status === 'COMPLETE'">Du är legitimerad.</div>
 
-      <div v-if="result?.status === 'FAILED'">
+      <div v-if="authResult?.status === 'FAILED'">
         Något gick fel vid legitimering. Prova att gå tillbaka ett steg och
         sedan försöka igen.
       </div>
     </template>
 
     <CommonWizardButtons
-      :next-button-disabled="result?.status !== 'COMPLETE'"
+      :next-button-disabled="authResult?.status !== 'COMPLETE'"
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
