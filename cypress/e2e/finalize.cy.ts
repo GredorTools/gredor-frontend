@@ -293,7 +293,10 @@ describe("finalize wizard", () => {
     );
     cy.get(
       '[data-testid="finalize-reminder-mismatching-values-list"] li',
-    ).should("have.text", "Balanserat resultat: [95228 / 95228 / 95229] kr");
+    ).should(
+      "have.text",
+      "Nettoomsättning: [  214\u00a0(tusental) / 213 154 ] kr",
+    );
   });
 
   it("reports missing orgnr", () => {

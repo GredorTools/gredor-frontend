@@ -30,6 +30,9 @@ import { XMLParser } from "fast-xml-parser";
 import { convertiXBRLToXBRL } from "@/util/convertiXBRLToXBRL.ts";
 import type { Underskrift } from "@/model/arsredovisning/Underskrift.ts";
 import LuhnAlgorithm from "@designbycode/luhn-algorithm";
+import { equalsWithDecimals } from "@/util/compareUtils.ts";
+import { formatNumber } from "@/util/formatUtils.ts";
+import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -253,14 +256,20 @@ const mismatchingValueBelopprader = computed(() => {
 
   const result: {
     taxonomyItem: TaxonomyItem;
-    values: string[];
+    values: {
+      belopp: string;
+      decimals: string;
+    }[];
   }[] = [];
 
   const rowValueMap = new Map<
     string,
     {
       taxonomyItemName: string;
-      values: string[];
+      values: {
+        belopp: string;
+        decimals: string;
+      }[];
     }
   >();
   for (const [xbrlItemKey, xbrlItemValue] of Object.entries(
@@ -282,6 +291,10 @@ const mismatchingValueBelopprader = computed(() => {
       const xbrlItemValueWithoutText = { ...xbrlItemValueItem };
       delete xbrlItemValueWithoutText["#text"];
 
+      if ("@_decimals" in xbrlItemValueWithoutText) {
+        delete xbrlItemValueWithoutText["@_decimals"];
+      }
+
       const rowValueMapKey =
         xbrlItemKey + JSON.stringify(xbrlItemValueWithoutText);
       if (!rowValueMap.has(rowValueMapKey)) {
@@ -291,9 +304,13 @@ const mismatchingValueBelopprader = computed(() => {
         });
       }
 
-      rowValueMap
-        .get(rowValueMapKey)!
-        .values.push(xbrlItemValueItem["#text"] as string);
+      rowValueMap.get(rowValueMapKey)!.values.push({
+        belopp: String(xbrlItemValueItem["#text"]),
+        decimals:
+          "@_decimals" in xbrlItemValueItem
+            ? String(xbrlItemValueItem["@_decimals"])
+            : "INF",
+      });
     }
 
     if (Array.isArray(xbrlItemValue)) {
@@ -304,7 +321,20 @@ const mismatchingValueBelopprader = computed(() => {
   }
 
   for (const { taxonomyItemName, values } of rowValueMap.values()) {
-    if (values.length > 1 && !values.every((belopp) => belopp === values[0])) {
+    const baseValue =
+      values.find((value) => value.decimals === "INF") ?? values[0];
+
+    if (
+      values.length > 1 &&
+      !values.every((value) =>
+        equalsWithDecimals(
+          value.belopp,
+          value.decimals,
+          baseValue.belopp,
+          baseValue.decimals,
+        ),
+      )
+    ) {
       let taxonomyItem: TaxonomyItem | null = null;
       for (const taxonomyManager of beloppradLists.value.map(
         (x) => x.beloppradListTaxonomyManager,
@@ -423,10 +453,31 @@ const mismatchingValueBelopprader = computed(() => {
           …beloppen för följande fält; det förekommer olika värden på olika
           ställen och du bör korrigera detta:
           <ul data-testid="finalize-reminder-mismatching-values-list">
-            <li v-for="(belopprad, i) in mismatchingValueBelopprader" :key="i">
-              {{ belopprad.taxonomyItem.properties.label }}: [{{
-                belopprad.values.join(" / ")
-              }}]
+            <li
+              v-for="(belopprad, beloppradIndex) in mismatchingValueBelopprader"
+              :key="beloppradIndex"
+            >
+              {{ belopprad.taxonomyItem.properties.label }}: [
+              <template
+                v-for="(
+                  beloppradValue, beloppradValueIndex
+                ) in belopprad.values"
+                :key="beloppradValueIndex"
+              >
+                <template v-if="beloppradValueIndex > 0"> /</template>
+                {{
+                  formatNumber(
+                    beloppradValue.belopp,
+                    null,
+                    beloppradValue.decimals === "-3"
+                      ? BeloppFormat.TUSENTAL
+                      : BeloppFormat.HELTAL,
+                  )
+                }}<template v-if="beloppradValue.decimals === '-3'"
+                  >&nbsp;(tusental)</template
+                >
+              </template>
+              ]
               {{
                 arsredovisning.redovisningsinformation.redovisningsvaluta
                   .namnKort
