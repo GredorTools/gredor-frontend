@@ -7,6 +7,7 @@
 import { useDropZone } from "@vueuse/core";
 import { ref } from "vue";
 import { requestOpenFile } from "@/util/fileUtils.ts";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 const props = defineProps<{
   /** Tillåtna filändelser, t.ex.: [".jpg", ".jpeg"] */
@@ -14,6 +15,9 @@ const props = defineProps<{
 
   /** Tillåtna datatyper, t.ex.: ["application/pdf"] */
   allowedDataTypes?: string[];
+
+  /** Maximal filstorlek i kilobyte. */
+  maxFileSizeKilobytes?: number;
 
   /** Huruvida komponenten är avvaktiverad, dvs det är inte möjligt att byta
    * fil. */
@@ -45,20 +49,42 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
   dataTypes: props.allowedDataTypes,
 });
 
+const { showMessageModal } = useModalStore();
+
 async function importFile() {
   const file = await requestOpenFile(props.allowedFileExtensions.join(","));
   onFilePicked(file);
 }
 
 function onFilePicked(file: File | null | undefined) {
-  if (props.disabled) {
+  if (props.disabled || !file) {
     return;
   }
 
-  if (file) {
-    filename.value = file.name;
-    emit("filePicked", file);
+  if (
+    props.maxFileSizeKilobytes != null &&
+    file.size > props.maxFileSizeKilobytes * 1024
+  ) {
+    showMessageModal(
+      `Filen får inte vara större än ${props.maxFileSizeKilobytes} kB.`,
+      "Fel",
+    );
+    return;
   }
+
+  if (
+    props.allowedDataTypes != null &&
+    !props.allowedDataTypes.includes(file.type)
+  ) {
+    showMessageModal(
+      `Filen får endast vara av något av dessa format: ${props.allowedFileExtensions.join(", ")}`,
+      "Fel",
+    );
+    return;
+  }
+
+  filename.value = file.name;
+  emit("filePicked", file);
 }
 </script>
 
