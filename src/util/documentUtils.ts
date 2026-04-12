@@ -214,8 +214,7 @@ async function getCssTextForUsedRules(
   }
 
   for (const sheet of Object.values(document.styleSheets)) {
-    if (!sheet.cssRules) {
-      // Händer ibland med injicerad CSS från webbläsartillägg, t.ex. DarkReader
+    if (!isValidStyleSheetForDocument(sheet)) {
       continue;
     }
 
@@ -247,6 +246,7 @@ async function getCssTextForUsedRules(
     rulesCss += rule.cssText + "\n";
   }
 
+  // Typsnitt
   const fontReferencesInDocument =
     await getFontReferencesInDocument(fontFamilyWhitelist);
   for (const fontReference of fontReferencesInDocument) {
@@ -262,6 +262,15 @@ async function getCssTextForUsedRules(
     }
   }
 
+  // Sanity checks på den CSS som vi har skapat
+  if (!rulesCss.includes("data-v-")) {
+    throw new Error("CSS sanity check failed, data-v- missing");
+  }
+  if (!rulesCss.includes("@font-face")) {
+    throw new Error("CSS sanity check failed, @font-face missing");
+  }
+
+  // Returnera
   return rulesCss;
 }
 
@@ -295,6 +304,10 @@ async function getFontReferencesInDocument(fontFamilyWhitelist: string[]) {
 
   // Gå igenom varje stilmall som är tillgänglig i dokumentet
   for (const styleSheet of document.styleSheets) {
+    if (!isValidStyleSheetForDocument(styleSheet)) {
+      continue;
+    }
+
     const cssRules = styleSheet.cssRules;
 
     // Gå igenom varje CSS-regel i stilmallen
@@ -349,4 +362,36 @@ async function getFontReferencesInDocument(fontFamilyWhitelist: string[]) {
   }
 
   return fontFiles;
+}
+
+/**
+ * Tar reda på huruvida ett stylesheet är giltigt för att inkluderas i
+ * iXBRL-dokumentet.
+ *
+ * @param sheet - Det stylesheet som ska kontrolleras
+ * @returns True om stylesheet är giltigt för att inkluderas i iXBRL-dokumentet,
+ * annars false
+ */
+function isValidStyleSheetForDocument(sheet: CSSStyleSheet) {
+  if (!sheet.cssRules) {
+    // Händer ibland med injicerad CSS från webbläsartillägg, t.ex. DarkReader
+    return false;
+  }
+
+  if (
+    !(sheet.ownerNode instanceof Element) ||
+    !(
+      sheet.ownerNode.attributes.getNamedItem("data-vite-dev-id") ||
+      sheet.ownerNode.attributes
+        .getNamedItem("href")
+        ?.value?.toString()
+        .startsWith("/assets/")
+    )
+  ) {
+    // Ej våran CSS - kan vara injicerad från tillägg
+    return false;
+  }
+
+  // OK
+  return true;
 }

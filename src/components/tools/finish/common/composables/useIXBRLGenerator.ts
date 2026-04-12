@@ -4,6 +4,7 @@ import RenderMain from "@/components/render/RenderMain.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import type { Ref } from "vue";
 import { RENDER_FONT_FAMILY_WHITELIST } from "@/util/renderUtils.ts";
+import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 
 /**
  * Argument som krävs för att generera en iXBRL-årsredovisning.
@@ -40,11 +41,23 @@ function tryGenerateIXBRLInInterval(args: Args) {
       }
 
       const { foretagsinformation } = args.arsredovisning;
-      args.ixbrlOutput.value = await convertVueHTMLToiXBRL(
-        arsredovisningRoot.value,
-        `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
-        RENDER_FONT_FAMILY_WHITELIST,
-      );
+      try {
+        args.ixbrlOutput.value = await convertVueHTMLToiXBRL(
+          arsredovisningRoot.value,
+          `${foretagsinformation.organisationsnummer} ${foretagsinformation.foretagsnamn} - Årsredovisning`,
+          RENDER_FONT_FAMILY_WHITELIST,
+        );
+      } catch (e: unknown) {
+        const { showMessageModal } = useModalStore();
+
+        const errorDetails = e instanceof Error ? e.message : "Unknown error";
+        showMessageModal(
+          `Det gick inte att skapa dokumentet.
+          
+                Skulle felet fortsatt uppstå, mejla gredor@potatiz.com och uppge följande felmeddelande: ${errorDetails}`,
+          "Fel",
+        );
+      }
     }
   }, 250);
   return intervalId;
