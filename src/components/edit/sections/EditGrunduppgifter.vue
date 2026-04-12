@@ -7,31 +7,20 @@
 import { type Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import { REDOVISNINGSVALUTOR } from "@/data/redovisningsvalutor.ts";
 import { AVGIVANDE_TYPER } from "@/data/avgivande.ts";
-import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
-import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import CommonDeleteButton from "@/components/common/CommonDeleteButton.vue";
 import CommonAccordion from "@/components/common/CommonAccordion.vue";
 import CommonAccordionItem from "@/components/common/CommonAccordionItem.vue";
+import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 
 /** Årsredovisningen som innehåller grunduppgifterna. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
 });
 
-const { showMessageModal } = useModalStore();
-
 const maxLogoSizeKB = 512;
 
 function onLogoFilePicked(file: File) {
-  if (file.size > maxLogoSizeKB * 1024) {
-    showMessageModal(
-      `Logotypen får inte vara större än ${maxLogoSizeKB} kB.`,
-      "Fel",
-    );
-    return;
-  }
-
   const fileReader = new FileReader();
   fileReader.addEventListener("load", () => {
     if (typeof fileReader.result !== "string") {
@@ -87,6 +76,7 @@ function onLogoFilePicked(file: File) {
           v-if="arsredovisning.foretagsinformation.logotyp.base64 == null"
           :allowed-data-types="['image/png', 'image/jpeg', 'image/gif']"
           :allowed-file-extensions="['.png', '.jpg', '.jpeg', '.gif']"
+          :max-file-size-kilobytes="maxLogoSizeKB"
           hide-selected-file-name
           @file-picked="onLogoFilePicked"
         />
