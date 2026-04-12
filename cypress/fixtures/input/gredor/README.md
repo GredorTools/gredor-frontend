@@ -22,8 +22,7 @@ Innehåller:
 
 ### TestfilA_med-avrundningfel
 
-Liknar TestfilA, men har avrundningsfel på ett av fälten för balanserat
-resultat.
+Liknar TestfilA, men har avrundningsfel på ett av fälten för nettoomsättning.
 
 ### TestfilA_utan-orgnr
 

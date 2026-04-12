@@ -102,7 +102,7 @@
         "taxonomyItemName": "se-gen-base:Nettoomsattning",
         "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "213157",
+        "beloppNuvarandeAr": "213554",
         "beloppTidigareAr": [
           "274012",
           "259263",
@@ -113,7 +113,7 @@
         "taxonomyItemName": "se-gen-base:ResultatEfterFinansiellaPoster",
         "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "61573",
+        "beloppNuvarandeAr": "61579",
         "beloppTidigareAr": [
           "59635",
           "16825",
@@ -1100,7 +1100,7 @@
         "taxonomyItemName": "se-gen-base:BalanseratResultat",
         "parentTaxonomyItemName": "se-gen-base:FrittEgetKapitalAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "95229",
+        "beloppNuvarandeAr": "95228",
         "beloppTidigareAr": [
           "70406"
         ]
