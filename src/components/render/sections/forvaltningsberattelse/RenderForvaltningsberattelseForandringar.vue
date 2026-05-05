@@ -12,6 +12,7 @@ import { isBeloppradInTaxonomyItemList } from "@/model/arsredovisning/Belopprad.
 import BaseRenderBeloppradLevel1Header from "@/components/render/blocks/belopprad/BaseRenderBeloppradLevel1Header.vue";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import RenderBeloppradCellComparable from "@/components/render/blocks/belopprad/cell/RenderBeloppradCellComparable.vue";
+import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som innehåller förvaltningsberättelsen med förändringar i eget kapital. */
@@ -28,11 +29,15 @@ const groupTaxonomyItem = computed(() =>
 );
 
 const belopprader = computed(() =>
-  props.arsredovisning.forvaltningsberattelse.filter((belopprad) =>
-    isBeloppradInTaxonomyItemList(
-      groupTaxonomyItem.value.childrenFlat,
-      belopprad,
-    ),
+  props.arsredovisning.forvaltningsberattelse.filter(
+    (belopprad) =>
+      isBeloppradInTaxonomyItemList(
+        groupTaxonomyItem.value.childrenFlat,
+        belopprad,
+      ) &&
+      // Monetära belopprader utan värde vill vi inte visa (kan uppstå vid t.ex.
+      // SIE-import)
+      (!isBeloppradMonetary(belopprad) || belopprad.beloppNuvarandeAr),
   ),
 );
 
