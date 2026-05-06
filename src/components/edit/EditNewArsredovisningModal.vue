@@ -56,8 +56,12 @@ const busy = ref<boolean>(false);
 
 const { showMessageModal } = useModalStore();
 const { fetchCompanyRecords } = useCompanyRecordsApi({
-  apiErrorHandler: (message) => {
-    throw new Error(message);
+  apiErrorHandler: (message, statusCode) => {
+    if (statusCode >= 400 && statusCode <= 499) {
+      showMessageModal(message, "Fel");
+    } else {
+      throw new Error(message);
+    }
   },
   exceptionHandler: (e) => {
     throw e;
@@ -105,7 +109,8 @@ async function createArsredovisning() {
     console.error(error);
     showMessageModal(
       "Misslyckades med att hämta företagets namn och räkenskapsår från" +
-        " Bolagsverket. Du kan ändå gå vidare och arbeta på din årsredovisning.",
+        " Bolagsverket. Du kan ändå gå vidare och arbeta på din" +
+        " årsredovisning, förutsatt att du redovisar för ett aktiebolag.",
       "Varning",
     );
   } finally {
@@ -138,7 +143,7 @@ async function fetchRecords() {
   });
 
   if (!data) {
-    throw new Error("Data saknas");
+    return;
   }
 
   // Uppdatera årsredovisningen med data från Bolagsverket

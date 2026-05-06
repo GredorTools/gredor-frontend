@@ -9,7 +9,7 @@ import { client } from "@/api/client.ts";
  *   - exceptionHandler - Callback-funktion för att hantera oväntade fel.
  */
 export function useCompanyRecordsApi(composableParams: {
-  apiErrorHandler: (message: string) => void;
+  apiErrorHandler: (message: string, statusCode: number) => void;
   exceptionHandler: (error: Error) => void;
 }) {
   const { apiErrorHandler, exceptionHandler } = composableParams;
@@ -30,6 +30,7 @@ export function useCompanyRecordsApi(composableParams: {
       const {
         data, // 2XX response
         error, // 4XX / 5XX response
+        response,
       } = await client.GET("/v1/information/records/{orgnr}", {
         params: {
           path: {
@@ -39,7 +40,7 @@ export function useCompanyRecordsApi(composableParams: {
       });
 
       if (error) {
-        apiErrorHandler(error);
+        apiErrorHandler(error, (response as Response).status);
       } else if (data) {
         return data;
       }
