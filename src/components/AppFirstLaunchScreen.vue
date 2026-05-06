@@ -95,7 +95,7 @@ function onArsredovisningCreated(value: Arsredovisning) {
       <div class="card text-center d-flex flex-column align-items-center gap-3">
         <h2>Välkommen till Gredor!</h2>
         <p>
-          Ett verktyg för att skapa årsredovisningar<br />
+          Ett verktyg för att skapa årsredovisningar för aktiebolag<br />
           och ladda upp dem till Bolagsverket, helt gratis.
         </p>
         <h4>Vad vill du göra?</h4>
