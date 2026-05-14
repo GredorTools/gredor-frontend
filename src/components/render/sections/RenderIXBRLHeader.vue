@@ -160,9 +160,11 @@ const allDecimalTaxonomyItems = [
             </xbrli:period>
           </xbrli:context>
         </template>
-        <template v-if="arsredovisning.verksamhetsarTidigare.length == 0">
-          <!-- Öppningsbalans för nystartade företag -->
-          <xbrli:context id="balans1">
+        <template v-if="arsredovisning.verksamhetsarTidigare.length < 3">
+          <!-- Öppningsbalansdag för företag som inte har kommit upp i fyra räkenskapsår -->
+          <xbrli:context
+            :id="`balans${arsredovisning.verksamhetsarTidigare.length + 1}`"
+          >
             <xbrli:entity>
               <xbrli:identifier scheme="http://www.bolagsverket.se"
                 >{{ arsredovisning.foretagsinformation.organisationsnummer }}
@@ -170,7 +172,14 @@ const allDecimalTaxonomyItems = [
             </xbrli:entity>
             <xbrli:period>
               <xbrli:instant
-                >{{ arsredovisning.verksamhetsarNuvarande.startdatum }}
+                >{{
+                  // Öppningsbalansdagen är startdatumet för första räkenskapsåret
+                  arsredovisning.verksamhetsarTidigare.length > 0
+                    ? arsredovisning.verksamhetsarTidigare[
+                        arsredovisning.verksamhetsarTidigare.length - 1
+                      ].startdatum
+                    : arsredovisning.verksamhetsarNuvarande.startdatum
+                }}
               </xbrli:instant>
             </xbrli:period>
           </xbrli:context>

@@ -2090,6 +2090,14 @@
       <xbrli:instant>2023-06-30</xbrli:instant>
     </xbrli:period>
   </xbrli:context>
+  <xbrli:context id="balans3">
+    <xbrli:entity>
+      <xbrli:identifier scheme="http://www.bolagsverket.se">556002-1361</xbrli:identifier>
+    </xbrli:entity>
+    <xbrli:period>
+      <xbrli:instant>2022-07-01</xbrli:instant>
+    </xbrli:period>
+  </xbrli:context>
   <xbrli:unit id="redovisningsvaluta">
     <xbrli:measure>iso4217:EUR</xbrli:measure>
   </xbrli:unit>
