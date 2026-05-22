@@ -30,6 +30,12 @@
     max-width: calc(210mm - 4rem);
   }
 
+  * {
+    // Nödvändigt i de fall webbläsarens textstorlek inte är lika med 16 px,
+    // för att textstorleken ska bli rätt
+    font-size: 1rem;
+  }
+
   & > *:not(:first-child) {
     padding-top: 2rem;
 
