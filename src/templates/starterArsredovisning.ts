@@ -111,32 +111,6 @@ export const starterArsredovisning: Arsredovisning = {
       type: "xbrli:stringItemType",
       text: "Årsredovisningen är upprättad i enlighet med årsredovisningslagen och Bokföringsnämndens allmänna råd (BFNAR 2016:10) om årsredovisning i mindre företag.",
     } as Belopprad<"xbrli:stringItemType">,
-    {
-      taxonomyItemName: "se-gen-base:UpplysningarResultatrakningenAbstract",
-      labelType: "terseLabel",
-      parentTaxonomyItemName: "se-gen-base:NoterAbstract",
-      type: "xbrli:stringItemType",
-    },
-    {
-      taxonomyItemName: "se-gen-base:NotMedelantaletAnstallda",
-      labelType: "terseLabel",
-      parentTaxonomyItemName:
-        "se-gen-base:UpplysningarResultatrakningenAbstract",
-      type: "xbrli:stringItemType",
-    },
-    {
-      taxonomyItemName: "se-gen-base:MedelantaletAnstalldaAbstract",
-      labelType: "terseLabel",
-      parentTaxonomyItemName: "se-gen-base:NotMedelantaletAnstallda",
-      type: "xbrli:stringItemType",
-    },
-    {
-      taxonomyItemName: "se-gen-base:MedelantaletAnstallda",
-      parentTaxonomyItemName: "se-gen-base:MedelantaletAnstalldaAbstract",
-      type: "xbrli:decimalItemType",
-      beloppNuvarandeAr: "",
-      beloppTidigareAr: [""],
-    } as Belopprad<"xbrli:decimalItemType">,
   ],
   gredorState: {
     todoList: {

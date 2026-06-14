@@ -1,8 +1,15 @@
 import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
-import { getOrCreateBeloppradInList, getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
+import {
+  createBeloppradInList,
+  getOrCreateBeloppradInList,
+  getTaxonomyItemForBelopprad,
+} from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import Decimal from "decimal.js";
-import type { Arsredovisning, Verksamhetsar } from "@/model/arsredovisning/Arsredovisning.ts";
+import type {
+  Arsredovisning,
+  Verksamhetsar,
+} from "@/model/arsredovisning/Arsredovisning.ts";
 import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
 
 /**
@@ -92,8 +99,9 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
 }
 
 /**
- * Fyller automatiskt i notnummer för raden för personalkostnader i
- * resultaträkningen, om det finns en not för medelantalet anställda.
+ * Fyller automatiskt i notnummer på raden för personalkostnader i
+ * resultaträkningen, som hänvisar till noten för medelantalet anställda. Finns
+ * det inte någon not för medelantalet anställda, skapas en ny not.
  *
  * @param arsredovisning - Årsredovisningen som ska få notnumret ifyllt
  */
@@ -104,18 +112,24 @@ export async function autofillPersonalkostnaderNot(
     (belopprad) =>
       belopprad.taxonomyItemName === "se-gen-base:Personalkostnader",
   );
-  const notMedelandataletAnstalldaBelopprad = arsredovisning.noter.find(
-    (belopprad) =>
-      belopprad.taxonomyItemName === "se-gen-base:NotMedelantaletAnstallda",
-  );
 
   if (
     personalkostnaderBelopprad != null &&
-    notMedelandataletAnstalldaBelopprad != null &&
     isBeloppradComparable(personalkostnaderBelopprad)
   ) {
     const noterTaxonomyManager = await getTaxonomyManager(
       TaxonomyRootName.NOTER,
+    );
+
+    // Skapa en ny not om den inte finns
+    createBeloppradInList(
+      noterTaxonomyManager,
+      arsredovisning.noter,
+      noterTaxonomyManager.getItemByCompleteInfo(
+        "se-gen-base:MedelantaletAnstallda",
+        undefined,
+        "se-gen-base:MedelantaletAnstalldaAbstract",
+      ),
     );
 
     // Räkna ut notnumret
@@ -126,7 +140,11 @@ export async function autofillPersonalkostnaderNot(
             getTaxonomyItemForBelopprad(noterTaxonomyManager, belopprad)
               .level === 2,
         )
-        .indexOf(notMedelandataletAnstalldaBelopprad) + 1
+        .findIndex(
+          (belopprad) =>
+            belopprad.taxonomyItemName ===
+            "se-gen-base:NotMedelantaletAnstallda",
+        ) + 1
     ).toString();
   }
 }
@@ -138,4 +156,5 @@ const BOLAGSSKATT_PER_AR: { [ar: string]: string } = {
   "2023": "20.6",
   "2024": "20.6",
   "2025": "20.6",
+  "2026": "20.6",
 };
