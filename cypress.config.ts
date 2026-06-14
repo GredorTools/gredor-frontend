@@ -1,16 +1,18 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-
 import { defineConfig } from "cypress";
+
+// @ts-expect-error - cypress-delete-downloads-folder är inte korrekt typat
+import { removeDirectory } from "cypress-delete-downloads-folder";
+
+import codeCoverageTask from "@cypress/code-coverage/task";
 
 export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       on("task", {
-        removeDirectory: require("cypress-delete-downloads-folder")
-          .removeDirectory,
+        removeDirectory,
       });
 
-      require("@cypress/code-coverage/task")(on, config);
+      codeCoverageTask(on, config);
       return config;
     },
     scrollBehavior: "center",
