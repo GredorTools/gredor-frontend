@@ -772,10 +772,10 @@ it("can create and edit manually", function () {
 
   cy.get(
     "#arsredovisning-for-export table:nth-child(3) td:nth-child(2)",
-  ).should("have.text", "–");
+  ).should("not.exist");
   cy.get(
     "#arsredovisning-for-export table:nth-child(3) td:nth-child(3)",
-  ).should("have.text", "–");
+  ).should("not.exist");
 
   cy.get(
     '[data-testid="edit-se-gen-base:MedelantaletAnstallda-current-year"]',
@@ -785,7 +785,7 @@ it("can create and edit manually", function () {
   ).clear();
   cy.get(
     '[data-testid="edit-se-gen-base:MedelantaletAnstallda-current-year"]',
-  ).type("0");
+  ).type("1");
   cy.get(
     '[data-testid="edit-se-gen-base:MedelantaletAnstallda-previous-year-1"]',
   ).click();
@@ -798,7 +798,7 @@ it("can create and edit manually", function () {
 
   cy.get(
     '#arsredovisning-for-export td:nth-child(2) [name="se-gen-base:MedelantaletAnstallda"]',
-  ).should("have.text", "0");
+  ).should("have.text", "1");
   cy.get(
     '#arsredovisning-for-export td:nth-child(3) [name="se-gen-base:MedelantaletAnstallda"]',
   ).should("have.text", "0");
