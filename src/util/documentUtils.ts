@@ -113,7 +113,6 @@ export async function convertVueHTMLToiXBRL(
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
       <meta name="programvara" content="Gredor" />
       <meta name="programversion" content="${getAppFullVersion()}" />
-      <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no" />
       <title>${title}</title>
       <style type="text/css">${rulesCss}</style>
     `;
@@ -147,6 +146,14 @@ export async function convertVueHTMLToiXBRL(
     (match, openTag, content, closeTag) => {
       return `${openTag}${content.replace(/&gt;/g, ">")}${closeTag}`;
     },
+  );
+
+  // Fixa problem med Safari som automatiskt gör om organisationsnummer till
+  // länkar i stil med <a href="tel:556002-1361">556002-1361</a> - dessa måste
+  // tas bort
+  xhtml = xhtml.replace(
+    /<a\s*href\s*=\s*["']tel:.+?["']\s*>(.+?)<\/a\s*>/gm,
+    (_match, content) => content,
   );
 
   // Returnera
