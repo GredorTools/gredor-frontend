@@ -6,13 +6,19 @@ import {
   type Belopprad,
   deleteBelopprad,
   getOrCreateBeloppradInList,
-  getTaxonomyItemForBelopprad
+  getTaxonomyItemForBelopprad,
 } from "@/model/arsredovisning/Belopprad.ts";
 import { isBeloppradComparable } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
 import { sieMappings } from "@/data/taxonomy/k2/2021-10-31/sieMappings.ts";
 import { extraSieMappings } from "@/data/taxonomy/k2/2021-10-31/extraSieMappings.ts";
-import { autofillPersonalkostnaderNot, autofillSoliditet } from "@/util/autofillUtils.ts";
-import { TaxonomyRootName } from "@/model/taxonomy/TaxonomyItem.ts";
+import {
+  autofillPersonalkostnaderNot,
+  autofillSoliditet,
+} from "@/util/autofillUtils.ts";
+import {
+  isTaxonomyItemTuple,
+  TaxonomyRootName,
+} from "@/model/taxonomy/TaxonomyItem.ts";
 import {
   type BeloppradMonetary,
   calculateValuesIntoBelopprad,
@@ -68,9 +74,6 @@ export async function mapSieFileIntoArsredovisning(
           mappingKonto.start <= basAccountAsNumber &&
           basAccountAsNumber <= mappingKonto.end
         ) {
-          // Matchning hittad
-          mappingFound = true;
-
           // Hämta taxonomiobjekt för den aktuella mappningen
           const taxonomyManager = await getTaxonomyManager(
             mapping.taxonomyItemId.rootName as TaxonomyRootName,
@@ -80,6 +83,17 @@ export async function mapSieFileIntoArsredovisning(
             mapping.taxonomyItemId.labelType || undefined,
             mapping.taxonomyItemId.parentName || undefined,
           );
+          if (
+            taxonomyItem.parent != null &&
+            isTaxonomyItemTuple(taxonomyItem.parent)
+          ) {
+            // I dagsläget hanterar vi inte värden som ligger i tuples (t.ex.
+            // värden under noten för övriga rörelsekostnader).
+            continue;
+          }
+
+          // Nu vet vi att vi har hittat en matchning
+          mappingFound = true;
 
           // Hämta eller skapa en ny belopprad för taxonomiobjektet
           const beloppradListToAddInto = getBeloppradListToAddInto(
