@@ -6,7 +6,7 @@
  * möjlighet att importera en SIE-fil.
  */
 
-import { computed, ref, unref } from "vue";
+import { ref, unref } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { starterArsredovisning } from "@/templates/starterArsredovisning.ts";
@@ -17,7 +17,6 @@ import {
 import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import {
   AvgivandeLikvidator,
@@ -26,8 +25,10 @@ import {
 } from "@/data/avgivande.ts";
 import { addTodoListItem } from "@/model/todolist/TodoList.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
-import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 import { useCompanyRecordsApi } from "@/api/composables/useCompanyRecordsApi.ts";
+import CommonOrgnrInput, {
+  type OrgnrValidationStatus,
+} from "@/components/common/CommonOrgnrInput.vue";
 
 defineProps<{
   /** ID för modalinstansen som är unikt över hela applikationen. */
@@ -52,6 +53,7 @@ const arsredovisning = ref<Arsredovisning>(
 );
 const sieMessages = ref<string[]>([]);
 
+const orgnrValidationStatus = ref<OrgnrValidationStatus>("awaiting_input");
 const busy = ref<boolean>(false);
 
 const { showMessageModal } = useModalStore();
@@ -181,21 +183,6 @@ async function fetchRecords() {
     );
   }
 }
-
-const orgnrRegex = /^\d{6}-?\d{4}$/;
-
-const orgnrCorrectFormatButInvalidLuhn = computed(
-  () =>
-    orgnrRegex.test(
-      arsredovisning.value.foretagsinformation.organisationsnummer,
-    ) &&
-    !LuhnAlgorithm.isValid(
-      arsredovisning.value.foretagsinformation.organisationsnummer.replace(
-        "-",
-        "",
-      ),
-    ),
-);
 </script>
 
 <template>
@@ -213,24 +200,16 @@ const orgnrCorrectFormatButInvalidLuhn = computed(
         företagets namn och senaste räkenskapsår från Bolagsverket.
       </p>
 
-      <input
+      <CommonOrgnrInput
         v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
-        :disabled="busy"
         data-testid="new-arsredovisning-modal-orgnr"
-        maxlength="11"
-        name="organisationsnummer"
+        :disabled="busy"
         placeholder="Skriv företagets organisationsnummer här…"
-        type="text"
-        @input="
-          arsredovisning.foretagsinformation.organisationsnummer =
-            tryFormatOrgnr(
-              arsredovisning.foretagsinformation.organisationsnummer,
-            )
+        class="orgnr-input"
+        @validation-status-change="
+          (validationStatus) => (orgnrValidationStatus = validationStatus)
         "
       />
-      <strong v-if="orgnrCorrectFormatButInvalidLuhn" class="d-block mt-2"
-        >Ogiltigt organisationsnummer.</strong
-      >
 
       <h5>Bokföringsimport (frivilligt)</h5>
 
@@ -257,10 +236,8 @@ const orgnrCorrectFormatButInvalidLuhn = computed(
     <CommonWizardButtons
       :next-button-disabled="
         busy ||
-        !orgnrRegex.test(
-          arsredovisning.foretagsinformation.organisationsnummer,
-        ) ||
-        orgnrCorrectFormatButInvalidLuhn
+        (orgnrValidationStatus !== 'ok' &&
+          orgnrValidationStatus !== 'likely_not_aktiebolag')
       "
       :next-button-text="busy ? 'Vänta – arbetar…' : 'Skapa'"
       previous-button-hidden
@@ -280,7 +257,7 @@ h5:not(:first-of-type) {
   margin-top: $spacing-xxl;
 }
 
-input[type="text"] {
+:deep(.orgnr-input) {
   width: 75%;
 }
 </style>

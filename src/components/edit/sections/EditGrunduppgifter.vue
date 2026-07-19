@@ -11,7 +11,7 @@ import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import CommonDeleteButton from "@/components/common/CommonDeleteButton.vue";
 import CommonAccordion from "@/components/common/CommonAccordion.vue";
 import CommonAccordionItem from "@/components/common/CommonAccordionItem.vue";
-import { tryFormatOrgnr } from "@/util/formatUtils.ts";
+import CommonOrgnrInput from "@/components/common/CommonOrgnrInput.vue";
 
 /** Årsredovisningen som innehåller grunduppgifterna. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -51,18 +51,10 @@ function onLogoFilePicked(file: File) {
         <label class="form-label" for="organisationsnummer"
           >Organisationsnummer:</label
         >
-        <input
+        <CommonOrgnrInput
           id="organisationsnummer"
           v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
           class="form-control"
-          maxlength="11"
-          type="text"
-          @input="
-            arsredovisning.foretagsinformation.organisationsnummer =
-              tryFormatOrgnr(
-                arsredovisning.foretagsinformation.organisationsnummer,
-              )
-          "
         />
       </div>
 
