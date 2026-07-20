@@ -232,6 +232,7 @@ function finish() {
                 :options="lineOptions"
                 :matches="matchesLine"
                 :input-testid="`sie-account-mapping-input-${account.basAccount}`"
+                :aria-label="`Mappa konto ${account.basAccount} till rad`"
                 placeholder="Sök rad eller kontonummer…"
               />
             </td>

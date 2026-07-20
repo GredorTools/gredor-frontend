@@ -29,6 +29,9 @@ const props = defineProps<{
   /** Platshållartext i fältet. */
   placeholder?: string;
 
+  /** Tillgänglighetsetikett (aria-label) för fältet. */
+  ariaLabel?: string;
+
   /** data-testid som sätts på själva inmatningsfältet. */
   inputTestid?: string;
 
@@ -161,6 +164,7 @@ function onBlur() {
     <input
       ref="inputRef"
       :value="query"
+      :aria-label="ariaLabel ?? placeholder"
       :data-testid="inputTestid"
       :placeholder="placeholder"
       autocomplete="off"

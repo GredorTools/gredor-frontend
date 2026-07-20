@@ -32,7 +32,9 @@ function startImport(fixture: string) {
   );
 
   cy.get("#newArsredovisningBtn").click();
-  cy.wait(1000);
+  // Vänta in att modalen har öppnats (fältet blir synligt) i stället för en
+  // fast fördröjning.
+  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').should("be.visible");
   cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
   cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').clear();
   cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("556002-1361");
@@ -42,10 +44,13 @@ function startImport(fixture: string) {
   );
 }
 
-// Klickar bort en eventuell meddelandemodal (t.ex. avrundningsfelvarningar) och
-// slutför skapandet av årsredovisningen.
+// Slutför skapandet av årsredovisningen. Väntar in att importen är klar (Skapa-
+// knappen är inte längre inaktiverad), stänger en eventuell sammanfattningsmodal
+// (t.ex. avrundningsfelvarningar) och skapar sedan årsredovisningen.
 function finishCreation() {
-  cy.wait(500);
+  const skapaButton =
+    "#new-arsredovisning-modal-AppHeader-footer-teleport [data-testid='wizard-next-button']";
+  cy.get(skapaButton).should("not.be.disabled");
   cy.get("body").then(($body) => {
     if ($body.find(".message-modal-content").length > 0) {
       cy.get(".message-modal-content")
@@ -54,9 +59,7 @@ function finishCreation() {
         .click();
     }
   });
-  cy.get(
-    "#new-arsredovisning-modal-AppHeader-footer-teleport [data-testid='wizard-next-button']",
-  ).click();
+  cy.get(skapaButton).click();
 }
 
 describe("mapping accounts with no automatic match (9000)", () => {

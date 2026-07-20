@@ -114,10 +114,10 @@ export function findMappingsForAccount(
 }
 
 /** Taxonomirötterna för de två huvudräkningarna (resultat- och balansräkning). */
-const STATEMENT_ROOT_NAMES = [
-  "http://www.taxonomier.se/se/fr/gaap/k2/role/form/resultatrakning/kostnadsslagsindelad",
-  "http://www.taxonomier.se/se/fr/gaap/k2/role/form/balansrakning",
-];
+const STATEMENT_ROOT_NAMES = new Set<string>([
+  TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
+  TaxonomyRootName.BALANSRAKNING,
+]);
 
 /**
  * Returnerar de rader i resultat- och balansräkningen som ett belopp kan
@@ -133,7 +133,7 @@ export async function getStatementLineOptions(): Promise<StatementLineOption[]> 
     { label: string; accountRanges: { start: number; end: number }[] }
   >();
   for (const mapping of [...sieMappings, ...extraSieMappings]) {
-    if (!STATEMENT_ROOT_NAMES.includes(mapping.taxonomyItemId.rootName)) {
+    if (!STATEMENT_ROOT_NAMES.has(mapping.taxonomyItemId.rootName)) {
       continue;
     }
     const taxonomyManager = await getTaxonomyManager(
@@ -193,7 +193,7 @@ export async function accountLandsOnStatementLeaf(
   basAccountNumber: number,
 ): Promise<boolean> {
   for (const mapping of findMappingsForAccount(basAccountNumber)) {
-    if (!STATEMENT_ROOT_NAMES.includes(mapping.taxonomyItemId.rootName)) {
+    if (!STATEMENT_ROOT_NAMES.has(mapping.taxonomyItemId.rootName)) {
       continue;
     }
     const taxonomyManager = await getTaxonomyManager(
@@ -301,7 +301,7 @@ export async function mapSieFileIntoArsredovisning(
           valueToAdd.mul(
             taxonomyItem.properties.balance === "credit" &&
               // Specialare för årets resultat
-              !(signAccount != null && signAccount.startsWith("899"))
+              !signAccount?.startsWith("899")
               ? -1
               : 1,
           ),
@@ -548,7 +548,7 @@ function decodeCp437(bytes: Uint8Array): string {
   let result = "";
   for (const byte of bytes) {
     result +=
-      byte < 0x80 ? String.fromCharCode(byte) : CP437_HIGH_CHARS[byte - 0x80];
+      byte < 0x80 ? String.fromCodePoint(byte) : CP437_HIGH_CHARS[byte - 0x80];
   }
   return result;
 }
@@ -585,7 +585,7 @@ function parseSieAccounts(sieFileText: string): SieAccountInfo[] {
   const seen = new Set<string>();
   for (const line of sieFileText.split(/\r?\n/)) {
     const parts = line.match(/(?:[^\s"]+|"[^"]*")+/g);
-    if (!parts || parts[0] !== "#KONTO" || parts[1] == null) {
+    if (parts?.[0] !== "#KONTO" || parts[1] == null) {
       continue;
     }
     const number = parts[1];
