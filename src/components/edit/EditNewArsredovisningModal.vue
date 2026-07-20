@@ -14,7 +14,11 @@ import {
   type Arsredovisning,
   createArsredovisningFromTemplate,
 } from "@/model/arsredovisning/Arsredovisning.ts";
-import { mapSieFileIntoArsredovisning } from "@/util/sieUtils.ts";
+import {
+  decodeSieFileBytes,
+  mapSieFileIntoArsredovisning,
+} from "@/util/sieUtils.ts";
+import EditSieAccountMappingModal from "@/components/edit/EditSieAccountMappingModal.vue";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
@@ -41,6 +45,8 @@ const emit = defineEmits<{
 }>();
 
 const modal = ref<ComponentExposed<typeof CommonModal>>();
+const accountMappingModal =
+  ref<ComponentExposed<typeof EditSieAccountMappingModal>>();
 defineExpose({
   /** Visar det modala fönstret. */
   show: () => {
@@ -84,11 +90,14 @@ async function handleSieFile(file: File) {
 
     sieMessages.value = [];
 
-    const sieFileText = await file.text();
+    const sieFileText = decodeSieFileBytes(await file.arrayBuffer());
     await mapSieFileIntoArsredovisning(
       sieFileText,
       arsredovisning.value,
       (message) => sieMessages.value.push(message),
+      (unmappedAccounts) =>
+        accountMappingModal.value?.show(unmappedAccounts) ??
+        Promise.resolve(new Map()),
     );
 
     if (sieMessages.value.length > 0) {
@@ -244,6 +253,11 @@ async function fetchRecords() {
       @go-to-next-step="createArsredovisning"
     />
   </CommonModal>
+
+  <EditSieAccountMappingModal
+    ref="accountMappingModal"
+    :instance-id="instanceId"
+  />
 </template>
 
 <style lang="scss" scoped>
