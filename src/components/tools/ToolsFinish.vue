@@ -12,6 +12,7 @@ import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
 import { getConfigValue } from "@/util/configUtils.ts";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
+import type { ForberedInlamning } from "@/components/common/composables/useForberedInlamning.ts";
 
 const props = defineProps<{
   /** Årsredovisningen som ska exporteras. */
@@ -30,6 +31,7 @@ const finalizeWizardRenderId = ref<number>(0);
 const finalizeWizard = ref<ComponentExposed<typeof FinalizeWizard>>();
 const sendWizardRenderId = ref<number>(0);
 const sendWizard = ref<ComponentExposed<typeof SendWizard>>();
+const forberedInlamning = ref<ForberedInlamning | undefined>();
 
 async function exportArsredovisning() {
   const ixbrl = await props.getIxbrlForPreview();
@@ -44,11 +46,30 @@ async function showFinalizeWizard() {
   finalizeWizard.value?.show(); // Nu kan vi visa modalen
 }
 
-async function showSendWizard() {
+/**
+ * Visar skicka-in-wizarden.
+ *
+ * @param nyForberedInlamning - En årsredovisning som har hämtats från en länk.
+ * Om den anges startar wizarden på steg 2 med den årsredovisningen ifylld, i
+ * stället för på filuppladdningssteget. Är wizarden redan öppen görs ingenting.
+ */
+async function showSendWizard(nyForberedInlamning?: ForberedInlamning) {
+  if (nyForberedInlamning && sendWizard.value?.isShown()) {
+    // Hämtningen av den förberedda filen kan ha tagit tid; under tiden kan
+    // användaren ha öppnat wizarden själv, och det påbörjade flödet får inte
+    // nollställas under fötterna på hen
+    return;
+  }
+
+  forberedInlamning.value = nyForberedInlamning;
   sendWizardRenderId.value++; // Så att komponenten nollställs
   await nextTick(); // Vänta tills den har uppdaterats
   sendWizard.value?.show(); // Nu kan vi visa modalen
 }
+
+defineExpose({
+  showSendWizard,
+});
 </script>
 
 <template>
@@ -70,7 +91,7 @@ async function showSendWizard() {
     <button
       class="btn btn-primary d-flex align-items-center"
       data-testid="show-send-wizard-button"
-      @click="showSendWizard"
+      @click="showSendWizard()"
     >
       <img
         alt="Kräver BankID"
@@ -91,6 +112,7 @@ async function showSendWizard() {
   <SendWizard
     :key="sendWizardRenderId"
     ref="sendWizard"
+    :forbered-inlamning="forberedInlamning"
     instance-id="ToolsFinish"
   />
 </template>

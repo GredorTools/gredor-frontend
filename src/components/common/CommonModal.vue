@@ -21,17 +21,23 @@ const props = defineProps<{
   showCloseButton?: boolean;
 }>();
 
+const isShown = ref<boolean>(false);
+
 defineExpose({
   /** Visar det modala fönstret. */
   show: () => {
     modal?.show();
     modalHasBeenShown.value = true;
+    isShown.value = true;
   },
 
   /** Döljer det modala fönstret. */
   hide: () => {
     modal?.hide();
   },
+
+  /** Huruvida fönstret visas just nu. */
+  isShown,
 });
 
 const footerTeleportPointId = computed(() => `${props.id}-footer-teleport`);
@@ -52,9 +58,15 @@ onMounted(() => {
       keyboard: false,
     });
 
+    // Fönstret kan stängas utan att hide() anropas, t.ex. med stängknappen
+    element.addEventListener("hidden.bs.modal", () => {
+      isShown.value = false;
+    });
+
     if (props.showOnMount) {
       modal.show();
       modalHasBeenShown.value = true;
+      isShown.value = true;
     }
   }
 });
