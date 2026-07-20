@@ -109,6 +109,56 @@ overridesTaxonomyItemIds.set(
   [{ start: 1346, end: 1347 }],
 );
 
+// Balanserat resultat: taxonomins BAS-referens exkluderar gruppkontot 2090
+// eftersom det formellt är ett rubrikkonto. Vissa program (t.ex. Bokio) bokför
+// dock det balanserade resultatet direkt på 2090, vilket annars gör att beloppet
+// tappas bort i förändringar i eget kapital. Vi lägger därför till 2090 i de
+// befintliga intervallen (2091, 2093-2095, 2098).
+const balanseratResultatBasAccounts = [
+  { start: 2090, end: 2091 },
+  { start: 2093, end: 2095 },
+  { start: 2098, end: 2098 },
+];
+overridesTaxonomyItemIds.set(
+  {
+    rootName:
+      "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+    name: "se-gen-base:BalanseratResultat",
+    parentName: "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+    labelType: "periodStartLabel",
+  },
+  balanseratResultatBasAccounts,
+);
+overridesTaxonomyItemIds.set(
+  {
+    rootName:
+      "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+    name: "se-gen-base:BalanseratResultat",
+    parentName: "se-gen-base:ForandringEgetKapitalBalanseratResultatAbstract",
+    labelType: "periodEndLabel",
+  },
+  balanseratResultatBasAccounts,
+);
+overridesTaxonomyItemIds.set(
+  {
+    rootName:
+      "http://www.taxonomier.se/se/fr/gaap/k2/role/form/forvaltningsberattelse",
+    name: "se-gen-base:BalanseratResultat",
+    parentName: "se-gen-base:MedelDisponeraAbstract",
+    labelType: null,
+  },
+  balanseratResultatBasAccounts,
+);
+overridesTaxonomyItemIds.set(
+  {
+    rootName: "http://www.taxonomier.se/se/fr/gaap/k2/role/form/balansrakning",
+    name: "se-gen-base:BalanseratResultat",
+    parentName: "se-gen-base:FrittEgetKapitalAbstract",
+    labelType: null,
+  },
+  balanseratResultatBasAccounts,
+);
+
 // Gör mappningar
 const mappings: SieMapping[] = [];
 for (const rootName of [
