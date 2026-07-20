@@ -53,6 +53,10 @@ export async function mapSieFileIntoArsredovisning(
 ) {
   const parseResult = parseSieFile(sieFileText);
 
+  // Omklassificera en negativ skatteskuld (debetsaldo på skattekontona) till en
+  // skattefordran innan kontona mappas till taxonomiobjekt.
+  reclassifyNegativeSkatteskulder(parseResult, messageCallback);
+
   const beloppraderAdded: Belopprad[] = [];
   const taxonomyManagersForBelopprad: Map<Belopprad, TaxonomyManager> =
     new Map();
@@ -336,6 +340,87 @@ function parseSieFile(sieFileText: string) {
   }
 
   return values;
+}
+
+// BAS-konton för aktuell skatteskuld resp. skattefordran.
+const TAX_LIABILITY_ACCOUNT_RANGE = { start: 2510, end: 2519 };
+const TAX_RECEIVABLE_ACCOUNT = "1640";
+
+/**
+ * Omklassificerar en negativ skatteskuld till en skattefordran. Skattekontona
+ * (BAS 2510–2519) mappas normalt till skulderaden Skatteskulder. Har kontona
+ * netto ett debetsaldo är det i praktiken en fordran (företaget har betalat in
+ * för mycket skatt), som i stället ska redovisas på tillgångssidan.
+ *
+ * K2-taxonomin saknar en renderbar rad för aktuell skattefordran, så beloppet
+ * flyttas till skattefordringskontot 1640 som redan mappas till Övriga fordringar.
+ * Genom att flytta beloppet redan i den parsade datan – innan kontona mappas –
+ * hamnar det automatiskt rätt både på detaljraderna och i samtliga summeringar
+ * (tillgångar ökar, skulder minskar), utan att ge upphov till avstämningsfel.
+ *
+ * Nuvarande och föregående år bedöms var för sig – endast det/de år vars netto
+ * är ett debetsaldo flyttas, medan ett kreditsaldo ligger kvar som skatteskuld.
+ *
+ * @param parseResult - De parsade kontovärdena, som muteras på plats.
+ * @param messageCallback - Callback som anropas för att informera användaren om
+ * att en omklassificering har gjorts.
+ */
+function reclassifyNegativeSkatteskulder(
+  parseResult: {
+    [basAccount: string]: SieValue;
+  },
+  messageCallback: (message: string) => void,
+) {
+  const taxLiabilityAccounts = Object.keys(parseResult).filter((account) => {
+    const accountNumber = Number.parseInt(account, 10);
+    return (
+      accountNumber >= TAX_LIABILITY_ACCOUNT_RANGE.start &&
+      accountNumber <= TAX_LIABILITY_ACCOUNT_RANGE.end
+    );
+  });
+  if (taxLiabilityAccounts.length === 0) {
+    return;
+  }
+
+  // Nettobelopp per år i SIE:s teckenkonvention (debet positivt, kredit
+  // negativt). Ett positivt netto = debetsaldo = i praktiken en skattefordran.
+  let netNuvarandeAr = Decimal(0);
+  let netForegaendeAr = Decimal(0);
+  for (const account of taxLiabilityAccounts) {
+    netNuvarandeAr = netNuvarandeAr.add(parseResult[account].nuvarandeAr);
+    netForegaendeAr = netForegaendeAr.add(parseResult[account].foregaendeAr);
+  }
+
+  const nuvarandeArArFordran = netNuvarandeAr.greaterThan(0);
+  const foregaendeArArFordran = netForegaendeAr.greaterThan(0);
+  if (!nuvarandeArArFordran && !foregaendeArArFordran) {
+    return;
+  }
+
+  messageCallback(
+    "Skattekontona (2510-2519) hade ett debetsaldo och har redovisats som en" +
+      " skattefordran under Övriga fordringar i stället för som en skatteskuld." +
+      " Kontrollera att detta stämmer.",
+  );
+
+  // Nolla ut de år som ska flyttas på skattekontona ...
+  for (const account of taxLiabilityAccounts) {
+    if (nuvarandeArArFordran) {
+      parseResult[account].nuvarandeAr = Decimal(0);
+    }
+    if (foregaendeArArFordran) {
+      parseResult[account].foregaendeAr = Decimal(0);
+    }
+  }
+
+  // ... och lägg nettot på skattefordringskontot.
+  const receivable = getOrCreateSieValue(parseResult, TAX_RECEIVABLE_ACCOUNT);
+  if (nuvarandeArArFordran) {
+    receivable.nuvarandeAr = receivable.nuvarandeAr.add(netNuvarandeAr);
+  }
+  if (foregaendeArArFordran) {
+    receivable.foregaendeAr = receivable.foregaendeAr.add(netForegaendeAr);
+  }
 }
 
 function getOrCreateSieValue(
