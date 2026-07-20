@@ -193,6 +193,28 @@ async function fetchRecords() {
     title="Ny årsredovisning"
   >
     <CommonModalContents class="limit-width">
+      <h5>Bokföringsimport (frivilligt)</h5>
+
+      <p>
+        Om du har en SIE-fil från ditt bokföringssystem kan du importera den här
+        och få resultaträkningen, balansräkningen samt delar av
+        förvaltningsberättelsen ifyllda automatiskt. Om SIE-filen innehåller ett
+        organisationsnummer fylls även det i automatiskt.
+      </p>
+
+      <p>
+        Tänk på att kontrollera efteråt att fälten blev korrekt ifyllda, och att
+        själv fylla i de uppgifter som återstår – oftast delar av
+        förvaltningsberättelsen och noterna.
+      </p>
+
+      <CommonFileInput
+        :allowed-file-extensions="['.se', '.si', '.sie']"
+        :disabled="busy"
+        data-testid="new-arsredovisning-sie-file-input"
+        @file-picked="handleSieFile"
+      />
+
       <h5>Organisationsnummer</h5>
 
       <p>
@@ -209,27 +231,6 @@ async function fetchRecords() {
         @validation-status-change="
           (validationStatus) => (orgnrValidationStatus = validationStatus)
         "
-      />
-
-      <h5>Bokföringsimport (frivilligt)</h5>
-
-      <p>
-        Om du har en SIE-fil från ditt bokföringssystem kan du importera den här
-        och få resultaträkningen, balansräkningen samt delar av
-        förvaltningsberättelsen ifyllda automatiskt.
-      </p>
-
-      <p>
-        Tänk på att kontrollera efteråt att fälten blev korrekt ifyllda, och att
-        själv fylla i de uppgifter som återstår – oftast delar av
-        förvaltningsberättelsen och noterna.
-      </p>
-
-      <CommonFileInput
-        :allowed-file-extensions="['.se', '.si', '.sie']"
-        :disabled="busy"
-        data-testid="new-arsredovisning-sie-file-input"
-        @file-picked="handleSieFile"
       />
     </CommonModalContents>
 
