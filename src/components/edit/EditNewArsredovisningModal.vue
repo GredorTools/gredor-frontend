@@ -25,6 +25,7 @@ import {
 } from "@/data/avgivande.ts";
 import { addTodoListItem } from "@/model/todolist/TodoList.ts";
 import CommonModalContents from "@/components/common/CommonModalContents.vue";
+import CommonWizardSteps from "@/components/common/CommonWizardSteps.vue";
 import { useCompanyRecordsApi } from "@/api/composables/useCompanyRecordsApi.ts";
 import CommonOrgnrInput, {
   type OrgnrValidationStatus,
@@ -53,6 +54,7 @@ const arsredovisning = ref<Arsredovisning>(
 );
 const sieMessages = ref<string[]>([]);
 
+const currentStep = ref<"sie-import" | "foretagsuppgifter">("sie-import");
 const orgnrValidationStatus = ref<OrgnrValidationStatus>("awaiting_input");
 const busy = ref<boolean>(false);
 
@@ -98,6 +100,10 @@ async function handleSieFile(file: File) {
         "SIE-import",
       );
     }
+
+    // Gå vidare till företagsuppgifterna, där organisationsnumret nu kan vara
+    // förifyllt från SIE-filen.
+    currentStep.value = "foretagsuppgifter";
   } finally {
     busy.value = false;
   }
@@ -193,55 +199,69 @@ async function fetchRecords() {
     title="Ny årsredovisning"
   >
     <CommonModalContents class="limit-width">
-      <h5>Bokföringsimport (frivilligt)</h5>
-
-      <p>
-        Om du har en SIE-fil från ditt bokföringssystem kan du importera den här
-        och få resultaträkningen, balansräkningen samt delar av
-        förvaltningsberättelsen ifyllda automatiskt. Om SIE-filen innehåller ett
-        organisationsnummer fylls även det i automatiskt.
-      </p>
-
-      <p>
-        Tänk på att kontrollera efteråt att fälten blev korrekt ifyllda, och att
-        själv fylla i de uppgifter som återstår – oftast delar av
-        förvaltningsberättelsen och noterna.
-      </p>
-
-      <CommonFileInput
-        :allowed-file-extensions="['.se', '.si', '.sie']"
-        :disabled="busy"
-        data-testid="new-arsredovisning-sie-file-input"
-        @file-picked="handleSieFile"
+      <CommonWizardSteps
+        :steps="['SIE-import', 'Företagsuppgifter']"
+        :current-step-number="currentStep === 'sie-import' ? 1 : 2"
       />
 
-      <h5>Organisationsnummer</h5>
+      <template v-if="currentStep === 'sie-import'">
+        <h5>Importera bokföring (frivilligt)</h5>
 
-      <p>
-        Skriv in företagets organisationsnummer nedan. Gredor kommer att hämta
-        företagets namn och senaste räkenskapsår från Bolagsverket.
-      </p>
+        <p>
+          Har du en SIE-fil från ditt bokföringssystem kan du importera den för
+          att få resultaträkningen, balansräkningen och delar av
+          förvaltningsberättelsen ifyllda automatiskt. Om SIE-filen innehåller
+          ett organisationsnummer fylls även det i automatiskt. Kontrollera
+          efteråt att fälten blev korrekt ifyllda.
+        </p>
 
-      <CommonOrgnrInput
-        v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
-        data-testid="new-arsredovisning-modal-orgnr"
-        :disabled="busy"
-        placeholder="Skriv företagets organisationsnummer här…"
-        class="orgnr-input"
-        @validation-status-change="
-          (validationStatus) => (orgnrValidationStatus = validationStatus)
-        "
-      />
+        <CommonFileInput
+          :allowed-file-extensions="['.se', '.si', '.sie']"
+          :disabled="busy"
+          data-testid="new-arsredovisning-sie-file-input"
+          @file-picked="handleSieFile"
+        />
+      </template>
+
+      <template v-else>
+        <h5>Organisationsnummer</h5>
+
+        <p>
+          Skriv in företagets organisationsnummer nedan. Gredor hämtar
+          företagets namn och senaste räkenskapsår från Bolagsverket.
+        </p>
+
+        <CommonOrgnrInput
+          v-model.trim="arsredovisning.foretagsinformation.organisationsnummer"
+          data-testid="new-arsredovisning-modal-orgnr"
+          :disabled="busy"
+          placeholder="Skriv företagets organisationsnummer här…"
+          class="orgnr-input"
+          @validation-status-change="
+            (validationStatus) => (orgnrValidationStatus = validationStatus)
+          "
+        />
+      </template>
     </CommonModalContents>
 
     <CommonWizardButtons
+      v-if="currentStep === 'sie-import'"
+      :next-button-disabled="busy"
+      :next-button-text="busy ? 'Vänta – arbetar…' : 'Hoppa över import'"
+      previous-button-hidden
+      @go-to-next-step="currentStep = 'foretagsuppgifter'"
+    />
+
+    <CommonWizardButtons
+      v-else
       :next-button-disabled="
         busy ||
         (orgnrValidationStatus !== 'ok' &&
           orgnrValidationStatus !== 'likely_not_aktiebolag')
       "
       :next-button-text="busy ? 'Vänta – arbetar…' : 'Skapa'"
-      previous-button-hidden
+      :previous-button-disabled="busy"
+      @go-to-previous-step="currentStep = 'sie-import'"
       @go-to-next-step="createArsredovisning"
     />
   </CommonModal>
@@ -252,10 +272,6 @@ async function fetchRecords() {
 
 .limit-width {
   width: var(--bs-modal-width);
-}
-
-h5:not(:first-of-type) {
-  margin-top: $spacing-xxl;
 }
 
 :deep(.orgnr-input) {
