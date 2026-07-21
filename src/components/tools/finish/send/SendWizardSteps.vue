@@ -9,7 +9,7 @@
  * slutgiltig bekräftelse och överföring till Bolagsverket.
  */
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import SendRequestFiles from "@/components/tools/finish/send/steps/SendRequestFiles.vue";
 import SendAddFaststallelseintyg from "@/components/tools/finish/send/steps/SendAddFaststallelseintyg.vue";
@@ -24,13 +24,21 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import SendGredorAgreement from "@/components/tools/finish/send/steps/SendGredorAgreement.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
+import type { ForberedInlamning } from "@/components/common/composables/useForberedInlamning.ts";
+import SendForberedInlamningBanner from "@/components/tools/finish/send/SendForberedInlamningBanner.vue";
 
-defineProps<{
+const props = defineProps<{
   /** Modalen som wizarden ligger i. */
   modal?: ComponentExposed<typeof CommonModal>;
+
+  /** En årsredovisning som har hämtats från en länk i stället för att laddas
+   * upp manuellt. Om den är satt startar wizarden på steg 2. */
+  forberedInlamning?: ForberedInlamning;
 }>();
 
-const arsredovisning = ref<Arsredovisning | undefined>();
+const arsredovisning = ref<Arsredovisning | undefined>(
+  props.forberedInlamning?.arsredovisning,
+);
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
 const notificationEmail = useGredorStorage<string>("UserNotificationEmail", "");
 const ixbrl = ref<string | undefined>();
@@ -46,112 +54,138 @@ const currentStep = ref<
   | "gredorAgreement"
   | "finalConfirmation"
   | "uploadReport"
->("sendRequestFiles");
+>(props.forberedInlamning ? "requestInformation" : "sendRequestFiles");
 const numSteps = 10;
+
+// Bannern får bara visas så länge det faktiskt är den hämtade årsredovisningen
+// som ligger i wizarden — går användaren tillbaka och laddar upp en egen fil i
+// stället stämmer inte längre uppgiften om varifrån den kom.
+const showForberedInlamningBanner = computed(
+  () =>
+    props.forberedInlamning != null &&
+    arsredovisning.value === props.forberedInlamning.arsredovisning &&
+    currentStep.value !== "uploadReport",
+);
 </script>
 
 <template>
-  <SendRequestFiles
-    v-if="currentStep === 'sendRequestFiles'"
-    v-model:arsredovisning="arsredovisning"
-    :current-step-number="1"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-next-step="currentStep = 'requestInformation'"
-  />
-  <SendRequestInformation
-    v-if="currentStep === 'requestInformation'"
-    v-model:notification-email="notificationEmail"
-    v-model:personal-number="personalNumber"
-    :current-step-number="2"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'sendRequestFiles'"
-    @go-to-next-step="currentStep = 'bankIdLogin'"
-  />
-  <CommonBankIdLogin
-    v-if="currentStep === 'bankIdLogin'"
-    :current-step-number="3"
-    :num-steps="numSteps"
-    :personal-number="personalNumber"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'requestInformation'"
-    @go-to-next-step="currentStep = 'bolagsverketAgreement'"
-  />
-  <CommonBolagsverketAgreement
-    v-if="currentStep === 'bolagsverketAgreement' && arsredovisning != null"
-    :arsredovisning="arsredovisning"
-    :current-step-number="4"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'bankIdLogin'"
-    @go-to-next-step="currentStep = 'addFaststallelseintyg'"
-  />
-  <SendAddFaststallelseintyg
-    v-if="currentStep === 'addFaststallelseintyg'"
-    :arsredovisning="arsredovisning"
-    :current-step-number="5"
-    :num-steps="numSteps"
-    @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
-    @go-to-next-step="currentStep = 'generateReport'"
-  />
-  <SendGenerateReport
-    v-if="currentStep === 'generateReport' && arsredovisning != null"
-    v-model:ixbrl="ixbrl"
-    :arsredovisning="arsredovisning"
-    :current-step-number="6"
-    :include-faststallelseintyg="true"
-    :num-steps="numSteps"
-    @go-to-previous-step="currentStep = 'addFaststallelseintyg'"
-    @go-to-next-step="currentStep = 'validateReport'"
-  />
-  <CommonValidateReport
-    v-if="
-      currentStep === 'validateReport' &&
-      arsredovisning != null &&
-      ixbrl != null
-    "
-    :arsredovisning="arsredovisning"
-    :current-step-number="7"
-    :ixbrl="ixbrl"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'generateReport'"
-    @go-to-next-step="currentStep = 'gredorAgreement'"
-  />
-  <SendGredorAgreement
-    v-if="currentStep === 'gredorAgreement'"
-    :current-step-number="8"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'validateReport'"
-    @go-to-next-step="currentStep = 'finalConfirmation'"
-  />
-  <SendFinalConfirmation
-    v-if="currentStep === 'finalConfirmation'"
-    :current-step-number="9"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'gredorAgreement'"
-    @go-to-next-step="currentStep = 'uploadReport'"
-  />
-  <SendUploadReport
-    v-if="
-      currentStep === 'uploadReport' && arsredovisning != null && ixbrl != null
-    "
-    :arsredovisning="arsredovisning"
-    :current-step-number="10"
-    :ixbrl="ixbrl"
-    :notification-email="notificationEmail"
-    :num-steps="numSteps"
-    class="limit-width"
-    @go-to-previous-step="currentStep = 'finalConfirmation'"
-    @go-to-next-step="modal?.hide()"
-  />
+  <div class="d-flex flex-column gap-3">
+    <SendForberedInlamningBanner
+      v-if="showForberedInlamningBanner"
+      :kalla-origin="forberedInlamning!.kallaOrigin"
+      class="banner"
+    />
+    <SendRequestFiles
+      v-if="currentStep === 'sendRequestFiles'"
+      v-model:arsredovisning="arsredovisning"
+      :current-step-number="1"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-next-step="currentStep = 'requestInformation'"
+    />
+    <SendRequestInformation
+      v-if="currentStep === 'requestInformation'"
+      v-model:notification-email="notificationEmail"
+      v-model:personal-number="personalNumber"
+      :current-step-number="2"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'sendRequestFiles'"
+      @go-to-next-step="currentStep = 'bankIdLogin'"
+    />
+    <CommonBankIdLogin
+      v-if="currentStep === 'bankIdLogin'"
+      :current-step-number="3"
+      :num-steps="numSteps"
+      :personal-number="personalNumber"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'requestInformation'"
+      @go-to-next-step="currentStep = 'bolagsverketAgreement'"
+    />
+    <CommonBolagsverketAgreement
+      v-if="currentStep === 'bolagsverketAgreement' && arsredovisning != null"
+      :arsredovisning="arsredovisning"
+      :current-step-number="4"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'bankIdLogin'"
+      @go-to-next-step="currentStep = 'addFaststallelseintyg'"
+    />
+    <SendAddFaststallelseintyg
+      v-if="currentStep === 'addFaststallelseintyg'"
+      :arsredovisning="arsredovisning"
+      :current-step-number="5"
+      :num-steps="numSteps"
+      @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
+      @go-to-next-step="currentStep = 'generateReport'"
+    />
+    <SendGenerateReport
+      v-if="currentStep === 'generateReport' && arsredovisning != null"
+      v-model:ixbrl="ixbrl"
+      :arsredovisning="arsredovisning"
+      :current-step-number="6"
+      :include-faststallelseintyg="true"
+      :num-steps="numSteps"
+      @go-to-previous-step="currentStep = 'addFaststallelseintyg'"
+      @go-to-next-step="currentStep = 'validateReport'"
+    />
+    <CommonValidateReport
+      v-if="
+        currentStep === 'validateReport' &&
+        arsredovisning != null &&
+        ixbrl != null
+      "
+      :arsredovisning="arsredovisning"
+      :current-step-number="7"
+      :ixbrl="ixbrl"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'generateReport'"
+      @go-to-next-step="currentStep = 'gredorAgreement'"
+    />
+    <SendGredorAgreement
+      v-if="currentStep === 'gredorAgreement'"
+      :current-step-number="8"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'validateReport'"
+      @go-to-next-step="currentStep = 'finalConfirmation'"
+    />
+    <SendFinalConfirmation
+      v-if="currentStep === 'finalConfirmation'"
+      :current-step-number="9"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'gredorAgreement'"
+      @go-to-next-step="currentStep = 'uploadReport'"
+    />
+    <SendUploadReport
+      v-if="
+        currentStep === 'uploadReport' &&
+        arsredovisning != null &&
+        ixbrl != null
+      "
+      :arsredovisning="arsredovisning"
+      :current-step-number="10"
+      :ixbrl="ixbrl"
+      :notification-email="notificationEmail"
+      :num-steps="numSteps"
+      class="limit-width"
+      @go-to-previous-step="currentStep = 'finalConfirmation'"
+      @go-to-next-step="modal?.hide()"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .limit-width {
   width: var(--bs-modal-width);
+}
+
+// Bannern ska följa bredden på steget den visas ovanför, utan att dess egen
+// text kan tvinga modalen att bli bredare
+.banner {
+  width: 0;
+  min-width: 100%;
 }
 </style>

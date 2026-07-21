@@ -33,7 +33,9 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
 
 const { showMessageModal } = useModalStore();
 
-const hasPickedArsredovisningFile = ref<boolean>(false);
+// Om en årsredovisning redan finns (t.ex. hämtad från en länk, eller vald
+// innan användaren gick tillbaka hit) behöver ingen fil väljas på nytt
+const hasPickedArsredovisningFile = ref<boolean>(arsredovisning.value != null);
 
 async function handleArsredovisningFile(file: File) {
   const json = await file.text();

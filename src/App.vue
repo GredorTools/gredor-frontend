@@ -14,7 +14,7 @@ import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import AppFirstLaunchScreen from "@/components/AppFirstLaunchScreen.vue";
 import { emptyArsredovisning } from "@/templates/emptyArsredovisning.ts";
-import { onBeforeUnmount, useTemplateRef } from "vue";
+import { onBeforeUnmount, useTemplateRef, watch } from "vue";
 import AppModalController from "@/components/AppModalController.vue";
 import { useHorizontalDrag } from "@/components/common/composables/useHorizontalDrag.ts";
 import AppMessages from "@/components/AppMessages.vue";
@@ -25,6 +25,7 @@ import {
 } from "@/model/arsredovisning/Arsredovisning.ts";
 import { useGetIXBRL } from "@/components/common/composables/useGetIXBRL.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { useForberedInlamning } from "@/components/common/composables/useForberedInlamning.ts";
 
 const {
   ref: arsredovisning,
@@ -52,6 +53,23 @@ const renderMain =
 const { getIXBRL } = useGetIXBRL(arsredovisning, renderMain);
 
 useHorizontalDrag(mainRef, handleRef, editorRef, rendererRef, 700, 320);
+
+// Om en förberedd årsredovisning har hämtats från en länk öppnas
+// skicka-in-wizarden direkt med den. Den autosparade årsredovisningen som
+// användaren redigerar lämnas orörd — den förberedda filen lever bara i
+// wizardens eget tillstånd, precis som vid manuell uppladdning.
+const toolsFinishRef =
+  useTemplateRef<ComponentExposed<typeof ToolsFinish>>("toolsFinish");
+const { forberedInlamning } = useForberedInlamning();
+watch(
+  forberedInlamning,
+  (nyForberedInlamning) => {
+    if (nyForberedInlamning) {
+      toolsFinishRef.value?.showSendWizard(nyForberedInlamning);
+    }
+  },
+  { once: true },
+);
 
 onBeforeUnmount(() => {
   removeArsredovisningStorageChangeListener();
@@ -112,6 +130,7 @@ onBeforeUnmount(() => {
         />
         <div class="horizontal-separator" />
         <ToolsFinish
+          ref="toolsFinish"
           v-model:todo-list="arsredovisning.gredorState.todoList"
           :arsredovisning="arsredovisning"
           :get-ixbrl-for-preview="getIXBRL"
