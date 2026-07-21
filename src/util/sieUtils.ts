@@ -398,9 +398,9 @@ function reclassifyNegativeSkatteskulder(
   }
 
   messageCallback(
-    "Skattekontona (2510-2519) hade ett debetsaldo och har redovisats som en" +
-      " skattefordran under Övriga fordringar i stället för som en skatteskuld." +
-      " Kontrollera att detta stämmer.",
+    "Företagets skatteskulder (konto 2510-2519) är negativa enligt SIE-filen;" +
+      " Gredor har fört om dessa så att de istället redovisas som en " +
+      " skattefordran under Övriga fordringar. Kontrollera att detta stämmer.",
   );
 
   // Nolla ut de år som ska flyttas på skattekontona ...
