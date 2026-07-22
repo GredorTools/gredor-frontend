@@ -211,8 +211,13 @@ async function fetchRecords() {
           Har du en SIE-fil från ditt bokföringssystem kan du importera den för
           att få resultaträkningen, balansräkningen och delar av
           förvaltningsberättelsen ifyllda automatiskt. Om SIE-filen innehåller
-          ett organisationsnummer fylls även det i automatiskt. Kontrollera
-          efteråt att fälten blev korrekt ifyllda.
+          ett organisationsnummer fylls även det i automatiskt.
+        </p>
+
+        <p>
+          Efter import bör du kontrollera att fälten blev korrekt ifyllda samt
+          fylla i de uppgifter som återstår – oftast delar av
+          förvaltningsberättelsen och noterna.
         </p>
 
         <CommonFileInput
