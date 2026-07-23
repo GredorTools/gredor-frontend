@@ -339,6 +339,10 @@ function parseSieFile(sieFileText: string) {
     }
   }
 
+  if (Object.keys(values).length < 1) {
+    throw new Error("Filen verkar inte vara en giltig SIE-fil.");
+  }
+
   return values;
 }
 
