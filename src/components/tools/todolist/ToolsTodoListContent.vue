@@ -4,11 +4,7 @@
  * behöver åtgärdas innan årsredovisningen kan färdigställas.
  */
 
-import {
-  removeTodoListItem,
-  type TodoList,
-} from "@/model/todolist/TodoList.ts";
-import CommonDeleteButton from "@/components/common/CommonDeleteButton.vue";
+import { type TodoList } from "@/model/todolist/TodoList.ts";
 
 /** Att-åtgärda-listan som ska visas. */
 const todoList = defineModel<TodoList>("todoList", { required: true });
@@ -22,6 +18,13 @@ const todoList = defineModel<TodoList>("todoList", { required: true });
     </h5>
 
     <div class="todo-items">
+      <p class="explainer">
+        Här listas saker som kan behöva åtgärdas i din årsredovisning. Du bockar
+        av uppgifterna själv genom att klicka på dem.
+      </p>
+
+      <hr />
+
       <div class="d-flex flex-column gap-3">
         <div
           v-for="item in todoList.items"
@@ -30,44 +33,29 @@ const todoList = defineModel<TodoList>("todoList", { required: true });
           class="todo-item card"
         >
           <div class="card-body p-3">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6
-                  :data-testid="`todo-list-item-${item.id}-title`"
-                  class="mb-1"
-                >
-                  {{ item.title }}
-                </h6>
+            <h6 :data-testid="`todo-list-item-${item.id}-title`" class="mb-1">
+              {{ item.title }}
+            </h6>
 
-                <p
-                  v-if="item.description"
-                  :data-testid="`todo-list-item-${item.id}-description`"
-                  class="text-muted mb-2 small"
-                >
-                  {{ item.description }}
-                </p>
+            <p
+              v-if="item.description"
+              :data-testid="`todo-list-item-${item.id}-description`"
+              class="text-muted mb-2 small"
+            >
+              {{ item.description }}
+            </p>
 
-                <div>
-                  <span class="badge bg-light text-dark border">
-                    <i class="bi bi-clock me-1"></i>
-                    {{ new Date(item.timestamp).toLocaleDateString("sv-SE") }}
-                    {{
-                      new Date(item.timestamp).toLocaleTimeString("sv-SE", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="ms-4">
-                <CommonDeleteButton
-                  :data-testid="`todo-list-item-delete-${item.id}`"
-                  description="Ta bort avsnittet från att-åtgärda-listan"
-                  @delete="removeTodoListItem(todoList, item.id)"
-                />
-              </div>
+            <div>
+              <span class="badge bg-light text-dark border">
+                <i class="bi bi-clock me-1"></i>
+                {{ new Date(item.timestamp).toLocaleDateString("sv-SE") }}
+                {{
+                  new Date(item.timestamp).toLocaleTimeString("sv-SE", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                }}
+              </span>
             </div>
 
             <ul v-if="item.tasks.length > 0" class="task-list mt-3 mb-0">
@@ -126,12 +114,17 @@ const todoList = defineModel<TodoList>("todoList", { required: true });
 .todo-header {
   padding-top: $spacing-lg;
   padding-bottom: $spacing-md;
+  margin-bottom: 0;
 }
 
 .todo-items {
   max-height: 50vh;
   overflow-y: auto;
   padding-bottom: $spacing-lg;
+
+  .explainer {
+    font-size: $font-size-sm;
+  }
 }
 
 .todo-item {

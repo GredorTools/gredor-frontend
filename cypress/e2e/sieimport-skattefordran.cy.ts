@@ -58,11 +58,11 @@ describe("importing SIE files with a negative tax liability", () => {
     );
     cy.get("div.message-modal-content p:nth-child(3)").should(
       "have.text",
-      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
+      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
     );
     cy.get("div.message-modal-content p:nth-child(5)").should(
       "have.text",
-      'Belopprad "Årets resultat" har avrundningsfel. Du kan behöva justera detta manuellt.',
+      'Belopprad "Årets resultat" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
     );
     cy.get(
       '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',

@@ -806,15 +806,15 @@
             "timestamp": 1767719541267,
             "tasks": [
               {
-                "text": "Belopprad \"Resultat efter finansiella poster\" har avrundningsfel. Du kan behöva justera detta manuellt.",
+                "text": "Belopprad \"Resultat efter finansiella poster\" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.",
                 "complete": true
               },
               {
-                "text": "Belopprad \"Resultat före skatt\" har avrundningsfel. Du kan behöva justera detta manuellt.",
+                "text": "Belopprad \"Resultat före skatt\" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.",
                 "complete": false
               },
               {
-                "text": "Belopprad \"Årets resultat\" har avrundningsfel. Du kan behöva justera detta manuellt.",
+                "text": "Belopprad \"Årets resultat\" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.",
                 "complete": false
               }
             ]

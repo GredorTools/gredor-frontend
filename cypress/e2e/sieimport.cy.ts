@@ -336,20 +336,32 @@ describe("importing SIE files", () => {
     // Kolla att-åtgärda-lista
     cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
       "have.text",
-      "3",
+      "8",
     );
     cy.get("[data-testid='todo-list-button']").click();
-    cy.get("[data-testid='todo-list-item-sie-import-task-0'] span").should(
+    cy.get(
+      "[data-testid='todo-list-item-sie-import-after-task-0'] span",
+    ).should(
       "have.text",
-      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
+      "Förvaltningsberättelse: Fyll i information om verksamheten",
     );
-    cy.get("[data-testid='todo-list-item-sie-import-task-1'] span").should(
+    cy.get(
+      "[data-testid='todo-list-item-sie-import-warnings-task-0'] span",
+    ).should(
       "have.text",
-      'Belopprad "Resultat före skatt" har avrundningsfel. Du kan behöva justera detta manuellt.',
+      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
     );
-    cy.get("[data-testid='todo-list-item-sie-import-task-2'] span").should(
+    cy.get(
+      "[data-testid='todo-list-item-sie-import-warnings-task-1'] span",
+    ).should(
       "have.text",
-      'Belopprad "Årets resultat" har avrundningsfel. Du kan behöva justera detta manuellt.',
+      'Belopprad "Resultat före skatt" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
+    );
+    cy.get(
+      "[data-testid='todo-list-item-sie-import-warnings-task-2'] span",
+    ).should(
+      "have.text",
+      'Belopprad "Årets resultat" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
     );
   });
 
@@ -420,15 +432,15 @@ function startNewArsredovisningWithValidSIETestFile() {
   );
   cy.get("div.message-modal-content p:nth-child(2)").should(
     "have.text",
-    'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
+    'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
   );
   cy.get("div.message-modal-content p:nth-child(3)").should(
     "have.text",
-    'Belopprad "Resultat före skatt" har avrundningsfel. Du kan behöva justera detta manuellt.',
+    'Belopprad "Resultat före skatt" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
   );
   cy.get("div.message-modal-content p:nth-child(4)").should(
     "have.text",
-    'Belopprad "Årets resultat" har avrundningsfel. Du kan behöva justera detta manuellt.',
+    'Belopprad "Årets resultat" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
   );
   cy.get(
     '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',
