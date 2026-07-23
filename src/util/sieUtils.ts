@@ -23,6 +23,7 @@ import {
   type BeloppradMonetary,
   calculateValuesIntoBelopprad,
 } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
+import { tryFormatOrgnr } from "@/util/formatUtils.ts";
 
 export interface SieMapping {
   basAccounts: { start: number; end: number }[];
@@ -51,7 +52,13 @@ export async function mapSieFileIntoArsredovisning(
   arsredovisning: Arsredovisning,
   messageCallback: (message: string) => void = alert,
 ) {
-  const parseResult = parseSieFile(sieFileText);
+  const { values: parseResult, orgnr } = parseSieFile(sieFileText);
+
+  // Fyll i organisationsnummer om det finns i SIE-filen (#ORGNR-taggen)
+  if (orgnr) {
+    arsredovisning.foretagsinformation.organisationsnummer =
+      tryFormatOrgnr(orgnr);
+  }
 
   // Omklassificera en negativ skatteskuld (debetsaldo på skattekontona) till en
   // skattefordran innan kontona mappas till taxonomiobjekt.
@@ -285,13 +292,15 @@ export async function mapSieFileIntoArsredovisning(
  * och föregående räkenskapår.
  *
  * @param sieFileText - Innehållet från SIE-filen som ska omvandlas.
- * @returns Ett objekt med kontonummer som nycklar och deras motsvarande
- * belopp som värden.
+ * @returns Ett objekt med `values` (kontonummer som nycklar och deras
+ * motsvarande belopp som värden) samt `orgnr` (organisationsnumret från
+ * #ORGNR-taggen om det finns, annars null).
  */
 function parseSieFile(sieFileText: string) {
   // SIE-specifikation: https://sie.se/wp-content/uploads/2020/05/SIE_filformat_ver_4B_080930.pdf
 
   const values: { [basAccount: string]: SieValue } = {};
+  let orgnr: string | null = null;
 
   // Föregående års värden kan komma antingen från #UB -1 (föregående års
   // utgående balans) eller #IB 0 (nuvarande års ingående balans) - vi behöver
@@ -305,7 +314,10 @@ function parseSieFile(sieFileText: string) {
     // inte bör förekomma på "#RES"-/"#IB"-/"#UB"-rader
     const parts = line.match(/(?:[^\s"]+|"[^"]*")+/g);
 
-    if (parts && parts[0] === "#RES") {
+    if (parts && parts[0] === "#ORGNR" && parts[1]) {
+      // Organisationsnummer (#ORGNR orgnr [förvärvsnr] [verksnr])
+      orgnr = parts[1].replace(/^"|"$/g, "");
+    } else if (parts && parts[0] === "#RES") {
       if (parts[1] === "0") {
         getOrCreateSieValue(values, parts[2]).nuvarandeAr = Decimal(parts[3]);
       } else if (parts[1] === "-1") {
@@ -343,7 +355,7 @@ function parseSieFile(sieFileText: string) {
     throw new Error("Filen verkar inte vara en giltig SIE-fil.");
   }
 
-  return values;
+  return { values, orgnr };
 }
 
 // BAS-konton för aktuell skatteskuld resp. skattefordran.

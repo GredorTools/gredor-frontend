@@ -55,9 +55,15 @@ const orgnrValidationStatus: ComputedRef<OrgnrValidationStatus> = computed(
   },
 );
 
-watch(orgnrValidationStatus, function () {
-  emit("validationStatusChange", orgnrValidationStatus.value);
-});
+watch(
+  orgnrValidationStatus,
+  function () {
+    emit("validationStatusChange", orgnrValidationStatus.value);
+  },
+  // Emit direkt vid montering så att ett förifyllt organisationsnummer (t.ex.
+  // från en SIE-fil) valideras utan att fältet först måste ändras manuellt.
+  { immediate: true },
+);
 </script>
 
 <template>

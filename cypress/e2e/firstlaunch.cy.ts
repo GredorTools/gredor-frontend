@@ -33,6 +33,8 @@ describe("first launch screen", () => {
     cy.get(
       '[data-testid="first-launch-screen-new-arsredovisning-button"]',
     ).click();
+    // Hoppa över SIE-importsteget
+    cy.get('[data-testid="wizard-next-button"]').click();
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type("5560021361");
     cy.get('[data-testid="wizard-next-button"]').click();
