@@ -272,7 +272,7 @@ export async function mapSieFileIntoArsredovisning(
 
             messageCallback(
               `Belopprad "${taxonomyItem.additionalData.displayLabel}" har` +
-                " avrundningsfel. Du kan behöva justera detta manuellt.",
+                " avrundningsfel. Du kan eventuellt behöva justera detta manuellt.",
             );
           }
         }
