@@ -31,6 +31,7 @@ defineProps<{
 }>();
 
 const arsredovisning = ref<Arsredovisning | undefined>();
+const arsredovisningGredorFile = ref<File | undefined>();
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
 const notificationEmail = useGredorStorage<string>("UserNotificationEmail", "");
 const ixbrl = ref<string | undefined>();
@@ -54,6 +55,7 @@ const numSteps = 10;
   <SendRequestFiles
     v-if="currentStep === 'sendRequestFiles'"
     v-model:arsredovisning="arsredovisning"
+    v-model:arsredovisning-gredor-file="arsredovisningGredorFile"
     :current-step-number="1"
     :num-steps="numSteps"
     class="limit-width"

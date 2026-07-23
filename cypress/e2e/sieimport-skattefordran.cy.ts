@@ -42,11 +42,6 @@ describe("importing SIE files with a negative tax liability", () => {
     // Börja på ny årsredovisning
     cy.get("#newArsredovisningBtn").click();
     cy.wait(1000);
-    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
-    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').clear();
-    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').type(
-      "556002-1361",
-    );
     cy.get('[data-testid="new-arsredovisning-sie-file-input"]').selectFile(
       `cypress/fixtures/input/sie/SIETestSkattefordran.se`,
       {
@@ -72,7 +67,14 @@ describe("importing SIE files with a negative tax liability", () => {
     cy.get(
       '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',
     ).click();
-    cy.get("#new-arsredovisning-modal-AppHeader-footer-teleport .btn").click();
+    // Organisationsnumret fylls i automatiskt från SIE-filens #ORGNR-tagg
+    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').should(
+      "have.value",
+      "556002-1361",
+    );
+    cy.get(
+      '#new-arsredovisning-modal-AppHeader-footer-teleport [data-testid="wizard-next-button"]',
+    ).click();
 
     cy.get(
       '#arsredovisning-for-export [name="se-cd-base:ForetagetsNamn"]',

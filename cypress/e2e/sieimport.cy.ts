@@ -35,58 +35,11 @@ describe("importing SIE files", () => {
         ],
       },
     );
-
-    // Börja på ny årsredovisning
-    cy.get("#newArsredovisningBtn").click();
-    cy.wait(1000);
-    // SIE-import är första steget – ladda upp filen direkt
-    cy.get('[data-testid="new-arsredovisning-sie-file-input"]').selectFile(
-      `cypress/fixtures/input/sie/SIETest.se`,
-      {
-        action: "drag-drop",
-      },
-    );
-    cy.get("div.message-modal-content p:nth-child(2)").should(
-      "have.text",
-      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
-    );
-    cy.get("div.message-modal-content p:nth-child(3)").should(
-      "have.text",
-      'Belopprad "Resultat före skatt" har avrundningsfel. Du kan behöva justera detta manuellt.',
-    );
-    cy.get("div.message-modal-content p:nth-child(4)").should(
-      "have.text",
-      'Belopprad "Årets resultat" har avrundningsfel. Du kan behöva justera detta manuellt.',
-    );
-    cy.get(
-      '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',
-    ).click();
-    // Organisationsnumret fylls i automatiskt från SIE-filens #ORGNR-tagg
-    cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').should(
-      "have.value",
-      "556002-1361",
-    );
-    cy.get(
-      '#new-arsredovisning-modal-AppHeader-footer-teleport [data-testid="wizard-next-button"]',
-    ).click();
-
-    cy.get(
-      '#arsredovisning-for-export [name="se-cd-base:ForetagetsNamn"]',
-    ).should("have.text", "Testbolaget AB");
-    cy.get(
-      '#arsredovisning-for-export [name="se-cd-base:Organisationsnummer"]',
-    ).should("have.text", "556002-1361");
-    cy.get("#arsredovisning-for-export h1").should(
-      "have.text",
-      "Årsredovisning för räkenskapsåret 2024",
-    );
-    cy.get("#arsredovisning-for-export p:nth-child(3)").should(
-      "have.text",
-      "Styrelsen avger härmed följande årsredovisningför räkenskapsåret 2024-01-01 – 2024-12-31. ",
-    );
   });
 
   it("generates correct content on page", () => {
+    startNewArsredovisningWithValidSIETestFile();
+
     // Verifiera innehåll
     cy.get(
       '#arsredovisning-for-export td:nth-child(2) [name="se-gen-base:Nettoomsattning"]',
@@ -401,6 +354,8 @@ describe("importing SIE files", () => {
   });
 
   it("generates correct .gredorutkast file", () => {
+    startNewArsredovisningWithValidSIETestFile();
+
     cy.get("#saveArsredovisningBtn").click();
     cy.wait(3000); // Så filen hinner sparas
 
@@ -432,4 +387,73 @@ describe("importing SIE files", () => {
       });
     });
   });
+
+  it("throws on file without values", () => {
+    // Börja på ny årsredovisning
+    cy.get("#newArsredovisningBtn").click();
+    cy.wait(1000);
+    cy.get('[data-testid="new-arsredovisning-sie-file-input"]').selectFile(
+      `cypress/fixtures/input/sie/SIETestInvalid.se`,
+      {
+        action: "drag-drop",
+      },
+    );
+    cy.get("div.message-modal-content p").should(
+      "have.text",
+      "Ett fel uppstod: Filen verkar inte vara en giltig SIE-fil.",
+    );
+    cy.get(
+      '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',
+    ).should("be.disabled");
+  });
 });
+
+function startNewArsredovisningWithValidSIETestFile() {
+  // Börja på ny årsredovisning
+  cy.get("#newArsredovisningBtn").click();
+  cy.wait(1000);
+  cy.get('[data-testid="new-arsredovisning-sie-file-input"]').selectFile(
+    `cypress/fixtures/input/sie/SIETest.se`,
+    {
+      action: "drag-drop",
+    },
+  );
+  cy.get("div.message-modal-content p:nth-child(2)").should(
+    "have.text",
+    'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan behöva justera detta manuellt.',
+  );
+  cy.get("div.message-modal-content p:nth-child(3)").should(
+    "have.text",
+    'Belopprad "Resultat före skatt" har avrundningsfel. Du kan behöva justera detta manuellt.',
+  );
+  cy.get("div.message-modal-content p:nth-child(4)").should(
+    "have.text",
+    'Belopprad "Årets resultat" har avrundningsfel. Du kan behöva justera detta manuellt.',
+  );
+  cy.get(
+    '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',
+  ).click();
+  // Organisationsnumret fylls i automatiskt från SIE-filens #ORGNR-tagg
+  cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').should(
+    "have.value",
+    "556002-1361",
+  );
+  cy.get(
+    '#new-arsredovisning-modal-AppHeader-footer-teleport [data-testid="wizard-next-button"]',
+  ).click();
+
+  cy.get(
+    '#arsredovisning-for-export [name="se-cd-base:ForetagetsNamn"]',
+  ).should("have.text", "Testbolaget AB");
+  cy.get(
+    '#arsredovisning-for-export [name="se-cd-base:Organisationsnummer"]',
+  ).should("have.text", "556002-1361");
+  cy.get("#arsredovisning-for-export h1").should(
+    "have.text",
+    "Årsredovisning för räkenskapsåret 2024",
+  );
+  cy.get("#arsredovisning-for-export p:nth-child(3)").should(
+    "have.text",
+    "Styrelsen avger härmed följande årsredovisningför räkenskapsåret 2024-01-01 – 2024-12-31. ",
+  );
+}
