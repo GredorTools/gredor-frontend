@@ -33,6 +33,7 @@ describe("first launch screen", () => {
     cy.get(
       '[data-testid="first-launch-screen-new-arsredovisning-button"]',
     ).click();
+    cy.wait(1000); // Löser flaky tester
     // Hoppa över SIE-importsteget
     cy.get('[data-testid="wizard-next-button"]').click();
     cy.get('[data-testid="new-arsredovisning-modal-orgnr"]').click();
