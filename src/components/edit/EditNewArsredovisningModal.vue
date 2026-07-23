@@ -6,7 +6,7 @@
  * möjlighet att importera en SIE-fil.
  */
 
-import { ref, unref } from "vue";
+import { ref, unref, watch } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { starterArsredovisning } from "@/templates/starterArsredovisning.ts";
@@ -51,6 +51,7 @@ defineExpose({
 const arsredovisning = ref<Arsredovisning>(
   createArsredovisningFromTemplate(starterArsredovisning),
 );
+const sieFile = ref<File | undefined>();
 const sieMessages = ref<string[]>([]);
 
 const orgnrValidationStatus = ref<OrgnrValidationStatus>("awaiting_input");
@@ -74,13 +75,7 @@ async function handleSieFile(file: File) {
   busy.value = true;
 
   try {
-    const organisationsnummer =
-      arsredovisning.value.foretagsinformation.organisationsnummer;
-    arsredovisning.value = createArsredovisningFromTemplate(
-      starterArsredovisning,
-    ); // Nollställer
-    arsredovisning.value.foretagsinformation.organisationsnummer =
-      organisationsnummer;
+    clearSieFileDataFromArsredovisning();
 
     sieMessages.value = [];
 
@@ -98,9 +93,29 @@ async function handleSieFile(file: File) {
         "SIE-import",
       );
     }
+  } catch (e) {
+    console.error(e);
+    showMessageModal(
+      `Ett fel uppstod: ${e instanceof Error ? e.message : "Okänt fel"}`,
+      "SIE-import",
+    );
+    sieFile.value = undefined;
   } finally {
     busy.value = false;
   }
+}
+
+/**
+ * Tar bort allt i årsredovisningen förutom organisationsnumret.
+ */
+function clearSieFileDataFromArsredovisning() {
+  const organisationsnummer =
+    arsredovisning.value.foretagsinformation.organisationsnummer;
+  arsredovisning.value = createArsredovisningFromTemplate(
+    starterArsredovisning,
+  ); // Nollställer
+  arsredovisning.value.foretagsinformation.organisationsnummer =
+    organisationsnummer;
 }
 
 async function createArsredovisning() {
@@ -183,6 +198,14 @@ async function fetchRecords() {
     );
   }
 }
+
+watch(sieFile, () => {
+  if (sieFile.value) {
+    handleSieFile(sieFile.value);
+  } else {
+    clearSieFileDataFromArsredovisning();
+  }
+});
 </script>
 
 <template>
@@ -226,10 +249,11 @@ async function fetchRecords() {
       </p>
 
       <CommonFileInput
+        v-model="sieFile"
         :allowed-file-extensions="['.se', '.si', '.sie']"
         :disabled="busy"
         data-testid="new-arsredovisning-sie-file-input"
-        @file-picked="handleSieFile"
+        allow-delete
       />
     </CommonModalContents>
 
