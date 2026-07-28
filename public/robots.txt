@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /laddaupp
+Disallow: /om

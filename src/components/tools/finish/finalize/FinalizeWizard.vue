@@ -14,7 +14,6 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonModal from "@/components/common/CommonModal.vue";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import CommonComponentLoadError from "@/components/common/CommonComponentLoadError.vue";
 
 const FinalizeWizardSteps = defineAsyncComponent({
@@ -60,11 +59,11 @@ defineExpose({
       />
 
       <template #fallback>
-        <CommonModalContents>
+        <div>
           Laddar…
 
           <CommonWizardButtons next-button-disabled previous-button-hidden />
-        </CommonModalContents>
+        </div>
       </template>
     </Suspense>
   </CommonModal>

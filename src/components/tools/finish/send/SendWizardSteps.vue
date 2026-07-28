@@ -9,7 +9,7 @@
  * slutgiltig bekräftelse och överföring till Bolagsverket.
  */
 
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import SendRequestFiles from "@/components/tools/finish/send/steps/SendRequestFiles.vue";
 import SendAddFaststallelseintyg from "@/components/tools/finish/send/steps/SendAddFaststallelseintyg.vue";
@@ -28,6 +28,11 @@ import { useGredorStorage } from "@/components/common/composables/useGredorStora
 defineProps<{
   /** Modalen som wizarden ligger i. */
   modal?: ComponentExposed<typeof CommonModal>;
+}>();
+
+const emit = defineEmits<{
+  /** Triggas när resultatet av valideringen har ändrats. */
+  (e: "stepChange", step: typeof currentStep.value): void;
 }>();
 
 const arsredovisning = ref<Arsredovisning | undefined>();
@@ -49,6 +54,8 @@ const currentStep = ref<
   | "uploadReport"
 >("sendRequestFiles");
 const numSteps = 10;
+
+watch(currentStep, () => emit("stepChange", currentStep.value));
 </script>
 
 <template>
@@ -153,7 +160,11 @@ const numSteps = 10;
 </template>
 
 <style lang="scss" scoped>
+* {
+  max-height: 100%;
+}
+
 .limit-width {
-  width: var(--bs-modal-width);
+  width: var(--bs-modal-width, 500px);
 }
 </style>

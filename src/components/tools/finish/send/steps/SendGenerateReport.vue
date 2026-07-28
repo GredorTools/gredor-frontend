@@ -126,5 +126,9 @@ p {
   overflow: scroll;
   flex: 1;
   padding: $spacing-sm;
+
+  & > * {
+    max-height: 100%;
+  }
 }
 </style>

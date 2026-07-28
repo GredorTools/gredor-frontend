@@ -10,7 +10,6 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import { computed } from "vue";
 import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
@@ -38,7 +37,7 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter
     </CommonModalSubtitle>
@@ -93,7 +92,7 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped>

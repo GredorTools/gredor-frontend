@@ -87,7 +87,7 @@ export const tourSteps: OnboardingTourStep[] = [
       "</ul>",
   },
   {
-    target: "#documentation",
+    target: "#about",
     title: "Mer information",
     description:
       "Mer information om hur Gredor fungerar och vad som är viktigt att tänka" +

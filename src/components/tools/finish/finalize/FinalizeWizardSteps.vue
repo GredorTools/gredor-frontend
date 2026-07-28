@@ -159,7 +159,11 @@ const currentStep = ref<
 </template>
 
 <style lang="scss" scoped>
+* {
+  max-height: 100%;
+}
+
 .limit-width {
-  width: var(--bs-modal-width);
+  width: var(--bs-modal-width, 500px);
 }
 </style>

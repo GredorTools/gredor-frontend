@@ -4,7 +4,7 @@
  */
 
 import { getConfigValue } from "@/util/configUtils.ts";
-import { nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
+import { nextTick, ref, useTemplateRef } from "vue";
 import {
   parseGredorFile,
   requestOpenFile,
@@ -17,86 +17,23 @@ import {
 import type { DataContainer } from "@/model/DataContainer.ts";
 import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
-import { Dropdown, Tooltip } from "bootstrap";
-import type VueOnboardingTour from "vue-onboarding-tour";
-import { tourSteps } from "@/components/tourSteps.ts";
+import { Dropdown } from "bootstrap";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import { formatDateForFilename } from "@/util/formatUtils.ts";
 import { printDocument } from "@/util/documentUtils.ts";
 
 const props = defineProps<{
-  /** En funktion som returnerar den iXBRL som visas i live-förhandsgranskningen. */
-  getIxbrlForPreview: () => Promise<string | undefined>;
+  /** Valfri sidrubrik. */
+  pageTitle?: string;
+
+  /** En funktion som returnerar iXBRL för utskriftsfunktionen. */
+  getIxbrlForPrint?: () => Promise<string | undefined>;
 }>();
 
 /** Årsredovisningen som redigeras i applikationen. */
-const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
-  required: true,
-});
+const arsredovisning = defineModel<Arsredovisning>("arsredovisning");
 
 const environmentName = getConfigValue("VITE_ENV_NAME");
-
-// Tooltip för rundtur - visas automatiskt när sidan laddas första gången, så
-// fort "Välkommen till Gredor"-rutan är borta
-const tourTooltipHasBeenDisplayed = useGredorStorage(
-  "AppTourTooltipHasBeenDisplayed",
-  false,
-);
-
-const showFirstLaunchScreen = useGredorStorage(
-  "AppShowFirstLaunchScreen",
-  true,
-);
-
-const tourBtn = useTemplateRef("tour-btn");
-
-if (!tourTooltipHasBeenDisplayed.value) {
-  onMounted(() => {
-    const element = tourBtn.value;
-    if (element) {
-      const tooltip = new Tooltip(element);
-
-      function showAndHideTooltip(showTimeout: number) {
-        setTimeout(() => {
-          tooltip.show();
-          setTimeout(() => {
-            tooltip.hide();
-            tourTooltipHasBeenDisplayed.value = true;
-          }, 5000);
-        }, showTimeout);
-      }
-
-      if (!showFirstLaunchScreen.value) {
-        // "Välkommen till Gredor"-rutan visas inte - visa tooltipen direkt
-        showAndHideTooltip(500);
-      } else {
-        // "Välkommen till Gredor"-rutan är i vägen - vänta tills den försvinner
-        const unwatchShowFirstLaunchScreen = watch(
-          showFirstLaunchScreen,
-          () => {
-            if (!showFirstLaunchScreen.value) {
-              showAndHideTooltip(1000);
-              unwatchShowFirstLaunchScreen();
-            }
-          },
-        );
-      }
-    }
-  });
-}
-
-// Rundtur
-const tour = ref<ComponentExposed<typeof VueOnboardingTour>>();
-
-function startTour() {
-  // @ts-expect-error Något fel med typerna i VueOnboardingTour - nedan ska fungera
-  tour.value?.startTour();
-}
-
-function endTour() {
-  window.scrollTo(0, 0);
-}
 
 // Ny årsredovisning
 const newArsredovisningModalRenderId = ref<number>(0);
@@ -130,6 +67,10 @@ async function importFile() {
 }
 
 function exportFile() {
+  if (!arsredovisning.value) {
+    throw new Error("arsredovisning is not defined");
+  }
+
   const dataContainer: DataContainer<Arsredovisning> = {
     dataType: "arsredovisning_utkast",
     version: 1,
@@ -149,13 +90,17 @@ const moreDropdownToggle = useTemplateRef("moreDropdownToggle");
 const isPrinting = ref(false);
 
 async function print() {
+  if (!props.getIxbrlForPrint) {
+    throw new Error("getIxbrlForPrint is not defined");
+  }
+
   if (isPrinting.value) {
     return;
   }
 
   isPrinting.value = true;
   try {
-    const ixbrl = await props.getIxbrlForPreview();
+    const ixbrl = await props.getIxbrlForPrint();
     if (ixbrl) {
       printDocument(ixbrl);
     }
@@ -169,8 +114,11 @@ async function print() {
 </script>
 
 <template>
-  <header class="d-flex flex-row justify-content-between">
-    <div class="d-flex">
+  <header
+    class="d-flex flex-row justify-content-between"
+    :class="{ 'has-page-title': !!pageTitle }"
+  >
+    <div class="site-title">
       <h1>
         <img
           alt="Gredor – gratis årsredovisning"
@@ -181,7 +129,7 @@ async function print() {
         }}</span>
       </h1>
 
-      <div class="d-flex gap-2 menu">
+      <div v-if="arsredovisning" class="d-flex gap-2 menu">
         <button
           id="newArsredovisningBtn"
           class="btn btn-primary"
@@ -207,6 +155,7 @@ async function print() {
         </div>
         <div class="dropdown">
           <button
+            v-if="getIxbrlForPrint"
             ref="moreDropdownToggle"
             aria-expanded="false"
             class="btn btn-outline-primary dropdown-toggle"
@@ -239,20 +188,13 @@ async function print() {
       </div>
     </div>
 
-    <button
-      id="tour-btn"
-      ref="tour-btn"
-      aria-label="Starta rundtur genom applikationen"
-      class="btn btn-secondary"
-      data-bs-offset="[0, 12]"
-      data-bs-placement="left"
-      data-bs-title="Första gången här? Ta rundturen!"
-      data-bs-toggle="tooltip"
-      data-bs-trigger="manual"
-      @click="startTour"
-    >
-      Rundtur
-    </button>
+    <h2 v-if="pageTitle" class="page-title">{{ pageTitle }}</h2>
+
+    <div class="extra-content">
+      <div class="extra-content-contents">
+        <slot name="extra-content" />
+      </div>
+    </div>
   </header>
 
   <EditNewArsredovisningModal
@@ -260,14 +202,6 @@ async function print() {
     ref="newArsredovisningModal"
     instance-id="AppHeader"
     @arsredovisning-created="(value) => (arsredovisning = value)"
-  />
-
-  <VueOnboardingTour
-    ref="tour"
-    :steps="tourSteps"
-    label-terminate="Avsluta rundtur"
-    tour-id="appTour"
-    @end-tour="endTour"
   />
 </template>
 
@@ -277,6 +211,10 @@ async function print() {
 header {
   padding-bottom: $spacing-md;
   border-bottom: 1px solid $border-color-normal;
+
+  .site-title {
+    display: flex;
+  }
 
   h1 {
     margin-bottom: 0;
@@ -312,6 +250,31 @@ header {
 
     & > div {
       display: flex;
+    }
+  }
+
+  .extra-content-contents {
+    display: flex;
+    height: 100%;
+  }
+
+  &.has-page-title {
+    .site-title,
+    .extra-content {
+      // Så att .page-title centreras
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+
+    .page-title {
+      align-self: center;
+      font-size: $font-size-xxl;
+      margin: 0;
+    }
+
+    .extra-content-contents {
+      width: fit-content;
+      margin-left: auto;
     }
   }
 }
