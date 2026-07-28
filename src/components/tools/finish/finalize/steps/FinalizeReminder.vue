@@ -22,7 +22,6 @@ import {
   type BaseBeloppradComparable,
   isBeloppradComparable,
 } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import RenderMain from "@/components/render/RenderMain.vue";
@@ -362,7 +361,7 @@ const mismatchingValueBelopprader = computed(() => {
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Glöm inte…
     </CommonModalSubtitle>
@@ -515,7 +514,7 @@ const mismatchingValueBelopprader = computed(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped>

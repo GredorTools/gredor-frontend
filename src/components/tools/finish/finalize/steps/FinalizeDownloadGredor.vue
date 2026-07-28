@@ -17,7 +17,6 @@ import type { DataContainer } from "@/model/DataContainer.ts";
 import { requestSaveFile } from "@/util/fileUtils.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { formatDateForFilename } from "@/util/formatUtils.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 const props = defineProps<
   CommonStepProps & {
@@ -54,7 +53,7 @@ function exportGredorfardig() {
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda ner .gredorfardig-fil
     </CommonModalSubtitle>
@@ -78,7 +77,7 @@ function exportGredorfardig() {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped>

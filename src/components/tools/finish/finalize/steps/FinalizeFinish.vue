@@ -13,7 +13,6 @@ import CommonWizardButtons, {
 } from "@/components/common/CommonWizardButtons.vue";
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 defineProps<CommonStepProps>();
 
@@ -21,7 +20,7 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Redo för årsstämma!
     </CommonModalSubtitle>
@@ -38,7 +37,7 @@ const emit = defineEmits<CommonWizardButtonsEmits>();
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

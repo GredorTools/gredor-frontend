@@ -13,7 +13,6 @@ import { defineAsyncComponent, ref } from "vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import CommonComponentLoadError from "@/components/common/CommonComponentLoadError.vue";
 
 const SendWizardSteps = defineAsyncComponent({
@@ -46,11 +45,11 @@ defineExpose({
       <SendWizardSteps :modal="modal" />
 
       <template #fallback>
-        <CommonModalContents>
+        <div>
           Laddar…
 
           <CommonWizardButtons next-button-disabled previous-button-hidden />
-        </CommonModalContents>
+        </div>
       </template>
     </Suspense>
   </CommonModal>

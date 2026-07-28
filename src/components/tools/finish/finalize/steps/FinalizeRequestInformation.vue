@@ -11,7 +11,6 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { computed } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import LuhnAlgorithm from "@designbycode/luhn-algorithm";
 
 defineProps<
@@ -43,7 +42,7 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Fyll i uppgifter
     </CommonModalSubtitle>
@@ -118,7 +117,7 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped>

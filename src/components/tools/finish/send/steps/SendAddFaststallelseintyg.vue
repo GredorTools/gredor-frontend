@@ -14,7 +14,6 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { isFaststallseintygRequiresStammansResultatdisposition } from "@/data/faststallelseintyg.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 defineProps<CommonStepProps>();
 
@@ -49,7 +48,7 @@ const isValidFaststallelseintyg = computed(() => {
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Lägg till fastställelseintyg
     </CommonModalSubtitle>
@@ -71,7 +70,7 @@ const isValidFaststallelseintyg = computed(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped>

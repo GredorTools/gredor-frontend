@@ -17,7 +17,6 @@ import CommonFileInput from "@/components/common/CommonFileInput.vue";
 import { watch } from "vue";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 
 defineProps<CommonStepProps>();
 
@@ -62,7 +61,7 @@ watch(arsredovisningGredorFile, async () => {
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <div class="d-flex flex-column gap-3">
       <CommonModalSubtitle>
         Steg {{ currentStepNumber }}/{{ numSteps }}: Ladda upp filer
@@ -86,7 +85,7 @@ watch(arsredovisningGredorFile, async () => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

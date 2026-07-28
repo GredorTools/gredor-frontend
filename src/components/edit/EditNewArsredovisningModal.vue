@@ -24,7 +24,6 @@ import {
   AvgivandeStyrelsenOchVD,
 } from "@/data/avgivande.ts";
 import { addTodoListItem } from "@/model/todolist/TodoList.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import CommonWizardSteps from "@/components/common/CommonWizardSteps.vue";
 import { useCompanyRecordsApi } from "@/api/composables/useCompanyRecordsApi.ts";
 import CommonOrgnrInput, {
@@ -304,7 +303,7 @@ watch(sieFile, () => {
     show-close-button
     title="Ny årsredovisning"
   >
-    <CommonModalContents class="limit-width">
+    <div class="limit-width">
       <CommonWizardSteps
         :steps="['SIE-import', 'Företagsuppgifter']"
         :current-step-number="currentStep === 'sie-import' ? 1 : 2"
@@ -354,7 +353,7 @@ watch(sieFile, () => {
           "
         />
       </template>
-    </CommonModalContents>
+    </div>
 
     <CommonWizardButtons
       v-if="currentStep === 'sie-import'"
@@ -389,7 +388,7 @@ watch(sieFile, () => {
 @import "@/assets/_variables.scss";
 
 .limit-width {
-  width: var(--bs-modal-width);
+  width: var(--bs-modal-width, 500px);
 }
 
 :deep(.orgnr-input) {

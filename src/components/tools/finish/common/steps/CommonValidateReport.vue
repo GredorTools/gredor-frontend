@@ -17,7 +17,6 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
 import { addTodoListItem, type TodoList } from "@/model/todolist/TodoList.ts";
-import CommonModalContents from "@/components/common/CommonModalContents.vue";
 import { useValidateSubmissionApi } from "@/api/composables/useValidateSubmissionApi.ts";
 
 const props = defineProps<
@@ -95,14 +94,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <CommonModalContents>
+  <div>
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Bolagsverkets kontroller
     </CommonModalSubtitle>
 
     <div v-if="loading">Kontrollerar – det kan ta några sekunder…</div>
 
-    <div v-if="result != null">
+    <div v-if="result != null" data-testid="validate-report-kontrollresultat">
       <h5>Kontrollresultat</h5>
 
       <div
@@ -170,7 +169,7 @@ onMounted(() => {
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
     />
-  </CommonModalContents>
+  </div>
 </template>
 
 <style lang="scss" scoped>
