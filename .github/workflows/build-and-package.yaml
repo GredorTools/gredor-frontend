@@ -68,6 +68,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # För bättre SonarQube-analyser
 
       - name: Download build folder
         uses: actions/download-artifact@v4
@@ -102,12 +104,11 @@ jobs:
           start: npm run preview
           browser: ${{ matrix.browser == 'chrome' && steps.setup-chrome.outputs.chrome-path || matrix.browser == 'edge' && steps.setup-edge.outputs.edge-path || steps.setup-firefox.outputs.firefox-path }}
 
-      - name: Upload coverage reports to Codecov
+      - name: SonarQube Scan
         if: ${{ matrix.browser == 'chrome' && matrix.browser-variant == 'stable' && matrix.os == 'ubuntu-latest' }}
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ inputs.codecov_token }}
-          directory: ./coverage
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Upload test screenshots on failure
         uses: actions/upload-artifact@v7
