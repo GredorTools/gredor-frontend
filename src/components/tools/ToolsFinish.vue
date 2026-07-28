@@ -5,20 +5,15 @@
  */
 
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { requestSaveFile } from "@/util/fileUtils.ts";
 import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import SendWizard from "@/components/tools/finish/send/SendWizard.vue";
 import FinalizeWizard from "@/components/tools/finish/finalize/FinalizeWizard.vue";
-import { getConfigValue } from "@/util/configUtils.ts";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
 
-const props = defineProps<{
+defineProps<{
   /** Årsredovisningen som ska exporteras. */
   arsredovisning: Arsredovisning;
-
-  /** En funktion som returnerar den iXBRL som visas i live-förhandsgranskningen. */
-  getIxbrlForPreview: () => Promise<string | undefined>;
 }>();
 
 /** Att-åtgärda-lista där fel/varningar kan läggas till av denna komponent. */
@@ -30,13 +25,6 @@ const finalizeWizardRenderId = ref<number>(0);
 const finalizeWizard = ref<ComponentExposed<typeof FinalizeWizard>>();
 const sendWizardRenderId = ref<number>(0);
 const sendWizard = ref<ComponentExposed<typeof SendWizard>>();
-
-async function exportArsredovisning() {
-  const ixbrl = await props.getIxbrlForPreview();
-  if (ixbrl) {
-    requestSaveFile(ixbrl, "arsredovisning.xhtml", "text/html");
-  }
-}
 
 async function showFinalizeWizard() {
   finalizeWizardRenderId.value++; // Så att komponenten nollställs
@@ -53,13 +41,6 @@ async function showSendWizard() {
 
 <template>
   <div class="d-inline-flex justify-content-end gap-2">
-    <button
-      v-if="getConfigValue('VITE_TEST_MODE') === 'true'"
-      class="btn btn-outline-primary"
-      @click="exportArsredovisning()"
-    >
-      Exportera iXBRL-fil (test)
-    </button>
     <button
       class="btn btn-primary"
       data-testid="show-finalize-wizard-button"

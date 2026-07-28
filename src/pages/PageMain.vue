@@ -125,7 +125,7 @@ function endTour() {
     <template #header>
       <AppHeader
         v-model:arsredovisning="arsredovisning"
-        :get-ixbrl-for-print="getIXBRL"
+        :get-ixbrl-for-preview="getIXBRL"
       >
         <template #extra-content>
           <button
@@ -202,7 +202,6 @@ function endTour() {
         <ToolsFinish
           v-model:todo-list="arsredovisning.gredorState.todoList"
           :arsredovisning="arsredovisning"
-          :get-ixbrl-for-preview="getIXBRL"
         />
       </div>
     </div>
