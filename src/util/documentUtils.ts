@@ -381,11 +381,6 @@ async function getFontReferencesInDocument(fontFamilyWhitelist: string[]) {
  * annars false
  */
 function isValidStyleSheetForDocument(sheet: CSSStyleSheet) {
-  if (!sheet.cssRules) {
-    // Händer ibland med injicerad CSS från webbläsartillägg, t.ex. DarkReader
-    return false;
-  }
-
   if (
     !(sheet.ownerNode instanceof Element) ||
     !(
@@ -396,7 +391,14 @@ function isValidStyleSheetForDocument(sheet: CSSStyleSheet) {
         .startsWith("/assets/")
     )
   ) {
-    // Ej våran CSS - kan vara injicerad från tillägg
+    // Ej våran CSS - kan vara extern eller injicerad från tillägg
+    return false;
+  }
+
+  if (!sheet.cssRules) {
+    // Händer ibland med injicerad CSS från webbläsartillägg, t.ex. DarkReader
+    // Obs: Detta måste kontrolleras efter att vi har kollat att det inte är
+    // extern CSS, annars kan säkerhets-exceptions uppstå
     return false;
   }
 
