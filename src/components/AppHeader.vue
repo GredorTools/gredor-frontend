@@ -27,7 +27,7 @@ const props = defineProps<{
   pageTitle?: string;
 
   /** En funktion som returnerar iXBRL för utskriftsfunktionen. */
-  getIxbrlForPrint?: () => Promise<string | undefined>;
+  getIxbrlForPreview?: () => Promise<string | undefined>;
 }>();
 
 /** Årsredovisningen som redigeras i applikationen. */
@@ -90,8 +90,8 @@ const moreDropdownToggle = useTemplateRef("moreDropdownToggle");
 const isPrinting = ref(false);
 
 async function print() {
-  if (!props.getIxbrlForPrint) {
-    throw new Error("getIxbrlForPrint is not defined");
+  if (!props.getIxbrlForPreview) {
+    throw new Error("getIxbrlForPreview is not defined");
   }
 
   if (isPrinting.value) {
@@ -100,7 +100,7 @@ async function print() {
 
   isPrinting.value = true;
   try {
-    const ixbrl = await props.getIxbrlForPrint();
+    const ixbrl = await props.getIxbrlForPreview();
     if (ixbrl) {
       printDocument(ixbrl);
     }
@@ -109,6 +109,30 @@ async function print() {
     if (moreDropdownToggle.value) {
       Dropdown.getInstance(moreDropdownToggle.value)?.hide();
     }
+  }
+}
+
+// Felsökningspaket
+const isExportingIXBRL = ref(false);
+
+async function exportIXBRL() {
+  if (!props.getIxbrlForPreview) {
+    throw new Error("getIxbrlForPreview is not defined");
+  }
+
+  if (isExportingIXBRL.value) {
+    return;
+  }
+
+  isExportingIXBRL.value = true;
+
+  try {
+    const ixbrl = await props.getIxbrlForPreview();
+    if (ixbrl) {
+      requestSaveFile(ixbrl, "arsredovisning.xhtml", "text/html");
+    }
+  } finally {
+    isExportingIXBRL.value = false;
   }
 }
 </script>
@@ -155,7 +179,7 @@ async function print() {
         </div>
         <div class="dropdown">
           <button
-            v-if="getIxbrlForPrint"
+            v-if="getIxbrlForPreview"
             ref="moreDropdownToggle"
             aria-expanded="false"
             class="btn btn-outline-primary dropdown-toggle"
@@ -180,6 +204,26 @@ async function print() {
                 <template v-else>
                   <div class="spinner-border"></div>
                   Förbereder utskrift…
+                </template>
+              </a>
+            </li>
+            <li>
+              <a
+                :role="!isExportingIXBRL ? 'button' : 'status'"
+                class="dropdown-item"
+                href="#"
+                @click.prevent="exportIXBRL"
+              >
+                <template v-if="!isExportingIXBRL">
+                  <i
+                    v-if="!isExportingIXBRL"
+                    class="bi bi-file-earmark-arrow-down"
+                  ></i>
+                  Avancerat: Exportera iXBRL till fil
+                </template>
+                <template v-else>
+                  <div class="spinner-border"></div>
+                  Förbereder iXBRL-export…
                 </template>
               </a>
             </li>
@@ -250,6 +294,17 @@ header {
 
     & > div {
       display: flex;
+    }
+  }
+
+  .dropdown-menu {
+    li:not(:last-child) {
+      padding-bottom: $spacing-xs;
+      border-bottom: 1px solid $border-color-normal;
+    }
+
+    li:not(:first-child) {
+      padding-top: $spacing-xs;
     }
   }
 
