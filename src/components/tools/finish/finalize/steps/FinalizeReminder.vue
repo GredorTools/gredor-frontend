@@ -87,22 +87,43 @@ const orgnrIsFilledAndValid = computed(() => {
   );
 });
 
-const verksamhetsarDatesAreFilled = computed(() => {
-  return (
-    props.arsredovisning.verksamhetsarNuvarande &&
-    props.arsredovisning.verksamhetsarNuvarande.startdatum &&
-    props.arsredovisning.verksamhetsarNuvarande.slutdatum &&
-    (!props.arsredovisning.verksamhetsarTidigare ||
-      props.arsredovisning.verksamhetsarTidigare.every(
-        (verksamhetsar) => verksamhetsar.startdatum && verksamhetsar.slutdatum,
-      ))
-  );
+const invalidVerksamhetsar = computed(() => {
+  return [
+    props.arsredovisning.verksamhetsarNuvarande,
+    ...props.arsredovisning.verksamhetsarTidigare,
+  ].filter((verksamhetsar) => {
+    if (
+      !verksamhetsar ||
+      !verksamhetsar.startdatum ||
+      !verksamhetsar.slutdatum
+    ) {
+      return true;
+    }
+
+    const startdatumDate = new Date(verksamhetsar.startdatum);
+    const slutdatumDate = new Date(verksamhetsar.slutdatum);
+
+    return (
+      !isValidVerksamhetsarDate(startdatumDate) ||
+      !isValidVerksamhetsarDate(slutdatumDate) ||
+      startdatumDate > slutdatumDate
+    );
+  });
 });
+function isValidVerksamhetsarDate(date: Date) {
+  return (
+    date != null &&
+    date instanceof Date &&
+    !Number.isNaN(date.getTime()) &&
+    date.getFullYear() > 2010 &&
+    date.getFullYear() < 3000
+  );
+}
 
 const requiredFieldsAreFilled = computed(() => {
   return (
     orgnrIsFilledAndValid.value &&
-    verksamhetsarDatesAreFilled.value &&
+    invalidVerksamhetsar.value.length < 1 &&
     props.arsredovisning.redovisningsinformation.datering &&
     props.arsredovisning.redovisningsinformation.underskrifter.length > 0 &&
     props.arsredovisning.redovisningsinformation.underskrifter.every(
@@ -485,21 +506,52 @@ const mismatchingValueBelopprader = computed(() => {
             </li>
           </ul>
         </li>
-        <li
-          v-if="!orgnrIsFilledAndValid"
-          data-testid="finalize-reminder-invalid-orgnr"
-        >
-          …att organisationsnumret är korrekt ifyllt under fliken
-          "Grunduppgifter"; <strong>just nu är det inte korrekt ifyllt.</strong>
-        </li>
-        <li
-          v-if="!verksamhetsarDatesAreFilled"
-          data-testid="finalize-reminder-invalid-verksamhetsar"
-        >
-          …att verksamhetsåren är korrekt ifyllda under fliken "Grunduppgifter";
-          <strong>just nu är de inte korrekt ifyllda.</strong>
-        </li>
       </ul>
+
+      <template v-if="!requiredFieldsAreFilled">
+        <hr />
+        <p>
+          <strong>Obs!</strong> Följande nödvändiga uppgifter saknas eller är
+          ogiltiga och <strong>måste</strong> åtgärdas för att du ska kunna gå
+          vidare:
+        </p>
+        <ul>
+          <li
+            v-if="!orgnrIsFilledAndValid"
+            data-testid="finalize-reminder-invalid-orgnr"
+          >
+            …att organisationsnumret är korrekt ifyllt under fliken
+            "Grunduppgifter"; just nu är det inte korrekt ifyllt.
+          </li>
+          <li
+            v-if="invalidVerksamhetsar.length > 0"
+            data-testid="finalize-reminder-invalid-verksamhetsar"
+          >
+            …att verksamhetsåren är korrekt ifyllda under fliken
+            "Grunduppgifter"; just nu är följande verksamhetsår inte korrekt
+            ifyllda:
+            <ul>
+              <li
+                v-for="(
+                  verksamhetsar, verksamhetsarIndex
+                ) in invalidVerksamhetsar"
+                :key="verksamhetsarIndex"
+                :data-testid="`finalize-reminder-invalid-verksamhetsar-${verksamhetsarIndex}`"
+              >
+                <template v-if="verksamhetsar.startdatum">
+                  {{ verksamhetsar.startdatum }}
+                </template>
+                <strong v-else>&lt;startdatum saknas!&gt;</strong>
+                {{ "-" }}
+                <template v-if="verksamhetsar.slutdatum">
+                  {{ verksamhetsar.slutdatum }}
+                </template>
+                <strong v-else>&lt;slutdatum saknas!&gt;</strong>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </template>
     </div>
 
     <CommonWizardButtons
@@ -508,7 +560,7 @@ const mismatchingValueBelopprader = computed(() => {
         ixbrl
           ? requiredFieldsAreFilled
             ? 'Nästa'
-            : 'Nödvändiga uppgifter saknas!'
+            : 'Nödvändiga uppgifter saknas eller är ogiltiga, se ovan'
           : 'Vänta – arbetar i bakgrunden…'
       "
       :previous-button-hidden="currentStepNumber === 1"
