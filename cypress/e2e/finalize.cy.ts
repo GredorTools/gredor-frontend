@@ -87,11 +87,11 @@ describe("finalize wizard", () => {
       "cypress/fixtures/input/gredor/TestfilA.gredorfardig",
       { force: true },
     );
-    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
-    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
     cy.get(
@@ -145,7 +145,7 @@ describe("finalize wizard", () => {
 
     // Steg 3 - BankID
     cy.get("div.justify-content-center button.btn").click();
-    cy.wait(1000); // Vänta på legitimering
+    cy.wait(1000); // NOSONAR // Vänta på legitimering
     cy.get('[data-testid="wizard-next-button"]').click();
 
     // Steg 4 - Bolagsverkets villkor
@@ -190,11 +190,11 @@ describe("finalize wizard", () => {
       "cypress/fixtures/input/gredor/TestfilB.gredorfardig",
       { force: true },
     );
-    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
-    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
     cy.get(
@@ -280,11 +280,11 @@ describe("finalize wizard", () => {
       "cypress/fixtures/input/gredor/TestfilA_med-avrundningfel.gredorfardig",
       { force: true },
     );
-    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
-    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
     cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
@@ -314,11 +314,11 @@ describe("finalize wizard", () => {
       "cypress/fixtures/input/gredor/TestfilA_utan-orgnr.gredorutkast",
       { force: true },
     );
-    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
-    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
     cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
@@ -327,7 +327,7 @@ describe("finalize wizard", () => {
     );
   });
 
-  it("reports invalid verksamhetsar", () => {
+  it("reports invalid verksamhetsar (missing date)", () => {
     cy.viewport(1600, 900);
 
     cy.visit("http://localhost:4173", {
@@ -339,19 +339,55 @@ describe("finalize wizard", () => {
     // Öppna fil
     cy.get("#openArsredovisningBtn").click();
     cy.get('[data-testid="request-open-file-input"]').selectFile(
-      "cypress/fixtures/input/gredor/TestfilA_med-ogiltigt-verksamhetsar.gredorutkast",
+      "cypress/fixtures/input/gredor/TestfilA_med-ogiltigt-verksamhetsar-datum-saknas.gredorutkast",
       { force: true },
     );
-    cy.wait(1000); // Behövs för att filen ska hinna laddas in
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
 
     // Öppna wizard
     cy.get('[data-testid="show-finalize-wizard-button"]').click();
-    cy.wait(1000); // Behövs för att input-fält inte ska bete sig knasigt
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
     cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar"]').should(
       "have.length",
       1,
+    );
+    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar-0"]').should(
+      "have.text",
+      "<startdatum saknas!> - 2022-12-31",
+    );
+  });
+
+  it("reports invalid verksamhetsar (invalid interval)", () => {
+    cy.viewport(1600, 900);
+
+    cy.visit("http://localhost:4173", {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+      },
+    });
+
+    // Öppna fil
+    cy.get("#openArsredovisningBtn").click();
+    cy.get('[data-testid="request-open-file-input"]').selectFile(
+      "cypress/fixtures/input/gredor/TestfilA_med-ogiltigt-verksamhetsar-fel-intervall.gredorutkast",
+      { force: true },
+    );
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
+
+    // Öppna wizard
+    cy.get('[data-testid="show-finalize-wizard-button"]').click();
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
+
+    // Steg 1 - Glöm inte...
+    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar"]').should(
+      "have.length",
+      1,
+    );
+    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar-0"]').should(
+      "have.text",
+      "2022-01-01 - 2021-12-31",
     );
   });
 });
