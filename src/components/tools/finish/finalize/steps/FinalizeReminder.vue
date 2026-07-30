@@ -511,7 +511,7 @@ const mismatchingValueBelopprader = computed(() => {
         <hr />
         <p>
           <strong>Obs!</strong> Följande nödvändiga uppgifter saknas eller är
-          ogiltiga och <strong>måste</strong> åtgärdas för att du ska kunna gå
+          ogiltiga, och <strong>måste</strong> åtgärdas för att du ska kunna gå
           vidare:
         </p>
         <ul>
@@ -519,16 +519,15 @@ const mismatchingValueBelopprader = computed(() => {
             v-if="!orgnrIsFilledAndValid"
             data-testid="finalize-reminder-invalid-orgnr"
           >
-            …att organisationsnumret är korrekt ifyllt under fliken
-            "Grunduppgifter"; just nu är det inte korrekt ifyllt.
+            Organisationsnumret är inte korrekt ifyllt under fliken
+            "Grunduppgifter".
           </li>
           <li
             v-if="invalidVerksamhetsar.length > 0"
             data-testid="finalize-reminder-invalid-verksamhetsar"
           >
-            …att verksamhetsåren är korrekt ifyllda under fliken
-            "Grunduppgifter"; just nu är följande verksamhetsår inte korrekt
-            ifyllda:
+            Verksamhetsåren är inte korrekt ifyllda under fliken
+            "Grunduppgifter". Det gäller följande verksamhetsår:
             <ul>
               <li
                 v-for="(
