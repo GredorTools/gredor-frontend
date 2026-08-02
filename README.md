@@ -55,6 +55,9 @@ t.ex. nya funktioner och förändringar måste passa bra med Gredor i övrigt. O
 vill bidra med något större, öppna gärna en issue och/eller utkasts-PR för att
 få tidig återkoppling på dina tänkta ändringar.
 
+Ta gärna en titt på [wikin](https://github.com/GredorTools/gredor-frontend/wiki)
+för information om projektets sammanhang och arkitektur.
+
 
 ## Licens
 
