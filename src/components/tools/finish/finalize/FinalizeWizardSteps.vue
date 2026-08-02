@@ -8,7 +8,7 @@
  * validering och nedladdning av nödvändiga filer.
  */
 
-import { computed, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import CommonValidateReport from "@/components/tools/finish/common/steps/CommonValidateReport.vue";
 import CommonBolagsverketAgreement from "@/components/tools/finish/common/steps/CommonBolagsverketAgreement.vue";
@@ -25,8 +25,11 @@ import FinalizeReminder from "@/components/tools/finish/finalize/steps/FinalizeR
 import FinalizeDownloadGredor from "@/components/tools/finish/finalize/steps/FinalizeDownloadGredor.vue";
 import FinalizeFinish from "@/components/tools/finish/finalize/steps/FinalizeFinish.vue";
 import type { TodoList } from "@/model/todolist/TodoList.ts";
+import RenderMain from "@/components/render/RenderMain.vue";
+import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
+import FinalizeGredorValidation from "@/components/tools/finish/finalize/steps/FinalizeGredorValidation.vue";
 
-defineProps<{
+const props = defineProps<{
   /** Årsredovisningen som ska skickas in till Bolagsverket. */
   arsredovisning: Arsredovisning;
 
@@ -44,14 +47,15 @@ const callBolagsverket = useGredorStorage<WrappedType<boolean | null>>(
   { wrappedValue: null },
 );
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
-const ixbrl = ref<string | undefined>();
+const ixbrl = ref<string | null>(null);
 const hasDownloadedGredorfardig = ref<boolean>(false);
 const hasDownloadedPdf = ref<boolean>(false);
 
-const numSteps = computed(() => (callBolagsverket.value.wrappedValue ? 8 : 5));
+const numSteps = computed(() => (callBolagsverket.value.wrappedValue ? 9 : 6));
 
 const currentStep = ref<
   | "reminder"
+  | "gredorValidation"
   | "requestInformation"
   | "bankIdLogin"
   | "bolagsverketAgreement"
@@ -60,16 +64,58 @@ const currentStep = ref<
   | "downloadReport"
   | "finish"
 >("reminder");
+
+// Generering av iXBRL - sker i bakgrunden
+const renderMain = ref<ComponentExposed<typeof RenderMain>>();
+
+const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
+  renderMain,
+  arsredovisning: props.arsredovisning,
+  ixbrlOutput: ixbrl,
+});
+let reportGeneratorIntervalId: number | undefined;
+onMounted(() => {
+  ixbrl.value = null;
+
+  // Timeout så att förhandsgranskningen hinner ladda in innan vi skapar iXBRL
+  setTimeout(async () => {
+    // Konvertera renderad HTML till iXBRL
+    reportGeneratorIntervalId = tryGenerateIXBRLInInterval();
+  }, 250);
+});
+
+onBeforeUnmount(() => {
+  if (reportGeneratorIntervalId != null) {
+    clearInterval(reportGeneratorIntervalId);
+  }
+});
 </script>
 
 <template>
+  <div hidden>
+    <RenderMain
+      ref="renderMain"
+      :arsredovisning="arsredovisning"
+      :show-faststallelseintyg="false"
+    />
+  </div>
   <FinalizeReminder
     v-if="currentStep === 'reminder'"
-    v-model:ixbrl="ixbrl"
     :arsredovisning="arsredovisning"
     :current-step-number="1"
     :num-steps="numSteps"
     class="limit-width"
+    @go-to-next-step="currentStep = 'gredorValidation'"
+  />
+  <FinalizeGredorValidation
+    v-if="currentStep === 'gredorValidation'"
+    v-model:todo-list="todoList"
+    :arsredovisning="arsredovisning"
+    :current-step-number="2"
+    :ixbrl="ixbrl"
+    :num-steps="numSteps"
+    class="limit-width"
+    @go-to-previous-step="currentStep = 'reminder'"
     @go-to-next-step="currentStep = 'requestInformation'"
   />
   <FinalizeRequestInformation
@@ -77,10 +123,10 @@ const currentStep = ref<
     v-model:call-bolagsverket="callBolagsverket.wrappedValue"
     v-model:personal-number="personalNumber"
     :arsredovisning="arsredovisning"
-    :current-step-number="2"
+    :current-step-number="3"
     :num-steps="numSteps"
     class="limit-width"
-    @go-to-previous-step="currentStep = 'reminder'"
+    @go-to-previous-step="currentStep = 'gredorValidation'"
     @go-to-next-step="
       currentStep = callBolagsverket.wrappedValue
         ? 'bankIdLogin'
@@ -89,7 +135,7 @@ const currentStep = ref<
   />
   <CommonBankIdLogin
     v-if="currentStep === 'bankIdLogin'"
-    :current-step-number="3"
+    :current-step-number="4"
     :num-steps="numSteps"
     :personal-number="personalNumber"
     allow-skip
@@ -100,7 +146,7 @@ const currentStep = ref<
   <CommonBolagsverketAgreement
     v-if="currentStep === 'bolagsverketAgreement' && arsredovisning != null"
     :arsredovisning="arsredovisning"
-    :current-step-number="4"
+    :current-step-number="5"
     :num-steps="numSteps"
     class="limit-width"
     @go-to-previous-step="currentStep = 'bankIdLogin'"
@@ -114,7 +160,7 @@ const currentStep = ref<
     "
     v-model:todo-list="todoList"
     :arsredovisning="arsredovisning"
-    :current-step-number="5"
+    :current-step-number="6"
     :ixbrl="ixbrl"
     :num-steps="numSteps"
     class="limit-width"
@@ -126,7 +172,7 @@ const currentStep = ref<
     v-if="currentStep === 'downloadGredor'"
     v-model:has-downloaded-gredorfardig="hasDownloadedGredorfardig"
     :arsredovisning="arsredovisning"
-    :current-step-number="callBolagsverket.wrappedValue ? 6 : 3"
+    :current-step-number="callBolagsverket.wrappedValue ? 7 : 4"
     :num-steps="numSteps"
     class="limit-width"
     @go-to-previous-step="
@@ -139,7 +185,7 @@ const currentStep = ref<
   <FinalizeDownloadReport
     v-if="currentStep === 'downloadReport' && ixbrl != null"
     v-model:has-downloaded-pdf="hasDownloadedPdf"
-    :current-step-number="callBolagsverket.wrappedValue ? 7 : 4"
+    :current-step-number="callBolagsverket.wrappedValue ? 8 : 5"
     :ixbrl="ixbrl"
     :num-steps="numSteps"
     class="limit-width"
@@ -149,7 +195,7 @@ const currentStep = ref<
   <FinalizeFinish
     v-if="currentStep === 'finish'"
     :arsredovisning="arsredovisning"
-    :current-step-number="callBolagsverket.wrappedValue ? 8 : 5"
+    :current-step-number="callBolagsverket.wrappedValue ? 9 : 6"
     :ixbrl="ixbrl"
     :num-steps="numSteps"
     class="limit-width"

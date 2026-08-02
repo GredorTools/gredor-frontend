@@ -39,7 +39,7 @@ const arsredovisning = ref<Arsredovisning | undefined>();
 const arsredovisningGredorFile = ref<File | undefined>();
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
 const notificationEmail = useGredorStorage<string>("UserNotificationEmail", "");
-const ixbrl = ref<string | undefined>();
+const ixbrl = ref<string | null>(null);
 
 const currentStep = ref<
   | "sendRequestFiles"

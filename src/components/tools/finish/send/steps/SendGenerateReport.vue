@@ -33,7 +33,7 @@ const props = defineProps<
 >();
 
 /** Årsredovisningen i iXBRL-format. */
-const ixbrl = defineModel<string | undefined>("ixbrl", {
+const ixbrl = defineModel<string | null>("ixbrl", {
   required: true,
 });
 
@@ -48,7 +48,7 @@ const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
 });
 let reportGeneratorIntervalId: number | undefined;
 onMounted(() => {
-  ixbrl.value = undefined;
+  ixbrl.value = null;
 
   // Timeout så att förhandsgranskningen hinner ladda in innan vi skapar iXBRL
   setTimeout(async () => {

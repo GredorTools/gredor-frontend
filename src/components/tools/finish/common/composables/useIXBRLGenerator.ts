@@ -18,7 +18,7 @@ import { useModalStore } from "@/components/common/composables/useModalStore.ts"
 type Args = {
   renderMain: Ref<ComponentExposed<typeof RenderMain> | undefined>;
   arsredovisning: Arsredovisning;
-  ixbrlOutput: Ref<string | undefined>;
+  ixbrlOutput: Ref<string | null>;
 };
 
 /**

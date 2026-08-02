@@ -28,9 +28,21 @@ Liknar TestfilA, men har avrundningsfel på ett av fälten för nettoomsättning
 
 Liknar TestfilA, men saknar organisationsnummer.
 
-### TestfilA_med-ogiltigt-verksamhetsar
+### TestfilA_med-ogiltigt-verksamhetsar-datum-saknas
 
 Liknar TestfilA, men saknar startdatum på ett av verksamhetsåren.
+
+### TestfilA_med-ogiltigt-verksamhetsar-fel-intervall
+
+Liknar TestfilA, men har slutdatum före startdatum på ett av verksamhetsåren.
+
+### TestfilA_utan-datering
+
+Liknar TestfilA, men saknar datering.
+
+### TestfilA_med-ogiltiga-underskrifter
+
+Liknar TestfilA, men har en underskrift utan efternamn.
 
 
 ## TestfilB

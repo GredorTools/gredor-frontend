@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 /**
- * En komponent för att visa villkor för inlämning av årsredovisning med
- * Gredor.
+ * En komponent som påminner användaren om några saker som kan vara lätta att
+ * missa.
  */
 
 import CommonWizardButtons, {
@@ -10,28 +10,15 @@ import CommonWizardButtons, {
 import type { CommonStepProps } from "@/components/tools/finish/common/steps/CommonStepProps.ts";
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { getTaxonomyManager } from "@/util/TaxonomyManager.ts";
-import {
-  type TaxonomyItem,
-  TaxonomyRootName,
-} from "@/model/taxonomy/TaxonomyItem.ts";
+import { computed } from "vue";
 import { getHeaderBeloppraderForNoter } from "@/util/noterUtils.ts";
 import { getTaxonomyItemForBelopprad } from "@/model/arsredovisning/Belopprad.ts";
 import {
   type BaseBeloppradComparable,
   isBeloppradComparable,
 } from "@/model/arsredovisning/beloppradtyper/BaseBeloppradComparable.ts";
-import { useIXBRLGenerator } from "@/components/tools/finish/common/composables/useIXBRLGenerator.ts";
-import type { ComponentExposed } from "vue-component-type-helpers";
-import RenderMain from "@/components/render/RenderMain.vue";
-import { XMLParser } from "fast-xml-parser";
-import { convertiXBRLToXBRL } from "@/util/convertiXBRLToXBRL.ts";
 import type { Underskrift } from "@/model/arsredovisning/Underskrift.ts";
-import LuhnAlgorithm from "@designbycode/luhn-algorithm";
-import { equalsWithDecimals } from "@/util/compareUtils.ts";
-import { formatNumber } from "@/util/formatUtils.ts";
-import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
+import { useGetBeloppradLists } from "@/components/tools/finish/finalize/steps/useGetBeloppradLists.ts";
 
 const props = defineProps<
   CommonStepProps & {
@@ -40,97 +27,7 @@ const props = defineProps<
   }
 >();
 
-/** Årsredovisningen i iXBRL-format. */
-const ixbrl = defineModel<string | undefined>("ixbrl", {
-  required: true,
-});
-
 const emit = defineEmits<CommonWizardButtonsEmits>();
-
-// Generering av iXBRL - sker i bakgrunden
-const renderMain = ref<ComponentExposed<typeof RenderMain>>();
-
-const { tryGenerateIXBRLInInterval } = useIXBRLGenerator({
-  renderMain,
-  arsredovisning: props.arsredovisning,
-  ixbrlOutput: ixbrl,
-});
-let reportGeneratorIntervalId: number | undefined;
-onMounted(() => {
-  // Timeout så att förhandsgranskningen hinner ladda in innan vi skapar iXBRL
-  setTimeout(async () => {
-    // Konvertera renderad HTML till iXBRL
-    reportGeneratorIntervalId = tryGenerateIXBRLInInterval();
-  }, 250);
-});
-
-onBeforeUnmount(() => {
-  if (reportGeneratorIntervalId != null) {
-    clearInterval(reportGeneratorIntervalId);
-  }
-});
-
-// Kolla att nödvändiga fält är ifyllda
-const orgnrIsFilledAndValid = computed(() => {
-  return (
-    props.arsredovisning.foretagsinformation.organisationsnummer &&
-    props.arsredovisning.foretagsinformation.organisationsnummer.match(
-      /^\d{6}-?\d{4}$/,
-    ) &&
-    LuhnAlgorithm.isValid(
-      props.arsredovisning.foretagsinformation.organisationsnummer.replace(
-        "-",
-        "",
-      ),
-    )
-  );
-});
-
-const invalidVerksamhetsar = computed(() => {
-  return [
-    props.arsredovisning.verksamhetsarNuvarande,
-    ...props.arsredovisning.verksamhetsarTidigare,
-  ].filter((verksamhetsar) => {
-    if (
-      !verksamhetsar ||
-      !verksamhetsar.startdatum ||
-      !verksamhetsar.slutdatum
-    ) {
-      return true;
-    }
-
-    const startdatumDate = new Date(verksamhetsar.startdatum);
-    const slutdatumDate = new Date(verksamhetsar.slutdatum);
-
-    return (
-      !isValidVerksamhetsarDate(startdatumDate) ||
-      !isValidVerksamhetsarDate(slutdatumDate) ||
-      startdatumDate > slutdatumDate
-    );
-  });
-});
-function isValidVerksamhetsarDate(date: Date) {
-  return (
-    date != null &&
-    date instanceof Date &&
-    !Number.isNaN(date.getTime()) &&
-    date.getFullYear() > 2010 &&
-    date.getFullYear() < 3000
-  );
-}
-
-const requiredFieldsAreFilled = computed(() => {
-  return (
-    orgnrIsFilledAndValid.value &&
-    invalidVerksamhetsar.value.length < 1 &&
-    props.arsredovisning.redovisningsinformation.datering &&
-    props.arsredovisning.redovisningsinformation.underskrifter.length > 0 &&
-    props.arsredovisning.redovisningsinformation.underskrifter.every(
-      (signature) =>
-        signature.tilltalsnamn && signature.efternamn && signature.datum,
-    )
-  );
-});
 
 // Räkna ut senaste underskriftsdatum
 const latestSignatureDate = computed(() => {
@@ -162,34 +59,9 @@ const latestSignatureDate = computed(() => {
 });
 
 // Räkna ut notkopplingar
-const forvaltningsberattelseTaxonomyManager = await getTaxonomyManager(
-  TaxonomyRootName.FORVALTNINGSBERATTELSE,
+const { noterTaxonomyManager, beloppradLists } = await useGetBeloppradLists(
+  props.arsredovisning,
 );
-const resultatrakningTaxonomyManager = await getTaxonomyManager(
-  TaxonomyRootName.RESULTATRAKNING_KOSTNADSSLAGSINDELAD,
-);
-const balansrakningTaxonomyManager = await getTaxonomyManager(
-  TaxonomyRootName.BALANSRAKNING,
-);
-const noterTaxonomyManager = await getTaxonomyManager(TaxonomyRootName.NOTER);
-const beloppradLists = computed(() => [
-  {
-    beloppradList: props.arsredovisning.forvaltningsberattelse,
-    beloppradListTaxonomyManager: forvaltningsberattelseTaxonomyManager,
-  },
-  {
-    beloppradList: props.arsredovisning.resultatrakning,
-    beloppradListTaxonomyManager: resultatrakningTaxonomyManager,
-  },
-  {
-    beloppradList: props.arsredovisning.balansrakning,
-    beloppradListTaxonomyManager: balansrakningTaxonomyManager,
-  },
-  {
-    beloppradList: props.arsredovisning.noter,
-    beloppradListTaxonomyManager: noterTaxonomyManager,
-  },
-]);
 const headerBeloppraderForNoter = computed(() =>
   getHeaderBeloppraderForNoter(
     noterTaxonomyManager,
@@ -258,127 +130,6 @@ const beloppraderWithNonexistingNoter = computed(() => {
 
   return result;
 });
-
-// Hitta eventuella belopprader med samma koncept men olika värden
-const mismatchingValueBelopprader = computed(() => {
-  if (!ixbrl.value) {
-    return [];
-  }
-
-  const xbrl = convertiXBRLToXBRL(ixbrl.value);
-  const xbrlParser = new XMLParser({
-    ignoreAttributes: false,
-    attributeNamePrefix: "@_",
-    allowBooleanAttributes: true,
-    preserveOrder: false,
-  });
-  const parsedXbrl = xbrlParser.parse(xbrl);
-
-  const result: {
-    taxonomyItem: TaxonomyItem;
-    values: {
-      belopp: string;
-      decimals: string;
-    }[];
-  }[] = [];
-
-  const rowValueMap = new Map<
-    string,
-    {
-      taxonomyItemName: string;
-      values: {
-        belopp: string;
-        decimals: string;
-      }[];
-    }
-  >();
-  for (const [xbrlItemKey, xbrlItemValue] of Object.entries(
-    parsedXbrl["xbrli:xbrl"],
-  )) {
-    if (
-      !xbrlItemKey.startsWith("se-gen-base:") ||
-      typeof xbrlItemValue !== "object" ||
-      xbrlItemValue == null
-    ) {
-      continue;
-    }
-
-    function handleXbrlItemValueItem(xbrlItemValueItem: object) {
-      if (!("#text" in xbrlItemValueItem)) {
-        return;
-      }
-
-      const xbrlItemValueWithoutText = { ...xbrlItemValueItem };
-      delete xbrlItemValueWithoutText["#text"];
-
-      if ("@_decimals" in xbrlItemValueWithoutText) {
-        delete xbrlItemValueWithoutText["@_decimals"];
-      }
-
-      const rowValueMapKey =
-        xbrlItemKey + JSON.stringify(xbrlItemValueWithoutText);
-      if (!rowValueMap.has(rowValueMapKey)) {
-        rowValueMap.set(rowValueMapKey, {
-          taxonomyItemName: xbrlItemKey,
-          values: [],
-        });
-      }
-
-      rowValueMap.get(rowValueMapKey)!.values.push({
-        belopp: String(xbrlItemValueItem["#text"]),
-        decimals:
-          "@_decimals" in xbrlItemValueItem
-            ? String(xbrlItemValueItem["@_decimals"])
-            : "INF",
-      });
-    }
-
-    if (Array.isArray(xbrlItemValue)) {
-      xbrlItemValue.forEach(handleXbrlItemValueItem);
-    } else {
-      handleXbrlItemValueItem(xbrlItemValue);
-    }
-  }
-
-  for (const { taxonomyItemName, values } of rowValueMap.values()) {
-    const baseValue =
-      values.find((value) => value.decimals === "INF") ?? values[0];
-
-    if (
-      values.length > 1 &&
-      !values.every((value) =>
-        equalsWithDecimals(
-          value.belopp,
-          value.decimals,
-          baseValue.belopp,
-          baseValue.decimals,
-        ),
-      )
-    ) {
-      let taxonomyItem: TaxonomyItem | null = null;
-      for (const taxonomyManager of beloppradLists.value.map(
-        (x) => x.beloppradListTaxonomyManager,
-      )) {
-        try {
-          taxonomyItem = taxonomyManager.getItemByName(taxonomyItemName);
-        } catch {
-          // Gör inget
-        }
-      }
-      if (taxonomyItem == null) {
-        console.warn(`Taxonomy item not found for ${taxonomyItemName}`);
-        continue;
-      }
-
-      result.push({
-        taxonomyItem,
-        values,
-      });
-    }
-  }
-
-  return result;
-});
 </script>
 
 <template>
@@ -386,14 +137,6 @@ const mismatchingValueBelopprader = computed(() => {
     <CommonModalSubtitle>
       Steg {{ currentStepNumber }}/{{ numSteps }}: Glöm inte…
     </CommonModalSubtitle>
-
-    <div hidden>
-      <RenderMain
-        ref="renderMain"
-        :arsredovisning="arsredovisning"
-        :show-faststallelseintyg="false"
-      />
-    </div>
 
     <div>
       <p>
@@ -469,98 +212,10 @@ const mismatchingValueBelopprader = computed(() => {
             >.
           </div>
         </li>
-        <li v-if="mismatchingValueBelopprader.length > 0">
-          …beloppen för följande fält; det förekommer olika värden på olika
-          ställen och du bör korrigera detta:
-          <ul data-testid="finalize-reminder-mismatching-values-list">
-            <li
-              v-for="(belopprad, beloppradIndex) in mismatchingValueBelopprader"
-              :key="beloppradIndex"
-            >
-              {{ belopprad.taxonomyItem.properties.label }}: [
-              <template
-                v-for="(
-                  beloppradValue, beloppradValueIndex
-                ) in belopprad.values"
-                :key="beloppradValueIndex"
-              >
-                <template v-if="beloppradValueIndex > 0"> /</template>
-                {{
-                  formatNumber(
-                    beloppradValue.belopp,
-                    null,
-                    beloppradValue.decimals === "-3"
-                      ? BeloppFormat.TUSENTAL
-                      : BeloppFormat.HELTAL,
-                  )
-                }}<template v-if="beloppradValue.decimals === '-3'"
-                  >&nbsp;(tusental)</template
-                >
-              </template>
-              ]
-              {{
-                arsredovisning.redovisningsinformation.redovisningsvaluta
-                  .namnKort
-              }}
-            </li>
-          </ul>
-        </li>
       </ul>
-
-      <template v-if="!requiredFieldsAreFilled">
-        <hr />
-        <p>
-          <strong>Obs!</strong> Följande nödvändiga uppgifter saknas eller är
-          ogiltiga, och <strong>måste</strong> åtgärdas för att du ska kunna gå
-          vidare:
-        </p>
-        <ul>
-          <li
-            v-if="!orgnrIsFilledAndValid"
-            data-testid="finalize-reminder-invalid-orgnr"
-          >
-            Organisationsnumret är inte korrekt ifyllt under fliken
-            "Grunduppgifter".
-          </li>
-          <li
-            v-if="invalidVerksamhetsar.length > 0"
-            data-testid="finalize-reminder-invalid-verksamhetsar"
-          >
-            Verksamhetsåren är inte korrekt ifyllda under fliken
-            "Grunduppgifter". Det gäller följande verksamhetsår:
-            <ul>
-              <li
-                v-for="(
-                  verksamhetsar, verksamhetsarIndex
-                ) in invalidVerksamhetsar"
-                :key="verksamhetsarIndex"
-                :data-testid="`finalize-reminder-invalid-verksamhetsar-${verksamhetsarIndex}`"
-              >
-                <template v-if="verksamhetsar.startdatum">
-                  {{ verksamhetsar.startdatum }}
-                </template>
-                <strong v-else>&lt;startdatum saknas!&gt;</strong>
-                {{ "-" }}
-                <template v-if="verksamhetsar.slutdatum">
-                  {{ verksamhetsar.slutdatum }}
-                </template>
-                <strong v-else>&lt;slutdatum saknas!&gt;</strong>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </template>
     </div>
 
     <CommonWizardButtons
-      :next-button-disabled="!ixbrl || !requiredFieldsAreFilled"
-      :next-button-text="
-        ixbrl
-          ? requiredFieldsAreFilled
-            ? 'Nästa'
-            : 'Nödvändiga uppgifter saknas eller är ogiltiga, se ovan'
-          : 'Vänta – arbetar i bakgrunden…'
-      "
       :previous-button-hidden="currentStepNumber === 1"
       @go-to-previous-step="emit('goToPreviousStep')"
       @go-to-next-step="emit('goToNextStep')"
