@@ -16,6 +16,15 @@ export interface CalculationConceptValue {
   value: number;
 }
 
+export interface CalculationResult {
+  /** Summan av beloppen. */
+  sum: number;
+
+  /** Antalet belopp bland termerna som summerades som har ett värde (inklusive
+   * noll). */
+  numLeafNodesWithValues: number;
+}
+
 export class CalculationProcessor {
   private readonly calculationTree: CalculationNode[];
   private readonly nodes: Map<string, CalculationNode>; // <conceptName, node>
@@ -42,7 +51,7 @@ export class CalculationProcessor {
   public calculateForConcept(
     conceptName: string,
     values: CalculationConceptValue[],
-  ): number {
+  ): CalculationResult {
     const valueMap = new Map(values.map((v) => [v.conceptName, v.value]));
     const node = this.nodes.get(conceptName);
     if (!node) {
@@ -92,21 +101,30 @@ export class CalculationProcessor {
   private calculateNode(
     node: CalculationNode,
     valueMap: Map<string, number>,
-  ): number {
+  ): CalculationResult {
     // Om det är en leaf-nod, returnera dess värde från värdemappningen
     if (!node.children || node.children.length === 0) {
-      return valueMap.get(node.concept.name) || 0;
+      const value = valueMap.get(node.concept.name);
+      return {
+        sum: value || 0,
+        numLeafNodesWithValues: value != null && !Number.isNaN(value) ? 1 : 0,
+      };
     }
 
     // Beräkna summan av barnen
     let sum = 0;
+    let numChildren = 0;
     for (const child of node.children) {
       const childValue = this.calculateNode(child, valueMap);
-      const weight = Number.parseFloat(child.weight || "1");
-      sum += childValue * weight;
+      const weight = Number.parseFloat(child.weight ?? "1");
+      sum += childValue.sum * weight;
+      numChildren += childValue.numLeafNodesWithValues;
     }
 
-    return sum;
+    return {
+      sum,
+      numLeafNodesWithValues: numChildren,
+    };
   }
 
   private buildNodeMap(
@@ -208,8 +226,7 @@ class CalculationParser {
 export async function createNewCalculationProcessor(
   rootName: TaxonomyRootName,
 ): Promise<CalculationProcessor> {
-  const calculationJson = await import(
-    "@/data/taxonomy/k2/2021-10-31/calculation.json"
-  );
+  const calculationJson =
+    await import("@/data/taxonomy/k2/2021-10-31/calculation.json");
   return new CalculationProcessor(rootName, calculationJson);
 }
