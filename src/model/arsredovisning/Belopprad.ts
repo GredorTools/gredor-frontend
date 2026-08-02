@@ -51,9 +51,7 @@ export function createBelopprad<T extends TaxonomyItemType>(
     case "xbrli:pureItemType":
     case "xbrli:sharesItemType":
     case "enum:enumerationItemType": {
-      const defaultValue = taxonomyItem.additionalData.isCalculatedItem
-        ? "0"
-        : "";
+      const defaultValue = "";
       return {
         ...baseBeloppradData,
         beloppNuvarandeAr: defaultValue,

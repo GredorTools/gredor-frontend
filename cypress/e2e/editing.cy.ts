@@ -1463,3 +1463,102 @@ it("can create and edit manually", function () {
     '#arsredovisning-for-export [name="se-gen-base:UndertecknandeDatum"]',
   ).should("have.text", "2025-01-03");
 });
+
+it("handles zero and empty sums correctly", function () {
+  cy.viewport(1800, 1000);
+
+  cy.visit("http://localhost:4173", {
+    onBeforeLoad(win) {
+      win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+    },
+  });
+
+  function currentYearRowsThatShouldBeAffected(
+    callback: (rows: Cypress.Chainable) => void,
+  ) {
+    callback(
+      cy.get(
+        '#arsredovisning-for-export [name="se-gen-base:Nettoomsattning"],' +
+          '#arsredovisning-for-export [name="se-gen-base:RorelseintakterLagerforandringarMm"],' +
+          '#arsredovisning-for-export [name="se-gen-base:Rorelseresultat"],' +
+          '#arsredovisning-for-export [name="se-gen-base:ResultatEfterFinansiellaPoster"],' +
+          '#arsredovisning-for-export [name="se-gen-base:ResultatForeSkatt"],' +
+          '#arsredovisning-for-export [name="se-gen-base:AretsResultat"]',
+      ),
+    );
+  }
+
+  function allPreviousYearRows(callback: (rows: Cypress.Chainable) => void) {
+    callback(
+      cy.get("#arsredovisning-for-export tr td.value-container:nth-child(4)"),
+    );
+  }
+
+  // I början ska inga av raderna finnas
+  currentYearRowsThatShouldBeAffected((rows) => rows.should("not.exist"));
+  allPreviousYearRows((rows) => rows.should("not.exist"));
+
+  // Gå till resultaträkningen
+  cy.get("#editor li:nth-child(3) a.nav-link").click();
+  cy.get('[data-testid="accordion-item-resultatrakning-accordion"]').click();
+
+  // Skriv in "1" som nettoomsättning för nuvarande år - då ska följande hända:
+  // - ett antal summarader får värde "1" också, på nuvarande år
+  // - samma summarader får inget värde (visas som "–") på föregående år
+  cy.get(
+    '[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]',
+  ).click();
+  cy.get('[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]').type(
+    "1",
+  );
+  currentYearRowsThatShouldBeAffected((rows) =>
+    rows.each((row) => cy.wrap(row).should("have.text", "1")),
+  );
+  allPreviousYearRows((rows) =>
+    rows.each((row) => cy.wrap(row).should("have.text", "–")),
+  );
+
+  // Ändra till "0" som nettoomsättning för nuvarande år utan att rensa - då ska följande hända:
+  // - summaraderna får värde "0" på nuvarande år
+  // - summaraderna har fortfarande inget värde (visas som "–") på föregående år
+  cy.get(
+    '[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]',
+  ).click();
+  cy.get('[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]').type(
+    "{selectAll}0",
+  );
+  currentYearRowsThatShouldBeAffected((rows) =>
+    rows.each((row) => cy.wrap(row).should("have.text", "0")),
+  );
+  allPreviousYearRows((rows) =>
+    rows.each((row) => cy.wrap(row).should("have.text", "–")),
+  );
+
+  // Rensa fältet för nettoomsättning för nuvarande år - då ska följande hända:
+  // - summaraderna försvinner helt eftersom värde saknas på alla visade år
+  cy.get(
+    '[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]',
+  ).click();
+  cy.get(
+    '[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]',
+  ).clear();
+  currentYearRowsThatShouldBeAffected((rows) => rows.should("not.exist"));
+  allPreviousYearRows((rows) => rows.should("not.exist"));
+
+  // Skriv in "0" som nettoomsättning på nuvarande år igen - då ska följande hända:
+  // - summaraderna dyker upp igen
+  // - summaraderna får värde "0" på nuvarande år
+  // - summaraderna får inget värde (visas som "–") på föregående år
+  cy.get(
+    '[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]',
+  ).click();
+  cy.get('[data-testid="edit-se-gen-base:Nettoomsattning-current-year"]').type(
+    "0",
+  );
+  currentYearRowsThatShouldBeAffected((rows) =>
+    rows.each((row) => cy.wrap(row).should("have.text", "0")),
+  );
+  allPreviousYearRows((rows) =>
+    rows.each((row) => cy.wrap(row).should("have.text", "–")),
+  );
+});

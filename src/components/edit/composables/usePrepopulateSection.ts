@@ -46,7 +46,6 @@ type Args = {
  *
  * @param args - Argument som krävs för förpopuleringen.
  */
-
 function prepopulateSection(args: Args) {
   const belopprader = ref<Belopprad[]>([]);
   innerPrepopulateSection(args, belopprader);

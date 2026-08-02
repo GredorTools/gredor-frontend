@@ -25,6 +25,7 @@ export function calculateValuesIntoBelopprad(
   belopprader: Belopprad[],
   resultBelopprad: BeloppradMonetary,
 ): void {
+  // Nuvarande år
   const conceptValuesNuvarandeAr: CalculationConceptValue[] = belopprader.map(
     (belopprad) => {
       return {
@@ -35,7 +36,18 @@ export function calculateValuesIntoBelopprad(
       };
     },
   );
+  const nuvarandeArCalculationResult = calculationProcessor.calculateForConcept(
+    resultBelopprad.taxonomyItemName,
+    conceptValuesNuvarandeAr,
+  );
+  // Om det inte finns några belopprader som bidragit till summan, får
+  // summaraden inget värde (inte ens 0) på respektive år
+  resultBelopprad.beloppNuvarandeAr =
+    nuvarandeArCalculationResult.numLeafNodesWithValues > 0
+      ? nuvarandeArCalculationResult.sum.toString()
+      : "";
 
+  // Tidigare år
   const conceptValuesTidigareArList: CalculationConceptValue[][] =
     resultBelopprad.beloppTidigareAr.map((_, i) =>
       belopprader.map((belopprad) => {
@@ -47,21 +59,18 @@ export function calculateValuesIntoBelopprad(
         };
       }),
     );
-
-  resultBelopprad.beloppNuvarandeAr = calculationProcessor
-    .calculateForConcept(
-      resultBelopprad.taxonomyItemName,
-      conceptValuesNuvarandeAr,
-    )
-    .toString();
-
   for (let i = 0; i < resultBelopprad.beloppTidigareAr.length; i++) {
-    resultBelopprad.beloppTidigareAr[i] = calculationProcessor
-      .calculateForConcept(
+    const tidigareArCalculationResult =
+      calculationProcessor.calculateForConcept(
         resultBelopprad.taxonomyItemName,
         conceptValuesTidigareArList[i],
-      )
-      .toString();
+      );
+    // Om det inte finns några belopprader som bidragit till summan, får
+    // summaraden inget värde (inte ens 0) på respektive år
+    resultBelopprad.beloppTidigareAr[i] =
+      tidigareArCalculationResult.numLeafNodesWithValues > 0
+        ? tidigareArCalculationResult.sum.toString()
+        : "";
   }
 }
 
@@ -73,14 +82,6 @@ export function hasBeloppradMonetaryValue(
   maxNumPreviousYears: number,
 ): boolean {
   const taxonomyItem = getTaxonomyItemForBelopprad(taxonomyManager, belopprad);
-
-  function isBeloppValidMonetaryValue(stringValue: string): boolean {
-    const parsedInt = Number.parseInt(stringValue, 10);
-    return (
-      !Number.isNaN(parsedInt) &&
-      (!taxonomyItem.additionalData.isCalculatedItem || parsedInt !== 0)
-    );
-  }
 
   return (
     !!belopprad.not ||
@@ -96,4 +97,9 @@ export function hasBeloppradMonetaryValue(
         .some((belopp) => isBeloppValidMonetaryValue(belopp))) &&
       !isSumBeloppradEmpty(taxonomyManager, belopprad, taxonomyItem, section))
   );
+}
+
+function isBeloppValidMonetaryValue(stringValue: string): boolean {
+  const parsedInt = Number.parseInt(stringValue, 10);
+  return !Number.isNaN(parsedInt);
 }
