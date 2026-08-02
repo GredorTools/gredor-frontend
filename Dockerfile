@@ -1,4 +1,4 @@
-FROM node:lts-alpine as build-stage
+FROM node:lts-alpine AS build-stage
 
 # Install git
 RUN apk add --no-cache git
@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy application files
 COPY . .
@@ -19,7 +19,7 @@ COPY . .
 RUN npm run build
 
 # Production Stage
-FROM nginx:stable-alpine as production-stage
+FROM nginxinc/nginx-unprivileged:stable-alpine AS production-stage
 
 # Set working directory in Nginx container
 WORKDIR /usr/share/nginx/html
@@ -31,8 +31,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Add runtime configuration script
-COPY nginx/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY --chmod=755 nginx/entrypoint.sh /entrypoint.sh
 
 EXPOSE 8080
 
