@@ -121,7 +121,7 @@ onMounted(() => {
         {{ utfall.text }}
       </div>
 
-      <template v-if="(result.utfall?.length ?? 0) > 0">
+      <div v-if="(result.utfall?.length ?? 0) > 0" class="legend">
         <h5>Hur man tolkar kontrollresultatet</h5>
         <ul>
           <li v-if="result.utfall?.some((utfall) => utfall.typ === 'error')">
@@ -155,7 +155,7 @@ onMounted(() => {
         >
           Varningarna har lagts till i din att-åtgärda-lista.
         </p>
-      </template>
+      </div>
       <template v-else>
         Bolagsverkets automatiska kontroller hittade inga anmärkningar.
       </template>
@@ -178,5 +178,9 @@ onMounted(() => {
 h5 {
   font-size: 1.15rem;
   margin-top: $spacing-lg;
+}
+
+.legend li {
+  margin-bottom: $spacing-sm;
 }
 </style>

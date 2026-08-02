@@ -40,6 +40,7 @@ defineExpose({
     ref="modal"
     show-close-button
     title="Ladda upp till Bolagsverket"
+    unmount-content-on-hide
   >
     <Suspense>
       <SendWizardSteps :modal="modal" />

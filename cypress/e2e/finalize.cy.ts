@@ -125,35 +125,38 @@ describe("finalize wizard", () => {
       "have.text",
       " Årsstämman får därmed hållas tidigast 2025-01-04. ",
     );
-    cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
-      "not.exist",
-    );
-    cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
-      "not.exist",
-    );
-    cy.get('[data-testid="finalize-reminder-invalid-verksametsar"]').should(
-      "not.exist",
-    );
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 2 - OK att köra kontroller hos Bolagsverket
+    // Steg 2: Gredors förkontroller
+    cy.get(
+      '[data-testid="finalize-gredor-validation-mismatching-values-list"]',
+    ).should("not.exist");
+    cy.get('[data-testid="finalize-gredor-validation-invalid-orgnr"]').should(
+      "not.exist",
+    );
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-verksametsar"]',
+    ).should("not.exist");
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 3 - OK att köra kontroller hos Bolagsverket
     cy.get('label[for="callBolagsverketRadioYes"]').click();
     cy.get("#callBolagsverketRadioYes").check();
     cy.get('input[maxlength="12"]').click();
     cy.get('input[maxlength="12"]').type("191212121212");
     cy.get('[data-testid="wizard-next-button"]').click({ timeout: 15000 }); // Kan ta en stund att generera iXBRL
 
-    // Steg 3 - BankID
+    // Steg 4 - BankID
     cy.get("div.justify-content-center button.btn").click();
     cy.wait(1000); // NOSONAR // Vänta på legitimering
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 4 - Bolagsverkets villkor
+    // Steg 5 - Bolagsverkets villkor
     cy.get("div.limit-width p").should("have.text", "Exempeltext");
     cy.get("#bolagsverketAgreementCheck").check();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 5 - Bolagsverkets kontroller
+    // Steg 6 - Bolagsverkets kontroller
     cy.get("div.alert").should("have.text", "Varning: Mock-varning");
     cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
       "have.text",
@@ -161,17 +164,17 @@ describe("finalize wizard", () => {
     );
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 6 - Ladda ner .gredorfardig
+    // Steg 7 - Ladda ner .gredorfardig
     cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
     cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 7 - Skriv ut PDF
+    // Steg 8 - Skriv ut PDF
     cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
     cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 8 - Klar
+    // Steg 9 - Klar
     cy.get('[data-testid="wizard-next-button"]').click();
   });
 
@@ -234,33 +237,36 @@ describe("finalize wizard", () => {
       "have.text",
       " Årsstämman får därmed hållas tidigast 2025-01-04. ",
     );
-    cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
-      "not.exist",
-    );
-    cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
-      "not.exist",
-    );
-    cy.get('[data-testid="finalize-reminder-invalid-verksametsar"]').should(
-      "not.exist",
-    );
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 2 - Inte OK att köra kontroller hos Bolagsverket
+    // Steg 2: Gredors förkontroller
+    cy.get(
+      '[data-testid="finalize-gredor-validation-mismatching-values-list"]',
+    ).should("not.exist");
+    cy.get('[data-testid="finalize-gredor-validation-invalid-orgnr"]').should(
+      "not.exist",
+    );
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-verksametsar"]',
+    ).should("not.exist");
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 3 - Inte OK att köra kontroller hos Bolagsverket
     cy.get('label[for="callBolagsverketRadioNo"]').click();
     cy.get("#callBolagsverketRadioNo").check();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 3 - Ladda ner .gredorfardig
+    // Steg 4 - Ladda ner .gredorfardig
     cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
     cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 4 - Skriv ut PDF
+    // Steg 5 - Skriv ut PDF
     cy.get('[data-testid="wizard-next-button"]').should("be.disabled");
     cy.get("div:nth-child(2) > div.download-zone > button.btn").click();
     cy.get('[data-testid="wizard-next-button"]').click();
 
-    // Steg 5 - Klar
+    // Steg 6 - Klar
     cy.get('[data-testid="wizard-next-button"]').click();
     cy.get("[data-testid='todo-list-num-tasks-remaining']").should("not.exist");
   });
@@ -287,15 +293,26 @@ describe("finalize wizard", () => {
     cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
-    cy.get('[data-testid="finalize-reminder-mismatching-values-list"]').should(
-      "have.length",
-      1,
-    );
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 2: Gredors förkontroller
     cy.get(
-      '[data-testid="finalize-reminder-mismatching-values-list"] li',
-    ).should(
+      '[data-testid="finalize-gredor-validation-mismatching-values-list"]',
+    ).should("have.length", 1);
+    cy.get(
+      '[data-testid="finalize-gredor-validation-mismatching-values-list"] > li',
+    ).contains("Nettoomsättning");
+    cy.get(
+      '[data-testid="finalize-gredor-validation-mismatching-values-list"] > li > ul > li:nth-child(1)',
+    ).should("have.text", "214\u00a0(tusental) kr");
+    cy.get(
+      '[data-testid="finalize-gredor-validation-mismatching-values-list"] > li > ul > li:nth-child(2)',
+    ).should("have.text", "213 154 kr");
+
+    // Validera att-göra-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
       "have.text",
-      "Nettoomsättning: [  214\u00a0(tusental) / 213 154 ] kr",
+      "1",
     );
   });
 
@@ -321,9 +338,18 @@ describe("finalize wizard", () => {
     cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
-    cy.get('[data-testid="finalize-reminder-invalid-orgnr"]').should(
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 2: Gredors förkontroller
+    cy.get('[data-testid="finalize-gredor-validation-invalid-orgnr"]').should(
       "have.length",
       1,
+    );
+
+    // Validera att-göra-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
+      "have.text",
+      "1",
     );
   });
 
@@ -349,13 +375,20 @@ describe("finalize wizard", () => {
     cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
-    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar"]').should(
-      "have.length",
-      1,
-    );
-    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar-0"]').should(
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 2: Gredors förkontroller
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-verksamhetsar"]',
+    ).should("have.length", 1);
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-verksamhetsar-0"]',
+    ).should("have.text", "<startdatum saknas!> - 2022-12-31");
+
+    // Validera att-göra-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
       "have.text",
-      "<startdatum saknas!> - 2022-12-31",
+      "1",
     );
   });
 
@@ -381,13 +414,93 @@ describe("finalize wizard", () => {
     cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
 
     // Steg 1 - Glöm inte...
-    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar"]').should(
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 2: Gredors förkontroller
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-verksamhetsar"]',
+    ).should("have.length", 1);
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-verksamhetsar-0"]',
+    ).should("have.text", "2022-01-01 - 2021-12-31");
+
+    // Validera att-göra-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
+      "have.text",
+      "1",
+    );
+  });
+
+  it("reports missing date", () => {
+    cy.viewport(1600, 900);
+
+    cy.visit("http://localhost:4173", {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+      },
+    });
+
+    // Öppna fil
+    cy.get("#openArsredovisningBtn").click();
+    cy.get('[data-testid="request-open-file-input"]').selectFile(
+      "cypress/fixtures/input/gredor/TestfilA_utan-datering.gredorutkast",
+      { force: true },
+    );
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
+
+    // Öppna wizard
+    cy.get('[data-testid="show-finalize-wizard-button"]').click();
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
+
+    // Steg 1 - Glöm inte...
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 2: Gredors förkontroller
+    cy.get('[data-testid="finalize-gredor-validation-invalid-date"]').should(
       "have.length",
       1,
     );
-    cy.get('[data-testid="finalize-reminder-invalid-verksamhetsar-0"]').should(
+
+    // Validera att-göra-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
       "have.text",
-      "2022-01-01 - 2021-12-31",
+      "1",
+    );
+  });
+
+  it("reports invalid signatures", () => {
+    cy.viewport(1600, 900);
+
+    cy.visit("http://localhost:4173", {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("AppShowFirstLaunchScreen", "false");
+      },
+    });
+
+    // Öppna fil
+    cy.get("#openArsredovisningBtn").click();
+    cy.get('[data-testid="request-open-file-input"]').selectFile(
+      "cypress/fixtures/input/gredor/TestfilA_med-ogiltiga-underskrifter.gredorutkast",
+      { force: true },
+    );
+    cy.wait(1000); // NOSONAR // Behövs för att filen ska hinna laddas in
+
+    // Öppna wizard
+    cy.get('[data-testid="show-finalize-wizard-button"]').click();
+    cy.wait(1000); // NOSONAR // Behövs för att input-fält inte ska bete sig knasigt
+
+    // Steg 1 - Glöm inte...
+    cy.get('[data-testid="wizard-next-button"]').click();
+
+    // Steg 2: Gredors förkontroller
+    cy.get(
+      '[data-testid="finalize-gredor-validation-invalid-signatures"]',
+    ).should("have.length", 1);
+
+    // Validera att-göra-lista
+    cy.get("[data-testid='todo-list-num-tasks-remaining']").should(
+      "have.text",
+      "1",
     );
   });
 });

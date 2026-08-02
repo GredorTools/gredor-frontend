@@ -50,6 +50,7 @@ defineExpose({
     ref="modal"
     show-close-button
     title="Färdigställ inför årsstämma"
+    unmount-content-on-hide
   >
     <Suspense>
       <FinalizeWizardSteps

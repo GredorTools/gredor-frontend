@@ -16,9 +16,11 @@ const props = defineProps<{
   /** Huruvida fönstret ska visas direkt. */
   showOnMount?: boolean;
 
-  /** Huruvida fönstret ska ha en stäng-knapp (X) uppe till höger
-   * (standardvärde är false). */
+  /** Huruvida fönstret ska ha en stäng-knapp (X) uppe till höger. */
   showCloseButton?: boolean;
+
+  /** Huruvida innehållet i fönstret ska avmonteras när fönstret döljs. */
+  unmountContentOnHide?: boolean;
 }>();
 
 defineExpose({
@@ -56,6 +58,12 @@ onMounted(() => {
       modal.show();
       modalHasBeenShown.value = true;
     }
+
+    element.addEventListener("hidden.bs.modal", () => {
+      if (props.unmountContentOnHide) {
+        modalHasBeenShown.value = false;
+      }
+    });
   }
 });
 </script>
