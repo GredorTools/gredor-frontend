@@ -72,7 +72,7 @@ main {
   }
 
   &.standard-padding {
-    padding: $spacing-md;
+    padding: $spacing-md 0;
   }
 }
 </style>

@@ -27,8 +27,8 @@ import AppPage from "@/components/AppPage.vue";
   </AppPage>
 </template>
 
-<style lang="scss">
-.card {
+<style lang="scss" scoped>
+:deep(.card) {
   --bs-card-bg: white;
 }
 </style>
