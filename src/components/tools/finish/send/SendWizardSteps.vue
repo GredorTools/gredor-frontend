@@ -9,7 +9,7 @@
  * slutgiltig bekräftelse och överföring till Bolagsverket.
  */
 
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import type { Arsredovisning } from "@/model/arsredovisning/Arsredovisning.ts";
 import SendRequestFiles from "@/components/tools/finish/send/steps/SendRequestFiles.vue";
 import SendAddFaststallelseintyg from "@/components/tools/finish/send/steps/SendAddFaststallelseintyg.vue";
@@ -24,10 +24,16 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import SendGredorAgreement from "@/components/tools/finish/send/steps/SendGredorAgreement.vue";
 import CommonBankIdLogin from "@/components/tools/finish/common/steps/CommonBankIdLogin.vue";
 import { useGredorStorage } from "@/components/common/composables/useGredorStorage.ts";
+import type { ForberedInlamning } from "@/components/common/composables/useForberedInlamning.ts";
+import SendForberedInlamningBanner from "@/components/tools/finish/send/SendForberedInlamningBanner.vue";
 
-defineProps<{
+const props = defineProps<{
   /** Modalen som wizarden ligger i. */
   modal?: ComponentExposed<typeof CommonModal>;
+
+  /** En årsredovisning som har hämtats från en länk i stället för att laddas
+   * upp manuellt. Om den är satt startar flödet på steg 2. */
+  forberedInlamning?: ForberedInlamning;
 }>();
 
 const emit = defineEmits<{
@@ -35,8 +41,12 @@ const emit = defineEmits<{
   (e: "stepChange", step: typeof currentStep.value): void;
 }>();
 
-const arsredovisning = ref<Arsredovisning | undefined>();
-const arsredovisningGredorFile = ref<File | undefined>();
+const arsredovisning = ref<Arsredovisning | undefined>(
+  props.forberedInlamning?.arsredovisning,
+);
+const arsredovisningGredorFile = ref<File | undefined>(
+  props.forberedInlamning?.gredorFile,
+);
 const personalNumber = useGredorStorage<string>("UserPersonalNumber", "");
 const notificationEmail = useGredorStorage<string>("UserNotificationEmail", "");
 const ixbrl = ref<string | null>(null);
@@ -52,13 +62,28 @@ const currentStep = ref<
   | "gredorAgreement"
   | "finalConfirmation"
   | "uploadReport"
->("sendRequestFiles");
+>(props.forberedInlamning ? "requestInformation" : "sendRequestFiles");
 const numSteps = 10;
 
 watch(currentStep, () => emit("stepChange", currentStep.value));
+
+// Bannern får bara visas så länge det faktiskt är den hämtade årsredovisningen
+// som ligger i flödet — går användaren tillbaka och laddar upp en egen fil i
+// stället stämmer inte längre uppgiften om varifrån den kom.
+const showForberedInlamningBanner = computed(
+  () =>
+    props.forberedInlamning != null &&
+    arsredovisning.value === props.forberedInlamning.arsredovisning &&
+    currentStep.value !== "uploadReport",
+);
 </script>
 
 <template>
+  <SendForberedInlamningBanner
+    v-if="showForberedInlamningBanner && forberedInlamning != null"
+    :kalla-origin="forberedInlamning.kallaOrigin"
+    class="limit-width banner"
+  />
   <SendRequestFiles
     v-if="currentStep === 'sendRequestFiles'"
     v-model:arsredovisning="arsredovisning"
@@ -160,11 +185,17 @@ watch(currentStep, () => emit("stepChange", currentStep.value));
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/_variables.scss";
+
 * {
   max-height: 100%;
 }
 
 .limit-width {
   width: var(--bs-modal-width, 500px);
+}
+
+.banner {
+  margin-bottom: $spacing-md;
 }
 </style>
