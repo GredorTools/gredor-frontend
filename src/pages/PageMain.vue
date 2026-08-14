@@ -143,14 +143,6 @@ function endTour() {
           >
             Rundtur
           </button>
-
-          <VueOnboardingTour
-            ref="tour"
-            :steps="tourSteps"
-            label-terminate="Avsluta rundtur"
-            tour-id="appTour"
-            @end-tour="endTour"
-          />
         </template>
       </AppHeader>
     </template>
@@ -207,6 +199,15 @@ function endTour() {
     </div>
 
     <AppFirstLaunchScreen v-model:arsredovisning="arsredovisning" />
+
+    <VueOnboardingTour
+      ref="tour"
+      class="tour"
+      :steps="tourSteps"
+      label-terminate="Avsluta rundtur"
+      tour-id="appTour"
+      @end-tour="endTour"
+    />
 
     <template #footer>
       <AppFooter />
@@ -268,5 +269,10 @@ function endTour() {
       margin-left: (3 * $spacing-xs);
     }
   }
+}
+
+.tour {
+  top: 0;
+  left: 0;
 }
 </style>
