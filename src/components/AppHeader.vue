@@ -174,7 +174,7 @@ async function exportIXBRL() {
             class="btn btn-primary"
             @click="exportFile"
           >
-            <i class="bi bi-floppy"></i>Spara som
+            <i class="bi bi-floppy"></i>Spara som fil
           </button>
         </div>
         <div class="dropdown">
@@ -219,7 +219,7 @@ async function exportIXBRL() {
                     v-if="!isExportingIXBRL"
                     class="bi bi-file-earmark-arrow-down"
                   ></i>
-                  Avancerat: Exportera iXBRL till fil
+                  Avancerat: Exportera iXBRL-fil
                 </template>
                 <template v-else>
                   <div class="spinner-border"></div>

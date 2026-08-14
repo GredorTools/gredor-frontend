@@ -60,8 +60,8 @@ export const tourSteps: OnboardingTourStep[] = [
       "</p>" +
       "<p>" +
       "Du kan även använda" +
-      ' knapparna "Öppna" och "Spara som" till att dela årsredovisningar med' +
-      " andra personer." +
+      ' knapparna "Öppna" och "Spara som fil" till att dela' +
+      " årsredovisningar med andra personer." +
       "</p>",
   },
   {
