@@ -17,6 +17,7 @@ import EditNewArsredovisningModal from "@/components/edit/EditNewArsredovisningM
 import { nextTick, ref } from "vue";
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { useModalStore } from "@/components/common/composables/useModalStore.ts";
+import isMobile from "is-mobile";
 
 /** Årsredovisningen som redigeras i applikationen. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
@@ -33,6 +34,8 @@ const { showMessageModal } = useModalStore();
 const newArsredovisningModalRenderId = ref<number>(0);
 const newArsredovisningModal =
   ref<ComponentExposed<typeof EditNewArsredovisningModal>>();
+
+const isRunningOnMobile = isMobile();
 
 // Hantering av knappar
 async function showNewArsredovisningModal() {
@@ -94,10 +97,17 @@ function onArsredovisningCreated(value: Arsredovisning) {
     <div v-if="showFirstLaunchScreen" class="first-launch-container">
       <div class="card text-center d-flex flex-column align-items-center gap-3">
         <h2>Välkommen till Gredor!</h2>
+
         <p>
           Ett verktyg för att skapa årsredovisningar för aktiebolag<br />
           och ladda upp dem till Bolagsverket, helt gratis.
         </p>
+
+        <p v-if="isRunningOnMobile">
+          <strong>Obs!</strong> Gredor är inte designat för att användas på små
+          enheter som mobiltelefoner. Kör helst Gredor på en vanlig dator.
+        </p>
+
         <h4>Vad vill du göra?</h4>
         <div class="d-flex flex-column gap-3">
           <button
@@ -122,16 +132,19 @@ function onArsredovisningCreated(value: Arsredovisning) {
             <i class="bi bi-eye"></i>Visa en exempel-årsredovisning
           </button>
         </div>
-        <hr />
-        <p>
-          <strong>Tips!</strong> Efter att du har börjat på en årsredovisning
-          kommer det att finnas en knapp i övre högra hörnet, som ger dig en
-          rundtur av Gredor.
-        </p>
-        <p>
-          Mer information om Gredor finns nedan – det är bara att skrolla ner
-          lite.
-        </p>
+
+        <template v-if="!isRunningOnMobile">
+          <hr />
+          <p>
+            <strong>Tips!</strong> Efter att du har börjat på en årsredovisning
+            kommer det att finnas en knapp i övre högra hörnet, som ger dig en
+            rundtur av Gredor.
+          </p>
+          <p>
+            Mer information om Gredor finns nedan – det är bara att skrolla ner
+            lite.
+          </p>
+        </template>
       </div>
     </div>
   </transition>
