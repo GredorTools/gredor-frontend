@@ -47,14 +47,12 @@ const personnummerCorrectFormatButInvalidLuhn = computed(
       <p>
         Fyll i ditt personnummer nedan. I de följande stegen kommer Gredor att
         låta Bolagsverkets kontrollera din årsredovisning samt ladda upp den
-        till ditt egna utrymme, och du som initierar detta måste vara behörig
-        att företräda företaget samt kunna identifiera dig med BankID.
+        till ditt egna utrymme.
       </p>
       <p>
-        <strong>
-          Du kommer även att fylla i ett fastställelseintyg, och det måste då
-          vara ditt namn som står på det.
-        </strong>
+        Du som initierar detta <strong>måste</strong> vara en företrädare för
+        företaget som får signera årsredovisningens fastställelseintyg. Du
+        behöver också kunna identifiera dig med BankID.
       </p>
       <p>Format: ÅÅÅÅMMDDXXXX (12 siffror utan bindestreck)</p>
       <input

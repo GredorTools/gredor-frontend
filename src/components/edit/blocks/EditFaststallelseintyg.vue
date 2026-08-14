@@ -19,6 +19,11 @@ import { handleEventForInputWithValueWhitelist } from "@/util/inputUtils.ts";
 import { computed } from "vue";
 import { isBeloppradMonetary } from "@/model/arsredovisning/beloppradtyper/BeloppradMonetary.ts";
 
+defineProps<{
+  /** Personnummer på den som skriver under fastställelseintyget. */
+  personalNumber: string;
+}>();
+
 /** Årsredovisningen som innehåller fastställelseintyget. */
 const arsredovisning = defineModel<Arsredovisning>("arsredovisning", {
   required: true,
@@ -169,6 +174,16 @@ const availableResultatdispositionBeslut = computed(() => {
         </select>
       </div>
     </div>
+    <div class="row">
+      <div class="form-group col">
+        <span class="prefilled-label"
+          >Ditt personnummer (måste stämma överens med uppgifterna ovan):
+        </span>
+        <span data-testid="faststallelseintyg-person-personnummer">
+          {{ personalNumber }}
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -194,7 +209,8 @@ const availableResultatdispositionBeslut = computed(() => {
   }
 }
 
-label {
+label,
+.prefilled-label {
   font-weight: bold;
   margin-bottom: $spacing-sm;
   color: #333;

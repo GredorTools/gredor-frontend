@@ -15,7 +15,12 @@ import type { CommonStepProps } from "@/components/tools/finish/common/steps/Com
 import CommonModalSubtitle from "@/components/common/CommonModalSubtitle.vue";
 import { isFaststallseintygRequiresStammansResultatdisposition } from "@/data/faststallelseintyg.ts";
 
-defineProps<CommonStepProps>();
+defineProps<
+  CommonStepProps & {
+    /** Personnummer på den som skriver under fastställelseintyget. */
+    personalNumber: string;
+  }
+>();
 
 /** Årsredovisningen som ska skickas in till Bolagsverket. */
 const arsredovisning = defineModel<Arsredovisning | undefined>(
@@ -54,7 +59,10 @@ const isValidFaststallelseintyg = computed(() => {
     </CommonModalSubtitle>
     <div v-if="arsredovisning">
       <div>
-        <EditFaststallelseintyg :arsredovisning="arsredovisning" />
+        <EditFaststallelseintyg
+          :arsredovisning="arsredovisning"
+          :personal-number="personalNumber"
+        />
       </div>
       <h5>Förhandsgranskning</h5>
       <div class="preview">
