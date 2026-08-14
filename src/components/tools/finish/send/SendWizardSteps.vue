@@ -100,6 +100,7 @@ watch(currentStep, () => emit("stepChange", currentStep.value));
     v-if="currentStep === 'addFaststallelseintyg'"
     :arsredovisning="arsredovisning"
     :current-step-number="5"
+    :personal-number="personalNumber"
     :num-steps="numSteps"
     @go-to-previous-step="currentStep = 'bolagsverketAgreement'"
     @go-to-next-step="currentStep = 'generateReport'"
