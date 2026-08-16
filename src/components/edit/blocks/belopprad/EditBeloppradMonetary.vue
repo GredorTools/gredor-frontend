@@ -78,7 +78,7 @@ watch(
   <BaseEditBeloppradComparable
     :allow-delete="allowDelete"
     :allow-not="allowNot"
-    :allowed-value-regex="/^-?\d*$/"
+    :allowed-value-regex="/^-?\d{0,12}$/"
     :belopprad="belopprad"
     :display-as-level="displayAsLevel"
     :is-summarad="taxonomyItem.additionalData.isCalculatedItem"
