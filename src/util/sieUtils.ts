@@ -74,9 +74,10 @@ export async function mapSieFileIntoArsredovisning(
   arsredovisning.balansrakning.length = 0;
 
   // Iterera över varje BAS-kontonummer och dess värden från den parsade filen
+  let nonSumMappingsFoundForAllBasAccounts = true;
   for (const [basAccount, value] of Object.entries(parseResult)) {
     const basAccountAsNumber = Number.parseInt(basAccount, 10);
-    let mappingFound = false;
+    let nonSumMappingFound = false;
 
     // Hitta taxonomiobjekt som BAS-kontot matchar
     for (const mapping of [...sieMappings, ...extraSieMappings]) {
@@ -103,8 +104,13 @@ export async function mapSieFileIntoArsredovisning(
             continue;
           }
 
-          // Nu vet vi att vi har hittat en matchning
-          mappingFound = true;
+          if (
+            !taxonomyItem.additionalData.isCalculatedItem &&
+            taxonomyItem.parent?.xmlName !== "se-gen-base:Flerarsoversikt"
+          ) {
+            // Nu vet vi att vi har hittat en matchning på en icke-summarad
+            nonSumMappingFound = true;
+          }
 
           // Hämta eller skapa en ny belopprad för taxonomiobjektet
           const beloppradListToAddInto = getBeloppradListToAddInto(
@@ -162,8 +168,33 @@ export async function mapSieFileIntoArsredovisning(
       }
     }
 
-    if (!mappingFound) {
-      messageCallback(`Varning: Konto ${basAccount} kunde inte mappas.`);
+    if (!nonSumMappingFound) {
+      // Visa ett meddelande om att kontot inte kunde mappas till någon post i
+      // årsredovisningen
+
+      let valueText = "";
+      if (!value.nuvarandeAr.eq(0)) {
+        valueText +=
+          value.nuvarandeAr.abs().toString().replace(".", ",") +
+          " aktuellt räkenskapsår";
+        if (!value.foregaendeAr.eq(0)) {
+          valueText += "; ";
+        }
+      }
+      if (!value.foregaendeAr.eq(0)) {
+        valueText +=
+          value.foregaendeAr.abs().toString().replace(".", ",") +
+          " föregående räkenskapsår";
+      }
+
+      messageCallback(
+        `Varning: Konto ${basAccount} kunde inte mappas till någon post i` +
+          " årsredovisningen. Detta beror vanligtvis, men inte alltid, på att" +
+          " kontoplanen i din bokföring inte följer BAS fullt ut. Du behöver" +
+          ` troligtvis lägga in värdet på kontot (${valueText}) i` +
+          " årsredovisningen manuellt.",
+      );
+      nonSumMappingsFoundForAllBasAccounts = false;
     }
   }
 
@@ -176,9 +207,9 @@ export async function mapSieFileIntoArsredovisning(
     )
   ) {
     messageCallback(
-      "Årets resultat hittades inte eller var noll i SIE-filen. Gredor kommer" +
-        " ändå att importera filen, men du bör kontrollera att du inte har" +
-        " missat att slutföra din bokföring.",
+      "Varning: Årets resultat hittades inte eller var noll i SIE-filen." +
+        " Gredor kommer ändå att importera filen, men du bör kontrollera att" +
+        " du inte har missat att slutföra din bokföring.",
     );
   }
 
@@ -220,65 +251,14 @@ export async function mapSieFileIntoArsredovisning(
     }
   }
 
-  // Kolla om det kan finnas några avrundningsfel i beloppraderna genom att
-  // jämföra beloppen som har räknats fram ovan med summeringar av
-  // CalculationProcessor
-  for (const belopprad of beloppraderAdded) {
-    if (
-      isBeloppradComparable(belopprad) &&
-      beloppradListsForBelopprad.get(belopprad) != null
-    ) {
-      const taxonomyManager = taxonomyManagersForBelopprad.get(belopprad)!;
-      if (taxonomyManager != null) {
-        const taxonomyItem = getTaxonomyItemForBelopprad(
-          taxonomyManager,
-          belopprad,
-        );
-        if (taxonomyItem.additionalData.isCalculatedItem) {
-          // Summera med CalculationProcessor
-          const calculatedBelopprad: BeloppradMonetary = {
-            taxonomyItemName: belopprad.taxonomyItemName,
-            type: "xbrli:monetaryItemType",
-            beloppNuvarandeAr: "",
-            beloppTidigareAr: new Array(belopprad.beloppTidigareAr.length).fill(
-              "",
-            ),
-          };
-          calculateValuesIntoBelopprad(
-            taxonomyManager.calculationProcessor,
-            beloppradListsForBelopprad.get(belopprad)!,
-            calculatedBelopprad,
-          );
-
-          if (
-            // Jämför nuvarande år
-            calculatedBelopprad.beloppNuvarandeAr !==
-              belopprad.beloppNuvarandeAr ||
-            // Jämför tidigare år
-            calculatedBelopprad.beloppTidigareAr.some(
-              (_, i) =>
-                belopprad.beloppTidigareAr[i] !==
-                calculatedBelopprad.beloppTidigareAr[i],
-            )
-          ) {
-            // Sätt till det avrundade värdet så det stämmer överens med hur det
-            // hade blivit med automatisk summering om användaren hade matat in
-            // de övriga fälten utifrån sin bokföring manuellt.
-            belopprad.beloppNuvarandeAr = calculatedBelopprad.beloppNuvarandeAr;
-            belopprad.beloppTidigareAr.forEach((_, i) => {
-              belopprad.beloppTidigareAr[i] =
-                calculatedBelopprad.beloppTidigareAr[i];
-            });
-
-            messageCallback(
-              `Belopprad "${taxonomyItem.additionalData.displayLabel}" har` +
-                " avrundningsfel. Du kan eventuellt behöva justera detta manuellt.",
-            );
-          }
-        }
-      }
-    }
-  }
+  // Korrigera summarader och kolla efter avrundningsfel
+  fixSumsAndCheckForRoundingErrors(
+    beloppraderAdded,
+    beloppradListsForBelopprad,
+    taxonomyManagersForBelopprad,
+    nonSumMappingsFoundForAllBasAccounts,
+    messageCallback,
+  );
 
   // Räkna ut soliditet
   await autofillSoliditet(arsredovisning);
@@ -356,6 +336,113 @@ function parseSieFile(sieFileText: string) {
   }
 
   return { values, orgnr };
+}
+
+/**
+ * Korrigerar summarader så att de motsvarar vad som hade beräknats av
+ * CalculationProcessor. På detta sätt upptäcks även avrundningsfel (genom att
+ * jämföra beloppen som har lästs in med summeringar av CalculationProcessor);
+ * ett meddelande om avrundningsfel visas för användaren på vissa viktiga
+ * summarader. Denna funktion ska anropas efter att data från SIE-filen har
+ * lästs in till belopprader.
+ *
+ * @param beloppraderAdded - Beloppraderna som ska kontrolleras.
+ * @param beloppradListsForBelopprad - En mappning från belopprad till det
+ * avsnitt i årsredovisningen som beloppraden ligger i.
+ * @param taxonomyManagersForBelopprad - En mappning från belopprad till dess
+ * respektive TaxonomyManager.
+ * @param nonSumMappingsFoundForAllBasAccounts - En flagga som indikerar
+ * huruvida alla BAS-konton i SIE-filen har kunnat mappas till belopprader
+ * (summarader exkluderat).
+ * @param messageCallback - Callback-funktion som anropas för att visa
+ * meddelanden (t.ex. den inbyggda alert-funktionen).
+ */
+function fixSumsAndCheckForRoundingErrors(
+  beloppraderAdded: Belopprad[],
+  beloppradListsForBelopprad: Map<Belopprad, Belopprad[]>,
+  taxonomyManagersForBelopprad: Map<Belopprad, TaxonomyManager>,
+  nonSumMappingsFoundForAllBasAccounts: boolean,
+  messageCallback: (message: string) => void,
+) {
+  for (const belopprad of beloppraderAdded) {
+    if (!(
+      isBeloppradComparable(belopprad) &&
+      beloppradListsForBelopprad.get(belopprad) != null
+    )) {
+      continue;
+    }
+
+    const taxonomyManager = taxonomyManagersForBelopprad.get(belopprad)!;
+    if (taxonomyManager == null) {
+      continue;
+    }
+
+    const taxonomyItem = getTaxonomyItemForBelopprad(
+      taxonomyManager,
+      belopprad,
+    );
+    if (!taxonomyItem.additionalData.isCalculatedItem) {
+      continue;
+    }
+
+    const calculatedBelopprad: BeloppradMonetary = {
+      taxonomyItemName: belopprad.taxonomyItemName,
+      type: "xbrli:monetaryItemType",
+      beloppNuvarandeAr: "",
+      beloppTidigareAr: new Array(belopprad.beloppTidigareAr.length).fill(""),
+    };
+    calculateValuesIntoBelopprad(
+      taxonomyManager.calculationProcessor,
+      beloppradListsForBelopprad.get(belopprad)!,
+      calculatedBelopprad,
+    );
+    if (
+      // Jämför nuvarande år
+      (calculatedBelopprad.beloppNuvarandeAr !== belopprad.beloppNuvarandeAr &&
+        calculatedBelopprad.beloppNuvarandeAr !== "") ||
+      // Jämför tidigare år
+      calculatedBelopprad.beloppTidigareAr.some(
+        (_, i) =>
+          belopprad.beloppTidigareAr[i] !==
+            calculatedBelopprad.beloppTidigareAr[i] &&
+          calculatedBelopprad.beloppTidigareAr[i] !== "",
+      )
+    ) {
+      // Sätt till det avrundade värdet så det stämmer överens med hur det
+      // hade blivit med automatisk summering om användaren hade matat in
+      // de övriga fälten utifrån sin bokföring manuellt.
+      belopprad.beloppNuvarandeAr = calculatedBelopprad.beloppNuvarandeAr;
+      belopprad.beloppTidigareAr.forEach((_, i) => {
+        belopprad.beloppTidigareAr[i] = calculatedBelopprad.beloppTidigareAr[i];
+      });
+
+      // Visa ett meddelande för användaren om det är en av några specifika
+      // belopprader som har justerats utifrån vår beräkning
+      if (
+        [
+          "se-gen-base:ResultatEfterFinansiellaPoster",
+          "se-gen-base:AretsResultat",
+          "se-gen-base:Tillgangar",
+          "se-gen-base:EgetKapitalSkulder",
+        ].includes(taxonomyItem.xmlName)
+      ) {
+        if (nonSumMappingsFoundForAllBasAccounts) {
+          messageCallback(
+            `Varning: Summaraden "${taxonomyItem.additionalData.displayLabel}"` +
+              " har avrundningsfel. Du kan eventuellt behöva justera de belopp" +
+              " som summan bygger på.",
+          );
+        } else {
+          messageCallback(
+            `Varning: Summaraden "${taxonomyItem.additionalData.displayLabel}"` +
+              " har antingen avrundningsfel eller ett felaktigt värde p.g.a." +
+              " saknad kontomappning (se varningarna längre upp). Det är" +
+              " möjligt att du behöver justera de belopp som summan bygger på.",
+          );
+        }
+      }
+    }
+  }
 }
 
 // BAS-konton för aktuell skatteskuld resp. skattefordran.

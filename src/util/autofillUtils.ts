@@ -56,7 +56,11 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
       ): string {
         const bolagsskatt =
           BOLAGSSKATT_PER_AR[verksamhetsar.startdatum.substring(0, 4)];
-        if (bolagsskatt == null) {
+        if (
+          bolagsskatt == null ||
+          egetKapital.length < 1 ||
+          balansomslutning.length < 1
+        ) {
           return "";
         }
 
