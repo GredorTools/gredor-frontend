@@ -1,11 +1,11 @@
 describe("importing SIE files with a negative tax liability", () => {
-  // SIETestSkattefordran.se är identisk med SIETest.se förutom att konto 2510
-  // (aktuell skatt) innevarande år har ett debetsaldo (5000) i stället för ett
-  // kreditsaldo, dvs. bolaget har betalat in för mycket skatt. Föregående år är
-  // fortfarande ett kreditsaldo (skatteskuld). Kassakontot är justerat så att
-  // balansräkningen fortfarande går ihop. Det negativa skattesaldot ska därför
-  // omklassificeras från Skatteskulder till Övriga fordringar – men bara för
-  // innevarande år.
+  // SIETestSkattefordran.se är identisk med SIETest2Rakenskapsar.se förutom att
+  // konto 2510 (aktuell skatt) innevarande år har ett debetsaldo (5000) i
+  // stället för ett kreditsaldo, dvs. bolaget har betalat in för mycket skatt.
+  // Föregående år är fortfarande ett kreditsaldo (skatteskuld). Kassakontot är
+  // justerat så att balansräkningen fortfarande går ihop. Det negativa
+  // skattesaldot ska därför omklassificeras från Skatteskulder till Övriga
+  // fordringar – men bara för innevarande år.
   beforeEach(() => {
     cy.viewport(1800, 1000);
 
@@ -49,7 +49,7 @@ describe("importing SIE files with a negative tax liability", () => {
       },
     );
     // Omklassificeringen visas som ett informationsmeddelande först, följt av
-    // samma avrundningsmeddelanden som för SIETest.se.
+    // samma avrundningsmeddelanden som för SIETest2Rakenskapsar.se.
     cy.get("div.message-modal-content p:nth-child(2)").should(
       "have.text",
       "Företagets skatteskulder (konto 2510-2519) är negativa enligt SIE-filen;" +
@@ -58,11 +58,11 @@ describe("importing SIE files with a negative tax liability", () => {
     );
     cy.get("div.message-modal-content p:nth-child(3)").should(
       "have.text",
-      'Belopprad "Resultat efter finansiella poster" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
+      'Varning: Summaraden "Resultat efter finansiella poster" har avrundningsfel. Du kan eventuellt behöva justera de belopp som summan bygger på.',
     );
-    cy.get("div.message-modal-content p:nth-child(5)").should(
+    cy.get("div.message-modal-content p:nth-child(4)").should(
       "have.text",
-      'Belopprad "Årets resultat" har avrundningsfel. Du kan eventuellt behöva justera detta manuellt.',
+      'Varning: Summaraden "Årets resultat" har avrundningsfel. Du kan eventuellt behöva justera de belopp som summan bygger på.',
     );
     cy.get(
       '#app-modal-controller-1-footer-teleport [data-testid="wizard-next-button"]',
@@ -100,7 +100,8 @@ describe("importing SIE files with a negative tax liability", () => {
     ).should("have.text", "871");
 
     // Skatteskulden är borta ur kortfristiga skulder för innevarande år
-    // (18 835 i SIETest.se -> 3 685 här), medan föregående år är oförändrat.
+    // (18 835 i SIETest2Rakenskapsar.se -> 3 685 här), medan föregående år är
+    // oförändrat.
     cy.get(
       '#arsredovisning-for-export td:nth-child(3) [name="se-gen-base:KortfristigaSkulder"]',
     ).should("have.text", "3 685");
