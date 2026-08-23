@@ -115,7 +115,7 @@ const commonTaxonomyItemNames = [
                 class="form-control"
                 type="text"
                 @beforeinput="
-                  handleEventForInputWithValueWhitelist($event, /^-?\d*$/)
+                  handleEventForInputWithValueWhitelist($event, /^-?\d{0,12}$/)
                 "
               />
             </div>
