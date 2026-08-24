@@ -228,14 +228,16 @@ export function shouldShowSign(
   }
 
   let beloppToDisplay = Number.parseInt(belopp, 10);
-  switch (displayFormat) {
-    case BeloppFormat.HELTAL:
-      break;
-    case BeloppFormat.TUSENTAL:
-      beloppToDisplay = Math.round(beloppToDisplay / 1000);
-      break;
-    default:
-      throw new Error("Unknown format");
+  if (!isPercentageTaxonomyItem(taxonomyItem)) {
+    switch (displayFormat) {
+      case BeloppFormat.HELTAL:
+        break;
+      case BeloppFormat.TUSENTAL:
+        beloppToDisplay = Math.round(beloppToDisplay / 1000);
+        break;
+      default:
+        throw new Error("Unknown format");
+    }
   }
 
   if (beloppToDisplay === 0) {
