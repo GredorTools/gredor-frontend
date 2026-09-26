@@ -113,7 +113,7 @@ export async function convertVueHTMLToiXBRL(
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
       <meta name="programvara" content="Gredor" />
       <meta name="programversion" content="${getAppFullVersion()}" />
-      <title>${title}</title>
+      <title>${escapeXHTML(title)}</title>
       <style type="text/css">${rulesCss}</style>
     `;
   let xhtml = new XMLSerializer().serializeToString(doc);
@@ -404,4 +404,20 @@ function isValidStyleSheetForDocument(sheet: CSSStyleSheet) {
 
   // OK
   return true;
+}
+
+/**
+ * Escapear specialtecken i en sträng till motsvarande XHTML-entiteter.
+ *
+ * @param text - Strängen som ska escapeas.
+ * @returns Den escapeade strängen med specialtecken omvandlade till
+ * XHTML-entiteter.
+ */
+function escapeXHTML(text: string): string {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
