@@ -82,7 +82,7 @@
         "taxonomyItemName": "se-gen-base:Nettoomsattning",
         "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "213157",
+        "beloppNuvarandeAr": "207157",
         "beloppTidigareAr": [
           "274012"
         ]
@@ -91,7 +91,7 @@
         "taxonomyItemName": "se-gen-base:ResultatEfterFinansiellaPoster",
         "parentTaxonomyItemName": "se-gen-base:Flerarsoversikt",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "61573",
+        "beloppNuvarandeAr": "55573",
         "beloppTidigareAr": [
           "59635"
         ]
@@ -323,7 +323,7 @@
         "taxonomyItemName": "se-gen-base:Nettoomsattning",
         "parentTaxonomyItemName": "se-gen-base:RorelsensIntakterLagerforandringarMmAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "213157",
+        "beloppNuvarandeAr": "207157",
         "beloppTidigareAr": [
           "274012"
         ]
@@ -333,7 +333,7 @@
         "labelType": "totalLabel",
         "parentTaxonomyItemName": "se-gen-base:RorelseresultatAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "213157",
+        "beloppNuvarandeAr": "207157",
         "beloppTidigareAr": [
           "274012"
         ]
@@ -377,7 +377,7 @@
         "taxonomyItemName": "se-gen-base:Rorelseresultat",
         "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "60530",
+        "beloppNuvarandeAr": "54530",
         "beloppTidigareAr": [
           "59128"
         ]
@@ -412,7 +412,7 @@
         "taxonomyItemName": "se-gen-base:ResultatEfterFinansiellaPoster",
         "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "61574",
+        "beloppNuvarandeAr": "55574",
         "beloppTidigareAr": [
           "59635"
         ]
@@ -421,7 +421,7 @@
         "taxonomyItemName": "se-gen-base:ResultatForeSkatt",
         "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "61574",
+        "beloppNuvarandeAr": "55574",
         "beloppTidigareAr": [
           "59635"
         ]
@@ -447,7 +447,7 @@
         "labelType": "terseLabel",
         "parentTaxonomyItemName": "se-gen-base:ResultatrakningKostnadsslagsindeladAbstract",
         "type": "xbrli:monetaryItemType",
-        "beloppNuvarandeAr": "48868",
+        "beloppNuvarandeAr": "42868",
         "beloppTidigareAr": [
           "47322"
         ]
@@ -754,6 +754,8 @@
         "type": "xbrli:decimalItemType",
         "beloppNuvarandeAr": "",
         "beloppTidigareAr": [
+          "",
+          "",
           ""
         ]
       },

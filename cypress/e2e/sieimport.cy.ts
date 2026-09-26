@@ -1,6 +1,7 @@
 import path from "path";
 import { diff } from "json-diff-ts";
 import { Arsredovisning } from "../../src/model/arsredovisning/Arsredovisning";
+import { DataContainer } from "../../src/model/DataContainer";
 
 describe("importing SIE files", () => {
   beforeEach(() => {
@@ -598,22 +599,26 @@ describe("importing SIE files", () => {
         cy.readFile(
           "cypress/fixtures/expectedoutput/sie/SIETest2Rakenskapsar.gredorutkast",
         ).then((expectedGredorFile: string) => {
-          const parsedActual = JSON.parse(actualGredorFile) as Arsredovisning;
+          const parsedActual = JSON.parse(
+            actualGredorFile,
+          ) as DataContainer<Arsredovisning>;
           const parsedExpected = JSON.parse(
             expectedGredorFile,
-          ) as Arsredovisning;
+          ) as DataContainer<Arsredovisning>;
 
-          for (const SummaradenList of [
+          for (const beloppradList of [
             "forvaltningsberattelse",
             "resultatrakning",
             "balansrakning",
             "noter",
           ]) {
-            const diffs = diff(
-              parsedExpected[SummaradenList],
-              parsedActual[SummaradenList],
-            );
+            const actualBelopprader = parsedActual.data[beloppradList];
+            const expectedBelopprader = parsedExpected.data[beloppradList];
 
+            expect(expectedBelopprader).to.not.be.undefined;
+            expect(actualBelopprader).to.not.be.undefined;
+
+            const diffs = diff(expectedBelopprader, actualBelopprader);
             expect(diffs).to.be.empty;
           }
         });
