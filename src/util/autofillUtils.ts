@@ -48,38 +48,7 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
       isBeloppradComparable(balansomslutningBelopprad) &&
       isBeloppradComparable(soliditetBelopprad)
     ) {
-      function soliditet(
-        egetKapital: string,
-        obeskattadeReserver: string,
-        balansomslutning: string,
-        verksamhetsar: Verksamhetsar,
-      ): string {
-        const bolagsskatt =
-          BOLAGSSKATT_PER_AR[verksamhetsar.startdatum.substring(0, 4)];
-        if (
-          bolagsskatt == null ||
-          egetKapital.length < 1 ||
-          balansomslutning.length < 1
-        ) {
-          return "";
-        }
-
-        const calculatedSoliditet = Decimal(egetKapital)
-          .plus(
-            Decimal("1")
-              .minus(Decimal(bolagsskatt))
-              .mul(Decimal(obeskattadeReserver)),
-          )
-          .div(Decimal(balansomslutning))
-          .mul(100)
-          .round();
-
-        return !calculatedSoliditet.isNaN()
-          ? calculatedSoliditet.toString()
-          : "";
-      }
-
-      soliditetBelopprad.beloppNuvarandeAr = soliditet(
+      soliditetBelopprad.beloppNuvarandeAr = avrundadSoliditet(
         egetKapitalBelopprad.beloppNuvarandeAr,
         obeskattadeReserverBelopprad != null &&
           isBeloppradComparable(obeskattadeReserverBelopprad)
@@ -89,7 +58,7 @@ export async function autofillSoliditet(arsredovisning: Arsredovisning) {
         arsredovisning.verksamhetsarNuvarande,
       ).toString();
 
-      soliditetBelopprad.beloppTidigareAr[0] = soliditet(
+      soliditetBelopprad.beloppTidigareAr[0] = avrundadSoliditet(
         egetKapitalBelopprad.beloppTidigareAr[0],
         obeskattadeReserverBelopprad != null &&
           isBeloppradComparable(obeskattadeReserverBelopprad)
@@ -153,12 +122,41 @@ export async function autofillPersonalkostnaderNot(
   }
 }
 
+function avrundadSoliditet(
+  egetKapital: string,
+  obeskattadeReserver: string,
+  balansomslutning: string,
+  verksamhetsar: Verksamhetsar,
+): string {
+  const bolagsskatt =
+    BOLAGSSKATT_PER_AR[verksamhetsar.startdatum.substring(0, 4)];
+  if (
+    bolagsskatt == null ||
+    egetKapital.length < 1 ||
+    balansomslutning.length < 1
+  ) {
+    return "";
+  }
+
+  const calculatedSoliditet = Decimal(egetKapital)
+    .plus(
+      Decimal("1")
+        .minus(Decimal(bolagsskatt))
+        .mul(Decimal(obeskattadeReserver)),
+    )
+    .div(Decimal(balansomslutning))
+    .mul(100)
+    .round();
+
+  return !calculatedSoliditet.isNaN() ? calculatedSoliditet.toString() : "";
+}
+
 // Bolagsskatt per år (räkenskapsår som inleds 2021, 2022, osv)
 const BOLAGSSKATT_PER_AR: { [ar: string]: string } = {
-  "2021": "20.6",
-  "2022": "20.6",
-  "2023": "20.6",
-  "2024": "20.6",
-  "2025": "20.6",
-  "2026": "20.6",
+  "2021": "0.206", // 20,6%
+  "2022": "0.206", // 20,6%
+  "2023": "0.206", // 20,6%
+  "2024": "0.206", // 20,6%
+  "2025": "0.206", // 20,6%
+  "2026": "0.206", // 20,6%
 };
