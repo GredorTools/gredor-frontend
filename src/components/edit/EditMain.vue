@@ -47,7 +47,7 @@ const currentMode: Ref<Mode> = ref("grunduppgifter");
         :class="{ active: currentMode === mode }"
         class="nav-link"
         href="#"
-        @click="currentMode = mode as Mode"
+        @click.prevent="currentMode = mode as Mode"
         >{{ modeName }}</a
       >
     </li>
