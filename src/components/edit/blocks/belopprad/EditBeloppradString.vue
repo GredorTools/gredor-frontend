@@ -101,7 +101,7 @@ const trClasses = computed(() => [
         :colspan="comparableNumPreviousYears + 3"
       >
         <CommonAutoresizeTextarea
-          v-model="belopprad.text"
+          v-model.trim="belopprad.text"
           :data-testid="getTestIdForBelopprad(belopprad)"
           class="form-control belopprad-textarea"
         ></CommonAutoresizeTextarea>
@@ -128,7 +128,7 @@ const trClasses = computed(() => [
       class="value-container text-left"
     >
       <input
-        v-model="belopprad.text"
+        v-model.trim="belopprad.text"
         :class="{ 'form-control-sm': small }"
         :data-testid="`edit-${belopprad.taxonomyItemName}`"
         class="form-control"
