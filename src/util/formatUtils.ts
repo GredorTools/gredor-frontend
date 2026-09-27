@@ -3,7 +3,6 @@ import {
   type TaxonomyItem,
 } from "@/model/taxonomy/TaxonomyItem.ts";
 import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
-import { isPercentageTaxonomyItem } from "@/util/renderUtils.ts";
 
 /**
  * Formaterar en numerisk sträng genom att lägga till mellanslag som
@@ -21,10 +20,14 @@ export function formatNumber(
   taxonomyItem: TaxonomyItem | null,
   displayFormat: BeloppFormat,
   options?: {
-    removeSign: boolean;
+    removeSign?: boolean;
+    useNonBreakingSpace?: boolean;
   },
 ): string {
-  if (taxonomyItem == null || !isPercentageTaxonomyItem(taxonomyItem)) {
+  if (
+    taxonomyItem == null ||
+    taxonomyItem.properties.type === "xbrli:monetaryItemType"
+  ) {
     switch (displayFormat) {
       case BeloppFormat.HELTAL:
         break;
@@ -49,9 +52,10 @@ export function formatNumber(
   }
 
   // Tusentalsavskiljare
+  const space = options?.useNonBreakingSpace ? "\u00a0" : " ";
   const resultParts = result.split(","); // [heltal, decimaler]
   result =
-    resultParts[0].replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ") +
+    resultParts[0].replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, space) +
     (resultParts[1]?.length > 0 ? `,${resultParts[1]}` : "");
 
   if (options?.removeSign) {

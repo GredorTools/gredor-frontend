@@ -3,11 +3,7 @@ import { BeloppFormat } from "@/model/arsredovisning/BeloppFormat.ts";
 import { type Belopprad } from "@/model/arsredovisning/Belopprad.ts";
 
 export type UnitRef =
-  | "redovisningsvaluta"
-  | "pure"
-  | "shares"
-  | `decimal-${string}`
-  | undefined;
+  "redovisningsvaluta" | "pure" | "shares" | `decimal-${string}` | undefined;
 
 export const UNIT_REF_REDOVISNINGSVALUTA: UnitRef = "redovisningsvaluta";
 export const UNIT_REF_PURE: UnitRef = "pure";
@@ -56,7 +52,7 @@ export function getNonFractionScale(
 ): string {
   if (isPercentageTaxonomyItem(taxonomyItem)) {
     return "-2";
-  } else {
+  } else if (taxonomyItem.properties.type === "xbrli:monetaryItemType") {
     switch (displayFormat) {
       case BeloppFormat.HELTAL:
         return "0";
@@ -65,6 +61,8 @@ export function getNonFractionScale(
       default:
         throw new Error("Unknown format");
     }
+  } else {
+    return "0";
   }
 }
 
@@ -78,9 +76,7 @@ export function getNonFractionDecimals(
   taxonomyItem: TaxonomyItem,
   displayFormat: BeloppFormat,
 ): string {
-  if (isPercentageTaxonomyItem(taxonomyItem)) {
-    return "INF";
-  } else {
+  if (taxonomyItem.properties.type === "xbrli:monetaryItemType") {
     switch (displayFormat) {
       case BeloppFormat.HELTAL:
         return "INF";
@@ -89,6 +85,8 @@ export function getNonFractionDecimals(
       default:
         throw new Error("Unknown format");
     }
+  } else {
+    return "INF";
   }
 }
 
@@ -228,7 +226,7 @@ export function shouldShowSign(
   }
 
   let beloppToDisplay = Number.parseInt(belopp, 10);
-  if (!isPercentageTaxonomyItem(taxonomyItem)) {
+  if (taxonomyItem.properties.type === "xbrli:monetaryItemType") {
     switch (displayFormat) {
       case BeloppFormat.HELTAL:
         break;
