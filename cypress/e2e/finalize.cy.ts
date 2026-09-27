@@ -98,7 +98,7 @@ describe("finalize wizard", () => {
       '[data-testid="finalize-reminder-noter-connections-list"] li:nth-child(1)',
     ).should(
       "have.text",
-      " Not 1 (Redovisningsprinciper) är just nu inte kopplad till någon belopprad",
+      " Not 1 (Redovisningsprinciper) är just nu inte kopplad till någon post",
     );
     cy.get(
       '[data-testid="finalize-reminder-noter-connections-list"] li:nth-child(2)',
@@ -204,7 +204,7 @@ describe("finalize wizard", () => {
       '[data-testid="finalize-reminder-noter-connections-list"] li:nth-child(1)',
     ).should(
       "have.text",
-      " Not 1 (Redovisningsprinciper) är just nu inte kopplad till någon belopprad",
+      " Not 1 (Redovisningsprinciper) är just nu inte kopplad till någon post",
     );
     cy.get(
       '[data-testid="finalize-reminder-noter-connections-list"] li:nth-child(2)',
@@ -304,10 +304,10 @@ describe("finalize wizard", () => {
     ).contains("Nettoomsättning");
     cy.get(
       '[data-testid="finalize-gredor-validation-mismatching-values-list"] > li > ul > li:nth-child(1)',
-    ).should("have.text", "214\u00a0(tusental) kr");
+    ).should("have.text", "Belopp: 214\u00a0(tusental)\u00a0kr");
     cy.get(
       '[data-testid="finalize-gredor-validation-mismatching-values-list"] > li > ul > li:nth-child(2)',
-    ).should("have.text", "213 154 kr");
+    ).should("have.text", "Belopp: 213\u00a0154\u00a0kr");
 
     // Validera att-göra-lista
     cy.get("[data-testid='todo-list-num-tasks-remaining']").should(

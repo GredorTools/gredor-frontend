@@ -54,8 +54,8 @@
   <se-gen-base:Kassalikviditet contextRef="balans1" unitRef="pure" decimals="INF">0.23</se-gen-base:Kassalikviditet>
   <se-gen-base:Soliditet contextRef="balans0" unitRef="pure" decimals="INF">0.24</se-gen-base:Soliditet>
   <se-gen-base:Soliditet contextRef="balans1" unitRef="pure" decimals="INF">0.25</se-gen-base:Soliditet>
-  <se-gen-base:MedelantaletAnstallda contextRef="period0" unitRef="decimal-MedelantaletAnstallda" decimals="-3">0</se-gen-base:MedelantaletAnstallda>
-  <se-gen-base:MedelantaletAnstallda contextRef="period1" unitRef="decimal-MedelantaletAnstallda" decimals="-3">0</se-gen-base:MedelantaletAnstallda>
+  <se-gen-base:MedelantaletAnstallda contextRef="period0" unitRef="decimal-MedelantaletAnstallda" decimals="INF">26</se-gen-base:MedelantaletAnstallda>
+  <se-gen-base:MedelantaletAnstallda contextRef="period1" unitRef="decimal-MedelantaletAnstallda" decimals="INF">27</se-gen-base:MedelantaletAnstallda>
   <se-gen-base:KommentarFlerarsoversikt contextRef="period0">
                                             28
                                         </se-gen-base:KommentarFlerarsoversikt>

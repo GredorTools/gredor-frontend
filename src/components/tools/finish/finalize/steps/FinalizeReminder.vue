@@ -157,7 +157,7 @@ const beloppraderWithNonexistingNoter = computed(() => {
               <template v-if="resultForNot.connections.length > 0">
                 kopplad till "{{ resultForNot.connections.join('", "') }}"
               </template>
-              <template v-else>inte kopplad till någon belopprad</template>
+              <template v-else>inte kopplad till någon post</template>
             </li>
             <li
               v-for="beloppradWithNonexistingNot in beloppraderWithNonexistingNoter"

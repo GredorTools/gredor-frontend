@@ -275,7 +275,7 @@ watch(
     if (mismatchingValueBelopprader.value.length > 0) {
       errorsAndWarnings.push({
         text:
-          `På följande poster förekommer det olika belopp i olika delar` +
+          `På följande poster förekommer det olika värden i olika delar` +
           ` av årsredovisningen:` +
           ` "${mismatchingValueBelopprader.value
             .map((belopprad) => belopprad.taxonomyItem.properties.label)
@@ -382,7 +382,7 @@ watch(
       >
         <p>
           <strong>Varning:</strong> På följande poster förekommer det olika
-          belopp i olika delar av årsredovisningen. Du bör korrigera detta om
+          värden i olika delar av årsredovisningen. Du bör korrigera detta om
           möjligt.
         </p>
 
@@ -400,20 +400,30 @@ watch(
                 :key="beloppradValueIndex"
               >
                 {{
+                  (belopprad.taxonomyItem.properties.type ===
+                  "xbrli:monetaryItemType"
+                    ? "Belopp: "
+                    : "Värde: ") +
                   formatNumber(
                     beloppradValue.belopp,
                     null,
                     beloppradValue.decimals === "-3"
                       ? BeloppFormat.TUSENTAL
                       : BeloppFormat.HELTAL,
+                    { useNonBreakingSpace: true },
                   )
                 }}<template v-if="beloppradValue.decimals === '-3'"
                   >&nbsp;(tusental)</template
+                ><template
+                  v-if="
+                    belopprad.taxonomyItem.properties.type ===
+                    'xbrli:monetaryItemType'
+                  "
+                  >&nbsp;{{
+                    arsredovisning.redovisningsinformation.redovisningsvaluta
+                      .namnKort
+                  }}</template
                 >
-                {{
-                  arsredovisning.redovisningsinformation.redovisningsvaluta
-                    .namnKort
-                }}
               </li>
             </ul>
           </li>
