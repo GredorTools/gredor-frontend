@@ -19,7 +19,7 @@ COPY . .
 RUN npm run build
 
 # Production Stage
-FROM nginxinc/nginx-unprivileged:stable-alpine AS production-stage
+FROM nginx/nginx-unprivileged:stable-alpine AS production-stage
 
 # Set working directory in Nginx container
 WORKDIR /usr/share/nginx/html
