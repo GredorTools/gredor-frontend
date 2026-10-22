@@ -71,7 +71,7 @@
     "start-server-and-test": "^3.0.12",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.70.1",
-    "vite": "^8.3.1",
+    "vite": "^8.3.5",
     "vite-plugin-istanbul": "^9.0.1",
     "vite-plugin-vue-devtools": "^8.2.1",
     "vue-tsc": "^3.3.11",
