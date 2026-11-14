@@ -15,6 +15,7 @@ import CommonComponentLoadError from "@/components/common/CommonComponentLoadErr
 
 import CommonWizardButtons from "@/components/common/CommonWizardButtons.vue";
 import AppPage from "@/components/AppPage.vue";
+import { useForberedInlamning } from "@/components/common/composables/useForberedInlamning.ts";
 
 const footerTeleportPointId = "page-send-wizard-footer-teleport-point";
 
@@ -24,6 +25,11 @@ const SendWizardSteps = defineAsyncComponent({
 });
 
 const done = ref<boolean>(false);
+
+// Om sidan öppnats med ?fil=<https-URL> hämtas en förberedd årsredovisning och
+// flödet startar på steg 2. Misslyckas hämtningen visas ett meddelande och
+// flödet startar som vanligt på filuppladdningssteget.
+const { forberedInlamning, laddar } = useForberedInlamning();
 
 provide("footerTeleportPoint", `#${footerTeleportPointId}`);
 </script>
@@ -43,8 +49,15 @@ provide("footerTeleportPoint", `#${footerTeleportPointId}`);
     <div class="page-root">
       <div class="wizard">
         <div class="steps">
-          <Suspense>
+          <div v-if="laddar" data-testid="forbered-inlamning-laddar">
+            Hämtar årsredovisningen…
+
+            <CommonWizardButtons next-button-disabled previous-button-hidden />
+          </div>
+
+          <Suspense v-else>
             <SendWizardSteps
+              :forbered-inlamning="forberedInlamning"
               @step-change="
                 (step) => {
                   if (step === 'uploadReport') {
